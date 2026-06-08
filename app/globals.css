@@ -80,8 +80,16 @@ select {
 }
 
 .nav-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border-radius: 999px;
   padding: 8px 11px;
+}
+
+.nav-icon {
+  width: 15px;
+  height: 15px;
 }
 
 .nav-links a:hover,
@@ -163,6 +171,11 @@ main {
   font-weight: 700;
 }
 
+.button svg {
+  width: 18px;
+  height: 18px;
+}
+
 .button.primary {
   background: var(--text);
   color: white;
@@ -185,14 +198,20 @@ main {
 }
 
 .panel-row {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
   gap: 18px;
   border-bottom: 1px solid var(--border);
   padding: 16px;
   color: var(--muted);
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   font-size: 13px;
+}
+
+.panel-row svg {
+  width: 18px;
+  height: 18px;
 }
 
 .panel-row:last-child {
@@ -210,6 +229,32 @@ main {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
+}
+
+.icon-map {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.icon-map div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  padding: 14px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.icon-map svg {
+  width: 22px;
+  height: 22px;
+  color: var(--accent);
 }
 
 .content-section {
@@ -264,6 +309,23 @@ main {
     box-shadow 160ms ease;
 }
 
+.icon-shell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.icon-shell svg {
+  width: 20px;
+  height: 20px;
+}
+
 .content-card:hover,
 .content-card:focus-visible {
   border-color: color-mix(in srgb, var(--accent) 44%, var(--border));
@@ -315,6 +377,11 @@ main {
   color: var(--text);
   font-size: 14px;
   font-weight: 700;
+}
+
+.card-link svg {
+  width: 15px;
+  height: 15px;
 }
 
 .empty-state {
@@ -416,6 +483,8 @@ main {
 }
 
 .career-panel svg {
+  width: 28px;
+  height: 28px;
   color: var(--accent);
 }
 
@@ -475,7 +544,8 @@ main {
   .section-grid,
   .card-grid,
   .evidence-grid,
-  .career-grid {
+  .career-grid,
+  .icon-map {
     grid-template-columns: 1fr;
   }
 

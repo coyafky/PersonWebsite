@@ -1,4 +1,5 @@
 import { ContentCard } from "@/components/content-card";
+import { Icons0Calendar } from "@/components/icons0";
 import { getWeeklyPosts } from "@/lib/content";
 
 export const metadata = {
@@ -19,6 +20,7 @@ export default async function WeeklyPage() {
         {posts.map((post) => (
           <ContentCard
             href={`/weekly/${post.slug}`}
+            icon={Icons0Calendar}
             key={post.slug}
             meta={post.week}
             summary={post.summary}

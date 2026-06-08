@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, FileText, Sparkles } from "lucide-react";
+import { Icons0Document, Icons0Idea, Icons0Portfolio } from "@/components/icons0";
 import { getFeaturedProjects } from "@/lib/content";
 
 export const metadata = {
@@ -17,17 +17,17 @@ export default async function CareerPage() {
       </header>
       <section className="career-grid">
         <div className="career-panel">
-          <BriefcaseBusiness aria-hidden="true" />
+          <Icons0Portfolio />
           <h2>Focus</h2>
           <p>Frontend engineering, AI-assisted workflows, and product-minded development.</p>
         </div>
         <div className="career-panel">
-          <FileText aria-hidden="true" />
+          <Icons0Document />
           <h2>Resume Material</h2>
           <p>English bullets and STAR stories live in `content/career/` as reviewable drafts.</p>
         </div>
         <div className="career-panel">
-          <Sparkles aria-hidden="true" />
+          <Icons0Idea />
           <h2>Evidence</h2>
           <p>Career claims should trace back to real projects, weekly notes, or confirmed experience.</p>
         </div>

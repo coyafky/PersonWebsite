@@ -1,4 +1,5 @@
 import { ContentCard } from "@/components/content-card";
+import { Icons0Portfolio } from "@/components/icons0";
 import { getProjectPosts } from "@/lib/content";
 
 export const metadata = {
@@ -19,6 +20,7 @@ export default async function ProjectsPage() {
         {projects.map((project) => (
           <ContentCard
             href={`/projects/${project.slug}`}
+            icon={Icons0Portfolio}
             key={project.slug}
             meta={project.stack.join(" / ")}
             summary={project.summary}

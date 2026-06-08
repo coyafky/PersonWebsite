@@ -1,12 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  Icons0Blog,
+  Icons0Calendar,
+  Icons0Portfolio,
+  Icons0Profile,
+  Icons0Document,
+} from "@/components/icons0";
 
 const navItems = [
-  { href: "/blog", label: "Blog" },
-  { href: "/weekly", label: "Weekly" },
-  { href: "/projects", label: "Projects" },
-  { href: "/career", label: "Career" },
-  { href: "/about", label: "About" },
+  { href: "/blog", icon: Icons0Blog, label: "Blog" },
+  { href: "/weekly", icon: Icons0Calendar, label: "Weekly" },
+  { href: "/projects", icon: Icons0Portfolio, label: "Projects" },
+  { href: "/career", icon: Icons0Document, label: "Career" },
+  { href: "/about", icon: Icons0Profile, label: "About" },
 ];
 
 export function SiteNav() {
@@ -17,9 +24,10 @@ export function SiteNav() {
         <span>Personal Website</span>
       </Link>
       <nav className="nav-links" aria-label="Main navigation">
-        {navItems.map((item) => (
-          <Link href={item.href} key={item.href}>
-            {item.label}
+        {navItems.map(({ href, icon: Icon, label }) => (
+          <Link href={href} key={href}>
+            <Icon className="nav-icon" />
+            {label}
           </Link>
         ))}
       </nav>

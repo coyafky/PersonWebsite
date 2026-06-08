@@ -1,7 +1,15 @@
-import { BriefcaseBusiness, FolderGit2 } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ContentCard } from "@/components/content-card";
+import {
+  Icons0Blog,
+  Icons0Calendar,
+  Icons0Document,
+  Icons0Idea,
+  Icons0Notebook,
+  Icons0Portfolio,
+  Icons0Rocket,
+} from "@/components/icons0";
 import { getBlogPosts, getFeaturedProjects, getWeeklyPosts } from "@/lib/content";
 
 export default async function HomePage() {
@@ -22,32 +30,55 @@ export default async function HomePage() {
           </p>
           <div className="hero-actions">
             <Link className="button primary" href="/projects">
-              <FolderGit2 aria-hidden="true" size={18} />
+              <Icons0Portfolio />
               View Projects
             </Link>
             <Link className="button secondary" href="/career">
-              <BriefcaseBusiness aria-hidden="true" size={18} />
+              <Icons0Document />
               Career Notes
             </Link>
           </div>
         </div>
         <div className="hero-panel" aria-label="Content workflow preview">
           <div className="panel-row strong">
+            <Icons0Notebook />
             <span>Markdown / MDX</span>
             <span>source</span>
           </div>
           <div className="panel-row">
+            <Icons0Idea />
             <span>Hermes drafts</span>
             <span>review</span>
           </div>
           <div className="panel-row">
+            <Icons0Portfolio />
             <span>Projects</span>
             <span>evidence</span>
           </div>
           <div className="panel-row">
+            <Icons0Document />
             <span>Career</span>
             <span>bullets</span>
           </div>
+        </div>
+      </section>
+
+      <section className="icon-map" aria-label="Content map">
+        <div>
+          <Icons0Blog />
+          <span>Blog</span>
+        </div>
+        <div>
+          <Icons0Calendar />
+          <span>Weekly</span>
+        </div>
+        <div>
+          <Icons0Portfolio />
+          <span>Projects</span>
+        </div>
+        <div>
+          <Icons0Rocket />
+          <span>Career-ready</span>
         </div>
       </section>
 
@@ -56,6 +87,7 @@ export default async function HomePage() {
           {blogPosts.slice(0, 2).map((post) => (
             <ContentCard
               href={`/blog/${post.slug}`}
+              icon={Icons0Blog}
               key={post.slug}
               meta={post.date}
               summary={post.summary}
@@ -70,6 +102,7 @@ export default async function HomePage() {
           {weeklyPosts.slice(0, 2).map((post) => (
             <ContentCard
               href={`/weekly/${post.slug}`}
+              icon={Icons0Calendar}
               key={post.slug}
               meta={post.week}
               summary={post.summary}
@@ -90,6 +123,7 @@ export default async function HomePage() {
           {featuredProjects.map((project) => (
             <ContentCard
               href={`/projects/${project.slug}`}
+              icon={Icons0Portfolio}
               key={project.slug}
               meta={project.stack.join(" / ")}
               summary={project.summary}

@@ -1,4 +1,5 @@
 import { ContentCard } from "@/components/content-card";
+import { Icons0Blog } from "@/components/icons0";
 import { getBlogPosts } from "@/lib/content";
 
 export const metadata = {
@@ -19,6 +20,7 @@ export default async function BlogPage() {
         {posts.map((post) => (
           <ContentCard
             href={`/blog/${post.slug}`}
+            icon={Icons0Blog}
             key={post.slug}
             meta={post.date}
             summary={post.summary}
