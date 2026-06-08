@@ -5,7 +5,7 @@ summary: "个人网站内容系统启动时的第一篇草稿。"
 tags:
   - personal-website
   - writing
-status: draft
+status: published
 lang: zh
 englishSummary: "A first draft note for starting the personal website content system."
 ---
