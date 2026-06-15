@@ -6,10 +6,12 @@ import {
   Icons0Portfolio,
   Icons0Profile,
   Icons0Document,
+  Icons0Radar,
 } from "@/components/icons0";
 
 const navItems = [
   { href: "/blog", icon: Icons0Blog, label: "Blog" },
+  { href: "/ai-tracker", icon: Icons0Radar, label: "AI Tracker" },
   { href: "/weekly", icon: Icons0Calendar, label: "Weekly" },
   { href: "/projects", icon: Icons0Portfolio, label: "Projects" },
   { href: "/career", icon: Icons0Document, label: "Career" },

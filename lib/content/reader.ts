@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { z } from "zod";
 import {
+  type AiTrackerPost,
   type BlogPost,
   type CareerPost,
   type ContentKind,
@@ -25,6 +26,7 @@ type CollectionMap = {
   weekly: WeeklyPost;
   projects: ProjectPost;
   career: CareerPost;
+  "ai-tracker": AiTrackerPost;
 };
 
 async function fileExists(filePath: string) {
@@ -145,7 +147,69 @@ export async function getFeaturedProjects() {
   return projects.filter((project) => project.featured).slice(0, 3);
 }
 
+export async function getAiTrackerPosts(includeDrafts = false): Promise<AiTrackerPost[]> {
+  const items = await getCollection("ai-tracker", includeDrafts);
+  return items.filter((item): item is AiTrackerPost => item.kind === "ai-tracker");
+}
+
 export async function getContentBySlug<K extends ContentKind>(kind: K, slug: string) {
   const items = (await getCollection(kind)) as CollectionMap[K][];
   return items.find((item) => item.slug === slug) ?? null;
+}
+
+export type RelatedRef = {
+  blog?: string[];
+  weekly?: string[];
+  projects?: string[];
+  career?: string[];
+};
+
+export type ResolvedRelated = {
+  kind: "blog" | "weekly" | "projects" | "career";
+  slug: string;
+  title: string;
+};
+
+type RelatedCollectionKind = ResolvedRelated["kind"];
+
+function buildTitleMap<T extends { slug: string; title: string }>(items: T[]) {
+  return new Map(items.map((item) => [item.slug, item.title]));
+}
+
+export async function getRelatedTitles(
+  map: RelatedRef | undefined,
+): Promise<ResolvedRelated[]> {
+  if (!map) {
+    return [];
+  }
+
+  const kinds: RelatedCollectionKind[] = ["blog", "weekly", "projects", "career"];
+
+  const [blogItems, weeklyItems, projectItems, careerItems] = await Promise.all([
+    getBlogPosts(),
+    getWeeklyPosts(),
+    getProjectPosts(),
+    getCareerPosts(),
+  ]);
+
+  const titleMaps: Record<RelatedCollectionKind, Map<string, string>> = {
+    blog: buildTitleMap(blogItems),
+    weekly: buildTitleMap(weeklyItems),
+    projects: buildTitleMap(projectItems),
+    career: buildTitleMap(careerItems),
+  };
+
+  const resolved: ResolvedRelated[] = [];
+  for (const kind of kinds) {
+    const slugs = map[kind] ?? [];
+    const titleMap = titleMaps[kind];
+    for (const slug of slugs) {
+      const title = titleMap.get(slug);
+      if (title === undefined) {
+        continue; // silently skip missing slugs (drafts / typos / archived)
+      }
+      resolved.push({ kind, slug, title });
+    }
+  }
+  return resolved;
 }

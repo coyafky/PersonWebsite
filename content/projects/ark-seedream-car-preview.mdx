@@ -1,0 +1,112 @@
+---
+title: "Ark Seedream 车膜预览生图系统"
+date: "2026-06-08"
+summary: "基于火山引擎 Ark Seedream 模型，根据客户实车照片和色卡，生成高真实度贴膜效果预览图，并通过飞书 Bot 发回给客户。"
+role: "独立开发"
+stack:
+  - Python
+  - 火山引擎 Ark API (doubao-seedream-4-5-251128)
+  - 飞书 Bot API
+  - 飞书 MGS 网关
+links:
+  repository: "MySecondBrain/1-Projects/01-Company-Work/飞书&智能体/生图项目/ark-seedream-car-preview"
+impact:
+  - "实现客户发实车图→AI 生成贴膜预览→飞书回传的完整闭环"
+  - "Prompt 工程严格约束：只换膜色不换车，保持原图构图/光线/细节一致"
+  - "支持 DM 私聊和群聊两种发送模式，适配 4 个飞书 Bot 账号"
+resumeBullets:
+  - "Built Ark Seedream car wrap preview system: customer photo → AI preview generation → Feishu auto-delivery pipeline"
+  - "Engineered strict prompt constraints ensuring color accuracy and vehicle identity preservation in AI-generated previews"
+  - "Designed dual-mode delivery (DM + group chat) with 4 Feishu Bot account routing"
+status: published
+featured: true
+englishSummary: "Built an AI-powered car wrap preview system using Volcengine Ark Seedream. Customers send real car photos → AI generates realistic wrap previews → Feishu Bot delivers results back. Supports DM and group chat modes with 4 bot accounts."
+---
+
+## Background
+
+公司车膜品牌「有膜有漾」需要让客户在施工前就能看到贴膜效果。传统方式依赖色卡实物比对，客户很难想象整车上身后的样子。需要一套系统，让客户发一张实车照片，就能看到贴了某款膜之后的效果。
+
+## Problem
+
+- **颜色准确性要求极高**：看起来高清但颜色不准等于没用。光照、材质、模型渲染误差都会导致色差。
+- **不能改变车辆外观**：客户只关注膜的颜色——不能把车轮毂改了、不能把背景换了、不能让车「变帅」。
+- **需要即时响应**：客户在门店等着看效果，生成要快、发送要稳。
+
+## Goal
+
+搭建一条「客户实车图 → AI 生成贴膜预览 → 飞书自动发回」的完整链路，让客户在几分钟内看到接近实拍效果的施工预览图。
+
+## Role
+
+**独立开发**——从技术选型、Prompt 工程、脚本编写到飞书集成，全链路独自完成。
+
+## Approach
+
+### 模型选型
+
+选用火山引擎 Ark 的 **doubao-seedream-4-5-251128** 模型——国内可用、生成速度快、对真实照片的还原度高。
+
+### Prompt 工程（核心）
+
+设计了严格的约束 Prompt，核心原则是**「只换膜色，不换车」**：
+
+- 以客户原图为唯一主体基础，保持车辆品牌、车型、车身结构、轮毂、车灯、车窗、角度、透视关系、背景环境完全不变
+- 严格参考色卡颜色（色号/HEX/材质信息）还原准确色彩
+- 保留原车真实光影、反射、高光、阴影、金属质感
+- 准确体现膜面材质（哑光/亮光/金属/珠光/变色龙）
+- 禁止改变外观套件、车牌、轮胎、玻璃、门把手
+- 禁止美化、插画风、海报风——必须是写实商业修图效果
+- Prompt 末尾追加英文约束段落，进一步强化一致性
+
+### 脚本架构
+
+三个 Python 脚本组成松耦合工具链：
+
+| 脚本 | 职责 |
+|------|------|
+| `gen.py` | 调用 Ark API 生成预览图 → 保存到 `outputs/YYYY-MM-DD/` |
+| `feishu_sender.py` | 将已生成的图片发送到飞书 |
+| `gen_and_send.py` | 串联生成+发送，一步到位 |
+
+### 发送模式
+
+支持两种发送场景：
+
+| 场景 | 参数 | 说明 |
+|------|------|------|
+| 私聊 DM | `--target <open_id>` | 发回用户的私聊会话 |
+| 群聊 | `--chat-id <chat_id>` | 发回群聊，所有人都能看到 |
+
+4 个飞书 Bot 账号按场景路由：`xianbo-enterprise-test` / `xianbo-support` / `xianbo-ops` / `xianbo-content`。
+
+### 推荐工作流
+
+```
+gen.py 生成预览 → 确认效果满意 → feishu_sender.py 发送
+```
+
+（先生成再发送，而不是一体化盲目发送，保证每张发出去的都是确认过的。）
+
+## Challenges
+
+- **颜色准确性是最大挑战**：前期调研了三种方案（高清拍摄后渲染 / 商家电子图渲染 / 色差仪 L/A/B 数值），最终选定色差仪方案作为配合方向，确保颜色数据精确可控
+- **Prompt 需要精确到每个像素级别的约束**：早期生成结果偶尔会「美化」车辆——轮毂变帅了、背景变亮了——需要在 Prompt 中反复加约束
+- **飞书集成踩坑**：从 W14 的方案设计到 W17 的 MGS 配置落地，中间经历了 Gateway 连接、WebSocket、bot 授权等多个环节
+
+## Result
+
+| 维度 | 成果 |
+|------|------|
+| **功能闭环** | 客户发实车图 → AI 生成预览 → 飞书回传，全链路跑通 |
+| **生成质量** | Prompt 严格约束后，预览图与实车照片的背景/构图/光线/细节高度一致 |
+| **发送灵活性** | 支持 DM + 群聊 + 4 Bot 路由，适配门店和线上不同场景 |
+| **团队汇报** | W17 向团队完整汇报方案，从调研到落地形成闭环 |
+| **后续方向** | 与色差仪结合，用精确 L/A/B 数值替代 HEX 粗略色值 |
+
+## Resume Bullets
+
+- Built Ark Seedream car wrap preview pipeline: customer photo → AI-generated realistic preview → Feishu Bot auto-delivery, serving automotive film brand clients
+- Engineered strict prompt constraints ensuring color accuracy (HEX/color-code/finish) and complete vehicle identity preservation in AI previews
+- Designed dual-mode delivery architecture (DM + group chat) with 4 Feishu Bot account routing for store and online scenarios
+- Evaluated 3 image generation approaches (HD photography / merchant images / colorimeter LAB measurement), selected optimal technical path

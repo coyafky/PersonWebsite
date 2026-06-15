@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MdxContent } from "@/components/mdx-content";
+import { ArticleLayout } from "@/components/article-layout";
 import { getContentBySlug, getWeeklyPosts } from "@/lib/content";
+import { extractHeadings } from "@/lib/content/headings";
 
 type SlugPageProps = {
   params: Promise<{ slug: string }>;
@@ -34,15 +36,19 @@ export default async function WeeklyDetailPage({ params }: SlugPageProps) {
     notFound();
   }
 
+  const headings = extractHeadings(post.body);
+
   return (
-    <article className="article-shell">
-      <header className="article-header">
-        <span>{post.week}</span>
-        <h1>{post.title}</h1>
-        <p>{post.summary}</p>
-        {post.englishSummary ? <p className="english-summary">{post.englishSummary}</p> : null}
-      </header>
-      <MdxContent source={post.body} />
-    </article>
+    <ArticleLayout headings={headings}>
+      <article className="article-shell">
+        <header className="article-header">
+          <span>{post.week}</span>
+          <h1>{post.title}</h1>
+          <p>{post.summary}</p>
+          {post.englishSummary ? <p className="english-summary">{post.englishSummary}</p> : null}
+        </header>
+        <MdxContent source={post.body} />
+      </article>
+    </ArticleLayout>
   );
 }

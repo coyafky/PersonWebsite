@@ -1,0 +1,129 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Personal Website home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e4]: Personal Website
+    - navigation "Main navigation" [ref=e5]:
+      - link "Blog" [ref=e6] [cursor=pointer]:
+        - /url: /blog
+        - img [ref=e7]
+        - text: Blog
+      - link "AI Tracker" [ref=e9] [cursor=pointer]:
+        - /url: /ai-tracker
+        - img [ref=e10]
+        - text: AI Tracker
+      - link "Weekly" [ref=e15] [cursor=pointer]:
+        - /url: /weekly
+        - img [ref=e16]
+        - text: Weekly
+      - link "Projects" [ref=e18] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e19]
+        - text: Projects
+      - link "Career" [ref=e21] [cursor=pointer]:
+        - /url: /career
+        - img [ref=e22]
+        - text: Career
+      - link "About" [ref=e24] [cursor=pointer]:
+        - /url: /about
+        - img [ref=e25]
+        - text: About
+  - main [ref=e27]:
+    - generic [ref=e28]:
+      - article [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: 2026-06-12
+          - heading "GPT-5 论文速读与我的判断" [level=1] [ref=e33]
+          - paragraph [ref=e34]: 速读 GPT-5 技术报告,梳理我关注的几个核心变化,以及它对 agent 路线意味着什么。
+          - paragraph [ref=e35]: A quick read of the GPT-5 technical report — what actually changed, and what it implies for the agent stack.
+        - generic [ref=e36]:
+          - heading "Source" [level=2] [ref=e37]
+          - generic [ref=e38]:
+            - generic [ref=e39]: Type
+            - generic [ref=e40]: paper
+          - generic [ref=e41]:
+            - generic [ref=e42]: Signal
+            - generic [ref=e44]: 3 · 高价值
+          - generic [ref=e45]:
+            - generic [ref=e46]: Author
+            - generic [ref=e47]: OpenAI
+          - generic [ref=e48]:
+            - generic [ref=e49]: Published
+            - generic [ref=e50]: 2026-06-10
+          - generic [ref=e51]:
+            - generic [ref=e52]: Link
+            - link "GPT-5 Technical Report ↗" [ref=e54] [cursor=pointer]:
+              - /url: https://arxiv.org/abs/2026.00000
+        - generic [ref=e56]:
+          - heading "关键变化" [level=2] [ref=e57]
+          - paragraph [ref=e58]: 我最关注的不是参数数字,而是训练范式。报告把 reasoning 单独拆出来训练,再与基础模型拼接,这与过去一锅炖的 RL 路线有明显差别。
+          - table [ref=e59]:
+            - rowgroup [ref=e60]:
+              - row "维度 GPT-4 路线 GPT-5 路线" [ref=e61]:
+                - columnheader "维度" [ref=e62]
+                - columnheader "GPT-4 路线" [ref=e63]
+                - columnheader "GPT-5 路线" [ref=e64]
+            - rowgroup [ref=e65]:
+              - row "reasoning 隐式 分层 + 显式" [ref=e66]:
+                - cell "reasoning" [ref=e67]
+                - cell "隐式" [ref=e68]
+                - cell "分层 + 显式" [ref=e69]
+              - row "tool-use 在 RL 里学 独立训练再拼接" [ref=e70]:
+                - cell "tool-use" [ref=e71]
+                - cell "在 RL 里学" [ref=e72]
+                - cell "独立训练再拼接" [ref=e73]
+              - row "评估 单轮 QA long-horizon agentic" [ref=e74]:
+                - cell "评估" [ref=e75]
+                - cell "单轮 QA" [ref=e76]
+                - cell "long-horizon agentic" [ref=e77]
+          - heading "我对 agent 路线的判断" [level=2] [ref=e78]
+          - paragraph [ref=e79]: 如果分层范式站得住,agent framework 的设计可以从"模型 + 工具调用兜底"转向"基础模型 + 专用 reasoning head + 工具 head"。
+          - paragraph [ref=e80]: 这与 Hermes 这边正在做的事情方向一致——把规划、调用、反思拆成可插拔的模块,而不是绑死在一次模型调用里。
+        - generic [ref=e81]:
+          - heading "Takeaways" [level=2] [ref=e82]
+          - list [ref=e83]:
+            - listitem [ref=e84]: 报告里关于 reasoning 与 tool-use 的拆解比我预想清晰:它们不再被塞进同一个 RL loop,而是分层训练再拼接。
+            - listitem [ref=e85]: 评估体系被显著扩大,从单轮 QA 扩展到 long-horizon agentic tasks,这是论文最大的方法学贡献。
+            - listitem [ref=e86]: 对 inference 成本的公开讨论仍然模糊——只在 appendix 给出大致区间。
+        - generic [ref=e87]:
+          - heading "Questions" [level=2] [ref=e88]
+          - list [ref=e89]:
+            - listitem [ref=e90]: 分层训练后的拼接是否能保住端到端 RL 的 emergent 行为?
+            - listitem [ref=e91]: long-horizon 评估在多大程度上能预测真实部署表现?
+        - generic [ref=e92]:
+          - heading "Related Links" [level=2] [ref=e93]
+          - list [ref=e94]:
+            - listitem [ref=e95]:
+              - link "OpenAI 官方报告页" [ref=e96] [cursor=pointer]:
+                - /url: https://openai.com/research/gpt-5
+            - listitem [ref=e97]:
+              - link "Simon Willison 的解读" [ref=e98] [cursor=pointer]:
+                - /url: https://simonwillison.net/2026/jun/12/gpt-5/
+        - generic [ref=e99]:
+          - heading "Related Posts" [level=2] [ref=e100]
+          - generic [ref=e101]:
+            - paragraph [ref=e102]: Blog
+            - list [ref=e103]:
+              - listitem [ref=e104]:
+                - link "2026-06-12-hermes-feishu-bot-config" [ref=e105] [cursor=pointer]:
+                  - /url: /blog/2026-06-12-hermes-feishu-bot-config
+          - generic [ref=e106]:
+            - paragraph [ref=e107]: Weekly
+            - list [ref=e108]:
+              - listitem [ref=e109]:
+                - link "2026-W20" [ref=e110] [cursor=pointer]:
+                  - /url: /weekly/2026-W20
+      - progressbar "阅读进度"
+      - navigation "Table of contents" [ref=e111]:
+        - list [ref=e112]:
+          - listitem [ref=e113]:
+            - link "关键变化" [ref=e114] [cursor=pointer]:
+              - /url: "#关键变化"
+          - listitem [ref=e115]:
+            - link "我对 agent 路线的判断" [ref=e116] [cursor=pointer]:
+              - /url: "#我对-agent-路线的判断"
+  - contentinfo [ref=e117]:
+    - paragraph [ref=e118]: Built for writing, project evidence, and career preparation.
+  - button "Open Next.js Dev Tools" [ref=e124] [cursor=pointer]:
+    - img [ref=e125]
+  - alert [ref=e128]

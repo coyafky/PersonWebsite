@@ -1,29 +1,103 @@
 ---
 name: prompt-boost
-description: 将自然语言需求翻译为精确的项目内开发提示词。先深度扫描当前仓库的技术栈、内容模型、路由、组件和命名约定，再输出结构化 Markdown Prompt。
-argument-hint: "<自然语言描述>"
+description: Translate a rough request into a precise, repository-aware implementation prompt for this Personal Website project.
+argument-hint: "<rough request>"
 user-invocable: true
 ---
 
-# Prompt Boost — 自然语言 → 精确代码提示词
+# /prompt-boost - Personal Website Prompt Refinement
 
-你是这个仓库内的需求翻译引擎。用户会给你一段自然语言描述（`$ARGUMENTS`），你的任务是：
+Use this command before `/spec`, `/plan`, or `/dispatch` when the user's request is vague,
+broad, or missing project-specific context.
 
-1. 深度分析当前项目上下文
-2. 理解用户真实意图
-3. 生成一段可直接执行的结构化 Markdown Prompt
+## Role In The Workflow
 
-输出的 Prompt 必须贴合这个仓库的真实结构，不能假设存在 `src/` 目录，也不能套用其他项目的技术栈。
+`/prompt-boost` is the discovery and translation layer:
 
----
+```text
+rough request -> /prompt-boost -> precise prompt -> /spec or /plan or /dispatch
+```
 
-## 阶段一：项目深度扫描
+It does not replace a product spec or PRD. It makes the next step clearer and safer.
 
-在翻译需求之前，必须先扫描这个仓库。优先使用 `rg`、`rg --files`、`sed`、`find` 等快速命令。
+## Repository Context Rules
 
-### 1. 技术栈与配置
+This command must stay faithful to the real structure of this repository.
 
-读取以下文件并提取关键信息：
+- The project uses top-level `app/`, not `src/app/`.
+- Main content lives in `content/`.
+- Content rules and Hermes workflow live in `docs/agent/`.
+- Project-local Claude commands live in `.claude/commands/`.
+- Public pages are primarily under `app/(site)/`.
+- Public content is controlled by `status: published`.
+
+Do not assume missing folders, tools, APIs, or business systems.
+
+## Process
+
+### 1. Read project guidance first
+
+Always read:
+
+- `CLAUDE.md`
+
+Read `AGENTS.md` only if it exists.
+
+### 2. Scan project context relevant to the request
+
+Use fast repository inspection first (`rg`, `rg --files`, `sed`, `find`).
+
+Prioritize:
+
+- `package.json`
+- `next.config.mjs`
+- `tsconfig.json`
+- `eslint.config.mjs`
+- `app/`
+- `components/`
+- `lib/`
+- `content/`
+- `docs/agent/`
+- `docs/superpowers/specs/`
+- `public/`
+- `.claude/commands/`
+
+### 3. Identify what the user is really asking for
+
+Extract:
+
+- user intent
+- affected routes
+- affected content collections
+- affected components
+- affected schemas / content readers
+- affected assets
+- affected commands or agent workflow docs
+- technical and product risks
+
+### 4. Resolve obvious defaults from project conventions
+
+Infer defaults only when the repository already points to them. For example:
+
+- prefer Server Components
+- reuse `lib/content`
+- do not introduce `src/`
+- keep content in Markdown / MDX
+- keep unpublished content behind `status: draft`
+
+### 5. Mark unresolved decisions explicitly
+
+If something is ambiguous, do not hide it. Call it out and recommend a default.
+
+### 6. Produce a structured Markdown prompt
+
+The output should be ready to feed into `/spec`, `/plan`, or `/dispatch`.
+
+## What To Scan In This Repository
+
+### Technical stack and configuration
+
+Extract concrete facts from:
 
 - `package.json`
 - `next.config.mjs`
@@ -31,58 +105,9 @@ user-invocable: true
 - `eslint.config.mjs`
 - `app/globals.css`
 
-重点提取：
+### Routes
 
-- Next.js / React / TypeScript 版本
-- npm scripts
-- 路径别名
-- MDX 支持方式
-- 现有 CSS token / 视觉变量
-
-### 2. 数据模型与类型
-
-扫描：
-
-- `lib/content/`
-- `lib/`
-- `content/README.md`
-- `docs/agent/`
-
-提取：
-
-- 所有 `export type`
-- 所有 `export interface`
-- 所有 zod schema
-- 内容类型之间的关系
-- 数据读取函数，如 `getBlogPosts`、`getProjectPosts`、`getContentBySlug`
-
-### 3. 组件体系
-
-扫描 `components/`：
-
-- 列出所有组件文件
-- 标记是否有 `"use client"`
-- 记录 props 类型
-- 记录组件职责
-- 记录图标体系和共享组件
-
-特别关注：
-
-- `components/content-card.tsx`
-- `components/mdx-content.tsx`
-- `components/site-nav.tsx`
-- `components/icons0.tsx`
-
-### 4. 路由结构
-
-扫描 `app/` 目录树：
-
-- 列出所有 `page.tsx`
-- 列出所有 `layout.tsx`
-- 列出所有动态路由段
-- 记录当前公开站点结构
-
-当前项目应优先关注：
+Inspect:
 
 - `app/layout.tsx`
 - `app/(site)/layout.tsx`
@@ -93,160 +118,117 @@ user-invocable: true
 - `app/(site)/career/`
 - `app/(site)/about/`
 
-### 5. API 与系统路由
+Also check whether system routes such as `route.ts`, `sitemap.ts`, or `robots.ts` exist.
 
-扫描 `app/` 中的 `route.ts`、`sitemap.ts`、`robots.ts` 等系统路由文件。
+### Components
 
-如果不存在，也要在上下文中明确指出“当前暂无 API 或系统路由”。
+Inspect:
 
-### 6. 数据获取模式
+- `components/site-nav.tsx`
+- `components/content-card.tsx`
+- `components/mdx-content.tsx`
+- `components/icons0.tsx`
+- any additional components relevant to the request
 
-识别当前项目使用的数据获取方式：
+Capture:
 
-- Server Component 直接调用 `lib/content`
-- 构建时静态生成
-- `generateStaticParams`
-- `generateMetadata`
-- 本地文件系统内容源
+- whether they are Server or Client Components
+- their role in the page hierarchy
+- reusable patterns already present
 
-不要误写成客户端请求、数据库查询或 CMS 拉取，除非仓库里确实已经存在。
+### Content system
 
-### 7. 命名与编码约定
+Inspect:
 
-从现有仓库提取：
+- `lib/content/reader.ts`
+- `lib/content/schemas.ts`
+- `lib/content/index.ts`
+- `content/README.md`
+- relevant files in `content/blog/`, `content/weekly/`, `content/projects/`, `content/career/`, `content/inbox/`
 
-- 目录命名：kebab-case
-- 组件命名：小文件名 + named export
-- 样式方案：全局 CSS + 语义 className
-- 内容模型：Markdown / MDX + frontmatter + zod
-- 类型约束：TypeScript strict，无 `any`
-- 数据边界：`status: published` 才能公开渲染
+Capture:
 
----
+- content kinds
+- frontmatter expectations
+- zod schema boundaries
+- content loading functions
+- visibility rules for drafts vs published content
 
-## 阶段二：意图理解与消歧
+### Hermes / Claude workflow
 
-拿到 `$ARGUMENTS` 后，执行下面三步。
+Inspect:
 
-### 1. 意图分类
+- `docs/agent/hermes-content-workflow.md`
+- `docs/agent/inbox-to-content-workflow.md`
+- `docs/agent/hermes-usage-guide.md`
+- existing files under `.claude/commands/`
 
-判断属于哪类：
+Capture:
 
-- 新增功能
-- 修改现有功能
-- 修复问题
-- 重构优化
-- 内容系统增强
-- Claude Code / Hermes 工作流增强
+- what Hermes is allowed to do
+- what requires owner review
+- whether the request touches writing workflow, agent commands, or publishing boundaries
 
-### 2. 影响范围分析
+## Output Format
 
-明确它会影响：
-
-- 哪些路由
-- 哪些组件
-- 哪些内容类型
-- 哪些 schema / 数据读取函数
-- 是否需要新增文件
-
-### 3. 消歧检查
-
-如果描述里存在模糊点，在输出 Prompt 中写出“默认决策”，而不是把模糊问题留空。
-
-常见消歧项：
-
-- “加一个页面” → 具体路由是什么
-- “优化样式” → 改的是首页、列表页还是详情页
-- “加一个列表” → 数据源来自 `content/` 的哪一类
-- “支持草稿” → 是本地预览还是继续保持公开页只显示 `published`
-- “加个 agent 能力” → 是仓库文档、命令文件还是运行时逻辑
-
----
-
-## 阶段三：生成精确 Prompt
-
-输出必须是结构化 Markdown，格式如下：
+Return a structured Markdown brief with these sections:
 
 ```markdown
-# [需求标题]
+# [Requirement Title]
 
-## 需求概述
-[1-2 句话描述真实意图]
+## User Goal
+[What the user wants and the intended result]
 
-## 项目上下文
+## Business / Project Result
+[Why this change matters in the context of this personal website]
 
-### 技术栈
-- Framework: Next.js 16 App Router
-- UI: Global CSS + 本地图标组件
-- Language: TypeScript strict
-- Content: Markdown / MDX + gray-matter + zod
-- Build: static-content-first
+## Relevant Project Context
 
-### 相关数据模型
-[列出涉及的 schema、type、内容字段、读取函数，并附路径]
+### Technical Stack
+- ...
 
-### 相关组件
-[列出组件、职责、是否 client component、路径]
+### Relevant Routes
+- ...
 
-### 相关路由
-[列出页面路由和文件路径]
+### Relevant Components
+- ...
 
-### 相关系统路由 / API
-[列出已有 route.ts / sitemap.ts / robots.ts，如果没有则明确说明]
+### Relevant Content / Data Model
+- ...
 
-### 相关数据获取
-[列出 getXxx 函数、generateStaticParams、generateMetadata 等]
+### Relevant Commands / Agent Docs
+- ...
 
-## 实现规格
+## Affected Files And Modules
+- [path] - [why it matters]
 
-### 需要修改的文件
-[精确列出文件路径和改动点]
+## Proposed Implementation Boundaries
+- In scope:
+- Out of scope:
+- Constraints:
 
-### 需要新增的文件
-[精确列出文件路径和用途]
+## Acceptance Criteria
+- [ ] ...
+- [ ] `npm run lint` passes
+- [ ] `npm run typecheck` passes
+- [ ] `npm run build` passes
 
-### 实现步骤
-[按顺序列出执行步骤]
+## Ambiguities And Recommended Defaults
+- Ambiguity:
+  - Recommended default:
+  - Why:
 
-### 约束条件
-- 遵循当前仓库的目录结构，不要引入 `src/`
-- 复用 `lib/content` 的现有内容读取模式
-- 保持 `status: published` 的公开边界
-- 优先复用现有组件和 CSS token
-- 不引入新依赖，除非确有必要并说明原因
-- TypeScript strict，禁止 `any`
-- 保持 Server Component 优先
-
-### 验收标准
-- [ ] [具体标准 1]
-- [ ] [具体标准 2]
-- [ ] `npm run lint` 通过
-- [ ] `npm run typecheck` 通过
-- [ ] `npm run build` 通过
-
-## 歧义与默认决策
-[列出消歧项和默认决策]
+## Recommended Next Command
+- `/spec` if product intent or structure is still unsettled
+- `/plan` if a spec already exists and implementation planning is next
+- `/dispatch` if the work is approved and ready for agent-team execution
 ```
 
----
+## Rules
 
-## 重要原则
-
-1. 精确优于笼统：必须给出真实文件路径。
-2. 贴合当前仓库：不要假设不存在的目录、框架或工具。
-3. 复用优先：优先使用已有 `lib/content`、`components/`、`app/(site)/` 结构。
-4. 类型安全：引用已有 zod schema、TypeScript type，必要时明确新增位置。
-5. 增量改动：优先最小范围修改。
-6. 不越界：除非写入“默认决策”，否则不要替用户做额外产品决策。
-
----
-
-## 输出后动作
-
-生成 Prompt 后：
-
-1. 先展示完整 Prompt
-2. 明确列出你做出的默认决策
-3. 询问用户是否要直接执行该 Prompt
-
-如果用户确认执行，就严格按照你刚生成的 Prompt 落地实现。
+- Do not edit code.
+- Do not invent business facts.
+- Do not assume `src/` exists.
+- Prefer repository facts over generic Next.js advice.
+- Prefer spec creation over direct implementation when intent is still fuzzy.
+- Call out risks around content visibility, schema changes, and Hermes publishing boundaries when relevant.

@@ -1,0 +1,202 @@
+---
+title: "2026 W15 周记"
+week: "2026-W15"
+date: "2026-05-23"
+summary: "密集输出周：Shared Agent Memory 系统搭建（180条 skill）、计算机基础 Day1（28KB+笔记）、飞书工具链完善。"
+highlights:
+  - "Shared Agent Memory/Skills 系统：180 条记录跨 4 Agent 同步"
+  - "计算机基础 Day1：一天 4 模块，产出 28KB+ 笔记"
+  - "Hermes + 飞书 Gateway WebSocket 连接成功"
+tags:
+  - weekly
+status: published
+mood: "productive"
+englishSummary: "Built Shared Agent Memory/Skills system with 180 records synced across 4 agents. Completed CS fundamentals Day1 (4 modules, 28KB+ notes). Connected Hermes Feishu Gateway."
+---
+
+# 2026-W-15 — 密集输出周：共享智能体记忆系统 + 计算机基础 + 飞书工具链
+
+import { Callout } from '@/components/callout'
+
+> **说明：** 这是一个密集产出的周。前半周（5/19-5/20）集中在 Shared Agent Memory/Skills 系统从设计到实现的完整搭建，以及计算机基础模块 Day1 的全量学习。后半周（5/23）聚焦 Hermes 自身工具链的完善（飞书 Gateway + 流式卡片 + XMind 知识图谱）。
+
+---
+
+## 🎯 本周待办（MIT）
+
+| #   | 目标                                             | 状态            |
+| --- | ---------------------------------------------- | ------------- |
+| 1   | **搭建 Shared Agent Memory/Skills 系统**（设计→实现→同步） | ✅ 完成          |
+| 2   | **计算机基础 Day1 全模块学习**（网络/系统/Linux/持久化）          | ✅ 完成          |
+| 3   | **Hermes + 飞书工具链完善**（Gateway 连接 + 流式卡片 + 知识图谱） | ✅ 完成          |
+| 4   | Coya Notes / LucasBlog 部署更新                    | ❌ 取消（用户确认不需要） |
+
+---
+
+## ✅ 本周进展
+
+### ✅ 已完成
+
+**1. Shared Agent Memory 系统 — 从设计到全栈实现**
+
+与记忆系统同步推进：
+
+- **设计阶段（5/19）**：Capability-first 架构，定义 SQLite schema / CLI / HTTP API / MCP Server 四层
+- **实现阶段（5/19-5/20）**：
+  - 11 个 canonical skills（web-search/deep-research/project-organization/diagramming/ppt-generation/document-writing/session-log/memory-read-write/lark-workflow/image-generation/code-review）
+  - `skill.py` CLI + SQLite registry + MCP server
+  - **导入 168 个现有 agent skills**（Hermes 41 / Codex 6 / Claude Code 60 / OpenCode 61）
+  - 同步策略系统（profiles/tiers/packs），支持按角色同步
+- **同步执行（5/20）**：将 skills 同步到 Codex（16）/ Claude Code（30）/ OpenCode（30）
+- **Open CoDesign 配置（5/20）**：为 Codex 配置 AI 设计工具 skill
+- **总数**：registry 含 **180** 条 skill 记录
+
+**2. 计算机基础 Day1 — 四个模块完整完成（5/20）**
+
+一天完成 4 个模块，每个含方向一（笔记扩充）+ 方向二（动手实验）+ 方向三（Agent 视角复盘）：
+
+| 模块 | 笔记大小 | 实验亮点 |
+|------|----------|----------|
+| **计算机网络** | 18KB → 28KB | HTTP 报文逐行标注、串行17ms vs 并行9ms实测、SPA 路由验证 |
+| **计算机系统** | 2.3KB → 28.8KB | 8概念展开（进程/线程/内存/文件系统/环境变量/日志/并发/编码），7个实验 |
+| **Linux 基础** | 23KB → 24.5KB | macOS vs GNU 差异发现、管道一行出系统报告、chmod 完整验证 |
+| **数据持久化** | 13.7KB | 三级读取性能：内存0.04μs / SQLite4.88μs / JSON75.70μs（内存快1941x） |
+
+**3. Hermes 工具链完善（5/23）**
+
+- **飞书 Gateway 连接**：诊断并修复 feishu 平台未加载问题 → 通过 `.env` FEISHU_APP_ID/APP_SECRET 自动检测机制成功连接 WebSocket
+- **用户授权修复**：设置 `FEISHU_ALLOW_ALL_USERS=true`，解决飞书用户被静默拒绝的问题
+- **hermes-lark-streaming 插件**：确认 v0.7.0 已安装、hooks 已注入、streaming.enabled=true
+- **XMind 知识图谱**：安装 XMind Generator skill → 为飞书多维表格生成 67 分支知识图谱
+
+**4. 其他完成项**
+
+- 安装 10 个 Entrepreneurship skills（从 `slavingia/skills` 仓库，5/18）
+- 安装 Imprint skill（工作 DNA 模型，5/23）
+- YouTube → 文章生成（Harness Engineering，已产出结构化笔记）
+
+### 🟡 进行中 / 待完成
+
+| 事项 | 说明 |
+|------|------|
+| 流式卡片页脚/面板调优 | 已列出备选项（加 status/context 字段、展开面板、显示推理），未选定 |
+| 计算机基础 Day2 | Day1 四模块全部完成，Day2 主题待确认 |
+| 车膜内容营销排期 | 第一篇已出，后续排期未定 |
+
+---
+
+## 💡 思考（Insights）
+
+<Callout type="tip">
+**Shared Agent Memory 是这周的&ldquo;核武器&rdquo;**：它不是单个工具，而是一个生态——Hermes、Codex、Claude Code、OpenCode 四个 agent 现在共享同一个记忆层。**跨 Agent 的工作不丢失上下文**，每次换 agent 无需从头解释。
+</Callout>
+
+<Callout type="info">
+**记忆 = 资产，不是日志**：179→180→808 条记忆的增长说明一点——结构化记忆比原始对话记录更有价值。但 2,200 chars 上限是硬约束，需要定期压缩/合并。
+</Callout>
+
+<Callout type="success">
+**"学"和"造"可以同时进行**：5/20 一天内既学了计算机基础四个模块，又产出了 28KB+ 的笔记资产。**学习即产出**，不冲突。
+</Callout>
+
+<Callout type="info">
+**飞书集成终于落地**：从 W14 的&ldquo;Hermes + 飞书连接方案设计&rdquo;到 W15 的 WebSocket 连接成功，这条链路跑了三周才跑通。实际问题不是配置复杂，而是文档分散 + 配置层级误解。
+</Callout>
+
+---
+
+## 🕒 Time Log
+
+| 日期 | 活动 | 项目标签 |
+|------|------|----------|
+| **周一 5/18** | 批量安装 10 个 Entrepreneurship skills 到 Hermes | `#Hermes技能` |
+| **周二 5/19 上午** | Vault 会话日志系统 + 项目分类整理 | `#Vault基建` |
+| **周二 5/19 下午-深夜** | Shared Agent Memory 设计→实现（SQLite/CLI/HTTP/MCP） | `#共享记忆` |
+| **周二 5/19 深夜** | Shared Agent Skills 设计→实现（registry/CLI/MCP） | `#共享技能` |
+| **周三 5/20 上午** | 计算机网络 Day1（方向一至三：报文/API链路/串并行实测） | `#计算机基础` |
+| **周三 5/20 下午** | 计算机系统 Day1（8概念展开 + 7个实验） | `#计算机基础` |
+| **周三 5/20 下午-傍晚** | Linux 基础 Day1（macOS vs GNU 差异发现） | `#计算机基础` |
+| **周三 5/20 傍晚-晚** | 数据持久化 Day1（3层性能实测：内存0.04μs/SQLite4.88μs/JSON75.70μs） | `#计算机基础` |
+| **周三 5/20 夜间** | 共享技能导入 168 条 + 同步 3 个 Agent + Open CoDesign 配置 | `#共享技能` |
+| **周四 5/21** | 只读 Viewer 开发 + Agent 归属修复 + Agent Onboarding 文档 | `#共享记忆` |
+| **周六 5/23 上午** | Imprint + XMind Generator skill 安装 | `#Hermes技能` |
+| **周六 5/23 上午-中午** | 飞书 Gateway 诊断 + 用户授权修复 + hermes-lark-streaming 验证 | `#飞书工具链` |
+| **周六 5/23 下午** | 飞书多维表格知识图谱 XMind 生成（67 分支） | `#飞书工具链` |
+
+---
+
+## 📚 知识资产 / To Resource
+
+| 资产 | 说明 | 状态 |
+|------|------|------|
+| [Shared Agent Memory](https://github.com/coyafky/MySecondBrain) | SQLite + CLI + HTTP + MCP 全栈记忆系统 | ✅ 可用 |
+| [Shared Agent Skills](https://github.com/coyafky/MySecondBrain) | 180 条技能注册表，4 agent 同步 | ✅ 可用 |
+| `04-计算机网络.md` | Day1 笔记，28KB，含狗狗画廊全链路分析 | ✅ 完成 |
+| `05-计算机系统.md` | Day1 笔记，28.8KB，8概念+7实验 | ✅ 完成 |
+| `Linux基础.md` | Day1 笔记，24.5KB，macOS vs GNU 对照 | ✅ 完成 |
+| `07-数据持久化.md` | Day1 笔记，13.7KB，3层性能实测 | ✅ 完成 |
+| 飞书多维表格知识图谱.xmind | 67 分支知识图谱，12 个板块 | ✅ 完成 |
+| 飞书 Gateway + 流式卡片 | WebSocket 已连接，hermes-lark-streaming v0.7.0 | ✅ 运行中 |
+| Entrepreneurship 10 技能包 | find-community / validate-idea / mvp-minimalist 等 | ✅ 已安装 |
+
+---
+
+## 📋 上周回顾
+
+- **W-14 (New)**（关键周：5/5-5/10）— 部署路径探索（Docker→阿里云→腾讯云）+ 外包服务商选定（湾流畅游）
+- **W-14（原始）**（3/30-4/5）— 生图项目方案判断 + Hermes 初步探索
+
+---
+
+## 🎯 下周重点（3 个最重要的方向）
+
+### 🔴 P1 飞书流式卡片调优
+
+**为什么最重要：** Gateway 已连接、用户授权已修复、流式插件已安装——技术链条全部跑通。现在是**让它真正被用起来**的阶段。飞书卡片的显示体验（页脚、面板、推理过程）是用户体验的关键。
+
+**具体目标：**
+
+- 确定流式卡片配置调优方案（页脚字段、面板展开、推理显示）
+- 验证一次完整的飞书消息→Hermes 处理→流式卡片返回的端到端链路
+- 确认多用户（AI 部其他成员）接入方案
+
+### 🟡 P2 车膜内容营销推进
+
+**为什么重要：** 知识库（7 个研究方向）、竞品内容情报、第一篇内容均已就绪。现在是**从&ldquo;有素材&rdquo;到&ldquo;有排期&rdquo;**的跨越。需要确定输出节奏和形式。
+
+**具体目标：**
+
+- 制定内容发布日历（频率、平台、内容形式）
+- 确定第二/三篇内容选题
+- 确认 Coya Notes 博客与内容营销的统一发布链
+
+### 🟡 P3 计算机基础 Day2
+
+**为什么重要：** Day1 四模块已铺完&ldquo;广度&rdquo;，Day2 需要选择一个深度方向（推荐 WebSocket/OAuth/数据库进阶/Git 工作流）。
+
+**具体目标：**
+
+- 确定 Day2 主题
+- 保持&ldquo;学习即产出&rdquo;风格（笔记 + 实验 + Agent 视角）
+
+---
+
+## 📝 简历素材提取（Evidence）
+
+### 素材 1：跨 Agent 共享记忆系统设计与实现
+
+- **情境：** 公司 AI Agent 工具链碎片化，Hermes/Codex/Claude Code/OpenCode 各用各的上下文，无法跨 agent 接力
+- **行动：** 独立设计并实现 Shared Agent Memory 系统（SQLite schema + CLI + HTTP API + MCP Server），设计 Shared Agent Skills 注册表（180 条 record），编写 Agent Onboarding 文档让 4 个 agent 统一接入
+- **结果：** 4 个不同 AI Agent 共享同一记忆层，跨 agent 工作不丢失上下文；技能按角色同步（lark-agent 92 / coding-agent 30 / content-writing 24）
+
+### 素材 2：企业 AI 工具链集成（飞书）
+
+- **情境：** 公司使用飞书作为通信平台，Hermes Agent 需要以飞书智能体形式接入
+- **行动：** 诊断并修复飞书 Gateway 连接问题（配置层级误解、WebSocket 模式配置、用户授权策略），搭建 hermes-lark-streaming 流式卡片插件，验证端到端链路
+- **结果：** Hermes Agent 成功以飞书智能体身份连接，支持 WebSocket 实时消息 + 流式卡片输出
+
+### 素材 3：快速系统学习与知识资产化
+
+- **情境：** 缺乏系统性的计算机基础知识，工作中需要理解网络/系统/数据库/Linux 底层原理
+- **行动：** 一天内完成计算机网络、计算机系统、Linux 基础、数据持久化 4 个模块的 Day1 学习，每个模块采用笔记扩充 + 动手实验 + Agent 视角复盘的三层结构
+- **结果：** 产出 95KB+ 结构化笔记（含 20+ 个本地实验数据），学习即产出，不产生"学完就忘"的复习负担

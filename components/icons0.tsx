@@ -117,3 +117,20 @@ export function Icons0ArrowUpRight(props: IconProps) {
     </IconBase>
   );
 }
+
+export function Icons0Radar(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M16 4a12 12 0 1 0 12 12h-2A10 10 0 1 1 16 6Z"
+        fill="currentColor"
+      />
+      <path d="M4 16h2a10 10 0 0 1 10-10V4A12 12 0 0 0 4 16Z" fill="currentColor" />
+      <path
+        d="M16 9a7 7 0 0 0-7 7h2a5 5 0 0 1 5-5Zm0 4a3 3 0 1 0 3 3a3 3 0 0 0-3-3Z"
+        fill="currentColor"
+      />
+      <path d="M5.6 4.4l1.4 1.4L4.4 8.4L3 7Z" fill="currentColor" />
+    </IconBase>
+  );
+}

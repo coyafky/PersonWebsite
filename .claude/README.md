@@ -5,8 +5,8 @@ This repository includes project-local Claude Code commands in `.claude/commands
 Available commands:
 
 - `/prompt-boost`
-  Turns a natural-language request into a repository-aware implementation prompt.
-  It scans the current Next.js / content-system structure before writing the prompt.
+  Translates a rough request into a repository-aware implementation brief.
+  It is the discovery layer before `/spec`, `/plan`, or `/dispatch`.
 
 - `/dispatch`
   Runs a request through a repository-aware expert pipeline.

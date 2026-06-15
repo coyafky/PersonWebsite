@@ -1,0 +1,139 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e6] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e7]:
+      - img [ref=e8]
+    - generic [ref=e11]:
+      - button "Open issues overlay" [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: "2"
+          - generic [ref=e15]: "3"
+        - generic [ref=e16]:
+          - text: Issue
+          - generic [ref=e17]: s
+      - button "Collapse issues badge" [ref=e18]:
+        - img [ref=e19]
+  - banner [ref=e21]:
+    - link "Personal Website home" [ref=e22] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e23]: Personal Website
+    - navigation "Main navigation" [ref=e24]:
+      - link "Blog" [ref=e25] [cursor=pointer]:
+        - /url: /blog
+        - img [ref=e26]
+        - text: Blog
+      - link "AI Tracker" [ref=e28] [cursor=pointer]:
+        - /url: /ai-tracker
+        - img [ref=e29]
+        - text: AI Tracker
+      - link "Weekly" [ref=e34] [cursor=pointer]:
+        - /url: /weekly
+        - img [ref=e35]
+        - text: Weekly
+      - link "Projects" [ref=e37] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e38]
+        - text: Projects
+      - link "Career" [ref=e40] [cursor=pointer]:
+        - /url: /career
+        - img [ref=e41]
+        - text: Career
+      - link "About" [ref=e43] [cursor=pointer]:
+        - /url: /about
+        - img [ref=e44]
+        - text: About
+  - main [ref=e46]:
+    - generic [ref=e47]:
+      - generic [ref=e48]:
+        - heading "AI Tracker" [level=1] [ref=e49]
+        - paragraph [ref=e50]: AI 信息摄取、阅读记录、观点沉淀与长期追踪。
+      - generic [ref=e51]:
+        - heading "Agent 1" [level=2] [ref=e52]:
+          - generic [ref=e53]: Agent
+          - generic [ref=e54]: "1"
+        - link "2 · 参考 tool 2026-06-13 Claude Code CLI 的工程化设计 把 Claude Code 终端 agent 拆开看,它怎么管理上下文、回滚与权限,以及我们能学什么。 Topics Tags Claude Code Documentation ↗" [ref=e56] [cursor=pointer]:
+          - /url: /ai-tracker/2026-06-13-claude-code-cli
+          - generic [ref=e57]:
+            - generic [ref=e58]: 2 · 参考
+            - generic [ref=e59]: tool
+          - generic [ref=e60]: 2026-06-13
+          - heading "Claude Code CLI 的工程化设计" [level=3] [ref=e61]
+          - paragraph [ref=e62]: 把 Claude Code 终端 agent 拆开看,它怎么管理上下文、回滚与权限,以及我们能学什么。
+          - list "Topics" [ref=e63]:
+            - listitem [ref=e64]: Agent
+            - listitem [ref=e65]: 工具链
+          - list "Tags" [ref=e66]:
+            - listitem [ref=e67]: Claude Code
+            - listitem [ref=e68]: Anthropic
+            - listitem [ref=e69]: terminal
+            - listitem [ref=e70]: agent
+          - link "Claude Code Documentation ↗" [ref=e71]:
+            - /url: https://docs.claude.com/claude-code
+      - generic [ref=e72]:
+        - heading "工具链 1" [level=2] [ref=e73]:
+          - generic [ref=e74]: 工具链
+          - generic [ref=e75]: "1"
+        - link "2 · 参考 tool 2026-06-13 Claude Code CLI 的工程化设计 把 Claude Code 终端 agent 拆开看,它怎么管理上下文、回滚与权限,以及我们能学什么。 Topics Tags Claude Code Documentation ↗" [ref=e77] [cursor=pointer]:
+          - /url: /ai-tracker/2026-06-13-claude-code-cli
+          - generic [ref=e78]:
+            - generic [ref=e79]: 2 · 参考
+            - generic [ref=e80]: tool
+          - generic [ref=e81]: 2026-06-13
+          - heading "Claude Code CLI 的工程化设计" [level=3] [ref=e82]
+          - paragraph [ref=e83]: 把 Claude Code 终端 agent 拆开看,它怎么管理上下文、回滚与权限,以及我们能学什么。
+          - list "Topics" [ref=e84]:
+            - listitem [ref=e85]: Agent
+            - listitem [ref=e86]: 工具链
+          - list "Tags" [ref=e87]:
+            - listitem [ref=e88]: Claude Code
+            - listitem [ref=e89]: Anthropic
+            - listitem [ref=e90]: terminal
+            - listitem [ref=e91]: agent
+          - link "Claude Code Documentation ↗" [ref=e92]:
+            - /url: https://docs.claude.com/claude-code
+      - generic [ref=e93]:
+        - heading "模型 1" [level=2] [ref=e94]:
+          - generic [ref=e95]: 模型
+          - generic [ref=e96]: "1"
+        - link "3 · 高价值 paper 2026-06-12 GPT-5 论文速读与我的判断 速读 GPT-5 技术报告,梳理我关注的几个核心变化,以及它对 agent 路线意味着什么。 Topics Tags GPT-5 Technical Report ↗" [ref=e98] [cursor=pointer]:
+          - /url: /ai-tracker/2026-06-12-gpt5-paper-takeaways
+          - generic [ref=e99]:
+            - generic [ref=e100]: 3 · 高价值
+            - generic [ref=e101]: paper
+          - generic [ref=e102]: 2026-06-12
+          - heading "GPT-5 论文速读与我的判断" [level=3] [ref=e103]
+          - paragraph [ref=e104]: 速读 GPT-5 技术报告,梳理我关注的几个核心变化,以及它对 agent 路线意味着什么。
+          - list "Topics" [ref=e105]:
+            - listitem [ref=e106]: 模型
+            - listitem [ref=e107]: 研究方法
+          - list "Tags" [ref=e108]:
+            - listitem [ref=e109]: GPT-5
+            - listitem [ref=e110]: OpenAI
+            - listitem [ref=e111]: reasoning
+            - listitem [ref=e112]: evaluation
+          - link "GPT-5 Technical Report ↗" [ref=e113]:
+            - /url: https://arxiv.org/abs/2026.00000
+      - generic [ref=e114]:
+        - heading "研究方法 1" [level=2] [ref=e115]:
+          - generic [ref=e116]: 研究方法
+          - generic [ref=e117]: "1"
+        - link "3 · 高价值 paper 2026-06-12 GPT-5 论文速读与我的判断 速读 GPT-5 技术报告,梳理我关注的几个核心变化,以及它对 agent 路线意味着什么。 Topics Tags GPT-5 Technical Report ↗" [ref=e119] [cursor=pointer]:
+          - /url: /ai-tracker/2026-06-12-gpt5-paper-takeaways
+          - generic [ref=e120]:
+            - generic [ref=e121]: 3 · 高价值
+            - generic [ref=e122]: paper
+          - generic [ref=e123]: 2026-06-12
+          - heading "GPT-5 论文速读与我的判断" [level=3] [ref=e124]
+          - paragraph [ref=e125]: 速读 GPT-5 技术报告,梳理我关注的几个核心变化,以及它对 agent 路线意味着什么。
+          - list "Topics" [ref=e126]:
+            - listitem [ref=e127]: 模型
+            - listitem [ref=e128]: 研究方法
+          - list "Tags" [ref=e129]:
+            - listitem [ref=e130]: GPT-5
+            - listitem [ref=e131]: OpenAI
+            - listitem [ref=e132]: reasoning
+            - listitem [ref=e133]: evaluation
+          - link "GPT-5 Technical Report ↗" [ref=e134]:
+            - /url: https://arxiv.org/abs/2026.00000
+  - contentinfo [ref=e135]:
+    - paragraph [ref=e136]: Built for writing, project evidence, and career preparation.
+  - alert [ref=e137]
