@@ -130,7 +130,7 @@ main {
 .page-shell {
   width: min(var(--container), calc(100% - 32px));
   margin: 0 auto;
-  padding: 56px 0 72px;
+  padding: 48px 0 64px;
 }
 
 .page-shell.narrow,
@@ -578,7 +578,7 @@ main {
   width: min(var(--container), calc(100% - 32px));
   border-top: 1px solid var(--border);
   margin: 0 auto;
-  padding: 24px 0 36px;
+  padding: 32px 0 40px;
   color: var(--muted);
   font-size: 14px;
 }
