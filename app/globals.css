@@ -137,6 +137,9 @@ main {
 .article-shell {
   width: min(820px, calc(100% - 32px));
   min-width: 0;
+}
+
+.article-shell {
   margin: 0;
   padding: 56px 0 72px;
 }
