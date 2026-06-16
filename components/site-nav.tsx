@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { useState } from "react";
 import {
   Icons0Blog,
   Icons0Calendar,
@@ -19,8 +23,26 @@ const navItems = [
 ];
 
 export function SiteNav() {
+  const { scrollY } = useScroll();
+  const [scrolled, setScrolled] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 20);
+  });
+
   return (
-    <header className="site-header">
+    <motion.header
+      className="site-header"
+      animate={{
+        background: scrolled
+          ? "color-mix(in srgb, var(--background) 96%, transparent)"
+          : "color-mix(in srgb, var(--background) 88%, transparent)",
+        boxShadow: scrolled
+          ? "0 4px 24px rgb(42 45 51 / 0.06)"
+          : "0 0 0 transparent",
+      }}
+      transition={{ duration: 0.3 }}
+    >
       <Link className="brand" href="/" aria-label="Personal Website home">
         <Image src="/site-mark.svg" alt="" width={34} height={34} priority />
         <span>Personal Website</span>
@@ -33,6 +55,6 @@ export function SiteNav() {
           </Link>
         ))}
       </nav>
-    </header>
+    </motion.header>
   );
 }

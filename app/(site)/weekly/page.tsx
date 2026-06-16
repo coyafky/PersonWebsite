@@ -20,7 +20,7 @@ export default async function WeeklyPage() {
         {posts.map((post) => (
           <ContentCard
             href={`/weekly/${post.slug}`}
-            icon={Icons0Calendar}
+            icon={<Icons0Calendar />}
             key={post.slug}
             meta={post.week}
             summary={post.summary}

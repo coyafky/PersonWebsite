@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import type { ReactNode } from "react";
 
 interface Tab {
@@ -40,14 +41,22 @@ export function Tabs({ tabs }: { tabs: Tab[] }) {
           </button>
         ))}
       </div>
-      <div
-        className="tabs-panel"
-        role="tabpanel"
-        id={`tabs-panel-${active}`}
-        aria-labelledby={`tabs-trigger-${active}`}
-      >
-        {tabs[active]?.children}
-      </div>
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={active}
+          className="tabs-panel"
+          role="tabpanel"
+          id={`tabs-panel-${active}`}
+          aria-labelledby={`tabs-trigger-${active}`}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
+        >
+          {tabs[active]?.children}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

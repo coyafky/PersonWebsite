@@ -1,24 +1,35 @@
-import Link from "next/link";
-import type { ComponentType, SVGProps } from "react";
+"use client";
+
+import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 import { Icons0ArrowUpRight } from "@/components/icons0";
 
 type ContentCardProps = {
   href: string;
-  icon?: ComponentType<SVGProps<SVGSVGElement>>;
+  icon?: ReactNode;
   title: string;
   summary: string;
   meta?: string;
   tags?: string[];
 };
 
-export function ContentCard({ href, icon: Icon, title, summary, meta, tags = [] }: ContentCardProps) {
+export function ContentCard({
+  href,
+  icon,
+  title,
+  summary,
+  meta,
+  tags = [],
+}: ContentCardProps) {
   return (
-    <Link className="content-card" href={href}>
-      {Icon ? (
-        <span className="icon-shell">
-          <Icon />
-        </span>
-      ) : null}
+    <motion.a
+      className="content-card"
+      href={href}
+      whileHover={{ y: -4, scale: 1.01 }}
+      whileTap={{ scale: 0.985 }}
+      transition={{ type: "spring", stiffness: 300, damping: 24 }}
+    >
+      {icon ? <span className="icon-shell">{icon}</span> : null}
       {meta ? <span className="card-meta">{meta}</span> : null}
       <h3>{title}</h3>
       <p>{summary}</p>
@@ -33,6 +44,6 @@ export function ContentCard({ href, icon: Icon, title, summary, meta, tags = [] 
         Read
         <Icons0ArrowUpRight />
       </span>
-    </Link>
+    </motion.a>
   );
 }

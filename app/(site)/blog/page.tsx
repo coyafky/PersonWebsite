@@ -20,7 +20,7 @@ export default async function BlogPage() {
         {posts.map((post) => (
           <ContentCard
             href={`/blog/${post.slug}`}
-            icon={Icons0Blog}
+            icon={<Icons0Blog />}
             key={post.slug}
             meta={post.date}
             summary={post.summary}
