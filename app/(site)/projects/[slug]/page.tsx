@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MdxContent } from "@/components/mdx-content";
+import { ArticleLayout } from "@/components/article-layout";
 import { getContentBySlug, getProjectPosts } from "@/lib/content";
+import { extractHeadings } from "@/lib/content/headings";
 
 type SlugPageProps = {
   params: Promise<{ slug: string }>;
@@ -34,37 +36,41 @@ export default async function ProjectDetailPage({ params }: SlugPageProps) {
     notFound();
   }
 
+  const headings = extractHeadings(project.body);
+
   return (
-    <article className="article-shell">
-      <header className="article-header">
-        <span>{project.stack.join(" / ")}</span>
-        <h1>{project.title}</h1>
-        <p>{project.summary}</p>
-        {project.englishSummary ? <p className="english-summary">{project.englishSummary}</p> : null}
-      </header>
-      <section className="evidence-grid">
-        <div>
-          <h2>Role</h2>
-          <p>{project.role}</p>
-        </div>
-        <div>
-          <h2>Impact</h2>
+    <ArticleLayout headings={headings}>
+      <article className="article-shell">
+        <header className="article-header">
+          <span>{project.stack.join(" / ")}</span>
+          <h1>{project.title}</h1>
+          <p>{project.summary}</p>
+          {project.englishSummary ? <p className="english-summary">{project.englishSummary}</p> : null}
+        </header>
+        <section className="evidence-grid">
+          <div>
+            <h2>Role</h2>
+            <p>{project.role}</p>
+          </div>
+          <div>
+            <h2>Impact</h2>
+            <ul>
+              {project.impact.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+        <MdxContent source={project.body} />
+        <section className="resume-block">
+          <h2>Resume Bullets</h2>
           <ul>
-            {project.impact.map((item) => (
-              <li key={item}>{item}</li>
+            {project.resumeBullets.map((bullet) => (
+              <li key={bullet}>{bullet}</li>
             ))}
           </ul>
-        </div>
-      </section>
-      <MdxContent source={project.body} />
-      <section className="resume-block">
-        <h2>Resume Bullets</h2>
-        <ul>
-          {project.resumeBullets.map((bullet) => (
-            <li key={bullet}>{bullet}</li>
-          ))}
-        </ul>
-      </section>
-    </article>
+        </section>
+      </article>
+    </ArticleLayout>
   );
 }
