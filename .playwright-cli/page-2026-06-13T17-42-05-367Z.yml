@@ -1,0 +1,176 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Personal Website home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e4]: Personal Website
+    - navigation "Main navigation" [ref=e5]:
+      - link "Blog" [ref=e6] [cursor=pointer]:
+        - /url: /blog
+        - img [ref=e7]
+        - text: Blog
+      - link "AI Tracker" [ref=e9] [cursor=pointer]:
+        - /url: /ai-tracker
+        - img [ref=e10]
+        - text: AI Tracker
+      - link "Weekly" [ref=e15] [cursor=pointer]:
+        - /url: /weekly
+        - img [ref=e16]
+        - text: Weekly
+      - link "Projects" [ref=e18] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e19]
+        - text: Projects
+      - link "Career" [ref=e21] [cursor=pointer]:
+        - /url: /career
+        - img [ref=e22]
+        - text: Career
+      - link "About" [ref=e24] [cursor=pointer]:
+        - /url: /about
+        - img [ref=e25]
+        - text: About
+  - main [ref=e27]:
+    - generic [ref=e28]:
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - heading "记录想法、项目和成长，把经历沉淀为求职证据。" [level=1] [ref=e31]
+          - paragraph [ref=e32]: 这是一个面向长期写作和职业准备的个人网站。Blog 记录技术与想法，Weekly 保留成长轨迹，Projects 和 Career 把项目经验整理成可验证的能力索引。
+          - generic [ref=e33]:
+            - link "View Projects" [ref=e34] [cursor=pointer]:
+              - /url: /projects
+              - img [ref=e35]
+              - text: View Projects
+            - link "Career Notes" [ref=e37] [cursor=pointer]:
+              - /url: /career
+              - img [ref=e38]
+              - text: Career Notes
+        - generic "Content workflow preview" [ref=e40]:
+          - generic [ref=e41]:
+            - img [ref=e42]
+            - generic [ref=e45]: Markdown / MDX
+            - generic [ref=e46]: source
+          - generic [ref=e47]:
+            - img [ref=e48]
+            - generic [ref=e50]: Hermes drafts
+            - generic [ref=e51]: review
+          - generic [ref=e52]:
+            - img [ref=e53]
+            - generic [ref=e55]: Projects
+            - generic [ref=e56]: evidence
+          - generic [ref=e57]:
+            - img [ref=e58]
+            - generic [ref=e60]: Career
+            - generic [ref=e61]: bullets
+      - region "Content map" [ref=e62]:
+        - generic [ref=e63]:
+          - img [ref=e64]
+          - generic [ref=e66]: Blog
+        - generic [ref=e67]:
+          - img [ref=e68]
+          - generic [ref=e70]: Weekly
+        - generic [ref=e71]:
+          - img [ref=e72]
+          - generic [ref=e74]: Projects
+        - generic [ref=e75]:
+          - img [ref=e76]
+          - generic [ref=e79]: Career-ready
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - generic [ref=e82]:
+            - heading "Latest Blog" [level=2] [ref=e83]
+            - link "View all" [ref=e84] [cursor=pointer]:
+              - /url: /blog
+          - generic [ref=e85]:
+            - link "2026-06-12 怎么让车辆渲染到我们合适的色卡中——ark-seedream-car-preview 技术深度解析 深入解析 ymyy-sales-agent profile 中 ark-seedream-car-preview skill 的核心实现：色彩资产库、多 Provider 链式轮询、宽高比严格校验、模块化 Python 包架构。记录当前遇到的已知问题和解决方向。 Tags Read" [ref=e86] [cursor=pointer]:
+              - /url: /blog/2026-06-12-color-rendering-ark-seedream
+              - img [ref=e88]
+              - generic [ref=e90]: 2026-06-12
+              - heading "怎么让车辆渲染到我们合适的色卡中——ark-seedream-car-preview 技术深度解析" [level=3] [ref=e91]
+              - paragraph [ref=e92]: 深入解析 ymyy-sales-agent profile 中 ark-seedream-car-preview skill 的核心实现：色彩资产库、多 Provider 链式轮询、宽高比严格校验、模块化 Python 包架构。记录当前遇到的已知问题和解决方向。
+              - list "Tags" [ref=e93]:
+                - listitem [ref=e94]: 车膜
+                - listitem [ref=e95]: 生图系统
+                - listitem [ref=e96]: hermes
+                - listitem [ref=e97]: 色彩资产库
+                - listitem [ref=e98]: Seedream
+                - listitem [ref=e99]: 技术深度
+              - generic [ref=e100]:
+                - text: Read
+                - img [ref=e101]
+            - link "2026-06-12 从零配置 Hermes 连接飞书 Bot — 含多 Profile 实战 完整记录 Hermes Agent 连接飞书 Bot 的配置过程：Gateway 连接、Bot 授权、多 Profile 隔离、流式卡片插件、踩坑与排查。结合 W15-W17 三周实战经验。 Tags Read" [ref=e103] [cursor=pointer]:
+              - /url: /blog/2026-06-12-hermes-feishu-bot-config
+              - img [ref=e105]
+              - generic [ref=e107]: 2026-06-12
+              - heading "从零配置 Hermes 连接飞书 Bot — 含多 Profile 实战" [level=3] [ref=e108]
+              - paragraph [ref=e109]: 完整记录 Hermes Agent 连接飞书 Bot 的配置过程：Gateway 连接、Bot 授权、多 Profile 隔离、流式卡片插件、踩坑与排查。结合 W15-W17 三周实战经验。
+              - list "Tags" [ref=e110]:
+                - listitem [ref=e111]: hermes
+                - listitem [ref=e112]: feishu
+                - listitem [ref=e113]: bot
+                - listitem [ref=e114]: profile
+                - listitem [ref=e115]: 教程
+              - generic [ref=e116]:
+                - text: Read
+                - img [ref=e117]
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - heading "Weekly Notes" [level=2] [ref=e121]
+            - link "View all" [ref=e122] [cursor=pointer]:
+              - /url: /weekly
+          - generic [ref=e123]:
+            - link "2026-W18 2026 W18 周记 生图系统中转站迭代 + GEO 品牌基线测试 + 30 天落地方案汇报 + 官网 demo 骨架搭建。 Tags Read" [ref=e124] [cursor=pointer]:
+              - /url: /weekly/2026-W18
+              - img [ref=e126]
+              - generic [ref=e128]: 2026-W18
+              - heading "2026 W18 周记" [level=3] [ref=e129]
+              - paragraph [ref=e130]: 生图系统中转站迭代 + GEO 品牌基线测试 + 30 天落地方案汇报 + 官网 demo 骨架搭建。
+              - list "Tags" [ref=e131]:
+                - listitem [ref=e132]: weekly
+              - generic [ref=e133]:
+                - text: Read
+                - img [ref=e134]
+            - link "2026-W17 2026 W17 周记 MGS 生图系统完整闭环（配置→测试→汇报）+ GEO 研究启动 + Hermes 工具链完善。 Tags Read" [ref=e136] [cursor=pointer]:
+              - /url: /weekly/2026-W17
+              - img [ref=e138]
+              - generic [ref=e140]: 2026-W17
+              - heading "2026 W17 周记" [level=3] [ref=e141]
+              - paragraph [ref=e142]: MGS 生图系统完整闭环（配置→测试→汇报）+ GEO 研究启动 + Hermes 工具链完善。
+              - list "Tags" [ref=e143]:
+                - listitem [ref=e144]: weekly
+              - generic [ref=e145]:
+                - text: Read
+                - img [ref=e146]
+      - generic [ref=e148]:
+        - generic [ref=e149]:
+          - heading "Featured Projects" [level=2] [ref=e150]
+          - link "View all" [ref=e151] [cursor=pointer]:
+            - /url: /projects
+        - generic [ref=e152]:
+          - link "Python / 火山引擎 Ark API (doubao-seedream-4-5-251128) / 飞书 Bot API / 飞书 MGS 网关 Ark Seedream 车膜预览生图系统 基于火山引擎 Ark Seedream 模型，根据客户实车照片和色卡，生成高真实度贴膜效果预览图，并通过飞书 Bot 发回给客户。 Tags Read" [ref=e153] [cursor=pointer]:
+            - /url: /projects/ark-seedream-car-preview
+            - img [ref=e155]
+            - generic [ref=e157]: Python / 火山引擎 Ark API (doubao-seedream-4-5-251128) / 飞书 Bot API / 飞书 MGS 网关
+            - heading "Ark Seedream 车膜预览生图系统" [level=3] [ref=e158]
+            - paragraph [ref=e159]: 基于火山引擎 Ark Seedream 模型，根据客户实车照片和色卡，生成高真实度贴膜效果预览图，并通过飞书 Bot 发回给客户。
+            - list "Tags" [ref=e160]:
+              - listitem [ref=e161]: 实现客户发实车图→AI 生成贴膜预览→飞书回传的完整闭环
+              - listitem [ref=e162]: Prompt 工程严格约束：只换膜色不换车，保持原图构图/光线/细节一致
+            - generic [ref=e163]:
+              - text: Read
+              - img [ref=e164]
+          - link "Next.js / TypeScript / MDX / Vercel Personal Website Content System A file-based personal website for writing, weekly reflection, project archives, and career preparation. Tags Read" [ref=e166] [cursor=pointer]:
+            - /url: /projects/personal-website
+            - img [ref=e168]
+            - generic [ref=e170]: Next.js / TypeScript / MDX / Vercel
+            - heading "Personal Website Content System" [level=3] [ref=e171]
+            - paragraph [ref=e172]: A file-based personal website for writing, weekly reflection, project archives, and career preparation.
+            - list "Tags" [ref=e173]:
+              - listitem [ref=e174]: Created a maintainable writing and career-material workflow.
+              - listitem [ref=e175]: Defined Hermes agent boundaries for draft generation and content operations.
+            - generic [ref=e176]:
+              - text: Read
+              - img [ref=e177]
+  - contentinfo [ref=e179]:
+    - paragraph [ref=e180]: Built for writing, project evidence, and career preparation.
+  - button "Open Next.js Dev Tools" [ref=e186] [cursor=pointer]:
+    - img [ref=e187]
+  - alert [ref=e190]

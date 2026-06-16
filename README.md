@@ -19,6 +19,7 @@ docs/agent/       Hermes writing and maintenance protocols
 docs/superpowers/ Design specs and implementation plans
 lib/content/      Future content parsing and validation utilities
 public/           Static assets
+.claude/          Project-local Claude Code commands
 ```
 
 ## Publishing Rule

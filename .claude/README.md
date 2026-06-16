@@ -1,0 +1,36 @@
+# Project Claude Commands
+
+This repository includes project-local Claude Code commands in `.claude/commands/`.
+
+Available commands:
+
+- `/prompt-boost`
+  Translates a rough request into a repository-aware implementation brief.
+  It is the discovery layer before `/spec`, `/plan`, or `/dispatch`.
+
+- `/dispatch`
+  Runs a request through a repository-aware expert pipeline.
+  It is aligned with the user's existing Claude Code subagents and defaults to:
+  `architect -> coya-coding-agent -> tester -> deployer`.
+
+## Why this exists
+
+The project is content-heavy and agent-assisted. A repository-aware prompt command helps Claude Code avoid generic scaffolding and produce instructions that match:
+
+- `app/(site)/` routing
+- `lib/content/` schemas and readers
+- Markdown / MDX content rules
+- Hermes publishing boundaries
+- Existing visual and naming conventions
+
+## Usage
+
+Example:
+
+```txt
+/prompt-boost 为 blog 和 weekly 增加 RSS 输出，并确保 draft 内容不会进入 feed
+```
+
+```txt
+/dispatch docs/superpowers/specs/2026-06-11-claude-code-continuation-spec.md
+```
