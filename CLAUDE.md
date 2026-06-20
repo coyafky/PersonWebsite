@@ -36,6 +36,9 @@ PersonalWebsite/
 │       ├── page.tsx            # 首页
 │       ├── blog/               # 博客列表 + 详情
 │       ├── weekly/             # 周记列表 + 详情
+│       ├── learning/           # 学习笔记（按主题分组）
+│       │   ├── page.tsx        # 栏目首页（所有主题）
+│       │   └── [topic]/        # 主题首页 + 文章详情
 │       ├── projects/           # 项目列表 + 详情
 │       ├── career/             # 求职材料
 │       └── about/              # 关于页
@@ -53,6 +56,10 @@ PersonalWebsite/
 ├── content/                    # 内容层（Markdown/MDX 源文件）
 │   ├── blog/                   # 博客文章（.md）
 │   ├── weekly/                 # 周记（.md + .mdx）
+│   ├── learning/               # 学习笔记（按主题分组）
+│   │   └── <topic>/            # 每个主题一个子目录
+│   │       ├── _index.md       # 主题介绍（status: published 才会被列出）
+│   │       └── *.md            # 主题文章
 │   ├── projects/               # 项目档案（.mdx）← 需要嵌入组件时用 MDX
 │   ├── career/                 # 求职材料（.md）
 │   └── inbox/                  # 素材入口（碎片丢这里 → Hermes 整理）
@@ -102,6 +109,19 @@ PersonalWebsite/
 - **样式**：全局 CSS + 语义 className，不引入 Tailwind 或 CSS-in-JS（除非讨论决定）
 - **MDX 组件**：新增的 MDX 可用组件必须在 `components/mdx-content.tsx` 的 `components` 对象中注册
 - **内容格式**：所有内容文件 frontmatter 必须包含 `title` `date` `summary` `tags` `status` `englishSummary`
+
+---
+
+## Learning 栏目
+
+按主题（topic）组织的学习笔记，与 blog 区分：blog 写观点，learning 记结构化学习。
+
+- 路由：`/learning/<topic>/<slug>` 扩展到任意主题无代码改动
+- 内容目录：`content/learning/<topic>/`，每个主题下有 `_index.md`（主题介绍）+ `*.md`（文章）
+- 文件名约定：以 `_` 开头的文件被识别为索引页，不出现在文章列表
+- 文章 frontmatter 默认 `status: draft`，owner 改 `published` 后才会公开
+- reader 函数：`getLearningTopics` / `getLearningTopicIndex` / `getLearningPosts` / `getLearningPostBySlug`
+- 加新主题只需：建子目录 + 写 `_index.md` + 写文章，无需改代码
 
 ---
 
