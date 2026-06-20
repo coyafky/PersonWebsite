@@ -133,14 +133,18 @@ export function RevealOnScroll({
   delay?: number;
   once?: boolean;
 } & HTMLMotionProps<"div">) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement | null>(null);
   const inView = useInView(ref, { once, margin: "-64px 0px -64px 0px" });
 
   // resolveMotionTag returns the same `motion.X` reference for the same
   // `Tag` string, so memoizing by `Tag` keeps the component stable across
-  // renders (no remount, no state reset).
+  // renders (no remount, no state reset). Cast to ElementType so the union
+  // of motion.* components accepts an HTMLElement-typed ref.
   // eslint-disable-next-line react-hooks/static-components
-  const Comp = useMemo(() => resolveMotionTag(Tag), [Tag]);
+  const Comp = useMemo(
+    () => resolveMotionTag(Tag) as ElementType,
+    [Tag],
+  );
 
   return (
     <Comp
