@@ -7,10 +7,45 @@ import {
   type HTMLMotionProps,
   type Variants,
 } from "framer-motion";
-import { useRef, type ElementType, type ReactNode } from "react";
+import { useMemo, useRef, type ElementType, type ReactNode } from "react";
 
 // ── shared cubic-bezier easing (must be a tuple for framer-motion types) ──
 const easeOut: [number, number, number, number] = [0.22, 0.61, 0.36, 1];
+
+// ── motion element lookup table ────────────────────────────────────────
+// Keep at module level so references stay stable across renders.
+// `motion.create(Tag)` inside render would create a new component on every
+// render, remounting the subtree and resetting state.
+const MOTION_ELEMENTS = {
+  div: motion.div,
+  span: motion.span,
+  section: motion.section,
+  article: motion.article,
+  header: motion.header,
+  footer: motion.footer,
+  nav: motion.nav,
+  main: motion.main,
+  aside: motion.aside,
+  h1: motion.h1,
+  h2: motion.h2,
+  h3: motion.h3,
+  h4: motion.h4,
+  h5: motion.h5,
+  h6: motion.h6,
+  p: motion.p,
+  ul: motion.ul,
+  ol: motion.ol,
+  li: motion.li,
+} as const;
+
+type SupportedTag = keyof typeof MOTION_ELEMENTS;
+
+function resolveMotionTag(tag: ElementType) {
+  if (typeof tag === "string" && tag in MOTION_ELEMENTS) {
+    return MOTION_ELEMENTS[tag as SupportedTag];
+  }
+  return motion.div;
+}
 
 // ── variants catalogue ────────────────────────────────────────────────
 
@@ -101,7 +136,11 @@ export function RevealOnScroll({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once, margin: "-64px 0px -64px 0px" });
 
-  const Comp = motion.create(Tag);
+  // resolveMotionTag returns the same `motion.X` reference for the same
+  // `Tag` string, so memoizing by `Tag` keeps the component stable across
+  // renders (no remount, no state reset).
+  // eslint-disable-next-line react-hooks/static-components
+  const Comp = useMemo(() => resolveMotionTag(Tag), [Tag]);
 
   return (
     <Comp

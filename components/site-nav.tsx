@@ -3,10 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { useState } from "react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import { triggerSearch } from "@/lib/search-events";
 import {
   Icons0Blog,
   Icons0Calendar,
+  Icons0Notebook,
   Icons0Portfolio,
   Icons0Profile,
   Icons0Document,
@@ -17,6 +20,7 @@ const navItems = [
   { href: "/blog", icon: Icons0Blog, label: "Blog" },
   { href: "/ai-tracker", icon: Icons0Radar, label: "AI Tracker" },
   { href: "/weekly", icon: Icons0Calendar, label: "Weekly" },
+  { href: "/learning", icon: Icons0Notebook, label: "Learning" },
   { href: "/projects", icon: Icons0Portfolio, label: "Projects" },
   { href: "/career", icon: Icons0Document, label: "Career" },
   { href: "/about", icon: Icons0Profile, label: "About" },
@@ -25,6 +29,10 @@ const navItems = [
 export function SiteNav() {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 20);
@@ -55,6 +63,23 @@ export function SiteNav() {
           </Link>
         ))}
       </nav>
+      {mounted ? (
+        <button
+          className="theme-toggle"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          aria-label="Toggle theme"
+          suppressHydrationWarning
+        >
+          {theme === "dark" ? "☀" : "☾"}
+        </button>
+      ) : null}
+      <button
+        className="search-trigger"
+        onClick={triggerSearch}
+        aria-label="Search (Cmd+K)"
+      >
+        <span>⌘K</span>
+      </button>
     </motion.header>
   );
 }
