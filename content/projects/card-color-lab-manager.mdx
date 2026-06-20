@@ -1,0 +1,144 @@
+---
+title: "车膜色卡 Lab 数字化与本地改色预览 MVP"
+date: "2026-06-20"
+period: "2026.05–2026.06"
+summary: "为车膜销售场景搭建的本地色卡数字化基座——把色差仪 Lab 数值转换成可追溯的 sRGB / HEX 颜色资产，自动生成标准 PNG 色卡，并为后续 Hermes Agent 改色预览生图提供结构化数据与本地 API。"
+role: "Owner and developer"
+stack:
+  - Vite
+  - React 19
+  - Express
+  - better-sqlite3
+  - Lab 颜色科学
+  - GitHub
+  - Hermes Agent
+links:
+  repository: "MySecondBrain/1-Projects/01-Company-Work/飞书&智能体/生图项目/Card-color"
+  demo: ""
+impact:
+  - "建立可追溯的颜色资产库：色差仪原始 Lab、参考白点、几何、镜面模式、光源、操作人、日期等测量条件全部入库,支持同色号 light / no_light 多场景测量并存"
+  - "实现 Lab → XYZ → sRGB 转换链并支持 D50/D65 白点适配,自动生成标准 PNG 色卡预览,作为销售展示与 AI prompt hint 的颜色真源"
+  - "搭好 Vite + React 前端 + Express + SQLite 本地 API 服务化,所有颜色数据可被程序查询,为本地 Hermes Agent 端到端改色测试提供稳定输入"
+resumeBullets:
+  - "Architected a Lab-based color asset database with full measurement provenance (spectrometer Lab, reference white, geometry, specular mode, light source, operator), supporting multi-scene measurements per color code."
+  - "Implemented Lab → XYZ → sRGB conversion with D50/D65 white-point adaptation and automated PNG swatch generation, providing the canonical color source for downstream sales display and AI prompt hints."
+  - "Built a Vite + React 19 + Express + better-sqlite3 local color service with REST API, enabling structured queries for downstream Hermes Agent vehicle wrap preview pipeline."
+status: published
+featured: true
+englishSummary: "A local color asset foundation for car film sales. Converts colorimeter Lab measurements into traceable sRGB / HEX color assets with auto-generated PNG swatches, and exposes the dataset via a Vite + React + Express + SQLite service. Designed as the structured data layer that feeds downstream Hermes Agent vehicle wrap preview generation."
+---
+
+## Background
+
+车膜门店长期依赖实体色卡和色差仪,但**颜色数据本身没有数字化**:Lab 数值散落在测量记录里,销售想给客户看「贴完某款膜的效果」只能凭经验口述或临时拼图。AI 改色预览(参见 [Ark Seedream 车膜预览生图系统](/projects/ark-seedream-car-preview))已经能根据客户实车图生成贴膜效果图,但它的 prompt 需要**精确的颜色名 / HEX / 材质描述**作为输入——颜色真源从哪来?
+
+这个项目就是为那条 AI 改色链路建立**结构化颜色资产基座**:
+
+- 销售在飞书发车图,智能体根据色号查到颜色。
+- 颜色数据来自色差仪测量,而非人工目测或拍摄。
+- 颜色主表与测量记录分离,支持同色号在不同光照条件下并存。
+
+## Problem
+
+- **色卡数据未数字化**:Lab 数值散落在色差仪或 Excel,没有统一结构,无法被程序查询。
+- **屏幕预览与实物有偏差**:Lab 转 sRGB 受色域、白点、屏幕校准影响,需要一个**标准化预览**作为参考。
+- **图像模型 prompt 缺乏颜色真源**:改色提示词需要「颜色名 + HEX + 材质 + prompt hint」组合,没有结构化数据就只能硬写。
+- **销售输入不规范**:`A001` / `A-001` / `阿布扎比蓝` / `BMW Abu Dhabi Blue` 都可能指同一个颜色,需要归一化匹配。
+- **云端 24 小时跑之前,本地必须先闭环**:直接上飞书云端风险高,先用本地 Hermes Agent 验证「销售输入 → 颜色查询 → prompt 组装 → 生图 → 归档」最小闭环(参见 [OpenClaw 业务 Agent](/projects/openclaw-business-agent))。
+
+## Goal
+
+搭一个**本地 MVP 颜色资产服务**,为后续云端改色 Agent 提供:
+
+1. 可追溯的色卡主档(色号、系列、中英文名、材质、状态、备注)。
+2. 完整的测量元数据(Lab、参考白点、几何、镜面模式、光源、场景、操作人、日期)。
+3. 自动生成的标准化 PNG 色卡预览。
+4. 标准 REST API,让本地 Hermes Agent / 其他工具程序化查询颜色。
+
+## Role
+
+**Owner and developer**——从需求分析、数据模型、Lab 转换公式、SQLite schema、Express API、Vite + React 19 前端到 GitHub 分支策略与 Issue 规划,全链路独自完成。
+
+## Approach
+
+### 三层颜色数据模型
+
+车膜颜色的关键洞察是**原始测量、测量场景、屏幕预览必须分层保存**:
+
+| 层 | 字段 | 作用 |
+|----|------|------|
+| **色卡主档** (`color_cards`) | `color_code` / `series` / `cn_name` / `en_name` / `finish` / `status` / `notes` | 稳定信息,色号、系列、中英文名、膜面材质、状态 |
+| **Lab 测量记录** (`lab_measurements`) | `lab_l/a/b` / `input_reference_white` / `preview_reference_white` / `geometry` / `specular_mode` / `illumination_source` / `measurement_scene` / `operator` / `measured_at` | 同一色号在 `light` / `no_light` 或不同光源下并存多条记录 |
+| **屏幕预览** (派生) | `preview_r/g/b` / `preview_hex` / `preview_png_path` | `Lab → XYZ → sRGB` 转换后落到屏幕色域,自动生成 PNG 色块 |
+
+> **设计取舍**:不把 Lab 直接覆盖原始值。同一色号在标准光源箱和门店灯箱下可能得到不同 Lab——保留多场景测量记录,客户预览默认用 `light` 条件,门店现场可查 `no_light` 记录。
+
+### Lab → sRGB 转换链
+
+转换公式在 `src/App.jsx` 与 `server/index.js` 保持一致,核心是:
+
+```text
+Lab (D50_2) → XYZ → Bradford 色适应 D50 → D65 → linear sRGB → gamma 编码 → sRGB (D65_2) → HEX
+```
+
+- 测量白点常见 `D50_2` (2° 观察角),预览白点固定 `D65_2`,通过 Bradford 矩阵做色适应。
+- 转换受色域限制,超出色域的颜色做 `clamp01` 处理,并保留原始 Lab 以便人工判断是否需要复测。
+- 前端录入时实时预览 Lab → HEX,保存时同步落库并生成 PNG。
+
+### 颜色主档与测量解耦
+
+API 设计上把**主档 POST `/api/colors`** 和 **测量记录 POST `/api/colors/:color_code/measurements`** 拆成两步:
+
+- 新建色卡先存主档(色号、中英文名、材质、状态)。
+- 选中已存在色卡后才能录入 Lab——避免「没有色号就先存 Lab」导致孤儿数据。
+- 历史测量按 `measured_at` 倒序展示,保留复测轨迹。
+
+### 技术栈
+
+| 层 | 技术 |
+|----|------|
+| 前端 | Vite 7 + React 19,三栏布局(色卡列表 / 主档编辑 / Lab 测量) |
+| 后端 | Express 4 + better-sqlite3 (WAL 模式),`/api/health` / `/api/colors` / `/api/colors/:code/measurements` |
+| 数据库 | SQLite,`data/color-lab.db` 不入 Git,保留 WAL/SHM 提升并发 |
+| 颜色科学 | Lab ↔ XYZ ↔ sRGB 转换 + Bradford D50↔D65 适配 + sRGB gamma 编码 |
+| 部署 | 本地 `npm run dev` 同时启动前后端(端口 5173 / 8787) |
+
+### 本地 MVP 闭环
+
+参考 `docs/local-hermes-agent-test-plan.md`,当前为下一阶段做准备的工具分层:
+
+```text
+销售输入 (车辆图 + 色号/颜色名)
+  → 本地 Hermes Agent (tools/hermes-local/)
+    → color_lookup.js      标准化色号 / 名称 / 别名 → 唯一颜色
+    → prompt_builder.js    颜色资产 + 车辆图 → 结构化 prompt (task/color/finish/hex/prompt/negative_prompt)
+    → generate_preview.js  调用图像模型 (mock / 真实 API)
+    → run_case.js          端到端跑一次,记录到 runs/hermes-local/
+  → 人工评分 (颜色准确度 / 细节保留 / 瑕疵 / 是否可销售)
+```
+
+GitHub 分支策略: `main` 稳定 / `codex/*` 方案与实现 / `feature/*` / `fix/*`,每个 PR 必须说明关联 Issue、本地验证命令、prompt 改动前后的效果差异。密钥与本地 DB 不提交,默认私有仓库。
+
+## Challenges
+
+- **Lab 到屏幕色 ≠ 实物色**:色域、白点、屏幕校准、相机白平衡都会引入偏差。解决思路是**保留原始 Lab + 测量元数据 + 人工确认状态**,不把预览图当色差承诺。
+- **图像模型对车膜材质理解差**:只给 HEX 模型只会改车漆,必须配合 `finish` (gloss / matte / metallic / pearl / chameleon) 和 prompt hint 共同约束。
+- **销售输入不规范**:色号 `A001` vs `A-001`、中文名 vs 英文名 vs 别名都可能命中,查询时先做归一化,再按 `color_code → cn_name → en_name → aliases` 顺序匹配,多结果返回候选而非直接生图。
+- **本地 Agent 与云端 Hermes 协议要保持兼容**:本地工具层输出 JSON 结构(`task` / `color_code` / `color_name` / `series` / `finish` / `preview_hex` / `prompt` / `negative_prompt` / `assets`),后续云端直接复用同一协议。
+- **D50/D65 白点错配**:色差仪常输出 D50_2,屏幕 sRGB 用 D65_2,如果忘记色适应直接当 D65 处理会出现整体偏色。前端与后端必须强制走 Bradford 适配。
+
+## Result
+
+| 维度 | 成果 |
+|------|------|
+| **颜色资产** | 色卡主档 + 测量记录双表,同色号多场景测量并存,完整保留测量元数据 |
+| **预览一致性** | 前端 / 后端共用同一份 Lab → sRGB 转换逻辑,实时预览与最终 PNG 不会色差 |
+| **PNG 自动化** | 每次保存测量记录自动生成标准化色卡 PNG(色块 + 色号 + 中英文名 + Lab/RGB/HEX + 测量日期) |
+| **服务化** | Express + SQLite + REST API,本地 `npm run dev` 一键启动,数据可被任何程序查询 |
+| **下一阶段** | 本地 Hermes Agent 适配层已规划(4 个工具 + 1 个 runner),MVP Issue 列表与 GitHub 分支策略已落地 |
+
+## Resume Bullets
+
+- Architected a Lab-based color asset database with full measurement provenance (spectrometer Lab, reference white, geometry, specular mode, light source, operator), supporting multi-scene measurements per color code.
+- Implemented Lab → XYZ → sRGB conversion with D50/D65 white-point adaptation and automated PNG swatch generation, providing the canonical color source for downstream sales display and AI prompt hints.
+- Built a Vite + React 19 + Express + better-sqlite3 local color service with REST API, enabling structured queries for downstream Hermes Agent vehicle wrap preview pipeline.
