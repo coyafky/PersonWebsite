@@ -7,6 +7,7 @@ import {
   type BlogPost,
   type CareerPost,
   type ContentKind,
+  type LearningPost,
   type ProjectPost,
   type SiteContent,
   type WeeklyPost,
@@ -27,6 +28,7 @@ type CollectionMap = {
   projects: ProjectPost;
   career: CareerPost;
   "ai-tracker": AiTrackerPost;
+  learning: LearningPost;
 };
 
 async function fileExists(filePath: string) {
@@ -54,8 +56,13 @@ function formatValidationError(kind: ContentKind, slug: string, error: z.ZodErro
   return `Invalid ${kind} content "${slug}": ${details}`;
 }
 
-async function readCollection(kind: ContentKind): Promise<SiteContent[]> {
-  const directory = path.join(CONTENT_ROOT, kind);
+async function readCollection(
+  kind: ContentKind,
+  subDirectory?: string,
+): Promise<SiteContent[]> {
+  const directory = subDirectory
+    ? path.join(CONTENT_ROOT, kind, subDirectory)
+    : path.join(CONTENT_ROOT, kind);
 
   if (!(await fileExists(directory))) {
     return [];
@@ -150,6 +157,83 @@ export async function getFeaturedProjects() {
 export async function getAiTrackerPosts(includeDrafts = false): Promise<AiTrackerPost[]> {
   const items = await getCollection("ai-tracker", includeDrafts);
   return items.filter((item): item is AiTrackerPost => item.kind === "ai-tracker");
+}
+
+export type TopicSummary = {
+  topic: string;
+  title: string;
+  summary: string;
+  articleCount: number;
+};
+
+function isArticleSlug(slug: string) {
+  return !slug.startsWith("_");
+}
+
+async function readLearningTopic(topic: string, includeDrafts = false): Promise<LearningPost[]> {
+  const items = await readCollection("learning", topic);
+  assertUniqueSlugs(items, "learning");
+  return items
+    .filter((item): item is LearningPost => item.kind === "learning")
+    .filter((item) => (includeDrafts ? true : item.status === "published"));
+}
+
+export async function getLearningPosts(
+  topic: string,
+  includeDrafts = false,
+): Promise<LearningPost[]> {
+  const items = await readLearningTopic(topic, includeDrafts);
+  return byNewestDate(items.filter((item) => isArticleSlug(item.slug)));
+}
+
+export async function getLearningTopicIndex(
+  topic: string,
+): Promise<LearningPost | null> {
+  const items = await readLearningTopic(topic, false);
+  return items.find((item) => item.slug === "_index") ?? null;
+}
+
+export async function getLearningPostBySlug(
+  topic: string,
+  slug: string,
+): Promise<LearningPost | null> {
+  const items = await readLearningTopic(topic, false);
+  return items.find((item) => item.slug === slug) ?? null;
+}
+
+export async function getLearningTopics(includeDrafts = false): Promise<TopicSummary[]> {
+  const root = path.join(CONTENT_ROOT, "learning");
+  if (!(await fileExists(root))) {
+    return [];
+  }
+
+  const entries = await fs.readdir(root, { withFileTypes: true });
+  const topicDirs = entries.filter((entry) => entry.isDirectory());
+
+  const topics = await Promise.all(
+    topicDirs.map(async (entry) => {
+      const topic = entry.name;
+      const [indexPost, articles] = await Promise.all([
+        getLearningTopicIndex(topic),
+        getLearningPosts(topic, includeDrafts),
+      ]);
+
+      if (!indexPost) {
+        return null;
+      }
+
+      return {
+        topic,
+        title: indexPost.title,
+        summary: indexPost.summary,
+        articleCount: articles.length,
+      } satisfies TopicSummary;
+    }),
+  );
+
+  return topics
+    .filter((topic): topic is TopicSummary => topic !== null)
+    .toSorted((a, b) => a.title.localeCompare(b.title));
 }
 
 export async function getContentBySlug<K extends ContentKind>(kind: K, slug: string) {

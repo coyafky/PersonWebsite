@@ -14,6 +14,8 @@ const baseContentSchema = z.object({
   summary: z.string(),
   status: contentStatusSchema,
   englishSummary: z.string().optional(),
+  series: z.string().optional(),
+  seriesOrder: z.number().optional(),
 });
 
 export const blogSchema = baseContentSchema.extend({
@@ -48,6 +50,14 @@ export const careerSchema = baseContentSchema.extend({
   kind: z.literal("career"),
   lang: z.string().optional(),
   tags: stringArraySchema.optional(),
+});
+
+export const learningSchema = baseContentSchema.extend({
+  kind: z.literal("learning"),
+  topic: z.string(),
+  tags: stringArraySchema,
+  lang: z.string().default("zh"),
+  updated: z.string().optional(),
 });
 
 const aiTrackerSourceTypeSchema = z.enum([
@@ -101,6 +111,7 @@ export const schemaByKind = {
   projects: projectSchema,
   career: careerSchema,
   "ai-tracker": aiTrackerSchema,
+  learning: learningSchema,
 } as const;
 
 export type ContentKind = keyof typeof schemaByKind;
@@ -110,5 +121,12 @@ export type WeeklyPost = z.infer<typeof weeklySchema>;
 export type ProjectPost = z.infer<typeof projectSchema>;
 export type CareerPost = z.infer<typeof careerSchema>;
 export type AiTrackerPost = z.infer<typeof aiTrackerSchema>;
+export type LearningPost = z.infer<typeof learningSchema>;
 export type AiTrackerSourceType = z.infer<typeof aiTrackerSourceTypeSchema>;
-export type SiteContent = BlogPost | WeeklyPost | ProjectPost | CareerPost | AiTrackerPost;
+export type SiteContent =
+  | BlogPost
+  | WeeklyPost
+  | ProjectPost
+  | CareerPost
+  | AiTrackerPost
+  | LearningPost;
