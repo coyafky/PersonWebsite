@@ -1,40 +1,108 @@
 ---
 title: "Personal Website Content System"
 date: "2026-06-08"
-summary: "A file-based personal website for writing, weekly reflection, project archives, and career preparation."
+period: "2026.06"
+summary: "基于 Next.js App Router + Markdown/MDX 的个人内容系统,把博客、周记、项目档案、求职材料放到同一个 Git 仓库,配合 inbox 素材入口和四条自动化转化链路,让每一次写作都为长期成长和求职准备留下证据。"
 role: "Owner and developer"
 stack:
   - Next.js
   - TypeScript
   - MDX
   - Vercel
+  - Hermes Agent
 links:
   repository: ""
   demo: ""
 impact:
-  - "Created a maintainable writing and career-material workflow."
-  - "Defined Hermes agent boundaries for draft generation and content operations."
+  - "搭建 inbox → 内容的四条自动化转化链路(ideas→blog / logs→weekly / project-notes→projects / career-notes→career),素材碎片自动归集到对应内容类型"
+  - "定义 Hermes Agent 协作边界:Agent 负责草稿生成和内容运维,发布权由人控制"
+  - "统一博客、周记、项目、求职四类内容于同一 Git 仓库,让写作、复盘、项目证据、求职材料互相沉淀"
 resumeBullets:
   - "Designed a file-based content workflow using Markdown/MDX to support long-term writing, project archives, and job-search material."
+  - "Built four inbox-to-content automation pipelines (ideas→blog, logs→weekly, project-notes→projects, career-notes→career) with Hermes Agent handling drafts and owner-controlled publication."
+  - "Unified blog, weekly notes, project archives, and career materials in a single Git repo so that writing, reflection, and job-search evidence accumulate together."
 status: published
 featured: true
-englishSummary: "A personal website content system designed for writing, project evidence, and career preparation."
+englishSummary: "A file-based personal content system built on Next.js App Router + Markdown/MDX. Combines blog, weekly notes, project archives, and career materials in one Git repo, with an inbox entry point and four automation pipelines that turn raw fragments into structured content. Hermes Agent handles draft generation and content operations while publication stays owner-controlled."
 ---
 
 ## Background
 
-This project creates a personal website that combines writing, weekly notes, project records, and career preparation.
+个人笔记、项目细节、简历材料容易散落在不同工具里——Obsidian 写笔记、飞书写周报、本地文件夹存项目文档、Word 改简历。一旦要找「某个项目的复盘」或「这段经历能不能写进简历」,就要跨多个工具翻找,而且内容之间没有关联。
+
+这个项目把所有内容放到同一个 Git 仓库,让写作、复盘、项目证据、求职材料互相沉淀,而不是各自孤立。
 
 ## Problem
 
-Personal notes, project details, and resume material are easy to scatter across tools. The site should turn them into a maintainable content system.
+- **内容分散**:笔记在 Obsidian、周报在飞书、项目文档在本地、简历在 Word,互相找不到。
+- **素材到成品的转化断裂**:日常记录的碎片(灵感、日志、项目笔记、求职素材)很难自动变成可发布的内容。
+- **AI 协作边界不清**:让 AI 直接发布内容风险高,但完全不用 AI 又浪费草稿生成能力。
+
+## Goal
+
+搭一个文件驱动的个人内容系统:统一四类内容(blog / weekly / projects / career),配一个 inbox 素材入口和四条自动化转化链路,让 AI 负责草稿、人负责发布。
+
+## Role
+
+**Owner and developer**——从架构设计、frontmatter schema、内容读取层、MDX 组件体系到 Hermes 协作文档,全链路独自完成。
 
 ## Approach
 
-- Keep Markdown and MDX as the source of truth.
-- Use structured frontmatter for each content type.
-- Let Hermes create drafts and career material while keeping publication owner-controlled.
+### 文件驱动,Markdown/MDX 为唯一真相源
+
+| 内容类型 | 格式 | 位置 | 说明 |
+|---------|------|------|------|
+| 博客 | `.md` | `content/blog/` | frontmatter + 正文 |
+| 周记 | `.md` / `.mdx` | `content/weekly/` | 支持嵌入组件 |
+| 项目档案 | `.mdx` | `content/projects/` | 需要嵌入组件时用 MDX |
+| 求职材料 | `.md` | `content/career/` | 简历 bullet、STAR 故事 |
+
+所有 frontmatter 用 **Zod schema** 校验(`lib/content/schemas.ts`),`status: published` 才公开渲染,`status: draft` 仅本地可见。
+
+### inbox → 内容的四条转化链路
+
+```
+content/inbox/
+├── ideas/          → blog
+├── logs/           → weekly
+├── project-notes/  → projects
+└── career-notes/   → career
+```
+
+碎片素材丢进 inbox 对应子目录,Hermes Agent 按 Claude Code 命令(`blog-from-notes` / `weekly-from-inbox` / `project-to-career` / `draft-audit`)整理成草稿,人审核后改 `status: published` 发布。
+
+### Hermes Agent 协作边界
+
+- **Agent 负责**:草稿生成、内容运维、从 inbox 素材整理成结构化草稿
+- **人负责**:发布权——新增内容默认 `status: draft`,由人手动改为 `published`
+- **契约文档**:`docs/agent/` 下有 Hermes 内容工作流契约、四条转化链路说明、写作风格规范、模板,确保 Agent 行为可预期
+
+### 技术栈
+
+- **框架**:Next.js 16 App Router(Server Component 优先)
+- **内容解析**:gray-matter + next-mdx-remote (rsc) + remark-gfm
+- **MDX 组件**:Callout / Timeline / Tabs / Mermaid,统一在 `components/mdx-content.tsx` 注册
+- **校验**:TypeScript strict + Zod frontmatter schema
+- **部署**:Vercel(main 分支自动部署)
+
+## Challenges
+
+- **四类内容的 frontmatter 差异大**:博客有 tags/lang,周记有 week/highlights/mood,项目有 role/stack/impact/resumeBullets,求职有 lang/tags。需要用 Zod 为每种类型定义独立 schema,同时共享 baseContentSchema 的公共字段。
+- **MDX 组件注册要集中管理**:新增的 MDX 可用组件必须在 `components/mdx-content.tsx` 的 `components` 对象中注册,否则渲染时报错。这是一条强约束,但也保证了组件清单的可追溯。
+- **AI 协作边界的落地**:光说「Agent 负责草稿、人负责发布」不够,必须落到 `status: draft` 默认值 + Hermes 不会自动改 status 的行为约定 + 契约文档的明文规定,三层保证。
 
 ## Result
 
-This is a draft project record. Replace this section with implementation details and measurable outcomes after the first version is built.
+| 维度 | 成果 |
+|------|------|
+| **内容统一** | 博客/周记/项目/求职四类内容于同一 Git 仓库,互相关联 |
+| **自动化链路** | inbox → 内容的四条转化链路 + 4 个 Claude Code 命令,素材自动归集 |
+| **AI 协作边界** | Hermes 负责草稿和运维,发布权由人控制,契约文档明文约定 |
+| **技术基座** | Next.js App Router + TypeScript strict + Zod + MDX,Server Component 优先 |
+| **可维护性** | 文件驱动、schema 校验、组件集中注册,新增内容类型和组件有明确路径 |
+
+## Resume Bullets
+
+- Designed a file-based content workflow using Markdown/MDX to support long-term writing, project archives, and job-search material.
+- Built four inbox-to-content automation pipelines (ideas→blog, logs→weekly, project-notes→projects, career-notes→career) with Hermes Agent handling drafts and owner-controlled publication.
+- Unified blog, weekly notes, project archives, and career materials in a single Git repo so that writing, reflection, and job-search evidence accumulate together.

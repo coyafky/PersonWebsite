@@ -1,0 +1,110 @@
+---
+title: "6 个月 AI 应用工程师达标自检"
+date: "2026-06-19"
+summary: "5 个核心项目的达标 Checklist + 4 个能力组合自评表。动态追踪，每月手动更新 checkbox 状态。"
+status: draft
+lang: zh
+englishSummary: "Acceptance checklist for the five core projects and self-evaluation table for the four capability pillars. Dynamically tracked with checkboxes, manually updated monthly."
+---
+
+<Callout type="warning">
+**追踪说明**：本文件是动态追踪页。每完成一个 checkbox，把 `[ ]` 改成 `[x]`，并更新底部「最后更新」日期。建议每周日 review 一次。
+
+**配套文件**：[执行路线图](./goal-roadmap)
+</Callout>
+
+> 最后更新：2026-06-19（初始状态）
+
+## 项目 1：企业知识库 RAG（M1 · 7月）
+
+**核心交付**：上传文档 → 切分 → embedding → 问答机器人 → 引用来源 UI
+
+- [ ] LlamaIndex / LangChain 框架选型完成
+- [ ] 支持 PDF / Word / 网页 三种输入格式
+- [ ] chunk 切分策略确定（按段落 / 按 token / 滑动窗口）
+- [ ] embedding 模型选型（OpenAI text-embedding-3 / bge-large）
+- [ ] FAISS / Milvus 向量库部署
+- [ ] 问答接口支持引用来源
+- [ ] 前端 UI：上传 → 检索 → 答案 + 来源
+- [ ] Demo 录屏 + README + GitHub 仓库公开
+
+## 项目 2：AI 客服（飞书/微信接入）（M2 · 8月）
+
+**核心交付**：webhook + bot + RAG + prompt routing + 报价建议
+
+- [ ] 飞书机器人 webhook 接入
+- [ ] 产品知识库接入（复用项目 1）
+- [ ] prompt routing 分类（售前 / 售后 / 价格 / 物流）
+- [ ] 简单 agent：识别意图 → 调用工具 → 生成回复
+- [ ] 报价建议：基于产品价格表 + 客户需求
+- [ ] 多轮对话上下文管理
+- [ ] Demo 录屏 + README
+- [ ] 真实飞书群测试通过
+
+## 项目 3：CRM + AI 自动跟进（M3 · 9月）
+
+**核心交付**：飞书多维表格 + LLM 分类/scoring + workflow engine
+
+- [ ] 飞书多维表格 schema 设计（线索 / 客户 / 跟进 / 订单）
+- [ ] LLM 分类：线索类型（询盘 / 投诉 / 合作）
+- [ ] LLM scoring：客户意向评分（高 / 中 / 低）
+- [ ] 自动生成跟进话术
+- [ ] 自动报价建议（接入项目 2 的报价逻辑）
+- [ ] workflow engine：触发条件 → 动作编排
+- [ ] Demo 录屏 + README
+- [ ] 真实 CRM 数据回灌测试
+
+## 项目 4：Multi-Agent 流程自动化（M4 · 10月）
+
+**核心交付**：tool calling + workflow DAG + 多 agent 协作
+
+- [ ] LangGraph 框架调研
+- [ ] Agent 角色划分（识别 agent / 推荐 agent / 报价 agent / 写入 agent）
+- [ ] tool calling 标准化（每个工具的输入输出契约）
+- [ ] workflow DAG 设计
+- [ ] 场景验证：客户发图 → 识别车型 → 推荐方案 → 输出报价 → 写入 CRM
+- [ ] 错误处理 + 重试机制
+- [ ] Demo 录屏 + README
+- [ ] 性能基准：单次流程 < 5s
+
+## 项目 5：AI 内容生成 + OpenClaw 包装（M5 · 11月）
+
+**核心交付**：prompt template + 内容系统 + OpenClaw 项目品牌化
+
+- [ ] prompt template 系统（场景 + 风格 + 输出格式）
+- [ ] 小红书内容生成（标题 / 正文 / 话题）
+- [ ] 海报文案生成
+- [ ] 产品介绍生成
+- [ ] JSON 结构输出校验
+- [ ] OpenClaw 包装：定位为「企业 AI Agent 系统平台」
+- [ ] OpenClaw README / 文档站 / 演示视频
+- [ ] 公开发布：GitHub + 个人网站
+
+## 4 个能力组合自评
+
+| 能力组合 | 目标 | 当前状态 (2026-06) | 缺口 | 计划动作 |
+| --- | --- | --- | --- | --- |
+| ① AI 工程能力 | 熟练调用 LLM API + Function Calling | 🟡 中（已用 Hermes / OpenClaw） | 缺标准 RAG 实战 | M1 完成项目 1 |
+| ② LLM 应用架构能力 | RAG / Embedding / Vector DB / Agent | 🟡 中（架构理解有，缺生产经验） | 缺标准 RAG + Multi-Agent 实战 | M1 + M4 |
+| ③ 业务系统能力 | CRM / 工单 / 飞书 / API / workflow | 🟢 中高（CRM 思维 + workflow 拆解） | 缺飞书多维表格深入 | M3 |
+| ④ 产品化能力 | demo / 可演示系统 / 内部工具 | 🟢 高（已有车膜换色 Demo） | 缺完整 RAG + Multi-Agent demo | M1 + M4 |
+
+**图例**：🔴 缺 / 🟡 部分 / 🟢 已有
+
+## 关键里程碑
+
+- [ ] 2026-07-31 — 项目 1（RAG）MVP 上线
+- [ ] 2026-08-31 — 项目 2（AI 客服）真实群测试通过
+- [ ] 2026-09-30 — 项目 3（CRM + AI）真实数据回灌测试通过
+- [ ] 2026-10-31 — 项目 4（Multi-Agent）演示视频发布
+- [ ] 2026-11-30 — 项目 5（内容生成）+ OpenClaw 包装完成
+- [ ] 2026-12-19 — 简历升级 + 投递 + 面试
+
+## 风险与备选方案
+
+| 风险 | 影响 | 备选方案 |
+| --- | --- | --- |
+| M1 RAG 拖延到 M2 | 连锁影响后续项目 | 砍掉自建向量库，直接用 Pinecone serverless |
+| 飞书 API 配额限制 | M2/M3 测试受阻 | 申请企业账号 / 用 mock 数据演示 |
+| LangGraph 学习曲线 | M4 进度风险 | M3 提前 2 周预习；M4 fallback 到 AutoGen |
+| 求职周期长 | M6 投递到 offer > 6 个月 | 允许 deadline 顺延 1–2 个月，目标 2027-01–02 |

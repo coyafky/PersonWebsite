@@ -1,0 +1,112 @@
+---
+title: "6 个月 AI 应用工程师路线图"
+date: "2026-06-19"
+summary: "基于目标 JD 拆解的 6 个月（2026-07 → 2026-12）执行计划：4 个能力组合 + 5 个核心项目 + 月度里程碑。对应岗位 AI 技术应用 / AI 专员 / AI 落地工程师。"
+status: draft
+lang: zh
+englishSummary: "Six-month roadmap (July to December 2026) for an AI Application Engineer role: four capability pillars, five core projects, monthly milestones, and JD-aligned execution plan targeting enterprise AI tooling roles."
+---
+
+<Callout type="info">
+**目标岗位**：AI 技术应用 / AI 专员 / AI 落地工程师（偏业务型）
+
+**本质**：把大模型能力 → 变成公司内部可用系统的人。不是研究 AI，而是「用 AI 改造公司流程的人」。
+
+**Deadline**：2026-12-19（6 个月内）
+
+**配套文件**：[达标自检](./goal-checklist)
+</Callout>
+
+## 6 个月 Timeline
+
+<Timeline
+  items={[
+    {
+      label: "M1 · 2026-07",
+      title: "项目 1：企业知识库 RAG（必做）",
+      description:
+        "LlamaIndex / LangChain + FAISS + OpenAI/DeepSeek API。文档上传 → 切分 → embedding → 问答机器人 → 引用来源 UI。覆盖 JD 第 4 条「大模型 API + 知识库」。",
+      tags: ["P0", "RAG", "LangChain"],
+    },
+    {
+      label: "M2 · 2026-08",
+      title: "项目 2：AI 客服（飞书/微信接入）",
+      description:
+        "webhook + bot + RAG + prompt routing + 简单 agent。自动回复客户问题、匹配产品知识库、自动生成报价建议。覆盖 JD 第 3 条「AI 系统能力建设」。",
+      tags: ["P0", "Feishu", "Webhook"],
+    },
+    {
+      label: "M3 · 2026-09",
+      title: "项目 3：CRM + AI 自动跟进",
+      description:
+        "飞书多维表格 API + LLM 分类 + 客户意向评分 + workflow engine。线索自动分类、自动生成跟进话术、自动报价建议。覆盖 JD 第 2 条「业务流程 + AI 优化」。",
+      tags: ["P1", "Feishu-Base", "Workflow"],
+    },
+    {
+      label: "M4 · 2026-10",
+      title: "项目 4：Multi-Agent 流程自动化",
+      description:
+        "multi-agent + tool calling + workflow DAG。场景：客户发图 → 识别车型 → 推荐改装方案 → 输出报价 → 写入 CRM。覆盖 JD 第 8 条「AI 趋势跟踪」。",
+      tags: ["P2", "Multi-Agent", "LangGraph"],
+    },
+    {
+      label: "M5 · 2026-11",
+      title: "项目 5：AI 内容生成 + OpenClaw 包装",
+      description:
+        "prompt template + 模板系统 + LLM + JSON 结构输出。自动生成小红书内容、海报文案、产品介绍。同时把 OpenClaw 包装为「企业 AI Agent 系统平台」。覆盖 JD 第 5 条「AI 辅助工具设计」。",
+      tags: ["P2", "Content-Gen", "OpenClaw"],
+    },
+    {
+      label: "M6 · 2026-12",
+      title: "简历升级 + 投递 + 面试",
+      description:
+        "基于 5 个项目升级 bullets / star-stories / profile。投递目标公司 + mock 面试。覆盖 JD 全部 8 条要求。",
+      tags: ["求职", "Resume"],
+    },
+  ]}
+/>
+
+## 4 个能力组合 × 5 个项目 映射
+
+| 能力组合 | 优先级 | 对应项目 | 核心技能 |
+| --- | --- | --- | --- |
+| ① AI 工程能力 | P0 | 项目 1 RAG + 项目 2 AI 客服 | Python / OpenAI API / Prompt / Function Calling |
+| ② LLM 应用架构能力 | P0 | 项目 4 Multi-Agent + 项目 1 RAG | Embedding / Vector DB / Agent / LangChain |
+| ③ 业务系统能力 | P1 | 项目 3 CRM + AI + 项目 2 AI 客服 | CRM / 飞书集成 / API 对接 / Workflow |
+| ④ 产品化能力 | P2 | 项目 5 AI 内容 + OpenClaw 包装 | Demo / 可演示系统 / 内部工具 |
+
+## JD 8 条要求覆盖度
+
+| JD 条目 | 对应项目 | 完成月份 |
+| --- | --- | --- |
+| 1. AI 技术调研 + 应用落地 | 项目 1 RAG / 项目 2 AI 客服 | M1–M2 |
+| 2. 梳理业务流程 + AI 优化 | 项目 3 CRM + AI | M3 |
+| 3. AI 系统能力建设 | 项目 2 AI 客服 / 项目 5 内容生成 | M2 / M5 |
+| 4. 大模型 API + 知识库 | 项目 1 RAG | M1 |
+| 5. AI 辅助工具设计 | 项目 5 内容生成 + OpenClaw | M5 |
+| 6. 需求 → 方案 → 落地 | 全流程（每个项目都走一遍） | M1–M6 |
+| 7. AI 推广 | OpenClaw 包装 + 内部培训 | M5 |
+| 8. AI 趋势跟踪 | 项目 4 Multi-Agent | M4 |
+
+## 已有优势
+
+来自现有 `content/career/` 下的 `profile` / `bullets` / `star-stories`：
+
+- ✔ OpenClaw + 飞书 Agent（非常对口）
+- ✔ 车膜换色 Demo（AI + 产品）
+- ✔ CRM 系统思维（业务理解强）
+- ✔ workflow 拆解能力（加分项）
+
+## 缺口（面试会问）
+
+### 1. RAG 知识库（必须补）
+
+👉 当前还没有「标准 RAG 项目」—— M1 完成项目 1 填补。
+
+### 2. LLM 架构表达能力
+
+👉 面试会问：embedding 怎么做？chunk 怎么切？如何防止幻觉？—— M1 + M4 完成。
+
+### 3. Agent 系统深度
+
+👉 当前有 demo，缺：多 agent 协作逻辑、tool calling 标准化 —— M4 完成。

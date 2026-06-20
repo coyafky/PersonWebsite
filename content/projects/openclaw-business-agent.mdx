@@ -1,0 +1,95 @@
+---
+title: "OpenClaw 业务 Agent 设计与落地"
+date: "2026-04-01"
+period: "2026.04"
+summary: "基于 OpenClaw + 飞书搭建车膜客服、门店后台线索整理、营销内容助手等 3 类业务 Agent 原型,打通消息入口、Agent 路由和 workspace 规则文件,并设计汽车品牌海报自动化 workflow。"
+role: "开发者"
+stack:
+  - OpenClaw
+  - 飞书 Lark
+  - Hermes Agent
+  - Prompt 工程工作流
+links:
+  repository: ""
+  demo: ""
+impact:
+  - "搭建车膜客服、门店后台线索整理、营销内容助手 3 类业务 Agent 原型,打通消息入口、Agent 路由和 workspace 规则文件"
+  - "设计汽车品牌海报自动化 workflow,拆解车型轮换、场景选择、提示词拼装、图像生成、logo 与二维码合成、结果质检为可复用流程,适配 9:16 朋友圈营销海报场景"
+  - "通过多机器人绑定、多 Agent 配置和模板化规则设计,将 OpenClaw 价值落到重复咨询自动回复、线索结构化整理和内容批量生成等高频业务环节"
+resumeBullets:
+  - "基于 OpenClaw + 飞书搭建车膜客服、门店后台线索整理、营销内容助手 3 类业务 Agent 原型,打通消息入口、Agent 路由和 workspace 规则文件"
+  - "设计汽车品牌海报自动化 workflow,将车型轮换、场景选择、提示词拼装、图像生成、logo 与二维码合成、结果质检拆解为可复用流程,适配 9:16 朋友圈营销海报场景"
+  - "通过多机器人绑定、多 Agent 配置和模板化规则设计,将 OpenClaw 价值落到重复咨询自动回复、线索结构化整理和内容批量生成等高频业务环节,支持按场景独立演示和后续扩展"
+status: published
+featured: true
+englishSummary: "Built 3 business Agent prototypes (car film customer service, store lead organization, marketing content assistant) on OpenClaw + Feishu, wiring up message entry, Agent routing, and workspace rule files. Designed an automotive brand poster automation workflow decomposed into reusable steps (model rotation, scene selection, prompt assembly, image generation, logo/QR composition, quality check) for 9:16 WeChat Moments marketing scenarios."
+---
+
+## Background
+
+车膜门店的日常运营中有大量重复性、可标准化的环节:客户咨询集中在「这款膜多少钱」「能不能贴我的车型」「贴完什么样」等高频问题;销售每天收到的线索散落在私聊、群聊、表格里,整理耗时;朋友圈营销海报需要频繁出图,人工拼装效率低。
+
+这些场景的共同特征是**重复发生、规则可沉淀、对响应速度有要求**——正是 Agent 可以介入的高价值环节。
+
+## Problem
+
+- **重复咨询占用销售时间**:同样的车型适配、报价、施工时长问题每天被问很多遍,销售逐条手打回复效率低。
+- **线索散落难结构化**:客户私聊、群聊、表格里的线索没有统一归集,后续跟进容易漏。
+- **营销内容生产慢**:朋友圈海报需要人工选车型、选场景、拼提示词、生图、加 logo 和二维码,一条链路全靠手做。
+
+## Goal
+
+用 OpenClaw + 飞书搭出可演示、可扩展的业务 Agent 原型,把上述三类高频环节从「人工逐条处理」变成「Agent 自动处理 + 人工复核」。
+
+## Role
+
+**开发者**——负责 Agent 类型设计、消息入口与路由配置、workspace 规则文件编写、海报自动化 workflow 设计与拆解。
+
+## Approach
+
+### 3 类业务 Agent 原型
+
+围绕门店高频环节,设计 3 类可独立演示的 Agent:
+
+| Agent | 场景 | 核心动作 |
+|-------|------|---------|
+| 车膜客服 | 客户咨询自动回复 | 识别常见问题(报价/车型适配/施工时长)→ 按规则模板回复 |
+| 门店后台线索整理 | 私聊/群聊线索归集 | 抽取客户信息、需求、来源 → 结构化写入表格 |
+| 营销内容助手 | 朋友圈文案起稿 | 结合车型、活动、目标人群 → 输出可发布的短文案 |
+
+打通三件事:**消息入口**(飞书 Bot 接收)→ **Agent 路由**(按场景分发到对应 Agent)→ **workspace 规则文件**(每个 Agent 一套可维护的规则)。
+
+### 汽车品牌海报自动化 workflow
+
+把朋友圈 9:16 海报的生成拆成可复用流程:
+
+```
+车型轮换 → 场景选择 → 提示词拼装 → 图像生成 → logo 与二维码合成 → 结果质检
+```
+
+每一步独立可替换:车型库可扩展、场景模板可增减、提示词可调、生图模型可换、合成素材可配置、质检规则可迭代。
+
+### 多机器人 + 多 Agent 配置
+
+通过多机器人绑定和模板化规则设计,让同一套 OpenClaw 基座支持按场景独立演示和后续扩展——客服 Bot 只答咨询,线索 Bot 只整理线索,内容 Bot 只出文案,互不干扰。
+
+## Challenges
+
+- **规则文件要足够具体才能稳定触发**:早期规则写得太宽,客服 Agent 会对不相关消息也尝试回复。需要把触发条件收窄到明确的关键词和意图。
+- **海报 workflow 的质检环节是关键**:生图结果偶尔出错(车型不对、构图变形),必须在合成 logo 之前加质检,不能直接发出去。
+- **多 Bot 隔离 vs 统一管理的取舍**:多 profile 隔离清晰但配置成本高,需要按业务规模判断何时该拆 profile、何时共用一套规则。
+
+## Result
+
+| 维度 | 成果 |
+|------|------|
+| **Agent 原型** | 3 类业务 Agent(客服/线索/内容)可独立演示,消息入口→路由→规则闭环跑通 |
+| **海报 workflow** | 6 步可复用流程,适配 9:16 朋友圈场景,各步骤可独立替换 |
+| **扩展性** | 多机器人 + 多 Agent + 模板化规则,支持按场景独立演示和后续扩展 |
+| **业务落点** | 重复咨询自动回复、线索结构化整理、内容批量生成 3 个高频环节 |
+
+## Resume Bullets
+
+- 基于 OpenClaw + 飞书搭建车膜客服、门店后台线索整理、营销内容助手 3 类业务 Agent 原型,打通消息入口、Agent 路由和 workspace 规则文件。
+- 设计汽车品牌海报自动化 workflow,将车型轮换、场景选择、提示词拼装、图像生成、logo 与二维码合成、结果质检拆解为可复用流程,适配 9:16 朋友圈营销海报场景。
+- 通过多机器人绑定、多 Agent 配置和模板化规则设计,将 OpenClaw 价值落到重复咨询自动回复、线索结构化整理和内容批量生成等高频业务环节,支持按场景独立演示和后续扩展。
