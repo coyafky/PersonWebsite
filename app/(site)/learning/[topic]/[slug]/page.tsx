@@ -1,43 +1,52 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { MdxContent } from "@/components/mdx-content";
 import { ArticleLayout } from "@/components/article-layout";
-import { getBlogPosts, getContentBySlug } from "@/lib/content";
+import { MdxContent } from "@/components/mdx-content";
+import {
+  getLearningPostBySlug,
+  getLearningPosts,
+  getLearningTopics,
+} from "@/lib/content";
 import { extractHeadings } from "@/lib/content/headings";
 import { articleMetadata, buildUrl } from "@/lib/metadata";
 import { readingTimeLabel } from "@/lib/reading-time";
 import { BlogPostingJsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
-import { Comments } from "@/components/comments";
 import { RelatedPosts, getRelatedPosts } from "@/components/related-posts";
 import { SeriesNav } from "@/components/series-nav";
 import { ArticleKeyboardNav } from "@/components/article-keyboard-nav";
 
-type SlugPageProps = {
-  params: Promise<{ slug: string }>;
+type ArticlePageProps = {
+  params: Promise<{ topic: string; slug: string }>;
 };
 
 export async function generateStaticParams() {
-  const posts = await getBlogPosts();
-  return posts.map((post) => ({ slug: post.slug }));
+  const topics = await getLearningTopics();
+  const articleLists = await Promise.all(
+    topics.map(async (t) => {
+      const articles = await getLearningPosts(t.topic);
+      return articles.map((article) => ({ topic: t.topic, slug: article.slug }));
+    }),
+  );
+  return articleLists.flat();
 }
 
-export async function generateMetadata({ params }: SlugPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const post = await getContentBySlug("blog", slug);
+export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  const { topic, slug } = await params;
+  const post = await getLearningPostBySlug(topic, slug);
 
   if (!post) {
     return {};
   }
 
-  return articleMetadata({ ...post, path: "blog" });
+  return articleMetadata({ ...post, path: `learning/${topic}` });
 }
 
-export default async function BlogDetailPage({ params }: SlugPageProps) {
-  const { slug } = await params;
+export default async function LearningArticlePage({ params }: ArticlePageProps) {
+  const { topic, slug } = await params;
   const [post, allPosts] = await Promise.all([
-    getContentBySlug("blog", slug),
-    getBlogPosts(),
+    getLearningPostBySlug(topic, slug),
+    getLearningPosts(topic),
   ]);
 
   if (!post) {
@@ -45,11 +54,11 @@ export default async function BlogDetailPage({ params }: SlugPageProps) {
   }
 
   const headings = extractHeadings(post.body);
-  const url = buildUrl(`/blog/${post.slug}`);
+  const url = buildUrl(`/learning/${topic}/${slug}`);
 
   const related = getRelatedPosts(
-    { slug: post.slug, tags: post.tags, path: "blog" },
-    allPosts.map((p) => ({ title: p.title, slug: p.slug, tags: p.tags, date: p.date, path: "blog" })),
+    { slug: post.slug, tags: post.tags, path: `learning/${topic}` },
+    allPosts.map((p) => ({ title: p.title, slug: p.slug, tags: p.tags, date: p.date, path: `learning/${topic}` })),
   );
 
   let seriesPrev = null;
@@ -59,8 +68,8 @@ export default async function BlogDetailPage({ params }: SlugPageProps) {
       .filter((p) => p.series === post.series)
       .sort((a, b) => (a.seriesOrder ?? 0) - (b.seriesOrder ?? 0));
     const idx = seriesPosts.findIndex((p) => p.slug === post.slug);
-    if (idx > 0) seriesPrev = { title: seriesPosts[idx - 1].title, slug: `/blog/${seriesPosts[idx - 1].slug}`, date: seriesPosts[idx - 1].date };
-    if (idx < seriesPosts.length - 1) seriesNext = { title: seriesPosts[idx + 1].title, slug: `/blog/${seriesPosts[idx + 1].slug}`, date: seriesPosts[idx + 1].date };
+    if (idx > 0) seriesPrev = { title: seriesPosts[idx - 1].title, slug: `/learning/${topic}/${seriesPosts[idx - 1].slug}`, date: seriesPosts[idx - 1].date };
+    if (idx < seriesPosts.length - 1) seriesNext = { title: seriesPosts[idx + 1].title, slug: `/learning/${topic}/${seriesPosts[idx + 1].slug}`, date: seriesPosts[idx + 1].date };
   }
 
   const postIdx = allPosts.findIndex((p) => p.slug === slug);
@@ -69,24 +78,25 @@ export default async function BlogDetailPage({ params }: SlugPageProps) {
 
   return (
     <ArticleLayout headings={headings}>
-      <BlogPostingJsonLd post={post} path="blog" />
+      <BlogPostingJsonLd post={post} path={`learning/${topic}`} />
       <ArticleKeyboardNav
-        prevUrl={prevPost ? `/blog/${prevPost.slug}` : undefined}
-        nextUrl={nextPost ? `/blog/${nextPost.slug}` : undefined}
+        prevUrl={prevPost ? `/learning/${topic}/${prevPost.slug}` : undefined}
+        nextUrl={nextPost ? `/learning/${topic}/${nextPost.slug}` : undefined}
       />
       <article className="article-shell">
         <header className="article-header">
           <span>{post.date} · <span className="reading-time">{readingTimeLabel(post.body)}</span></span>
           <h1>{post.title}</h1>
           <p>{post.summary}</p>
-          {post.englishSummary ? <p className="english-summary">{post.englishSummary}</p> : null}
+          {post.englishSummary ? (
+            <p className="english-summary">{post.englishSummary}</p>
+          ) : null}
         </header>
         <MdxContent source={post.body} />
         <SeriesNav series={post.series ?? ""} prev={seriesPrev} next={seriesNext} />
         <ShareButtons title={post.title} url={url} />
       </article>
       <RelatedPosts posts={related} />
-      <Comments />
     </ArticleLayout>
   );
 }

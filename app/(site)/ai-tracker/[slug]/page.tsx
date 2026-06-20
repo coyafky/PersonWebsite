@@ -9,6 +9,10 @@ import {
   getRelatedTitles,
 } from "@/lib/content";
 import { extractHeadings } from "@/lib/content/headings";
+import { articleMetadata, buildUrl } from "@/lib/metadata";
+import { readingTimeLabel } from "@/lib/reading-time";
+import { BlogPostingJsonLd } from "@/components/json-ld";
+import { ShareButtons } from "@/components/share-buttons";
 
 type SlugPageProps = {
   params: Promise<{ slug: string }>;
@@ -36,10 +40,7 @@ export async function generateMetadata({ params }: SlugPageProps): Promise<Metad
     return {};
   }
 
-  return {
-    title: post.title,
-    description: post.summary,
-  };
+  return articleMetadata({ ...post, path: "ai-tracker" });
 }
 
 export default async function AiTrackerDetailPage({ params }: SlugPageProps) {
@@ -51,6 +52,7 @@ export default async function AiTrackerDetailPage({ params }: SlugPageProps) {
   }
 
   const headings = extractHeadings(post.body);
+  const url = buildUrl(`/ai-tracker/${post.slug}`);
   const resolvedRelated = await getRelatedTitles(post.relatedPosts);
   const resolvedByKind = (Object.keys(RELATED_COLLECTION_LABELS) as RelatedKind[]).map(
     (key) => ({
@@ -62,9 +64,10 @@ export default async function AiTrackerDetailPage({ params }: SlugPageProps) {
 
   return (
     <ArticleLayout headings={headings}>
+      <BlogPostingJsonLd post={post} path="ai-tracker" />
       <article className="article-shell">
         <header className="article-header">
-          <span>{post.date}</span>
+          <span>{post.date} · <span className="reading-time">{readingTimeLabel(post.body)}</span></span>
           <h1>{post.title}</h1>
           <p>{post.summary}</p>
           {post.englishSummary ? <p className="english-summary">{post.englishSummary}</p> : null}
@@ -180,6 +183,7 @@ export default async function AiTrackerDetailPage({ params }: SlugPageProps) {
             })}
           </section>
         ) : null}
+        <ShareButtons title={post.title} url={url} />
       </article>
     </ArticleLayout>
   );

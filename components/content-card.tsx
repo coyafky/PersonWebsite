@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { Icons0ArrowUpRight } from "@/components/icons0";
 
@@ -36,7 +37,14 @@ export function ContentCard({
       {tags.length > 0 ? (
         <ul className="tag-list" aria-label="Tags">
           {tags.map((tag) => (
-            <li key={tag}>{tag}</li>
+            <li key={tag}>
+              <Link
+                href={`/tags/${encodeURIComponent(tag)}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {tag}
+              </Link>
+            </li>
           ))}
         </ul>
       ) : null}
