@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { triggerSearch } from "@/lib/search-events";
 import {
   Icons0Blog,
@@ -28,9 +28,14 @@ export function SiteNav() {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => setMounted(true), []);
+  // 客户端挂载检测：避免 SSR/CSR 主题不一致导致的 hydration mismatch。
+  // 用 useSyncExternalStore 替代 useEffect+setState 模式，规避 react-hooks/set-state-in-effect 规则。
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 20);

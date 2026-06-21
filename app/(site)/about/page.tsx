@@ -255,8 +255,8 @@ export default async function AboutPage() {
       </section>
 
       {/* Career — 合并自原 /career 路由 */}
-      <section id="career" className="about-subsection">
-        <h2 id="career-heading">Career</h2>
+      <section className="about-subsection">
+        <h2 id="career">Career</h2>
         <p className="muted-block">
           一个连接技能、项目证据和求职材料的能力索引。原 /career 路由已合并到此页。
         </p>
