@@ -12,7 +12,6 @@ import {
   Icons0Notebook,
   Icons0Portfolio,
   Icons0Profile,
-  Icons0Document,
   Icons0Radar,
 } from "@/components/icons0";
 
@@ -22,7 +21,6 @@ const navItems = [
   { href: "/weekly", icon: Icons0Calendar, label: "Weekly" },
   { href: "/learning", icon: Icons0Notebook, label: "Learning" },
   { href: "/projects", icon: Icons0Portfolio, label: "Projects" },
-  { href: "/career", icon: Icons0Document, label: "Career" },
   { href: "/about", icon: Icons0Profile, label: "About" },
 ];
 
