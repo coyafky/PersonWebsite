@@ -81,9 +81,27 @@
 
 | 冲突 | 现状 | 处理 |
 |------|------|------|
-| 反 Inter 字体 | `app/layout.tsx:9` 用 `next/font/google` Inter | **先不换**。换字体是大动作（影响所有页面 + SEO/性能）。Skill 触发时**新做的部分**用 anchor 字体，已存在的部分不强求 |
-| 反 AI 蓝紫渐变 | 部分组件可能用 `linear-gradient(135deg, #667eea, #764ba2)` 风格 | 触发时新做的部分避开，已有不强求 |
+| 反 Inter 字体 | ~~`app/layout.tsx:9` 用 `next/font/google` Inter~~ | ✅ **已解决 (2026.06)** — Fraunces (display) + Source Serif 4 (body) + Inter (UI chrome only) 走 `next/font/google` |
+| 反 AI 蓝紫渐变 | ~~部分组件可能用 `linear-gradient(135deg, #667eea, #764ba2)` 风格~~ | ✅ **已解决 (2026.06)** — 所有 hex 迁移 oklch，hero 双层 gradient 简化为单层 surface |
 | 反 emoji 图标 | 项目用 `components/icons0.tsx` 自建图标 | ✅ 已合规 |
+
+### 已应用的设计系统：Stripe Press (2026.06)
+
+整个站点的 design system 已迁移到 Stripe Press 锚点（`.claude/skills/web-design-engineer/references/style-recipes/stripe-press.md`）。核心决策：
+
+- **字体**：Fraunces (display, opsz 144) / Source Serif 4 (body) / Inter (UI only)
+- **配色**：暖象牙底 + 暖墨字 + 单一 foil-stamp teal accent；全部走 oklch
+- **几何**：全局 0 圆角（Stripe Press signature）；hairline 1px / accent 2px
+- **动效**：1500ms opacity-only crossfade；fadeUp 800ms；hover 仅 `y: -2`
+
+**实施记录**：
+- 分支：`feature/stripe-press-refactor`
+- 8 个原子 commit
+- Baseline 备份：`docs/agent/design-refactor-baseline.md`
+- 5 维 critique：`docs/agent/stripe-press-critique.md`（全维度 ≥ 7/10，avg 7.6）
+- **新做/重做的视觉任务仍以 Stripe Press 为 anchor**；未来如要换 anchor，需要先 review CLAUDE.md 决策
+
+
 
 ### 升级 skill
 

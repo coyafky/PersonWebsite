@@ -146,7 +146,8 @@ PersonalWebsite/
 - ✅ 站点骨架完成：首页 / blog / weekly / projects / career / about 路由
 - ✅ 内容系统完成：inbox 素材入口 + 四条转化链路 + 4 个 Claude Code 命令
 - ✅ MDX 组件体系：Callout / Timeline / Tabs / Mermaid
-- 🟡 组件样式待完善（CSS 细节）
+- ✅ **Design system: Stripe Press (2026.06)** — Fraunces + Source Serif 4 衬线编辑式 / oklch 暖调 / 全局 0 圆角 / 1500ms 慢 crossfade。详见 `docs/agent/skills-usage.md` 和 `docs/agent/stripe-press-critique.md`
+- 🟡 组件样式微调（off-scale 间距值 12/18/22/28 仍残留，可做 rhythm pass）
 - 🟡 内容持续填充中（Obsidian → Website 同步）
 - 🟡 projects 页面展示待优化
 
