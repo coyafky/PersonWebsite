@@ -112,6 +112,22 @@ PersonalWebsite/
 
 ---
 
+## Available Skills
+
+通过 `.claude/skills/` 接入 Anthropic Agent Skills，给 Claude Code 等工具注入结构化领域能力。
+
+| Skill | 来源 | 触发场景 | 详细文档 |
+|------|------|---------|---------|
+| `web-design-engineer` v1.2.2 | `ConardLi/garden-skills` | 新做/重做页面、视觉组件、动效、数据可视化 | [`docs/agent/skills-usage.md`](docs/agent/skills-usage.md) |
+
+**通用规则**：
+
+- 触发 `web-design-engineer` 的任务（"画在屏幕上的新作品或重做"）先读 `.claude/skills/web-design-engineer/SKILL.md`，再选 design anchor（`references/style-recipes/INDEX.md`），最后宣告设计系统再动笔
+- **不要改 `SKILL.md` 本体**——定制写在 `docs/agent/skills-usage.md`
+- 新增 skill：复制到 `.claude/skills/<name>/` + 更新本表 + 更新 `skills-usage.md`
+
+---
+
 ## Learning 栏目
 
 按主题（topic）组织的学习笔记，与 blog 区分：blog 写观点，learning 记结构化学习。
