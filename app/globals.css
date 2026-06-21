@@ -2784,3 +2784,134 @@ main {
     font-size: 20px;
   }
 }
+
+/* ─── Slice 7: AI Tracker Signal Stream ─── */
+
+.entry-card-ai-tracker-stream {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.entry-card-ai-tracker {
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition: background var(--transition-fast);
+}
+
+.entry-card-ai-tracker:hover {
+  background: var(--gold-soft);
+}
+
+/* 信号强度修饰符 */
+.entry-card-ai-tracker-strong {
+  border-left: 3px solid var(--gold);
+  padding-left: var(--space-4);
+}
+.entry-card-ai-tracker-mid {
+  border-left: 3px solid var(--rose);
+  padding-left: var(--space-4);
+}
+.entry-card-ai-tracker-weak {
+  border-left: 3px solid var(--muted);
+  padding-left: var(--space-4);
+}
+
+/* 顶部 meta 行（信号标签 + 日期） */
+.entry-card-ai-tracker-meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.entry-card-ai-tracker-signal {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid currentColor;
+}
+
+.entry-card-ai-tracker-signal-strong { color: var(--gold); }
+.entry-card-ai-tracker-signal-mid { color: var(--rose); }
+.entry-card-ai-tracker-signal-weak { color: var(--muted); }
+
+.entry-card-ai-tracker-date {
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 主链接区 */
+.entry-card-ai-tracker-link {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+
+.entry-card-ai-tracker-link:hover .entry-card-ai-tracker-title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.entry-card-ai-tracker-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 var(--space-2) 0;
+  color: var(--text);
+}
+
+.entry-card-ai-tracker-summary {
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Tags 列表 */
+.entry-card-ai-tracker-tags {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-2) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.entry-card-ai-tracker-tags li a {
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+}
+
+.entry-card-ai-tracker-tags li a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* 移动端 */
+@media (max-width: 720px) {
+  .entry-card-ai-tracker-title { font-size: 18px; }
+  .entry-card-ai-tracker {
+    padding: var(--space-4) 0;
+  }
+  .entry-card-ai-tracker-strong,
+  .entry-card-ai-tracker-mid,
+  .entry-card-ai-tracker-weak {
+    padding-left: var(--space-3);
+  }
+}
