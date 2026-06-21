@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { PageTransitionWrapper } from "@/components/page-transition";
+import { PageTransitionWrapper } from "@/components/animations";
 import { SiteNav } from "@/components/site-nav";
 import { BackToTop } from "@/components/back-to-top";
 import { SearchDialog } from "@/components/search-dialog";

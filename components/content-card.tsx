@@ -26,9 +26,9 @@ export function ContentCard({
     <motion.a
       className="content-card"
       href={href}
-      whileHover={{ y: -4, scale: 1.01 }}
-      whileTap={{ scale: 0.985 }}
-      transition={{ type: "spring", stiffness: 300, damping: 24 }}
+      whileHover={{ y: -2 }}
+      whileTap={{ y: 0 }}
+      transition={{ duration: 0.4, ease: [0.22, 0.61, 0.36, 1] }}
     >
       {icon ? <span className="icon-shell">{icon}</span> : null}
       {meta ? <span className="card-meta">{meta}</span> : null}

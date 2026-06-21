@@ -7,6 +7,7 @@ import {
   type HTMLMotionProps,
   type Variants,
 } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useMemo, useRef, type ElementType, type ReactNode } from "react";
 
 // ── shared cubic-bezier easing (must be a tuple for framer-motion types) ──
@@ -54,7 +55,7 @@ export const fadeUp: Variants = {
   on: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: easeOut },
+    transition: { duration: 0.8, ease: easeOut },
   },
 };
 
@@ -91,7 +92,29 @@ export const stagger = (delay = 0.1): Variants => ({
 
 /**
  * Wraps children in AnimatePresence for page / route transitions.
+ * Stripe Press signature: 1500ms opacity-only crossfade, no translateY.
+ */
+export function PageTransitionWrapper({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={pathname}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { duration: 0.75, ease: easeOut } }}
+        exit={{ opacity: 0, transition: { duration: 0.75, ease: easeOut } }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+/**
+ * Wraps children in AnimatePresence for page / route transitions.
  * Key must change between routes — pass pathname.
+ * (Legacy API; kept for callers that need a controlled id.)
  */
 export function PageTransition({
   children,
@@ -157,7 +180,7 @@ export function RevealOnScroll({
         on: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.55, ease: easeOut, delay },
+          transition: { duration: 0.8, ease: easeOut, delay },
         },
       }}
       {...props}
