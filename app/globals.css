@@ -1,36 +1,56 @@
 :root {
   color-scheme: light;
 
-  /* 主底色：暖白 / 浅灰 / 雾蓝灰 */
-  --background: #F5EFE6;     /* 暖白 page background */
-  --surface: #FBF7EF;        /* 暖白卡片表面 */
-  --surface-soft: #ECE5D8;   /* 浅灰，二级表面 */
-  --surface-mist: #DDE2E7;   /* 雾蓝灰，三级表面 / 分隔 */
+  /* ── Stripe Press palette — warm cream ground + ink + foil teal ── */
+  --background: oklch(95% 0.025 80);    /* cream — page ground */
+  --surface: oklch(89% 0.03 75);       /* warmer cream — card surface */
+  --surface-soft: oklch(93% 0.022 78);  /* mist cream — secondary surface */
+  --surface-mist: oklch(85% 0.025 78);  /* deeper cream — tertiary / dividers */
 
-  /* 文字：炭灰 */
-  --text: #2A2D33;           /* 炭灰主文字 */
-  --muted: #5C616B;          /* 弱化炭灰 */
-  --border: #E0DCD3;         /* 暖浅灰描边 */
+  /* 文字：warm ink (not pure black) */
+  --text: oklch(20% 0.015 60);          /* warm ink — primary text */
+  --muted: oklch(50% 0.025 70);         /* warm secondary text */
+  --border: oklch(75% 0.04 75);         /* hairline — warm */
 
-  /* 强调色：深墨蓝 + 玫瑰梅子 */
-  --accent: #2A3656;         /* 深墨蓝 — 主链接、icon、meta、callout 左边 */
-  --accent-strong: #1A2138;  /* 更深的墨蓝 — primary 按钮底色、强面板底色 */
-  --accent-soft: #E5E0DA;    /* 暖中性 — icon-shell 底色、柔和衬底 */
+  /* foil-stamp teal — single editorial accent */
+  --accent: oklch(35% 0.08 200);        /* foil teal — links, icons, meta */
+  --accent-strong: oklch(25% 0.08 200); /* deeper teal — primary button ground */
+  --accent-soft: oklch(88% 0.03 85);    /* warm neutral — icon-shell ground */
 
-  --rose: #A07A8C;           /* 柔和玫瑰梅子 — 二级强调 */
-  --rose-soft: #F2E7EC;      /* 梅子 soft — 备用 */
+  --rose: oklch(60% 0.06 20);           /* subdued claret — secondary accent */
+  --rose-soft: oklch(92% 0.025 20);     /* claret soft — reserved */
 
-  /* 点缀色：金色 / 杏色 — 严格用于 hover 和标签 */
-  --gold: #C9A66B;           /* 金色 — hover 边框、tag 文字 */
-  --gold-soft: #F3E9D2;      /* 杏色 soft — hover 背景、tag 背景 */
+  /* 点缀色：gilt (used sparingly) */
+  --gold: oklch(60% 0.08 75);           /* gilt — hover border, tag text */
+  --gold-soft: oklch(92% 0.04 80);      /* gilt soft — hover ground, tag ground */
 
-  /* 强面板（hero 中的 "Markdown / MDX" 行等）— 深墨蓝 */
-  --surface-strong: #1A2138;
+  /* 强面板 — deep teal ink */
+  --surface-strong: oklch(22% 0.06 200);
 
   /* 几何与阴影 */
-  --shadow: 0 20px 60px rgb(42 45 51 / 0.08);
-  --radius: 8px;
+  --shadow: 0 20px 60px oklch(20% 0.015 60 / 0.04);  /* editorial: barely-there */
+  --radius: 0;                            /* Stripe Press signature: 0 radius */
   --container: 1120px;
+
+  /* ── Editorial motion ── */
+  --transition-fast: 150ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  --transition-slow: 1500ms ease;         /* signature slow page crossfade */
+
+  /* ── Radius scale (override-friendly) ── */
+  --radius-0: 0;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-pill: 9999px;
+
+  /* ── Spacing scale (8pt grid + half-step) ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 64px;
+  --space-8: 96px;
 
   /* AI Tracker signal 强度 */
   --signal-strong: var(--gold);
@@ -41,28 +61,29 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --background: #15191E;
-  --surface: #1E242B;
-  --surface-soft: #262D35;
-  --surface-mist: #2E3640;
+  /* night-editor mode — warm ink ground + cream text (no pure black/white) */
+  --background: oklch(20% 0.015 60);
+  --surface: oklch(25% 0.02 65);
+  --surface-soft: oklch(22% 0.018 62);
+  --surface-mist: oklch(30% 0.022 65);
 
-  --text: #E2E6EB;
-  --muted: #929AA5;
-  --border: #323942;
+  --text: oklch(95% 0.025 80);
+  --muted: oklch(70% 0.03 75);
+  --border: oklch(40% 0.03 70);
 
-  --accent: #8EA4D2;
-  --accent-strong: #B8CCF0;
-  --accent-soft: #262D35;
+  --accent: oklch(75% 0.08 200);
+  --accent-strong: oklch(85% 0.07 200);
+  --accent-soft: oklch(28% 0.025 65);
 
-  --rose: #C99DA8;
-  --rose-soft: #32252A;
+  --rose: oklch(75% 0.06 20);
+  --rose-soft: oklch(28% 0.04 20);
 
-  --gold: #D4B87A;
-  --gold-soft: #363025;
+  --gold: oklch(78% 0.08 80);
+  --gold-soft: oklch(28% 0.04 70);
 
-  --surface-strong: #B8CCF0;
+  --surface-strong: oklch(85% 0.07 200);
 
-  --shadow: 0 20px 60px rgb(0 0 0 / 0.25);
+  --shadow: 0 20px 60px oklch(10% 0.01 60 / 0.4);
 }
 
 * {
