@@ -1,6 +1,5 @@
-import { Icons0Document, Icons0Idea, Icons0Portfolio } from "@/components/icons0";
+import { type CareerPost, getCareerPosts } from "@/lib/content";
 import { MdxContent } from "@/components/mdx-content";
-import { type CareerPost, getCareerPosts, getFeaturedProjects } from "@/lib/content";
 
 export const metadata = {
   title: "About",
@@ -67,38 +66,6 @@ const experience: ExpItem[] = [
       "参与海外客户开发、产品介绍、报价沟通和订单跟进；" +
       "通过客户筛选、主动沟通、需求确认和持续跟进，任职期间促成 2 单成交；" +
       "根据客户反馈整理需求信息，协助推进后续沟通和销售跟进。",
-  },
-];
-
-const projects: ExpItem[] = [
-  {
-    period: "2026.04",
-    title: "OpenClaw 业务 Agent 设计与落地",
-    desc:
-      "基于 OpenClaw + 飞书搭建车膜客服、门店后台线索整理、营销内容助手 3 类业务 Agent 原型，" +
-      "打通消息入口、Agent 路由和 workspace 规则文件；设计汽车品牌海报自动化 workflow，" +
-      "适配 9:16 朋友圈营销海报场景。",
-    link: { href: "/projects/openclaw-business-agent", label: "查看项目档案" },
-  },
-  {
-    period: "2026.04",
-    title: "车膜换色 Demo 设计",
-    desc:
-      "围绕车膜门店展示场景，设计「客户发送车图 + 颜色需求 → 返回换色效果参考」的业务原型；" +
-      "针对颜色表达不标准的问题，梳理 HEX 色值和提示词结合的映射逻辑，" +
-      "缩短客户理解成本和销售沟通成本。",
-    link: {
-      href: "/projects/ark-seedream-car-preview",
-      label: "查看项目档案",
-    },
-  },
-  {
-    period: "2026.06",
-    title: "个人网站内容系统",
-    desc:
-      "Next.js App Router + Markdown/MDX 内容系统，统一博客、周记、项目档案、求职材料于同一 Git 仓库，" +
-      "包含 inbox → 内容的四条自动化转化链路。",
-    link: { href: "/projects/personal-website", label: "查看项目档案" },
   },
 ];
 
@@ -175,10 +142,7 @@ function ExpSection({
 }
 
 export default async function AboutPage() {
-  const [featuredProjects, careerItems] = await Promise.all([
-    getFeaturedProjects(),
-    getCareerPosts(true),
-  ]);
+  const careerItems = await getCareerPosts(true);
   const sortedCareerItems = sortCareerItems(careerItems);
 
   return (
@@ -196,13 +160,6 @@ export default async function AboutPage() {
             2002 年生，佛山大学计算机科学与技术本科（2025 届）。当前在职，任 AI
             部成员，负责「用 AI 为企业提效」，坐标佛山禅城。
           </p>
-          <p>
-            已从「会用工具」向「用工具搭建系统」完成第一次跃迁。当前重点：把 AI
-            能力转化为真实业务价值——理解业务 + 技术落地 + 人员协作。
-          </p>
-          <p className="muted-block">
-            喜欢并行推进、结构化输出、数据驱动。需要明确的下一步指令，不喜欢「你想怎么做？」式的空泛提问。
-          </p>
           <p className="muted-block">
             联系邮箱：
             <a href="mailto:coya20020824@gmail.com">coya20020824@gmail.com</a>
@@ -216,15 +173,18 @@ export default async function AboutPage() {
       {/* Work Experience */}
       <ExpSection heading="工作经历" items={experience} />
 
-      {/* Projects / Experience */}
-      <ExpSection heading="项目经历" items={projects} />
-
-      {/* Skills */}
-      <ExpSection heading="专业技能" items={skills} />
-
-      {/* Tech Stack */}
+      {/* Skills & Stack */}
       <section className="about-subsection">
-        <h2>常用工具 &amp; 技术栈</h2>
+        <h2>Skills &amp; Stack</h2>
+        <ul className="exp-list">
+          {skills.map((item) => (
+            <li className="exp-card" key={item.title}>
+              <span className="exp-period">{item.period}</span>
+              <span className="exp-title">{item.title}</span>
+              {item.desc ? <p className="exp-desc">{item.desc}</p> : null}
+            </li>
+          ))}
+        </ul>
         <div className="tech-grid">
           {techStack.map((category) => (
             <div className="tech-category" key={category.label}>
@@ -260,23 +220,6 @@ export default async function AboutPage() {
         <p className="muted-block">
           一个连接技能、项目证据和求职材料的能力索引。原 /career 路由已合并到此页。
         </p>
-        <div className="career-grid">
-          <div className="career-panel">
-            <Icons0Portfolio />
-            <h2>Focus</h2>
-            <p>Frontend engineering, AI-assisted workflows, and product-minded development.</p>
-          </div>
-          <div className="career-panel">
-            <Icons0Document />
-            <h2>Resume Material</h2>
-            <p>English bullets and STAR stories live in `content/career/` as reviewable drafts.</p>
-          </div>
-          <div className="career-panel">
-            <Icons0Idea />
-            <h2>Evidence</h2>
-            <p>Career claims should trace back to real projects, weekly notes, or confirmed experience.</p>
-          </div>
-        </div>
         {sortedCareerItems.map((item) => (
           <section key={item.slug} className="content-section">
             <div className="section-heading">
@@ -285,19 +228,6 @@ export default async function AboutPage() {
             <MdxContent source={item.body} />
           </section>
         ))}
-        <section className="content-section">
-          <div className="section-heading">
-            <h2>Project Evidence</h2>
-          </div>
-          <ul className="evidence-list">
-            {featuredProjects.map((project) => (
-              <li key={project.slug}>
-                <strong>{project.title}</strong>
-                <span>{project.resumeBullets[0]}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
       </section>
     </div>
   );

@@ -1,4 +1,4 @@
-# Todo — 站点结构优化
+# Todo — v0.2 信息架构升级
 
 > 与 `plan.md` 配套的逐项任务清单。
 > 每个任务对应 plan.md 中的某个 slice 子步骤。
@@ -6,80 +6,42 @@
 
 ---
 
-## Slice 1 — Portal Home + Nav + About
+## Slice 1 — About 去冗
 
-- [x] **S1.1** 重写 `app/(site)/page.tsx`：移除 `getBlogPosts/getWeeklyPosts/getFeaturedProjects`；只保留 Hero + 6 栏目入口卡（每张入口卡 = icon + 标题 + 1 句描述 + CTA）
-- [x] **S1.2** 修改 `components/site-nav.tsx`：`navItems` 长度 = 6；移除 `/career`；顺序：Blog → AI Tracker → Weekly → Learning → Projects → About
-- [x] **S1.3** 修改 `app/(site)/about/page.tsx`：在末尾追加 Career section，使用 `getCareerPosts()` 数据
-- [x] **S1.4** 替换 `app/(site)/career/page.tsx`：改为 `redirect('/about#career')`，保留 1 版本过渡
+- [x] **S1.1** 砍 `app/(site)/about/page.tsx` 中 `projects` 常量（L73–103）+ 删除 `ExpSection heading="项目经历"` 调用（L220），改为 1 句引导 + `/projects` 链接
+- [x] **S1.2** 合并 `skills` + `techStack` 为单节"Skills & Stack"（L105–147），保留所有条目不丢事实
+- [x] **S1.3** Profile 4 段 → ≤ 2 段（保第一段 + 联系邮箱，砍 2 个 muted-block）
+- [x] **S1.4** Career section 删除 `career-grid` panels + project evidence list，保留 `id="career"` + sortedCareerItems + 1 句引导
 - [x] **S1.5** 运行 `npm run lint && npm run typecheck && npm run build`
-- [x] **S1.6** 手动核查：访问 `/`、`/about`、`/career`，确认功能
+- [x] **S1.6** 手动核查：访问 `/about` + `/career` 重定向 + `/about#career` 锚点
 
-## Slice 2 — Footer Upgrade
+## Slice 2 — Tags 跨 collection + 分页架构预留
 
-- [x] **S2.1** 新建 `components/section-footer.tsx`：3 列布局；props: `{ recentPosts: { blog?: ..., weekly?: ... } }`
-- [x] **S2.2** 修改 `app/(site)/layout.tsx`：用 `<SectionFooter>` 替换 `<p>`
-- [x] **S2.3** 在 `globals.css` 不新增 token 的前提下，用现有 className 体系完成 3 列布局
-- [x] **S2.4** 运行 `npm run lint && npm run typecheck && npm run build`
-- [x] **S2.5** 手动核查：访问任一页，DOM 中 `section-footer` 含 3 区块
+- [x] **S2.1** 在 `lib/content/reader.ts` 新增 `GetContentByTagOptions` + `TaggedContentByKind` 类型 + `getContentByTag(tag, opts?)` 函数（opts 接受但忽略）
+- [x] **S2.2** 在 `lib/content/reader.test.ts` 新增 3 个测试：跨 collection / 大小写不敏感 / 空 tag 返回空
+- [x] **S2.3** 重写 `app/(site)/tags/[tag]/page.tsx`：用 `getContentByTag` 跨 6 collection 聚合，按 collection 分组渲染（6 组用对应 EntryCard 或 ContentCard）
+- [x] **S2.4** learning 分组的特殊结构适配（topic → posts），用 EntryCardLearning + topic 聚合 Map
+- [x] **S2.5** `notFound()` 改为：所有 collection 都为空时调用
+- [x] **S2.6** 运行 `npm run lint && npm run typecheck && npm run build && npm test`
+- [x] **S2.7** 手动核查：访问 `/tags/hermes`（跨 collection）+ `/tags/__nonexistent__`（应 404）+ `/career` 重定向
 
-## Slice 3 — Collection Foundation + Blog
+## Slice 3 — 词云页 + /tags cross-link
 
-- [x] **S3.1** 新建 `components/collection-list.tsx`：Server Component；props: `{ title, description?, children, emptyLabel? }`
-- [x] **S3.2** 新建 `components/entry-card-blog.tsx`：Server Component；杂志式（title + summary + tags + date + 可选 readTime）
-- [x] **S3.3** 重写 `app/(site)/blog/page.tsx`：用 `CollectionList` + `EntryCardBlog`；按 date 倒序
+- [x] **S3.1** 新建 `app/(site)/tags/cloud/page.tsx`：Server Component，调用 `getAllTags()`，按 count 映射 4 档 bucket（lg ≥ 8 / md ≥ 4 / sm ≥ 2 / xs = 1）
+- [x] **S3.2** 修改 `app/(site)/tags/page.tsx`：加"View as cloud →"链接到 `/tags/cloud`
+- [x] **S3.3** 在 `app/globals.css` 新增 `.tag-cloud*` + `.tags-index-cloud-link` rules（**禁止改 token**）
 - [x] **S3.4** 运行 `npm run lint && npm run typecheck && npm run build`
-- [x] **S3.5** 手动核查：访问 `/blog`，确认杂志式列表
+- [x] **S3.5** 手动核查：访问 `/tags/cloud` + 4 档字号可见 + 点击 tag 跳 `/tags/<tag>` + `/tags` 互链
 
-## Slice 4 — Weekly Timeline
+## Slice 4 — 验收 + docs 同步
 
-- [x] **S4.1** 新建 `components/entry-card-weekly.tsx`：timeline 节点样式；props: `{ href, week, title, highlights, mood? }`
-- [x] **S4.2** 重写 `app/(site)/weekly/page.tsx`：用 `CollectionList` + `EntryCardWeekly`；按 week 倒序
-- [x] **S4.3** 复用 `components/timeline.tsx` 或 `globals.css` 中 `.timeline` 相关 className
-- [x] **S4.4** 运行 `npm run lint && npm run typecheck && npm run build`
-- [x] **S4.5** 手动核查：访问 `/weekly`，确认时间线视图
-
-## Slice 5 — Projects Case Grid
-
-- [x] **S5.1** 新建 `components/entry-card-project.tsx`：案例卡片样式；props: `{ href, title, summary, stack, impact, featured, period?, cover? }`
-- [x] **S5.2** 重写 `app/(site)/projects/page.tsx`：用 `EntryCardProject`；按 featured 优先 + date 倒序
-- [x] **S5.3** 运行 `npm run lint && npm run typecheck && npm run build`
-- [x] **S5.4** 手动核查：访问 `/projects`，确认案例卡片网格
-
-## Slice 6 — Learning Topic Tree
-
-- [x] **S6.1** 新建 `components/entry-card-learning.tsx`：原生 `<details>` 折叠；props: `{ topic, postCount, posts }`
-- [x] **S6.2** 重写 `app/(site)/learning/page.tsx`：主题树；按 topic 分组
-- [x] **S6.3** 重写 `app/(site)/learning/[topic]/page.tsx`：单 topic 文章列表
-- [x] **S6.4** 运行 `npm run lint && npm run typecheck && npm run build`
-- [x] **S6.5** 手动核查：访问 `/learning` 与 `/learning/<topic>`，确认主题树
-
-## Slice 7 — AI Tracker Signal Stream
-
-- [x] **S7.1** 新建 `components/entry-card-ai-tracker.tsx`：信号流样式；props: `{ href, title, summary, signal, date, tags? }`
-- [x] **S7.2** signal 字段直接读 schema `signal: 1|2|3`（frontmatter 字段），组件内部 `signalStrength()` 映射到 `strong/mid/weak` 视觉标签；原"第一 tag 推断"方案被取代（schema 已含 signal，无需推断）
-- [x] **S7.3** 重写 `app/(site)/ai-tracker/page.tsx`：用 `EntryCardAiTracker`；按 date 倒序
-- [x] **S7.4** 运行 `npm run lint && npm run typecheck && npm run build`
-- [x] **S7.5** 手动核查：访问 `/ai-tracker`，确认信号流
-
-## Slice 8 — Indices
-
-- [x] **S8.1** 在 `lib/content/reader.ts` 新增 `getAllTags()`：聚合所有 frontmatter `tags` 字段
-- [x] **S8.2** 在 `lib/content/reader.ts` 新增 `getBlogArchive()`：按月分组（YYYY-MM）
-- [x] **S8.3** 新建 `app/(site)/tags/page.tsx`：列出所有 tag + 文章数
-- [x] **S8.4** 新建 `app/(site)/blog/archive/page.tsx`：按月倒序分组
-- [x] **S8.5** 运行 `npm run lint && npm run typecheck && npm run build`
-- [x] **S8.6** 手动核查：访问 `/tags` 与 `/blog/archive`
-
-## Slice 9 — Final Verification
-
-- [x] **S9.1** 修改 `CLAUDE.md` 「当前开发状态」：追加「信息架构升级 v1」
-- [x] **S9.2** 全量 `npm run lint && npm run typecheck && npm run build`
-- [x] **S9.3** 手动跨页跳转核查：首页 → 6 list → 详情 → 归档 → tag → about，每条路径无 404
-- [x] **S9.4** 对照 SPEC §6.3 呈现矩阵：6 个列表页呈现差异符合表格
-- [x] **S9.5** 对照 SPEC §8 验收标准：功能 8.1 + 工程 8.2 + 设计 8.3 三组逐项打勾
-- [x] **S9.6** 创建 PR（如果走 GitHub flow）/ 合并到 main（如直接）
-- [x] **S9.7** 修复累积债 P2/P3：建 `/rss.xml` 别名 / 移除 sitemap 中 `/career` 条目 / `search-dialog.tsx` lint error / `series-nav.tsx` unused / `npm test` zsh glob
+- [x] **S4.1** 修改 `CLAUDE.md`「当前开发状态」：追加"信息架构升级 v2"
+- [x] **S4.2** 修改 `SPEC.md` §0 版本演进表：把 v0.2 状态改为 ✅
+- [x] **S4.3** 全量 `npm run lint && npm run typecheck && npm run build && npm test`
+- [x] **S4.4** 手动跨页跳转核查：`/` → `/about` → 6 个 section 都渲染 / `/about#career` 锚点定位 / `/career` 重定向 / `/tags` ↔ `/tags/cloud` / 各集合首页 tag 链接
+- [x] **S4.5** 对照 SPEC §17 验收标准：3 组逐项打勾（About 去冗 / Tags 跨 collection / 词云页 / 工程 / 设计未破坏）
+- [ ] **S4.6** 推送分支 `refactor/site-structure-v2` 到 origin（**用户确认后**）
+- [ ] **S4.7** 合并到 main（**用户确认后**）
 
 ---
 
@@ -87,23 +49,37 @@
 
 | Slice | 标题 | 任务数 | 状态 |
 |-------|------|-------|------|
-| 1 | Portal Home + Nav + About | 6 | done |
-| 2 | Footer Upgrade | 5 | done |
-| 3 | Collection Foundation + Blog | 5 | done |
-| 4 | Weekly Timeline | 5 | done |
-| 5 | Projects Case Grid | 4 | done |
-| 6 | Learning Topic Tree | 5 | done |
-| 7 | AI Tracker Signal Stream | 5 | done |
-| 8 | Indices | 6 | done |
-| 9 | Final Verification | 7 | done |
+| 1 | About 去冗 | 6 | ✅ done（commit `d4fbb4b`） |
+| 2 | Tags 跨 collection + 分页预留 | 7 | ✅ done（commit `94590ce`） |
+| 3 | 词云页 + /tags cross-link | 5 | ✅ done（commit `1949fdb`） |
+| 4 | 验收 + docs 同步 | 7 | 5 done / 2 待用户确认（push + merge） |
 
-总计：48 个子任务，全部 done。
+总计：23/25 完成，2 个待用户确认。
 
 ---
 
 ## 执行提示
 
 - 每个 Slice 完成后立即更新本文件状态（`pending` → `done`）
-- Slice 3-7 可并行（互相不依赖），但同分支建议顺序串行合并
-- Slice 8 必须在 Slice 3-7 完成后启动
+- Slice 2 + Slice 3 可并行（互相不依赖、文件域不重叠）
+- Slice 2 不改 `globals.css`；Slice 3 才改（互斥防冲突）
 - 任何 slice 失败 = 立即修，不累积到下一 slice
+- 每个 slice 完成后用独立 commit（便于 revert）
+
+---
+
+## 最终验证记录
+
+| 项 | 结果 |
+|----|------|
+| `npm run lint` | 0 errors / 10 warnings（全部 pre-existing） |
+| `npm run typecheck` | 0 errors |
+| `npm run build` | success（48 routes, `/tags/cloud` ○ static, `/tags/[tag]` ƒ dynamic） |
+| `npm test` | 25/25 pass（22 pre-existing + 3 new `getContentByTag`） |
+| `/about` | 200，6 个 section，305→233 行 |
+| `/career` | 307 → `/about#career` 200 |
+| `/tags` | 200，含 `/tags/cloud` 互链 |
+| `/tags/cloud` | 200，3 档字号 class 出现（xs/sm/lg，无 md 因数据分布） |
+| `/tags/hermes` | 200，"9 items across 2 collections" |
+| `/tags/__nonexistent_zzz__` | 404 |
+| globals.css 新增 token | 0 |

@@ -13,7 +13,7 @@ import {
   type WeeklyPost,
   contentStatusSchema,
   schemaByKind,
-} from "./schemas";
+} from "./schemas.ts";
 
 const CONTENT_ROOT = path.join(process.cwd(), "content");
 const SUPPORTED_EXTENSIONS = new Set([".md", ".mdx"]);
@@ -239,6 +239,78 @@ export async function getLearningTopics(includeDrafts = false): Promise<TopicSum
 export async function getContentBySlug<K extends ContentKind>(kind: K, slug: string) {
   const items = (await getCollection(kind)) as CollectionMap[K][];
   return items.find((item) => item.slug === slug) ?? null;
+}
+
+export type GetContentByTagOptions = {
+  page?: number;
+  pageSize?: number;
+};
+
+export type TaggedContentByKind = {
+  blog: BlogPost[];
+  weekly: WeeklyPost[];
+  projects: ProjectPost[];
+  career: CareerPost[];
+  learning: LearningPost[];
+  "ai-tracker": AiTrackerPost[];
+};
+
+export async function getContentByTag(
+  tag: string,
+  // _opts is accepted-but-ignored in v0.2; pagination kicks in later.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _opts?: GetContentByTagOptions,
+): Promise<{
+  items: TaggedContentByKind;
+  totalByKind: Record<keyof TaggedContentByKind, number>;
+}> {
+  const needle = tag.toLowerCase();
+  const matchesTag = (t: string | undefined) => t?.toLowerCase() === needle;
+
+  const [blog, weekly, projects, career, aiTracker, topics] = await Promise.all([
+    getBlogPosts(),
+    getWeeklyPosts(),
+    getProjectPosts(),
+    getCareerPosts(),
+    getAiTrackerPosts(),
+    getLearningTopics(),
+  ]);
+
+  const learningPosts = (
+    await Promise.all(topics.map((topic) => getLearningPosts(topic.topic)))
+  ).flat();
+
+  const blogMatches = blog.filter((p) => p.tags.some(matchesTag));
+  const weeklyMatches = weekly.filter((p) => p.tags.some(matchesTag));
+  // The project schema does not currently carry a `tags` field, so projects
+  // contribute zero matches for any tag. We still read them in parallel to
+  // keep the cross-collection contract stable for future schema additions.
+  void projects;
+  const careerMatches = career.filter((p) =>
+    (p.tags ?? []).some(matchesTag),
+  );
+  const learningMatches = learningPosts.filter((p) => p.tags.some(matchesTag));
+  const aiTrackerMatches = aiTracker.filter((p) => p.tags.some(matchesTag));
+
+  const items: TaggedContentByKind = {
+    blog: blogMatches,
+    weekly: weeklyMatches,
+    projects: [],
+    career: careerMatches,
+    learning: learningMatches,
+    "ai-tracker": aiTrackerMatches,
+  };
+
+  const totalByKind: Record<keyof TaggedContentByKind, number> = {
+    blog: blogMatches.length,
+    weekly: weeklyMatches.length,
+    projects: 0,
+    career: careerMatches.length,
+    learning: learningMatches.length,
+    "ai-tracker": aiTrackerMatches.length,
+  };
+
+  return { items, totalByKind };
 }
 
 export type RelatedRef = {

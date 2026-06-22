@@ -25,6 +25,11 @@ export default async function TagsPage() {
         title="Tags"
         description={`${tags.length} ${tags.length === 1 ? "tag" : "tags"} across the site.`}
       >
+        <p className="tags-index-cloud-link-wrap">
+          <Link href="/tags/cloud" className="tags-index-cloud-link">
+            View as cloud →
+          </Link>
+        </p>
         <div className="tags-index">
           {tags.map(({ tag, count, kinds }) => (
             <Link
