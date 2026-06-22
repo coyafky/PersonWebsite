@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { onOpenSearch } from "@/lib/search-events";
 
@@ -17,6 +17,14 @@ export function SearchDialog() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // 客户端挂载检测：避免 SSR/CSR 不一致，并兼容 react-hooks/set-state-in-effect 规则。
+  // 用 useSyncExternalStore 替代 useEffect+setState 模式（同 site-nav）。
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const search = useCallback(async (q: string) => {
     if (!q.trim()) {
@@ -35,6 +43,14 @@ export function SearchDialog() {
     }
   }, []);
 
+  // 关闭时清空 query / results — 用 callback 替代 effect 中的 setState，
+  // 规避 react-hooks/set-state-in-effect 规则。
+  const close = useCallback(() => {
+    setOpen(false);
+    setQuery("");
+    setResults([]);
+  }, []);
+
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -42,25 +58,22 @@ export function SearchDialog() {
         setOpen((prev) => !prev);
       }
       if (e.key === "Escape") {
-        setOpen(false);
+        close();
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [close]);
 
   useEffect(() => {
     onOpenSearch(() => setOpen(true));
   }, []);
 
   useEffect(() => {
-    if (open) {
+    if (open && mounted) {
       inputRef.current?.focus();
-    } else {
-      setQuery("");
-      setResults([]);
     }
-  }, [open]);
+  }, [open, mounted]);
 
   useEffect(() => {
     const timer = setTimeout(() => search(query), 200);
@@ -70,7 +83,7 @@ export function SearchDialog() {
   return (
     <>
       {open ? (
-        <div className="search-overlay" onClick={() => setOpen(false)}>
+        <div className="search-overlay" onClick={close}>
           <div className="search-dialog" onClick={(e) => e.stopPropagation()}>
             <input
               ref={inputRef}
@@ -85,7 +98,7 @@ export function SearchDialog() {
               <ul className="search-results">
                 {results.map((r) => (
                   <li key={r.url}>
-                    <Link href={r.url} onClick={() => setOpen(false)}>
+                    <Link href={r.url} onClick={close}>
                       <span className="search-result-title">{r.title}</span>
                       <span className="search-result-excerpt">{r.summary}</span>
                     </Link>

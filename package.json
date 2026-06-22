@@ -9,7 +9,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test": "node --test --experimental-strip-types lib/**/*.test.ts"
+    "test": "node --test --experimental-strip-types $(find lib -name '*.test.ts' -type f)"
   },
   "dependencies": {
     "@giscus/react": "^3.1.0",
