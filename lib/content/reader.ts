@@ -248,6 +248,100 @@ export type RelatedRef = {
   career?: string[];
 };
 
+export type TagCount = {
+  tag: string;
+  count: number;
+  kinds: Record<ContentKind, number>;
+};
+
+function emptyKindCounts(): Record<ContentKind, number> {
+  return {
+    blog: 0,
+    weekly: 0,
+    projects: 0,
+    career: 0,
+    learning: 0,
+    "ai-tracker": 0,
+  };
+}
+
+export async function getAllTags(): Promise<TagCount[]> {
+  const [blog, weekly, career, aiTracker, topics] = await Promise.all([
+    getBlogPosts(),
+    getWeeklyPosts(),
+    getCareerPosts(),
+    getAiTrackerPosts(),
+    getLearningTopics(),
+  ]);
+  const learningPosts = (
+    await Promise.all(topics.map((topic) => getLearningPosts(topic.topic)))
+  ).flat();
+
+  const counts = new Map<string, TagCount>();
+
+  function bump(tag: string, kind: ContentKind) {
+    let entry = counts.get(tag);
+    if (!entry) {
+      entry = { tag, count: 0, kinds: emptyKindCounts() };
+      counts.set(tag, entry);
+    }
+    entry.count += 1;
+    entry.kinds[kind] += 1;
+  }
+
+  for (const post of blog) for (const tag of post.tags) bump(tag, "blog");
+  for (const post of weekly) for (const tag of post.tags) bump(tag, "weekly");
+  for (const post of career) for (const tag of post.tags ?? []) bump(tag, "career");
+  for (const post of aiTracker) for (const tag of post.tags) bump(tag, "ai-tracker");
+  for (const post of learningPosts) for (const tag of post.tags) bump(tag, "learning");
+
+  return [...counts.values()].toSorted((a, b) => {
+    if (b.count !== a.count) return b.count - a.count;
+    return a.tag.localeCompare(b.tag);
+  });
+}
+
+export type BlogArchivePost = {
+  slug: string;
+  title: string;
+  date: string;
+  summary: string;
+};
+
+export type BlogArchiveMonth = {
+  month: string;
+  count: number;
+  posts: BlogArchivePost[];
+};
+
+function monthKey(date: string) {
+  return date.slice(0, 7);
+}
+
+export async function getBlogArchive(): Promise<BlogArchiveMonth[]> {
+  const posts = await getBlogPosts();
+  const buckets = new Map<string, BlogArchivePost[]>();
+
+  for (const post of posts) {
+    const key = monthKey(post.date);
+    const list = buckets.get(key) ?? [];
+    list.push({
+      slug: post.slug,
+      title: post.title,
+      date: post.date,
+      summary: post.summary,
+    });
+    buckets.set(key, list);
+  }
+
+  return [...buckets.entries()]
+    .map(([month, list]) => {
+      const sortedPosts = list.toSorted((a, b) => b.date.localeCompare(a.date));
+      return { month, count: sortedPosts.length, posts: sortedPosts };
+    })
+    .toSorted((a, b) => b.month.localeCompare(a.month));
+}
+
 export type ResolvedRelated = {
   kind: "blog" | "weekly" | "projects" | "career";
   slug: string;
