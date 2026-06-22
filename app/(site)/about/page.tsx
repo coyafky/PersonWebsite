@@ -1,8 +1,32 @@
+import { Icons0Document, Icons0Idea, Icons0Portfolio } from "@/components/icons0";
+import { MdxContent } from "@/components/mdx-content";
+import { type CareerPost, getCareerPosts, getFeaturedProjects } from "@/lib/content";
+
 export const metadata = {
   title: "About",
   description:
     "冯科雅 (Coya) —— CS 背景，AI 提效实践者。个人介绍、经历、项目与技术栈。",
 };
+
+// 期望的展示顺序：goal-roadmap → goal-checklist → profile → bullets → star-stories
+const careerOrder: Record<string, number> = {
+  "goal-roadmap": 1,
+  "goal-checklist": 2,
+  profile: 3,
+  bullets: 4,
+  "star-stories": 5,
+};
+
+function sortCareerItems(items: CareerPost[]) {
+  return items.toSorted((a, b) => {
+    const orderA = careerOrder[a.slug] ?? 100;
+    const orderB = careerOrder[b.slug] ?? 100;
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+    return b.date.localeCompare(a.date);
+  });
+}
 
 type ExpItem = {
   period: string;
@@ -150,7 +174,13 @@ function ExpSection({
   );
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [featuredProjects, careerItems] = await Promise.all([
+    getFeaturedProjects(),
+    getCareerPosts(true),
+  ]);
+  const sortedCareerItems = sortCareerItems(careerItems);
+
   return (
     <div className="page-shell narrow">
       <header className="page-header">
@@ -222,6 +252,52 @@ export default function AboutPage() {
             on Vercel.
           </p>
         </div>
+      </section>
+
+      {/* Career — 合并自原 /career 路由 */}
+      <section className="about-subsection">
+        <h2 id="career">Career</h2>
+        <p className="muted-block">
+          一个连接技能、项目证据和求职材料的能力索引。原 /career 路由已合并到此页。
+        </p>
+        <div className="career-grid">
+          <div className="career-panel">
+            <Icons0Portfolio />
+            <h2>Focus</h2>
+            <p>Frontend engineering, AI-assisted workflows, and product-minded development.</p>
+          </div>
+          <div className="career-panel">
+            <Icons0Document />
+            <h2>Resume Material</h2>
+            <p>English bullets and STAR stories live in `content/career/` as reviewable drafts.</p>
+          </div>
+          <div className="career-panel">
+            <Icons0Idea />
+            <h2>Evidence</h2>
+            <p>Career claims should trace back to real projects, weekly notes, or confirmed experience.</p>
+          </div>
+        </div>
+        {sortedCareerItems.map((item) => (
+          <section key={item.slug} className="content-section">
+            <div className="section-heading">
+              <h2>{item.title}</h2>
+            </div>
+            <MdxContent source={item.body} />
+          </section>
+        ))}
+        <section className="content-section">
+          <div className="section-heading">
+            <h2>Project Evidence</h2>
+          </div>
+          <ul className="evidence-list">
+            {featuredProjects.map((project) => (
+              <li key={project.slug}>
+                <strong>{project.title}</strong>
+                <span>{project.resumeBullets[0]}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
       </section>
     </div>
   );

@@ -3,7 +3,6 @@ import {
   getBlogPosts,
   getWeeklyPosts,
   getProjectPosts,
-  getCareerPosts,
   getLearningTopics,
   getLearningPosts,
   getAiTrackerPosts,
@@ -11,11 +10,12 @@ import {
 import { buildUrl } from "@/lib/metadata";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [blog, weekly, projects, career, aiTracker] = await Promise.all([
+  // /career 已合并到 /about（app/(site)/career/page.tsx 仅 307 跳转）。
+  // 不暴露 /career 条目，避免搜索引擎索引跳转链。
+  const [blog, weekly, projects, aiTracker] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
     getProjectPosts(),
-    getCareerPosts(),
     getAiTrackerPosts(),
   ]);
 
@@ -24,7 +24,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: buildUrl("/blog"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: buildUrl("/weekly"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: buildUrl("/projects"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: buildUrl("/career"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: buildUrl("/learning"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
     { url: buildUrl("/ai-tracker"), lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
   ];
@@ -48,13 +47,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(post.date),
     changeFrequency: "monthly" as const,
     priority: 0.6,
-  }));
-
-  const careerUrls: MetadataRoute.Sitemap = career.map((post) => ({
-    url: buildUrl(`/career/${post.slug}`),
-    lastModified: new Date(post.date),
-    changeFrequency: "monthly" as const,
-    priority: 0.5,
   }));
 
   const aiTrackerUrls: MetadataRoute.Sitemap = aiTracker.map((post) => ({
@@ -91,7 +83,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...blogUrls,
     ...weeklyUrls,
     ...projectUrls,
-    ...careerUrls,
     ...aiTrackerUrls,
     ...learningUrls,
   ];

@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ContentCard } from "@/components/content-card";
-import { Icons0Notebook } from "@/components/icons0";
-import { MdxContent } from "@/components/mdx-content";
-import { getLearningPosts, getLearningTopicIndex, getLearningTopics } from "@/lib/content";
-import { buildUrl, SITE_NAME } from "@/lib/metadata";
+import { CollectionList } from "@/components/collection-list";
+import {
+  getLearningPosts,
+  getLearningTopicIndex,
+  getLearningTopics,
+} from "@/lib/content";
+import { SITE_NAME } from "@/lib/metadata";
 
 type TopicPageProps = {
   params: Promise<{ topic: string }>;
@@ -12,10 +15,12 @@ type TopicPageProps = {
 
 export async function generateStaticParams() {
   const topics = await getLearningTopics();
-  return topics.map((topic) => ({ topic: topic.topic }));
+  return topics.map((summary) => ({ topic: summary.topic }));
 }
 
-export async function generateMetadata({ params }: TopicPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: TopicPageProps): Promise<Metadata> {
   const { topic } = await params;
   const indexPost = await getLearningTopicIndex(topic);
 
@@ -41,47 +46,39 @@ export async function generateMetadata({ params }: TopicPageProps): Promise<Meta
 
 export default async function LearningTopicPage({ params }: TopicPageProps) {
   const { topic } = await params;
-  const [indexPost, articles] = await Promise.all([
-    getLearningTopicIndex(topic),
-    getLearningPosts(topic),
-  ]);
+  const articles = await getLearningPosts(topic);
 
-  if (!indexPost) {
+  if (articles.length === 0) {
     notFound();
   }
 
   return (
-    <div className="page-shell narrow">
-      <header className="page-header">
-        <h1>{indexPost.title}</h1>
-        <p>{indexPost.summary}</p>
-      </header>
-      <section className="content-section">
-        <MdxContent source={indexPost.body} />
-      </section>
-      <section className="content-section">
-        <div className="section-heading">
-          <h2>Articles</h2>
-          <span>{articles.length} 篇</span>
-        </div>
-        {articles.length === 0 ? (
-          <p className="empty-state">No articles published in this topic yet.</p>
-        ) : (
-          <div className="stack-list">
-            {articles.map((article) => (
-              <ContentCard
+    <div className="page-shell">
+      <CollectionList
+        title={topic}
+        description={`${articles.length} notes on ${topic}.`}
+        actions={
+          <Link className="button secondary" href="/learning">
+            ← All topics
+          </Link>
+        }
+      >
+        <ul className="entry-card-learning-list">
+          {articles.map((article) => (
+            <li key={article.slug} className="entry-card-learning-list-item-wrap">
+              <Link
+                className="entry-card-learning-list-item"
                 href={`/learning/${topic}/${article.slug}`}
-                icon={<Icons0Notebook />}
-                key={article.slug}
-                meta={article.date}
-                summary={article.summary}
-                tags={article.tags}
-                title={article.title}
-              />
-            ))}
-          </div>
-        )}
-      </section>
+              >
+                <h3 className="entry-card-learning-list-title">{article.title}</h3>
+                <p className="entry-card-learning-list-summary">
+                  {article.summary}
+                </p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </CollectionList>
     </div>
   );
 }
