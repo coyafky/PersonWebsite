@@ -129,7 +129,12 @@ async function getCollection(kind: ContentKind, includeDrafts = false) {
   return includeDrafts ? items : publishedOnly(items);
 }
 
-export async function getBlogPosts(includeDrafts = false): Promise<BlogPost[]> {
+export async function getBlogPosts(
+  includeDrafts = false,
+  // _opts is accepted-but-ignored in v0.3; pagination kicks in later.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _opts?: { page?: number; pageSize?: number },
+): Promise<BlogPost[]> {
   const items = await getCollection("blog", includeDrafts);
   return items.filter((item): item is BlogPost => item.kind === "blog");
 }
