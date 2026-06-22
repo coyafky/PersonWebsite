@@ -15,7 +15,7 @@
 | 版本 | 范围 | 状态 | 关键改动 |
 |------|------|------|---------|
 | v0.1 | 信息架构升级（v1） | ✅ 已合入 main（merge commit `2e9b5a9`） | 6 个列表页差异化、Career 并入 About、tag 索引 + blog archive、footer 3 列、P2/P3 清理（RSS / sitemap / lint） |
-| **v0.2**（本规约） | About 去冗 + Tags 跨 collection + 词云 | 🟡 规约中 | 见下文 §1 |
+| **v0.2** | About 去冗 + Tags 跨 collection + 词云 | ✅ 完成（分支 `refactor/site-structure-v2`，4 commits `027a337..94590ce`，待 push + merge） | About 9→6 sections / `getContentByTag` reader + 3 tests / `/tags/cloud` 词云页 / 分页架构预留 |
 
 ### 0.2 本规约新增的 3 个目标
 
