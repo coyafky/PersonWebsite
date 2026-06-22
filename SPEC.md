@@ -1,9 +1,29 @@
 # SPEC — 站点结构优化（结构层 / 不动设计层）
 
-> 版本: v0.1
+> 版本: v0.2（增量规约）
 > 范围: 信息架构与页面结构
 > 设计系统: 沿用 Stripe Press（不动 token、不动字体、不动圆角、不动动效）
-> 起点: 现有 Next.js 16 App Router + Markdown/MDX 内容系统
+> 起点: v0.1 已合入 main 的现状
+> 增量: 在 v0.1 之上，3 个新目标（详见 §0.1）
+
+---
+
+## 0. 版本演进
+
+### 0.1 版本历史
+
+| 版本 | 范围 | 状态 | 关键改动 |
+|------|------|------|---------|
+| v0.1 | 信息架构升级（v1） | ✅ 已合入 main（merge commit `2e9b5a9`） | 6 个列表页差异化、Career 并入 About、tag 索引 + blog archive、footer 3 列、P2/P3 清理（RSS / sitemap / lint） |
+| **v0.2**（本规约） | About 去冗 + Tags 跨 collection + 词云 | 🟡 规约中 | 见下文 §1 |
+
+### 0.2 本规约新增的 3 个目标
+
+| # | 目标 | 范围 |
+|---|------|------|
+| G1 | About 页去冗 + 内容重新优化 | 单页重写，砍 6 处冗余 |
+| G2 | Tags 跨 6 collection 聚合 | 重写 `/tags/[tag]` + 新增 `getContentByTag` reader + 分页架构预留 |
+| G3 | 词云页（visualize tag 频率） | 新增 `/tags/cloud` + font-size 4 档
 
 ---
 
@@ -427,4 +447,279 @@ CLAUDE.md                   🔧 更新「当前开发状态」
 
 ---
 
-**Spec 完成。下一步：/plan 拆任务 → /dispatch 执行。**
+## 11. v0.2 增量规约 — About 去冗 + Tags 跨 collection + 词云
+
+### 11.1 Objective（v0.2 三目标）
+
+#### G1 — About 页去冗 + 内容重新优化
+
+**现状**：`/about` 共 9 个 section，300+ 行，过长且多处冗余：
+
+| # | 冗余点 | 行号 | 影响 |
+|---|--------|------|------|
+| A1 | "项目经历"与 `/projects` 路由重复 | `app/(site)/about/page.tsx` L73–103, L220 | 两处维护成本高、信息易不一致 |
+| A2 | "专业技能"+"常用工具"两节重叠 | L105–147 | 阅读疲劳、信息密度低 |
+| A3 | Profile 段 4 段过长 | L195–209 | 关键信息淹没 |
+| A4 | Career section 三层嵌套 | L257–301（panels + content items + project evidence） | 视觉层级混乱 |
+| A5 | 整页无信息架构分层 | 9 个 section 同一视觉权重 | 读者无锚点 |
+| A6 | `/projects/[slug]` 已存在但 About 仍全量展示 | L73–103 | 数据来源不唯一 |
+
+**目标形态**：
+- section 总数 ≤ 6
+- 项目经历 → 删除，替换为 1 句引导 + `/projects` 链接
+- 专业技能 + 常用工具 → 合并为 1 节"Skills & Stack"
+- Profile → ≤ 2 段
+- Career section 的重复 project evidence list → 删除
+- **保留**：`id="career"` 锚点（外链依赖）/ "Why this site exists" / 元数据
+
+#### G2 — Tags 跨 6 collection 聚合 + 分页架构预留
+
+**现状**：`app/(site)/tags/[tag]/page.tsx` 只查 `blog + weekly`：
+
+```ts
+// 现状
+const [blog, weekly] = await Promise.all([getBlogPosts(), getWeeklyPosts()]);
+// ❌ 漏掉 projects / career / learning / ai-tracker
+```
+
+**问题**：
+- AI Tracker / Projects / Learning / Career 的 tag 一旦被点中 → 404
+- `getAllTags()` 已经聚合了 6 个 collection 的 tag（`TagCount.kinds`），但详情页没用到这个聚合
+
+**目标形态**：
+- `/tags/[tag]` 跨 6 collection 查询，按 collection 分组呈现
+- 每组用对应的 EntryCard 组件（blog → EntryCardBlog、weekly → EntryCardWeekly、ai-tracker → EntryCardAiTracker、projects → EntryCardProject、learning → EntryCardLearning）
+- `lib/content/reader.ts` 新增 `getContentByTag(tag: string, opts?: { page?: number; pageSize?: number })`
+- **分页架构预留**：`opts` 参数签名先设计，page.tsx 调用时仍传无参；未来真出现 50+ 条再启用
+
+#### G3 — 词云页 `/tags/cloud`
+
+**形态**：
+- 独立路由 `/tags/cloud`
+- Server Component，复用 `getAllTags()` 返回的 `count` 字段
+- font-size 4 档（small / medium / large / x-large），按 count 分布映射
+- 点击 tag 跳 `/tags/[tag]`
+- `/tags` 与 `/tags/cloud` 互相跳转链接
+- WCAG AA：字号差为唯一区分，**不靠颜色差**
+
+---
+
+### 11.2 Project Structure（v0.2 新增 ⭐ / 改造 🔧）
+
+```
+app/(site)/
+├── about/
+│   └── page.tsx            🔧 重写去冗（≤ 6 section）
+├── tags/
+│   ├── page.tsx            🔧 加"切换到词云"链接
+│   ├── [tag]/page.tsx      🔧 重写跨 6 collection + 分页架构预留
+│   └── cloud/              ⭐ 新增目录
+│       └── page.tsx        ⭐ 词云页（font-size 4 档）
+
+lib/content/
+├── reader.ts               🔧 新增 getContentByTag(tag, opts?)
+└── reader.test.ts          🔧 新增 getContentByTag 单元测试
+
+app/globals.css             🔧 +.tag-cloud-* + .about-toc-*（不动 token）
+```
+
+### 11.3 路由表（v0.2 增量）
+
+| 路由 | 状态 | 改动 |
+|------|------|------|
+| `/about` | 🔧 | 去冗重写 |
+| `/tags` | 🔧 | 加"切换到词云"链接 |
+| `/tags/[tag]` | 🔧 | 重写跨 collection；分页架构预留 |
+| `/tags/cloud` | ⭐ | 新增词云页 |
+
+---
+
+### 12. Code Style（v0.2 新约定）
+
+**沿用 §4.1 + §4.2**。本轮新增：
+
+- **`getContentByTag` 函数签名**（架构预留分页）：
+  ```ts
+  export type GetContentByTagOptions = {
+    page?: number;     // 1-based，未来启用
+    pageSize?: number; // 默认 20，未来启用
+  };
+
+  export type TaggedContentByKind = {
+    blog: BlogPost[];
+    weekly: WeeklyPost[];
+    projects: ProjectPost[];
+    career: CareerPost[];
+    learning: LearningPost[];
+    "ai-tracker": AiTrackerPost[];
+  };
+
+  export async function getContentByTag(
+    tag: string,
+    opts?: GetContentByTagOptions,
+  ): Promise<{
+    items: TaggedContentByKind;
+    totalByKind: Record<keyof TaggedContentByKind, number>;
+    // 未来启用：page / pageSize / totalPages
+  }>;
+  ```
+  v0.2 阶段：`opts` 参数接受但忽略；返回值不带分页字段
+
+- **词云页 className**：
+  ```css
+  .tag-cloud              /* 容器 */
+  .tag-cloud-item         /* 单个 tag */
+  .tag-cloud-item--xs     /* count 1 */
+  .tag-cloud-item--sm     /* count 2-3 */
+  .tag-cloud-item--md     /* count 4-7 */
+  .tag-cloud-item--lg     /* count 8+ */
+  ```
+
+- **About 页 className**：
+  ```css
+  .about-toc               /* 可选 toc 锚点导航 */
+  .about-subsection--lead  /* 主 section 视觉强化（不动 token） */
+  ```
+
+---
+
+### 13. Testing Strategy（v0.2 测试点）
+
+#### 13.1 单元测试（必加）
+
+新增 `getContentByTag` 单元测试：
+
+```ts
+// lib/content/reader.test.ts（追加）
+test("getContentByTag: matches across all 6 collections", async () => {
+  const result = await getContentByTag("AI");
+  // 至少 1 个 collection 有命中（取决于 fixture）
+  expect(Object.values(result.items).some((arr) => arr.length > 0)).toBe(true);
+});
+
+test("getContentByTag: case-insensitive", async () => {
+  const upper = await getContentByTag("AI");
+  const lower = await getContentByTag("ai");
+  expect(upper.items.blog.length).toBe(lower.items.blog.length);
+});
+
+test("getContentByTag: empty tag returns all empty", async () => {
+  const result = await getContentByTag("__nonexistent_tag__");
+  expect(Object.values(result.items).every((arr) => arr.length === 0)).toBe(true);
+});
+```
+
+#### 13.2 手工核查（v0.2 验收）
+
+1. `/about` 渲染 ≤ 6 section，`id="career"` 锚点存在
+2. `/tags/AI`（任一存在的跨 collection tag）渲染 6 个分组
+3. `/tags/only-in-ai-tracker`（只在 AI Tracker 出现的 tag）不 404
+4. `/tags/cloud` 渲染词云，font-size 4 档可见
+5. `/tags` ↔ `/tags/cloud` 互链正常
+
+---
+
+### 14. Boundaries（v0.2）
+
+#### 14.1 In scope（必做）
+
+| # | 项 | 验收点 |
+|---|----|--------|
+| 1 | About 页去冗 | ≤ 6 section，`id="career"` 保留 |
+| 2 | `/tags/[tag]` 跨 6 collection | 任意 tag 不 404，按 collection 分组 |
+| 3 | `getContentByTag` + 单元测试 | 3 个新测试通过 |
+| 4 | `getContentByTag` opts 参数签名 | 编译通过，运行时忽略 |
+| 5 | `/tags/cloud` 词云页 | font-size 4 档，可点击 |
+| 6 | `/tags` ↔ `/tags/cloud` 互链 | 顶部切换链接 |
+| 7 | SPEC.md / plan.md / todo.md 同步 | 三文件更新 |
+
+#### 14.2 Out of scope（v0.2 不做）
+
+- ❌ 内容规范化（项目 frontmatter 审计、补字段）— 用户已确认不做
+- ❌ Tag 详情页 UI 分页 — 架构预留即可
+- ❌ 词云加点击动画 / 3D / 力导向图 — 保持编辑式静态
+- ❌ 改 design token
+- ❌ 改 frontmatter schema
+- ❌ 改 Hermes 工作流
+- ❌ 新增 npm 依赖
+- ❌ About 页加 i18n
+
+#### 14.3 Ask first（v0.2 不确定时先问）
+
+- ✅ About 内容大段删除前先 grep 是否有外链引用
+- ✅ About 中"专业技能 + 常用工具"合并后的命名（Skills & Stack / Skills / Capabilities）→ 用默认 Skills & Stack
+- ✅ Tag 详情页 collection 顺序 → 用默认 blog → weekly → projects → ai-tracker → learning → career
+
+---
+
+### 15. Ambiguities Resolved（v0.2 已采纳的默认值）
+
+| # | 模糊点 | 默认值 | 状态 |
+|---|--------|--------|------|
+| 1 | "爆品页面" 含义 | = About 页去冗 | ✅ 用户澄清 |
+| 2 | 词云路径 | `/tags/cloud` 独立路由 | ✅ |
+| 3 | 词云强弱映射 | font-size 4 档（不动 color/opacity） | ✅ |
+| 4 | 内容规范化 | v0.2 不做 | ✅ |
+| 5 | tag 分页 | 架构预留不实现 | ✅ |
+| 6 | 词云是否要搜索/筛选 | 否，仅可视化 + 点击跳转 | 推荐默认 |
+| 7 | About 去冗幅度 | section 总数 ≤ 6，保留个人声音 | 推荐默认 |
+| 8 | Tag 详情页 collection 分组顺序 | 按"内容生产频次"：blog > weekly > ai-tracker > projects > learning > career | 推荐默认 |
+
+---
+
+### 16. Risks & Mitigations（v0.2 特有）
+
+| 风险 | 概率 | 影响 | 缓解 |
+|------|------|------|------|
+| About 内容删除后 SEO 关键词丢失 | 中 | 中 | 保留 `id="career"` 锚点；元数据（title/description）不变 |
+| 跨 collection 查询性能（首次慢） | 低 | 低 | `getAllTags` 已聚合；`getContentByTag` 复用同一 group-by 逻辑；后续可加缓存 |
+| 词云 4 档字号分布不均（多数 tag 都是 count=1） | 中 | 中 | 启用对数缩放：`bucket = floor(log2(count + 1))`，避免单档压死 |
+| About 删段后个人声音变薄 | 低 | 中 | 保留 Profile 第一段 + Why this site exists + Career section 主体；只砍重复段 |
+
+---
+
+### 17. Acceptance Criteria（v0.2 验收）
+
+#### 17.1 About 去冗
+
+- [ ] About 页面总 section 数 ≤ 6
+- [ ] "项目经历"section 已删除，改为 1 句引导 + `/projects` 链接
+- [ ] "专业技能"+"常用工具"合并为单节
+- [ ] Profile 从 4 段砍到 ≤ 2 段
+- [ ] Career section 的重复 project evidence list 删除
+- [ ] `id="career"` 锚点保留
+- [ ] "/career" → "/about#career" 重定向仍工作
+
+#### 17.2 Tags 跨 collection
+
+- [ ] `/tags/[tag]` 跨 6 collection 聚合（blog / weekly / projects / career / learning / ai-tracker）
+- [ ] 任意 tag 点击均不 404（即使只在 1 个 collection 出现）
+- [ ] 按 collection 分组，每组用对应的 EntryCard 组件
+- [ ] `lib/content/reader.ts` 新增 `getContentByTag` + 3 个单元测试通过
+- [ ] `getContentByTag` 接受可选 `{ page, pageSize }` 参数（架构预留，运行时忽略）
+
+#### 17.3 词云页
+
+- [ ] `/tags/cloud` 可访问
+- [ ] font-size 4 档（xs / sm / md / lg）
+- [ ] 点击 tag 跳到 `/tags/<tag>`
+- [ ] `/tags` 与 `/tags/cloud` 互相跳转链接
+- [ ] WCAG AA：通过（字号差为唯一区分）
+
+#### 17.4 工程
+
+- [ ] `npm run lint` 0 errors
+- [ ] `npm run typecheck` 0 errors
+- [ ] `npm run build` 成功
+- [ ] `npm test` 通过（含新增 3 个 `getContentByTag` 测试）
+- [ ] SPEC.md / plan.md / todo.md 同步本次改动
+- [ ] v0.2 内容合并到一个新分支（建议 `refactor/tags-v2` 或 `refactor/site-structure-v2`），不直接动 main
+
+#### 17.5 设计未破坏
+
+- [ ] 所有页面维持 Stripe Press 配色 / 0 圆角 / 1500ms 动效
+- [ ] 所有新 className 使用 CSS 变量，不引入硬编码值
+
+---
+
+**v0.2 规约完成。下一步：/plan 拆任务 → /dispatch 执行。**
