@@ -134,3 +134,14 @@ export function Icons0Radar(props: IconProps) {
     </IconBase>
   );
 }
+
+export function Icons0Book(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M16 4H8a2 2 0 0 0-2 2v18a2 2 0 0 0 2 2h10V4zm-2 18H8v-2h6v2zm0-4H8v-2h6v2zm0-4H8v-2h6v2zM22 4h-4v22h6V6a2 2 0 0 0-2-2zm0 18h-2V8h2v14z"
+        fill="currentColor"
+      />
+    </IconBase>
+  );
+}

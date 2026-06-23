@@ -5,6 +5,7 @@ import { z } from "zod";
 import {
   type AiTrackerPost,
   type BlogPost,
+  type BookListPost,
   type CareerPost,
   type ContentKind,
   type LearningPost,
@@ -29,6 +30,7 @@ type CollectionMap = {
   career: CareerPost;
   "ai-tracker": AiTrackerPost;
   learning: LearningPost;
+  "book-list": BookListPost;
 };
 
 async function fileExists(filePath: string) {
@@ -164,6 +166,11 @@ export async function getAiTrackerPosts(includeDrafts = false): Promise<AiTracke
   return items.filter((item): item is AiTrackerPost => item.kind === "ai-tracker");
 }
 
+export async function getBookListPosts(includeDrafts = false): Promise<BookListPost[]> {
+  const items = await getCollection("book-list", includeDrafts);
+  return items.filter((item): item is BookListPost => item.kind === "book-list");
+}
+
 export type TopicSummary = {
   topic: string;
   title: string;
@@ -258,6 +265,7 @@ export type TaggedContentByKind = {
   career: CareerPost[];
   learning: LearningPost[];
   "ai-tracker": AiTrackerPost[];
+  bookList: BookListPost[];
 };
 
 export async function getContentByTag(
@@ -272,14 +280,16 @@ export async function getContentByTag(
   const needle = tag.toLowerCase();
   const matchesTag = (t: string | undefined) => t?.toLowerCase() === needle;
 
-  const [blog, weekly, projects, career, aiTracker, topics] = await Promise.all([
-    getBlogPosts(),
-    getWeeklyPosts(),
-    getProjectPosts(),
-    getCareerPosts(),
-    getAiTrackerPosts(),
-    getLearningTopics(),
-  ]);
+  const [blog, weekly, projects, career, aiTracker, bookList, topics] =
+    await Promise.all([
+      getBlogPosts(),
+      getWeeklyPosts(),
+      getProjectPosts(),
+      getCareerPosts(),
+      getAiTrackerPosts(),
+      getBookListPosts(),
+      getLearningTopics(),
+    ]);
 
   const learningPosts = (
     await Promise.all(topics.map((topic) => getLearningPosts(topic.topic)))
@@ -296,6 +306,7 @@ export async function getContentByTag(
   );
   const learningMatches = learningPosts.filter((p) => p.tags.some(matchesTag));
   const aiTrackerMatches = aiTracker.filter((p) => p.tags.some(matchesTag));
+  const bookListMatches = bookList.filter((p) => p.tags.some(matchesTag));
 
   const items: TaggedContentByKind = {
     blog: blogMatches,
@@ -304,6 +315,7 @@ export async function getContentByTag(
     career: careerMatches,
     learning: learningMatches,
     "ai-tracker": aiTrackerMatches,
+    bookList: bookListMatches,
   };
 
   const totalByKind: Record<keyof TaggedContentByKind, number> = {
@@ -313,6 +325,7 @@ export async function getContentByTag(
     career: careerMatches.length,
     learning: learningMatches.length,
     "ai-tracker": aiTrackerMatches.length,
+    bookList: bookListMatches.length,
   };
 
   return { items, totalByKind };
@@ -339,15 +352,17 @@ function emptyKindCounts(): Record<ContentKind, number> {
     career: 0,
     learning: 0,
     "ai-tracker": 0,
+    "book-list": 0,
   };
 }
 
 export async function getAllTags(): Promise<TagCount[]> {
-  const [blog, weekly, career, aiTracker, topics] = await Promise.all([
+  const [blog, weekly, career, aiTracker, bookList, topics] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
     getCareerPosts(),
     getAiTrackerPosts(),
+    getBookListPosts(),
     getLearningTopics(),
   ]);
   const learningPosts = (
@@ -370,6 +385,7 @@ export async function getAllTags(): Promise<TagCount[]> {
   for (const post of weekly) for (const tag of post.tags) bump(tag, "weekly");
   for (const post of career) for (const tag of post.tags ?? []) bump(tag, "career");
   for (const post of aiTracker) for (const tag of post.tags) bump(tag, "ai-tracker");
+  for (const post of bookList) for (const tag of post.tags) bump(tag, "book-list");
   for (const post of learningPosts) for (const tag of post.tags) bump(tag, "learning");
 
   return [...counts.values()].toSorted((a, b) => {
