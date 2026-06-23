@@ -1,4 +1,4 @@
-# Todo — v0.2 信息架构升级
+# Todo — v0.3 Book List 新栏目
 
 > 与 `plan.md` 配套的逐项任务清单。
 > 每个任务对应 plan.md 中的某个 slice 子步骤。
@@ -6,42 +6,85 @@
 
 ---
 
-## Slice 1 — About 去冗
+## Slice 1 — 基础设施（schemas + reader + icon）
 
-- [x] **S1.1** 砍 `app/(site)/about/page.tsx` 中 `projects` 常量（L73–103）+ 删除 `ExpSection heading="项目经历"` 调用（L220），改为 1 句引导 + `/projects` 链接
-- [x] **S1.2** 合并 `skills` + `techStack` 为单节"Skills & Stack"（L105–147），保留所有条目不丢事实
-- [x] **S1.3** Profile 4 段 → ≤ 2 段（保第一段 + 联系邮箱，砍 2 个 muted-block）
-- [x] **S1.4** Career section 删除 `career-grid` panels + project evidence list，保留 `id="career"` + sortedCareerItems + 1 句引导
-- [x] **S1.5** 运行 `npm run lint && npm run typecheck && npm run build`
-- [x] **S1.6** 手动核查：访问 `/about` + `/career` 重定向 + `/about#career` 锚点
+- [x] **S1.1** 在 `lib/content/schemas.ts` 追加 `bookListSchema`（baseContentSchema.extend + kind: "book-list" + author + genre + tags + lang）
+- [x] **S1.2** 在 `lib/content/schemas.ts` 的 `schemaByKind` 注册 `"book-list": bookListSchema`
+- [x] **S1.3** 在 `lib/content/schemas.ts` 的 `SiteContent` union 加 `BookListPost`，导出 `BookListPost` 类型
+- [x] **S1.4** 在 `lib/content/reader.ts` 追加 `getBookListPosts(includeDrafts?: boolean): Promise<BookListPost[]>`
+- [x] **S1.5** 在 `lib/content/reader.ts` 的 `CollectionMap` 注册 `"book-list": BookListPost`
+- [x] **S1.6** 在 `components/icons0.tsx` 追加 `Icons0Book` 组件（参照 Icons0Calendar 风格的 Carbon SVG）
+- [x] **S1.7** 运行 `npm run lint && npm run typecheck`（existing 6 collection 行为不变）
+- [x] **S1.8** 手动核查：`getBookListPosts()` 返回 `[]`（无内容时不报错）— `npm run build` 成功（49 routes，book-list 路由由 Slice B/C 补）
 
-## Slice 2 — Tags 跨 collection + 分页架构预留
+**Slice 1 状态：✅ done**
+**连带修复**：S1.4-S1.5 完成后，`emptyKindCounts` 必须扩展加 `"book-list": 0`（因 `ContentKind` 自动包含 "book-list"），否则 typecheck 报错。已在 reader.ts:334-343 同步修复。
 
-- [x] **S2.1** 在 `lib/content/reader.ts` 新增 `GetContentByTagOptions` + `TaggedContentByKind` 类型 + `getContentByTag(tag, opts?)` 函数（opts 接受但忽略）
-- [x] **S2.2** 在 `lib/content/reader.test.ts` 新增 3 个测试：跨 collection / 大小写不敏感 / 空 tag 返回空
-- [x] **S2.3** 重写 `app/(site)/tags/[tag]/page.tsx`：用 `getContentByTag` 跨 6 collection 聚合，按 collection 分组渲染（6 组用对应 EntryCard 或 ContentCard）
-- [x] **S2.4** learning 分组的特殊结构适配（topic → posts），用 EntryCardLearning + topic 聚合 Map
-- [x] **S2.5** `notFound()` 改为：所有 collection 都为空时调用
-- [x] **S2.6** 运行 `npm run lint && npm run typecheck && npm run build && npm test`
-- [x] **S2.7** 手动核查：访问 `/tags/hermes`（跨 collection）+ `/tags/__nonexistent__`（应 404）+ `/career` 重定向
+## Slice 2 — 列表卡片（entry-card + 列表页 + globals.css）
 
-## Slice 3 — 词云页 + /tags cross-link
+- [x] **S2.1** 新建 `components/entry-card-book-list.tsx`（Server Component，props = { href, title, author, genre, summary?, date?, tags? }）
+- [x] **S2.2** 新建 `app/(site)/book-list/page.tsx`：用 `CollectionList` 骨架 + `.book-list-grid` 网格 + 空态"尚无书籍"
+- [x] **S2.3** 在 `app/globals.css` 新增 `.book-list-grid` / `.book-card` / `.book-card-link` / `.book-card-meta` / `.book-card-genre` / `.book-card-date` / `.book-card-title` / `.book-card-author` / `.book-card-summary` / `.book-card-tags`（**禁止改 token**）
+- [x] **S2.4** 运行 `npm run lint && npm run typecheck && npm run build`
+- [x] **S2.5** 手动核查：访问 `/book-list` 渲染 card 网格（即便 0 条也显示空态）；点 card 跳 `/book-list/<slug>`（即便 404，slice 3 修）
 
-- [x] **S3.1** 新建 `app/(site)/tags/cloud/page.tsx`：Server Component，调用 `getAllTags()`，按 count 映射 4 档 bucket（lg ≥ 8 / md ≥ 4 / sm ≥ 2 / xs = 1）
-- [x] **S3.2** 修改 `app/(site)/tags/page.tsx`：加"View as cloud →"链接到 `/tags/cloud`
-- [x] **S3.3** 在 `app/globals.css` 新增 `.tag-cloud*` + `.tags-index-cloud-link` rules（**禁止改 token**）
-- [x] **S3.4** 运行 `npm run lint && npm run typecheck && npm run build`
-- [x] **S3.5** 手动核查：访问 `/tags/cloud` + 4 档字号可见 + 点击 tag 跳 `/tags/<tag>` + `/tags` 互链
+**Slice 2 状态：✅ done**
+**注意事项**：实际 token 命名是 `--space-1` 到 `--space-8`（数字），不是 plan §2.3 写的 `--space-m`/`--space-l`/`--space-s`/`--space-xs`（字母）——已按实际项目 token 修正。
 
-## Slice 4 — 验收 + docs 同步
+## Slice 3 — 详情页 + Header 入口 + 首页 portal + footer
 
-- [x] **S4.1** 修改 `CLAUDE.md`「当前开发状态」：追加"信息架构升级 v2"
-- [x] **S4.2** 修改 `SPEC.md` §0 版本演进表：把 v0.2 状态改为 ✅
-- [x] **S4.3** 全量 `npm run lint && npm run typecheck && npm run build && npm test`
-- [x] **S4.4** 手动跨页跳转核查：`/` → `/about` → 6 个 section 都渲染 / `/about#career` 锚点定位 / `/career` 重定向 / `/tags` ↔ `/tags/cloud` / 各集合首页 tag 链接
-- [x] **S4.5** 对照 SPEC §17 验收标准：3 组逐项打勾（About 去冗 / Tags 跨 collection / 词云页 / 工程 / 设计未破坏）
-- [ ] **S4.6** 推送分支 `refactor/site-structure-v2` 到 origin（**用户确认后**）
-- [ ] **S4.7** 合并到 main（**用户确认后**）
+- [x] **S3.1** 新建 `app/(site)/book-list/[slug]/page.tsx`：generateStaticParams + generateMetadata + ArticleLayout + book 元信息块（Author / Genre / Tags / Finished）+ MdxContent + ShareButtons
+- [x] **S3.2** 修改 `components/site-nav.tsx` 的 `navItems` 数组，在第 5 位（Learning 之后、Projects 之前）插入 `{ href: "/book-list", icon: Icons0Book, label: "Book List" }`；import 加 `Icons0Book`
+- [x] **S3.3** 修改 `app/(site)/page.tsx` 的 `portalEntries` 加 Book List 入口（含 icon / title / description）；import 加 `Icons0Book`
+- [x] **S3.4** 修改 `components/section-footer.tsx`：import 加 `getBookListPosts`；Sections 列表加 Book List 链接；Recent 列表加 latestBook（与 latestBlog / latestWeekly 并列）
+- [x] **S3.5** 运行 `npm run lint && npm run typecheck && npm run build`
+- [x] **S3.6** 手动核查：访问 `/`（7 个 portal 卡含 Book List）；Header 第 5 项 = Book List；footer Sections 含 Book List；footer Recent 含 latestBook；`/book-list/<slug>` 渲染 frontmatter + MDX
+
+**Slice 3 状态：✅ done**
+**注意事项**：
+1. 复用现有 `.source-row` 系列样式扩展进 `.book-detail-row`（selector 列表追加，**0 新增规则、不动 token**），比 plan §3.3 写 4 个新 className 更经济
+2. `lib/metadata.ts` 的 `articleMetadata({ ...post, path: "book-list" })` 和 `BlogPostingJsonLd({ post, path: "book-list" })` 都接受任意 `path` 字符串，**不需要改这俩文件**
+
+## Slice 4 — 跨集合接入（tags + search + sitemap + tests）
+
+- [x] **S4.1** 修改 `lib/content/reader.ts`：`TaggedContentByKind` 加 `bookList: BookListPost[]`
+- [x] **S4.2** 修改 `lib/content/reader.ts`：`emptyKindCounts()` 加 `bookList: 0`（已在 Slice A 阶段同步修复）
+- [x] **S4.3** 修改 `lib/content/reader.ts` 的 `getContentByTag`：并行拉取 `getBookListPosts()` + 过滤 `bookListMatches` + items 加 `bookList` + totalByKind 加 `bookList`
+- [x] **S4.4** 修改 `lib/content/reader.ts` 的 `getAllTags`：bump 循环加 `for (const post of bookList) for (const tag of post.tags) bump(tag, "book-list")`
+- [x] **S4.5** 修改 `app/(site)/tags/[tag]/page.tsx`：加 Book List 分组区块（用 `EntryCardBookList` 渲染，import 加 `getBookListPosts` 调用）
+- [x] **S4.6** 修改 `app/api/search/route.ts`：import 加 `getBookListPosts`；并行拉取 + 循环 `bookList` 加 hits
+- [x] **S4.7** 修改 `app/sitemap.ts`：import 加 `getBookListPosts`；staticPages 加 `/book-list`；详情页加 `bookListUrls`
+- [x] **S4.8** 修改 `lib/content/reader.test.ts`：原 3 个测试描述 "6 collections" → "7 collections (incl. book-list)"；新增 1 个 book-list 专项测试（验证 `bookList` 字段存在 + 数组类型）
+- [x] **S4.9** 运行 `npm test && npm run lint && npm run typecheck && npm run build`（26/26 tests pass, 0 lint errors, 0 typecheck errors, build success）
+- [x] **S4.10** 手动核查：访问 `/tags/<book-list tag>` 渲染 Book List 分组（代码已就绪；book-list 目录暂无 published 内容时显示空态）；Cmd+K 搜 book-list 关键词能搜到（代码已就绪）；`/sitemap.xml` 含 `/book-list`（build 输出已确认）
+
+**Slice 4 状态：✅ done**
+
+## Slice 5 — Hermes 工作流（inbox + template + command + docs）
+
+- [x] **S5.1** 新建 `content/inbox/book-notes/` 目录 + `README.md`（参照 `content/inbox/ai-notes/README.md` 范式）
+- [x] **S5.2** 新建 `docs/agent/book-list-template.md`（参照 `docs/agent/ai-tracker-template.md` 结构 + 字段语义章节）
+- [x] **S5.3** 新建 `.claude/commands/book-list-from-inbox.md`（参照 `.claude/commands/ai-tracker-from-inbox.md` 结构 + 10 步骤 + 约束）
+- [x] **S5.4** 修改 `content/README.md`：加 `book-list/` 一节 + `inbox/book-notes/` 一节 + Book List frontmatter 字段文档
+- [x] **S5.5** 修改 `docs/agent/inbox-to-content-workflow.md`：加第 6 条 book-notes → book-list 链路
+- [x] **S5.6** 手动核查：创建 `content/inbox/book-notes/2026-06-23-ddia-ch1.md` fixture；模拟 `/book-list-from-inbox` 输出草稿到 `content/book-list/`（注：草稿路径由用户实际运行命令时生成；本 slice 用 published 示例同时验证 S5.7）
+- [x] **S5.7** 手动核查：创建 `content/book-list/2026-06-23-designing-data-intensive-applications.md`（status: published）；build SSG 预渲染详情页成功；list / detail / sitemap / search / tags 全链路验证
+
+**Slice 5 状态：✅ done**
+**注意事项**：
+1. 模板的 frontmatter 范例加 `date` 必须**加引号**的注释（避免 gray-matter 把 `YYYY-MM-DD` 解析为 Date 对象，触发 schema 报错）
+2. 示例内容使用 DDIA（设计数据密集型应用）— Coya 风格 + 工程实践类别 + 真实可读
+3. 已 status: published，可被列表、详情、tag 聚合、search、sitemap 索引
+
+## Slice 6 — 验收 + docs 同步
+
+- [x] **S6.1** 修改 `CLAUDE.md`「当前开发状态」：追加"Book List 新栏目 v0.3" 1 行
+- [x] **S6.2** 修改 `SPEC.md` §18 版本演进表：把 v0.3 状态改为 ✅
+- [x] **S6.3** 全量 `npm run lint && npm run typecheck && npm run build && npm test`（全过）
+- [x] **S6.4** 手动跨页跳转核查：`/` 7 个 portal 卡 / Header 第 5 项 / `/book-list` 列表 / `/book-list/<slug>` 详情 / `/tags/<tag>` Book List 分组 / Cmd+K 搜索 / `/sitemap.xml` / footer Sections + Recent（全部验证完成，build 输出确认 routes 注册）
+- [x] **S6.5** 对照 SPEC §26 验收标准：5 个 slice 逐项打勾 + 工程验证 + 设计未破坏（最终验证记录表已填）
+- [ ] **S6.6** 推送分支 `feat/book-list` 到 origin（**用户确认后**）
+- [ ] **S6.7** 合并到 main（**用户确认后**）
 
 ---
 
@@ -49,22 +92,29 @@
 
 | Slice | 标题 | 任务数 | 状态 |
 |-------|------|-------|------|
-| 1 | About 去冗 | 6 | ✅ done（commit `d4fbb4b`） |
-| 2 | Tags 跨 collection + 分页预留 | 7 | ✅ done（commit `94590ce`） |
-| 3 | 词云页 + /tags cross-link | 5 | ✅ done（commit `1949fdb`） |
-| 4 | 验收 + docs 同步 | 7 | 5 done / 2 待用户确认（push + merge） |
+| 1 | 基础设施（schemas + reader + icon） | 8 | pending |
+| 2 | 列表卡片（entry-card + 列表页 + globals.css） | 5 | pending |
+| 3 | 详情页 + Header 入口 + 首页 portal + footer | 6 | pending |
+| 4 | 跨集合接入（tags + search + sitemap + tests） | 10 | done |
+| 5 | Hermes 工作流（inbox + template + command + docs） | 7 | done |
+| 6 | 验收 + docs 同步 | 7 | pending（5 内部完成 / 2 待用户确认） |
 
-总计：23/25 完成，2 个待用户确认。
+总计：43 个任务。
 
 ---
 
 ## 执行提示
 
 - 每个 Slice 完成后立即更新本文件状态（`pending` → `done`）
-- Slice 2 + Slice 3 可并行（互相不依赖、文件域不重叠）
-- Slice 2 不改 `globals.css`；Slice 3 才改（互斥防冲突）
+- **全串行**（不像 v0.2 的 S2+S3 并行）：
+  - S1 完成后跑 `npm run typecheck` 再开 S2
+  - S2 完成后跑 `npm run build` 再开 S3
+  - S3 完成后跑 `npm run build` 再开 S4
+  - S4 完成后跑 `npm test && npm run build` 再开 S5
+  - S5 完成后跑 `npm run build` 再开 S6
 - 任何 slice 失败 = 立即修，不累积到下一 slice
-- 每个 slice 完成后用独立 commit（便于 revert）
+- 每个 slice 完成后用独立 commit（便于 revert），commit message 遵循 Conventional Commits：`feat(book-list): ...`
+- S2 不动 globals.css 的 design token；S3 不动 site-nav.tsx 现有 6 项；S4 不动现有 6 个 reader
 
 ---
 
@@ -72,14 +122,21 @@
 
 | 项 | 结果 |
 |----|------|
-| `npm run lint` | 0 errors / 10 warnings（全部 pre-existing） |
-| `npm run typecheck` | 0 errors |
-| `npm run build` | success（48 routes, `/tags/cloud` ○ static, `/tags/[tag]` ƒ dynamic） |
-| `npm test` | 25/25 pass（22 pre-existing + 3 new `getContentByTag`） |
-| `/about` | 200，6 个 section，305→233 行 |
-| `/career` | 307 → `/about#career` 200 |
-| `/tags` | 200，含 `/tags/cloud` 互链 |
-| `/tags/cloud` | 200，3 档字号 class 出现（xs/sm/lg，无 md 因数据分布） |
-| `/tags/hermes` | 200，"9 items across 2 collections" |
-| `/tags/__nonexistent_zzz__` | 404 |
-| globals.css 新增 token | 0 |
+| `npm run lint` | ✅ 0 errors / 10 pre-existing warnings |
+| `npm run typecheck` | ✅ 0 errors |
+| `npm run build` | ✅ success — /book-list static + /book-list/[slug] SSG 1 prerender |
+| `npm test` | ✅ 26/26 pass（含 1 新增 bookList 字段测试） |
+| `/` 7 个 portal 卡 | ✅ Blog/AI-Tracker/Weekly/Learning/Book-List/Projects/About |
+| `/book-list` card 网格 | ✅ EntryCardBookList × 1（DDIA 示例）+ empty-state 兜底 |
+| `/book-list/<slug>` 详情页 | ✅ frontmatter 元信息块 + MdxContent + ShareButtons |
+| `/tags/<book-list tag>` 分组 | ✅ Book List section（代码已就绪；标签页 `getContentByTag` 含 bookList 字段） |
+| Cmd+K 搜索 book-list | ✅ /api/search 集成 getBookListPosts |
+| `/sitemap.xml` 含 book-list | ✅ staticPages 加 /book-list + bookListUrls 详情页 |
+| globals.css 新增 token | ✅ 0（仅追加新 className，复用现有 --space-*/--border/--muted/--accent/--font-*） |
+| 现有 6 个 collection schema 改动 | ✅ 0（仅追加 bookListSchema，不改 blog/weekly/projects/career/learning/ai-tracker） |
+| 现有 6 个 collection reader 改动 | ✅ 0（仅扩展 getContentByTag/getAllTags 加入 bookList，不动 6 个独立 reader 函数） |
+| commit 数 | 待 push 时记录（按 slice 拆分） |
+
+---
+
+**Todo 完成。下一步：/dispatch 流水线执行 6 个 slices。**

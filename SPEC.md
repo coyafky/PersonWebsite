@@ -723,3 +723,667 @@ test("getContentByTag: empty tag returns all empty", async () => {
 ---
 
 **v0.2 规约完成。下一步：/plan 拆任务 → /dispatch 执行。**
+
+---
+
+## 18. v0.3 增量规约 — Book List 新栏目
+
+### 18.1 版本演进（追加）
+
+| 版本 | 范围 | 状态 | 关键改动 |
+|------|------|------|----------|
+| v0.1 | 信息架构升级（v1） | ✅ 合入 main | 6 个列表页差异化、Career 并入 About、tag 索引 + blog archive、footer 3 列、P2/P3 清理 |
+| v0.2 | About 去冗 + Tags 跨 collection + 词云 | ✅ 合入 main | About 9→6 sections / `getContentByTag` reader + 3 tests / `/tags/cloud` 词云页 / 分页架构预留 |
+| **v0.3** | **Book List 新栏目** | ✅ 合入 feat/book-list | 新增第 7 个 collection `book-list`（card 列表 + 读书笔记详情 + 跨集合接入 + Hermes 工作流） |
+
+### 18.2 v0.3 本规约新增的 1 个目标
+
+| # | 目标 | 范围 |
+|---|------|------|
+| **G1** | **Book List 新栏目落地** | 7 个文件改动 + 6 个文件新增 + Hermes 工作流 + inbox 子目录，按 5 个 vertical slices 实施 |
+
+### 18.3 Git 工作流
+
+- **分支名建议**：`feat/book-list`（独立 feature 分支，非 `refactor/*`）
+- **commit 策略**：每个 slice 一个 commit，commit message 遵循 Conventional Commits（`feat(book-list): ...`）
+- **不在 main 上直接改**——遵循 CLAUDE.md「先建分支再开发」
+
+### 18.4 与 v0.2 的关系
+
+- 复用 v0.2 的 `getContentByTag` 跨集合聚合架构（v0.3 扩展为 7 collection）
+- 复用 v0.2 的 `CollectionList` 列表骨架
+- 复用 v0.1 的 `entry-card-*` 卡片组件命名约定
+- 不复用：v0.2 的 `tag-cloud` 不需要改（book-list 自动接入）
+- 不破坏：现有 6 个 collection 任何字段
+
+---
+
+## 19. Objective（v0.3 目标）
+
+### 19.1 一句话
+在 6 collection 体系中新增第 7 个 `book-list` collection：列表页用 card 卡片展示「书名 / 作者 / 类别」三件套，点击进入对应书的读书笔记详情页。
+
+### 19.2 关键结果（必须）
+1. **新路由**：`/book-list`（列表页）+ `/book-list/<slug>`（详情页）双路由可访问。
+2. **card 卡片显示三件套**：每张 card 显示**书名（title）+ 作者（author）+ 类别（genre）**。tags 在 card 下方可选显示。
+3. **Header 入口**：`site-nav.tsx` 的 `navItems` 第 5 项为 Book List（在 Learning 和 Projects 之间）。
+4. **首页 portal 入口**：`app/(site)/page.tsx` 的 `portalEntries` 含 Book List 入口卡。
+5. **footer 接入**：`SectionFooter` 3 列中「Sections」含 Book List 链接，「Recent」含最新一条已 published 的书。
+6. **跨集合接入**：`getContentByTag` / `getAllTags` 接入 book-list；`/tags/[tag]` 分组含 Book List；`/api/search` 搜索源含 book-list；sitemap 含 `/book-list` 静态页 + 全部 published 详情页。
+7. **Hermes 工作流**：`content/inbox/book-notes/` 子目录 + `docs/agent/book-list-template.md` 模板 + `.claude/commands/book-list-from-inbox.md` 命令。
+8. **设计系统对齐**：Stripe Press（Fraunces 衬线、oklch 暖调、0 圆角、1500ms 慢 crossfade），不动 token。
+9. **内容边界**：`status: published` 才公开渲染；`status: draft` 仅本地可见。Hermes 永远生成 draft，Coya 手动改 published。
+10. **首版无 RSS**（与 ai-tracker 区别，book-list 不是信号流）。
+
+### 19.3 不在范围内（红线）
+- ❌ 设计 token（`app/globals.css` 中 CSS 变量、字体、半径、阴影、动效曲线）
+- ❌ MDX 组件注册表新增（读书笔记用现有 `MdxContent` 即可）
+- ❌ 现有 6 个 collection 任何 schema 字段改动
+- ❌ 新增 npm 依赖
+- ❌ RSS feed（ai-tracker 才有；book-list 首版不做）
+- ❌ 阅读状态机（reading / read / want-to-read / dnf）
+- ❌ 评分字段（1-5 星或 10 分制）
+- ❌ ISBN / 出版社 / 出版年 / 封面图（v0.3 schema 极简）
+- ❌ 跨书「同主题 / 同作者」聚合页
+- ❌ 「今年读了多少本」统计仪表盘
+
+---
+
+## 20. Project Structure（v0.3 文件树变更）
+
+### 20.1 按 5 个 Slices 拆分
+
+#### **Slice A — 基础设施**（schemas + reader + icon）
+
+```
+lib/content/
+├── schemas.ts               🔧 加 bookListSchema（base + author + genre）+ schemaByKind["book-list"] + BookListPost 类型 + SiteContent union
+└── reader.ts                🔧 加 getBookListPosts() + CollectionMap["book-list"]: BookListPost
+
+components/
+└── icons0.tsx               🔧 加 Icons0Book（参照 Icons0Calendar 风格的 Carbon SVG）
+```
+
+**验收**：`npm run typecheck` 通过；0 条 book-list 内容时无错误；`getBookListPosts()` 返回 `BookListPost[]`。
+
+#### **Slice B — 列表页 + 卡片组件**
+
+```
+components/
+└── entry-card-book-list.tsx   ⭐ 新增：card 组件，props = { href, title, author, genre, summary?, tags? }
+
+app/(site)/
+└── book-list/
+    └── page.tsx               ⭐ 新增：列表页（CollectionList 骨架 + card-grid 网格 + 空态）
+
+app/globals.css                🔧 +.book-list-grid +.book-card +.book-card-meta（不动 token，复用 --space-* --accent-* --gold）
+```
+
+**验收**：`/book-list` 渲染 card 网格；0 条内容时显示 empty-state（"尚无书籍 →"）；点击 card 跳 `/book-list/<slug>`（即使 404 也行，slice C 再补详情页）。
+
+#### **Slice C — 详情页 + Header 入口 + 首页 portal + footer**
+
+```
+app/(site)/
+└── book-list/
+    └── [slug]/
+        └── page.tsx           ⭐ 新增：详情页（ArticleLayout + book 元信息块 + MdxContent + ShareButtons）
+
+components/
+├── site-nav.tsx               🔧 navItems 数组插入 Book List 在第 5 位（Learning 之后、Projects 之前）
+├── section-footer.tsx         🔧 Sections 列加 Book List 链接；Recent 列加 latestBook（与 latestBlog/latestWeekly 并列）
+└── ...（其他不动）
+
+app/(site)/
+└── page.tsx                   🔧 portalEntries 加 Book List 入口（用 ContentCard 渲染）
+```
+
+**验收**：Header 第 5 项 = Book List；首页 portal 6→7 个入口卡；footer Sections 含 Book List 链接；footer Recent 在 latestBlog + latestWeekly 后显示 latestBook；`/book-list/<slug>` 详情页可渲染 frontmatter 元信息 + MDX 正文。
+
+#### **Slice D — 跨集合接入（tags + search + sitemap + 测试）**
+
+```
+lib/content/
+├── reader.ts                  🔧 getContentByTag / getAllTags / emptyKindCounts 接入 book-list
+│                                + getContentByTag 返回类型 TaggedContentByKind 加 book-list
+│                                + getAllTags bump() 循环加 book-list
+└── reader.test.ts             🔧 现有 3 个测试改 "6 collections" → "7 collections"；
+                                 新增 1 个 book-list 专项测试（验证 getBookListPosts + getContentByTag 跨 book-list 命中）
+
+app/(site)/
+└── tags/
+    └── [tag]/
+        └── page.tsx           🔧 加 Book List 分组区块（用 entry-card-book-list 渲染）
+
+app/api/
+└── search/
+    └── route.ts               🔧 搜索源加 getBookListPosts() 循环
+
+app/
+└── sitemap.ts                 🔧 静态页加 /book-list（priority 0.7，changeFrequency weekly）；
+                                 详情页加 bookListUrls（priority 0.5，changeFrequency monthly）
+```
+
+**验收**：
+- `/tags/<book-list 已用 tag>` 分组含 Book List
+- `/tags/<只在 book-list 出现的 tag>` 不 404
+- Cmd+K 搜到 book-list 内容
+- `npm run sitemap` / curl `/sitemap.xml` 含 book-list 条目
+- `npm test` 通过（含 4 个 reader 测试，原 3 个 + 新增 1 个）
+
+#### **Slice E — Hermes 工作流（template + command + inbox）**
+
+```
+content/
+├── inbox/
+│   ├── book-notes/            ⭐ 新增目录（与 ai-notes/ 并列）
+│   │   └── README.md          ⭐ 子目录说明（参照 ai-notes/README.md）
+│   └── ai-notes/              （不动）
+└── README.md                  🔧 加 book-list/ 一节 + inbox 加 book-notes/
+
+docs/agent/
+├── book-list-template.md      ⭐ 新增：内容模板（参照 ai-tracker-template.md）
+└── inbox-to-content-workflow.md  🔧 加 book-notes 转化链路（与 ai-notes 并列）
+
+.claude/commands/
+└── book-list-from-inbox.md    ⭐ 新增：从 inbox/book-notes/ 生成 status: draft 草稿（参照 ai-tracker-from-inbox.md）
+```
+
+**验收**：
+- Hermes 调 `/book-list-from-inbox` 能从 `content/inbox/book-notes/<file>.md` 生成 `content/book-list/<date-slug>.md`
+- 生成内容 `status: draft`，Coya 手动改 `published`
+- `content/README.md` 列出 book-list/ 一节
+- `inbox-to-content-workflow.md` 5 条转化链路（原有 4 条 + book-notes 新增）
+
+### 20.2 完整文件树（5 个 slice 完成后）
+
+```
+app/(site)/
+├── book-list/                 ⭐ 新增目录
+│   ├── page.tsx               ⭐ Slice B
+│   └── [slug]/
+│       └── page.tsx           ⭐ Slice C
+├── ...（其他路由不动）
+└── tags/
+    └── [tag]/
+        └── page.tsx           🔧 Slice D
+
+components/
+├── entry-card-book-list.tsx   ⭐ 新增（Slice B）
+├── icons0.tsx                 🔧 +Icons0Book（Slice A）
+├── site-nav.tsx               🔧 +Book List 入口（Slice C）
+├── section-footer.tsx         🔧 +Book List Sections/Recent（Slice C）
+└── ...（其他不动）
+
+lib/content/
+├── schemas.ts                 🔧 +bookListSchema（Slice A）
+├── reader.ts                  🔧 +getBookListPosts + 跨集合接入（Slice A + D）
+└── reader.test.ts             🔧 测试更新（Slice D）
+
+app/
+├── page.tsx                   🔧 +portalEntries（Slice C）
+├── sitemap.ts                 🔧 +book-list 条目（Slice D）
+└── api/search/route.ts        🔧 +book-list 搜索源（Slice D）
+
+app/globals.css                🔧 +.book-list-grid +.book-card +.book-card-meta（Slice B）
+
+content/
+├── book-list/                 ⭐ 新增目录（运行时由 Hermes/Coya 创建）
+└── inbox/
+    └── book-notes/            ⭐ 新增目录（Slice E）
+
+docs/agent/
+├── book-list-template.md      ⭐ 新增（Slice E）
+└── inbox-to-content-workflow.md  🔧 +book-notes 链路（Slice E）
+
+.claude/commands/
+└── book-list-from-inbox.md    ⭐ 新增（Slice E）
+
+SPEC.md                        🔧 v0.3 章节（本次）
+```
+
+### 20.3 路由表（v0.3 增量）
+
+| 路由 | 状态 | 改动 |
+|------|------|------|
+| `/book-list` | ⭐ | 列表页，card 网格 |
+| `/book-list/<slug>` | ⭐ | 详情页，读书笔记 |
+| `/tags/<tag>` | 🔧 | 分组加 Book List（仅当该 tag 在 book-list 出现时） |
+| `/sitemap.xml` | 🔧 | 加 `/book-list` 静态页 + 全部 published 详情页 |
+
+---
+
+## 21. Code Style（v0.3 新约定）
+
+### 21.1 沿用现有（CLAUDE.md §4 + SPEC §4.1-4.2）
+- Server Component 优先
+- kebab-case 文件名
+- 不引入 `src/`
+- TypeScript strict
+- 全局 CSS + 语义 className，不引入新样式方案
+
+### 21.2 v0.3 新增约定
+
+#### bookListSchema 字段定义（`lib/content/schemas.ts`）
+
+```ts
+export const bookListSchema = baseContentSchema.extend({
+  kind: z.literal("book-list"),
+  author: z.string(),                 // 必填，作者名
+  genre: z.string(),                  // 必填，粗分类（"商业 / 文学 / 技术 / 历史 / 其他"）
+  tags: stringArraySchema,            // 必填可空，细粒度标签
+  lang: z.string().default("zh"),
+});
+```
+
+**字段语义**：
+- `title` — 书名（卡片主标题）
+- `author` — 作者
+- `genre` — 类别（粗分类，单字段，便于卡片展示）
+- `tags` — 细粒度标签（2-5 个，自由发挥）
+- `date` — 读完日期（YYYY-MM-DD；与现有所有 collection 的 `date` 语义统一）
+- `summary` / `englishSummary` — 与 blog 相同
+- `status` — 永远 `draft` 由 Hermes 生成，Coya 手动改 `published`
+
+**不引入的字段**（v0.3 极简）：
+- ❌ `isbn` / `publisher` / `publishedYear` / `cover` / `rating` / `readingStatus`
+
+#### getBookListPosts 签名（`lib/content/reader.ts`）
+
+```ts
+export async function getBookListPosts(
+  includeDrafts = false,
+): Promise<BookListPost[]> {
+  const items = await getCollection("book-list", includeDrafts);
+  return items.filter((item): item is BookListPost => item.kind === "book-list");
+}
+```
+
+**接入点**：
+- `CollectionMap` 加 `"book-list": BookListPost`
+- `TaggedContentByKind` 加 `bookList: BookListPost[]`
+- `emptyKindCounts` 加 `bookList: 0`
+- `getContentByTag` 加 `getBookListPosts()` 并行拉取 + `bookListMatches` 过滤
+- `getAllTags` 在 `bump` 循环加 `for (const post of bookList) for (const tag of post.tags) bump(tag, "book-list")`
+
+#### entry-card-book-list props（`components/entry-card-book-list.tsx`）
+
+```ts
+type EntryCardBookListProps = {
+  href: string;
+  title: string;        // 书名
+  author: string;       // 作者
+  genre: string;        // 类别
+  summary?: string;     // 可选摘要
+  date?: string;        // 可选读完日期
+  tags?: string[];      // 可选细粒度标签
+};
+```
+
+**视觉结构**（参照 `content-card.tsx` 风格，零圆角、暖调）：
+```
+┌─────────────────────────────┐
+│ <genre pill>                │  ← 类目徽章
+│                             │
+│ Book Title (h3)             │  ← 书名（Fraunces 衬线）
+│ by Author                   │  ← 作者（小一号，灰）
+│                             │
+│ Summary text (optional)...  │  ← 可选摘要
+│                             │
+│ #tag1 #tag2 #tag3           │  ← 可选细粒度标签
+│                             │
+│ Read  ↗                     │  ← 跳转提示
+└─────────────────────────────┘
+```
+
+#### 详情页 frontmatter 块（`app/(site)/book-list/[slug]/page.tsx`）
+
+参照 `ai-tracker/[slug]/page.tsx` 的 `.ai-tracker-source` 块：
+
+```
+┌─ Book Info ─────────────────┐
+│ Author    │ Coya            │
+│ Genre     │ 商业            │
+│ Tags      │ #管理 #效率     │
+│ Finished  │ 2026-06-15      │
+└─────────────────────────────┘
+```
+
+#### globals.css 新增 className（不动 token）
+
+```css
+.book-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-l);  /* 沿用 v0.1 token */
+}
+
+.book-card {
+  /* 复用 .content-card 的 padding / border / hover，仅覆盖 grid-item 布局 */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.book-card-meta {
+  display: flex;
+  gap: var(--space-s);
+  align-items: center;
+  color: var(--accent);  /* 类别徽章用 accent 色 */
+  font-size: var(--font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+```
+
+**禁止**：
+- ❌ 新增 CSS 变量（token 冻结）
+- ❌ 新增硬编码值（color / spacing / font-size 全部走变量）
+- ❌ 改 `globals.css` 任何已有 token
+
+#### 不可触碰的红线
+- ❌ 不动 `app/globals.css` 的设计 token
+- ❌ 不动 `components/mdx-content.tsx`
+- ❌ 不动 `lib/content/reader.ts` 现有 6 个 reader（仅追加 `getBookListPosts`）
+- ❌ 不动 `lib/content/schemas.ts` 现有 6 个 schema（仅追加 `bookListSchema`）
+- ❌ 不动现有 6 个 collection 的内容文件
+
+---
+
+## 22. Testing Strategy（v0.3）
+
+### 22.1 单元测试（`lib/content/reader.test.ts` 追加）
+
+**Slice D 必加 1 个测试**（保留 v0.2 已有 3 个 + 描述从 "6 collections" 改为 "7 collections"）：
+
+```ts
+// lib/content/reader.test.ts（追加 + 修改）
+test("getContentByTag: matches across all 7 collections (incl. book-list)", async () => {
+  const result = await getContentByTag("__test_tag_zzz__");
+  // 即便 fixture 中无匹配，也验证 7 collection 都被查询（kinds 字段覆盖）
+  assert.equal(
+    Object.keys(result.totalByKind).length,
+    7,
+    "expected 7 collections in totalByKind",
+  );
+  assert.ok("bookList" in result.totalByKind);
+  assert.ok("bookList" in result.items);
+});
+```
+
+**其他 3 个原测试**：把描述中的 "6 collections" 改为 "7 collections"，逻辑不变。
+
+### 22.2 手工验收（每个 slice 的关键点）
+
+| Slice | 关键验收点 |
+|-------|------------|
+| A | `tsc --noEmit` 通过；`getBookListPosts()` 返回 `BookListPost[]`；0 条内容时不报错 |
+| B | `/book-list` 渲染 card 网格；0 条时显示 empty-state；点击 card 跳详情（即使 404，slice C 再修） |
+| C | Header 第 5 项是 Book List；首页 portal 7 个入口；footer 3 列含 Book List；详情页 frontmatter 元信息 + MDX 正文均渲染 |
+| D | tag 详情页 Book List 分组存在；Cmd+K 搜到 book；sitemap 含 book-list；`npm test` 通过 |
+| E | Hermes 调 `/book-list-from-inbox` 能生成 draft；`content/README.md` 列出 book-list/ |
+
+### 22.3 工程验证（必跑）
+
+```bash
+npm run lint        # ESLint
+npm run typecheck   # tsc --noEmit
+npm run build       # Next.js production build
+npm test            # node --test lib/**/*.test.ts
+```
+
+### 22.4 不引入端到端测试
+v0.3 范围清晰，跨集合聚合靠 reader 单测 + 手工核查覆盖。不引入 Playwright / Cypress。
+
+---
+
+## 23. Boundaries（v0.3）
+
+### 23.1 In scope（5 个 slices 必做）
+
+| Slice | # | 项 | 验收点 |
+|-------|---|----|--------|
+| A | 1 | `bookListSchema` 含 author + genre 单字段 | schemas.ts 通过 typecheck |
+| A | 2 | `getBookListPosts()` reader | reader.ts 通过 typecheck |
+| A | 3 | `Icons0Book` SVG 图标 | icons0.tsx 通过 typecheck |
+| B | 4 | `entry-card-book-list` 组件 | `/book-list` 列表页可用 |
+| B | 5 | `/book-list` 列表页 + `.book-list-grid` 样式 | card 网格渲染 |
+| C | 6 | `/book-list/[slug]` 详情页 | book 元信息块 + MDX 正文 |
+| C | 7 | `site-nav.tsx` navItems 第 5 项 = Book List | 视觉验证 |
+| C | 8 | `app/(site)/page.tsx` portalEntries 加 Book List | 7 个入口卡 |
+| C | 9 | `section-footer.tsx` Sections + Recent 加 Book List | footer 3 列渲染 |
+| D | 10 | `getContentByTag` / `getAllTags` 接入 book-list | reader.test.ts 通过 |
+| D | 11 | `/tags/[tag]` 加 Book List 分组 | tag 详情页有 Book List |
+| D | 12 | `/api/search` 加 book-list 搜索源 | Cmd+K 搜到 book |
+| D | 13 | `sitemap.ts` 加 book-list 条目 | sitemap.xml 含 book-list |
+| E | 14 | `content/inbox/book-notes/` 子目录 + README | Hermes 可写 |
+| E | 15 | `docs/agent/book-list-template.md` | 内容模板 |
+| E | 16 | `.claude/commands/book-list-from-inbox.md` | Hermes 命令 |
+| E | 17 | `content/README.md` + `inbox-to-content-workflow.md` 同步 | 文档同步 |
+
+### 23.2 Out of scope（v0.3 不做）
+- ❌ 设计 token 任何改动
+- ❌ MDX 组件库新增（除 entry-card-book-list）
+- ❌ 现有 6 个 collection 任何 schema 字段改动
+- ❌ 现有 6 个 collection 任何 reader 函数改动（仅追加 `getBookListPosts`）
+- ❌ Hermes 现有 5 个命令任何改动
+- ❌ 新增 npm 依赖
+- ❌ RSS feed（book-list 不是信号流）
+- ❌ 阅读状态机 / 评分 / ISBN / 出版社 / 出版年 / 封面图
+- ❌ 跨书聚合页（同主题 / 同作者）
+- ❌ 「今年读了多少本」统计仪表盘
+- ❌ 文章详情页 article-layout / toc / related-posts 体系改动
+
+### 23.3 Ask first（v0.3 不确定时先问）
+- ✅ `lib/content/schemas.ts` 任何修改（仅追加 bookListSchema，不动其他）
+- ✅ `lib/content/reader.ts` 任何修改（仅追加 + 接入跨集合聚合）
+- ✅ `app/globals.css` 任何修改（仅追加 3 个新 className，不动 token）
+- ✅ 任何 `*.md` 内容文件从 `draft` 改为 `published`（Coya 手动）
+
+### 23.4 Never（v0.3 红线）
+- ❌ 删除 `content/**` 任何文件
+- ❌ 提交 `.env` / `*.db` / `node_modules/`
+- ❌ `git push --force` / `git reset --hard` / 任何不可逆 git 操作
+- ❌ 在 main 分支直接改
+- ❌ 引入 Tailwind / CSS-in-JS / 新依赖
+- ❌ 改动 `app/globals.css` 的设计 token
+- ❌ 改动 `components/mdx-content.tsx`
+- ❌ 改动现有 6 个 collection 的任何 schema 字段
+- ❌ 改动现有 6 个 collection 的任何 reader 函数（仅追加新函数）
+- ❌ 改动 `app/(site)/page.tsx` 的现有 6 个 portalEntries 顺序或文案
+
+---
+
+## 24. Ambiguities Resolved（v0.3 已采纳的默认值）
+
+| # | 模糊点 | 默认值 | 状态 |
+|---|--------|--------|------|
+| 1 | 是否要阅读状态机 | 否 | ✅ 推荐默认 |
+| 2 | 是否要评分 / ISBN / 出版年 | 否 | ✅ 推荐默认 |
+| 3 | `date` 字段语义 | 读完日期（与现有 collection 一致） | ✅ 推荐默认 |
+| 4 | `tags` 必填 vs 可选 | 必填可空（沿用约定 `stringArraySchema.default([])`） | ✅ 沿用 |
+| 5 | 类别用单字段 vs tag | 单字段 `genre` | ✅ 推荐默认 |
+| 6 | 路由段名 | `book-list` ↔ `"book-list"` 完全一致 | ✅ 推荐默认 |
+| 7 | inbox 子目录 | `content/inbox/book-notes/` | ✅ 推荐默认 |
+| 8 | 首版是否做 RSS | 否（与 ai-tracker 区别） | ✅ 推荐默认 |
+| 9 | card 视觉风格 | content-card 网格（参照 portal） | ✅ 推荐默认 |
+| 10 | spec 文档策略 | 追加 v0.3 章节到 SPEC.md | ✅ 用户确认 |
+| 11 | 执行模式 | 5 个 vertical slices | ✅ 用户确认 |
+| 12 | Header 入口位置 | Learning 之后、Projects 之前（第 5 项） | ✅ 用户确认 |
+| 13 | Git 分支名 | `feat/book-list` | ✅ 推荐默认 |
+| 14 | Commit 策略 | 每 slice 一个 commit（`feat(book-list): ...`） | ✅ 推荐默认 |
+| 15 | 类别枚举值 | 自由字符串（不强制枚举），推荐用"商业 / 文学 / 技术 / 历史 / 哲学 / 科学 / 其他" | ✅ 推荐默认 |
+
+---
+
+## 25. Risks & Mitigations（v0.3 特有）
+
+| 风险 | 概率 | 影响 | 缓解 |
+|------|------|------|------|
+| Slice A 没做完就开 Slice B，导致 B 引用不存在的 reader | 高 | 高 | 严格按依赖顺序：先 A → B → C → D → E；每个 slice 完成后跑 `npm run typecheck` |
+| `entry-card-book-list` 与 `content-card` 视觉重复 | 中 | 中 | 明确分工：book-list 用专属 `entry-card-book-list`（genre 徽章 + 三件套），content-card 留给 portal / about |
+| `getContentByTag` 跨 7 collection 性能下降（每次都拉所有 collection） | 低 | 低 | v0.2 已聚合；v0.3 仅 +1 个 collection 拉取；后续可加缓存 |
+| sitemap 详情页数量爆炸 | 低 | 低 | 只列 `status: published`；与 ai-tracker 一致 |
+| Hermes 误把 draft 改成 published | 中 | 高 | `book-list-from-inbox.md` 命令明确禁止；Coya 手动审阅 |
+| 类别枚举不规范（Coya 自由发挥导致 genre 拼写不一致） | 中 | 低 | 模板里推荐常见值（商业 / 文学 / 技术 / 历史 / 哲学 / 科学 / 其他），不强制；Coya 自定 |
+| `/book-list` 列表页 0 条内容时点 card 跳 404 | 中 | 低 | Slice C 完成前 0 条 → 列表页显示 empty-state（"尚无书籍"），不点 |
+| globals.css 误改 token | 低 | 高 | Slice B 增量 diff review；不动 token 是 hard rule |
+
+---
+
+## 26. Acceptance Criteria（v0.3 验收）
+
+### 26.1 Slice A — 基础设施
+
+- [ ] `lib/content/schemas.ts` 含 `bookListSchema`（kind: "book-list"，author + genre 必填，tags 必填可空）
+- [ ] `lib/content/schemas.ts` 的 `schemaByKind` 加 `"book-list": bookListSchema`
+- [ ] `lib/content/schemas.ts` 的 `SiteContent` union 加 `BookListPost`
+- [ ] `lib/content/reader.ts` 含 `getBookListPosts()` 函数
+- [ ] `lib/content/reader.ts` 的 `CollectionMap` 加 `"book-list": BookListPost`
+- [ ] `components/icons0.tsx` 含 `Icons0Book` 组件（导出）
+- [ ] `npm run typecheck` 0 errors
+
+### 26.2 Slice B — 列表页 + 卡片
+
+- [ ] `components/entry-card-book-list.tsx` 存在
+- [ ] card 显示**书名（title）+ 作者（author）+ 类别（genre）** 三件套
+- [ ] `app/(site)/book-list/page.tsx` 存在
+- [ ] 列表页用 `CollectionList` 骨架
+- [ ] 列表页用 `.book-list-grid` 网格布局
+- [ ] 0 条内容时显示 empty-state
+- [ ] `app/globals.css` 新增 `.book-list-grid` / `.book-card` / `.book-card-meta`（不动 token）
+- [ ] `npm run typecheck` 0 errors
+- [ ] `npm run lint` 0 errors
+
+### 26.3 Slice C — 详情 + Header + Portal + Footer
+
+- [ ] `app/(site)/book-list/[slug]/page.tsx` 存在
+- [ ] 详情页 frontmatter 元信息块显示 author / genre / tags / date
+- [ ] 详情页用 `MdxContent` 渲染正文
+- [ ] 详情页有 `ShareButtons`
+- [ ] `components/site-nav.tsx` 的 `navItems` 第 5 项 = `{ href: "/book-list", icon: Icons0Book, label: "Book List" }`
+- [ ] `app/(site)/page.tsx` 的 `portalEntries` 含 Book List 入口
+- [ ] `components/section-footer.tsx` 的 Sections 列含 Book List 链接
+- [ ] `components/section-footer.tsx` 的 Recent 列含 latestBook（与 latestBlog / latestWeekly 并列）
+- [ ] `npm run build` 成功
+
+### 26.4 Slice D — 跨集合接入
+
+- [ ] `lib/content/reader.ts` 的 `getContentByTag` 返回类型含 `bookList`
+- [ ] `lib/content/reader.ts` 的 `getAllTags` bump 循环含 book-list
+- [ ] `lib/content/reader.ts` 的 `emptyKindCounts` 含 `bookList: 0`
+- [ ] `app/(site)/tags/[tag]/page.tsx` 含 Book List 分组区块
+- [ ] `app/api/search/route.ts` 搜索源含 `getBookListPosts`
+- [ ] `app/sitemap.ts` 静态页含 `/book-list`
+- [ ] `app/sitemap.ts` 详情页含 `bookListUrls`
+- [ ] `lib/content/reader.test.ts` 含 4 个测试（原 3 个 + 1 个新增），全部通过
+- [ ] 原 3 个测试的 "6 collections" 描述改为 "7 collections"
+- [ ] `npm test` 通过
+
+### 26.5 Slice E — Hermes 工作流
+
+- [ ] `content/inbox/book-notes/README.md` 存在
+- [ ] `docs/agent/book-list-template.md` 存在，参照 ai-tracker-template.md 结构
+- [ ] `.claude/commands/book-list-from-inbox.md` 存在，参照 ai-tracker-from-inbox.md 结构
+- [ ] `content/README.md` 含 `book-list/` 一节
+- [ ] `content/README.md` 含 `inbox/book-notes/` 一节
+- [ ] `docs/agent/inbox-to-content-workflow.md` 含 5 条转化链路（原 4 条 + book-notes 新增）
+- [ ] 手动跑 `/book-list-from-inbox <fixture>` 能生成 `status: draft` 草稿
+
+### 26.6 工程验证
+
+- [ ] `npm run lint` 0 errors
+- [ ] `npm run typecheck` 0 errors
+- [ ] `npm run build` 成功
+- [ ] `npm test` 0 failures
+- [ ] 无新增 npm 依赖
+- [ ] `app/globals.css` 无新增 / 修改的设计 token（仅追加 3 个新 className）
+- [ ] 现有 6 个 collection 的 schema / reader / 内容文件均无改动
+- [ ] SPEC.md / tasks/plan.md / tasks/todo.md 同步本次改动
+
+### 26.7 设计未破坏
+
+- [ ] 所有页面维持 Stripe Press 配色 / 0 圆角 / 1500ms 动效
+- [ ] 所有新 className 使用 CSS 变量，不引入硬编码值
+- [ ] 不动 `app/globals.css` 的 design token
+
+---
+
+## 附录 C：Book List card 视觉示意（非代码，仅描述）
+
+### /book-list 列表页
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  BOOK LIST                                                      │
+│  Books I've read, with notes on what I took away.               │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌──────────────────┐  ┌──────────────────┐  ┌────────────────┐ │
+│  │ [商业]           │  │ [文学]           │  │ [技术]         │ │
+│  │                  │  │                  │  │                │ │
+│  │  Managing Oneself│  │  The Three-Body  │  │ Designing      │ │
+│  │                  │  │  Problem         │  │ Data-Intensive │ │
+│  │  by Peter        │  │                  │  │ Applications   │ │
+│  │  Drucker         │  │  by 刘慈欣       │  │                │ │
+│  │                  │  │                  │  │  by Kleppmann  │ │
+│  │  极简管理思想...  │  │  文明与时间的...  │  │  系统设计的...  │ │
+│  │                  │  │                  │  │                │ │
+│  │  #管理 #效率     │  │  #科幻 #文明     │  │  #系统 #DDIA  │ │
+│  │                  │  │                  │  │                │ │
+│  │  Read  ↗         │  │  Read  ↗         │  │  Read  ↗       │ │
+│  └──────────────────┘  └──────────────────┘  └────────────────┘ │
+│                                                                 │
+│  ┌──────────────────┐  ┌──────────────────┐                     │
+│  │ [技术]           │  │ [商业]           │  ...更多卡片         │
+│  │  ...             │  │  ...             │                     │
+│  └──────────────────┘  └──────────────────┘                     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### /book-list/<slug> 详情页
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Managing Oneself                            2026-06-15 · 6 min│
+│  by Peter Drucker                                              │
+│  极简管理思想：从认知自己到贡献价值的元方法。                    │
+│  A meta-method for managing yourself — from self-awareness...  │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌─ Book Info ─────────────────────────────┐                  │
+│  │  Author   │ Peter Drucker               │                  │
+│  │  Genre    │ 商业                        │                  │
+│  │  Tags     │ #管理 #效率 #元方法         │                  │
+│  │  Finished │ 2026-06-15                  │                  │
+│  └─────────────────────────────────────────┘                  │
+│                                                                 │
+│  ## 我读到的核心                                                │
+│                                                                 │
+│  1. **先做对的事，再把事做对** — 效能 vs 效率 ...              │
+│  2. **把精力放在长板上** — 短板补到"够用"即可 ...              │
+│  3. **决策是判断，不是创意** — 多方案中选最不差的 ...           │
+│                                                                 │
+│  ## 我会怎么用                                                  │
+│                                                                 │
+│  - 周日做一次"我这段时间在做什么"复盘                            │
+│  - 决策时用"最不满意后果"框架 ...                              │
+│                                                                 │
+│  [Share buttons]                                                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 附录 D：与现有体系的对接点
+
+- **数据流**：所有 list / 详情页通过 `lib/content/reader.ts` 已有的 reader 模式；`getBookListPosts` 沿用 `getCollection("book-list")` 模式。
+- **样式系统**：新 className 通过 `app/globals.css` 现有 token（`--space-*` `--accent-*` `--font-size-*` `--gold`）引用。
+- **页面动画**：所有页面自动继承 `PageTransitionWrapper`（`components/animations.tsx`）的 1500ms crossfade。
+- **MDX 渲染**：读书笔记直接用现有 `MdxContent` 渲染，无需注册新组件。
+- **搜索**：`search-dialog.tsx` 现有实现透明支持 book-list（通过 `/api/search` 扩展）。
+- **SEO**：`sitemap.ts` 自动覆盖；详情页 `generateMetadata` 用现有 `articleMetadata` helper。
+- **Git 工作流**：按 CLAUDE.md，先建 `feat/book-list` 分支，5 个 slice 各 1 个 commit。
+- **Hermes 边界**：`/book-list-from-inbox` 命令永远生成 `status: draft`；Coya 手动改 `published`。
+
+---
+
+**v0.3 规约完成。下一步：/plan 拆任务 → /dispatch 执行 5 个 vertical slices。**
