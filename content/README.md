@@ -8,12 +8,14 @@ weekly/       Weekly reviews and personal logs
 projects/     Project records and portfolio pages
 career/       Resume bullets, STAR stories, profile material
 ai-tracker/   AI 信息摄取与长期追踪 (`.md` 为主,允许 `.mdx`)
+book-list/    读书笔记 — 读过的书 + 摘要 + 个人收获 (`.md`)
 inbox/
   ideas/         → blog
   logs/          → weekly
   project-notes/ → projects
   career-notes/  → career
   ai-notes/      → ai-tracker
+  book-notes/    → book-list
 ```
 
 Default format is Markdown (`.md`). Use MDX (`.mdx`) only when a page needs React components, richer layout, diagrams, or embedded demos.
@@ -118,4 +120,28 @@ AI Tracker is a knowledge-radar / reading-log column — not Blog, not Weekly. E
 `status: draft` entries are filtered out of `/ai-tracker` and the detail route. Use drafts for in-progress tracking.
 
 ### RSS 订阅 → `/ai-tracker/feed.xml`（RSS 2.0，只 published）
+
+## Book List frontmatter
+
+Book List 是读书笔记栏目 — 记录读完的书、核心观点、个人收获与可执行改变。每条 = 一本书(不是一章)。
+
+### 必填字段
+
+- `title`, `date`, `summary`, `status` — 与其他 collection 一致
+- `author` — 作者全名
+- `genre` — 单字段粗分类,见 `docs/agent/book-list-template.md` 的 `genre` 枚举
+- `tags` — 细粒度标签(2-5 个,概念而非形容词)
+
+### 可选字段
+
+- `lang` — 默认 `zh`
+- `englishSummary` — 1-2 句英文摘要
+
+### Drafts
+
+`status: draft` 条目被 `/book-list` 列表和详情路由过滤掉,草稿期间不可见。Coya 手动改为 `published` 后才会公开。
+
+### 转化路径
+
+`content/inbox/book-notes/` 的碎片通过 `/book-list-from-inbox` 整理为 `content/book-list/<date>-<slug>.md`。
 

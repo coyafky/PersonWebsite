@@ -144,3 +144,33 @@ englishSummary: ""  # 1-2 句英文摘要
 7. 自动填 `englishSummary`（1-2 句英文）
 8. 可选 `relatedPosts`（跨集合 slug，Coya 手动确认）
 
+---
+
+## 链路 6：`inbox/book-notes/` → `content/book-list/`
+
+### 触发条件
+- 你明确说「把这本书记到 Book List」或「整理这本书的笔记」
+- 或执行 `/book-list-from-inbox`
+
+### 输入格式
+- `content/inbox/book-notes/` 下单个或多个 `.md` 碎片
+- 可以是单本书的多条速记,或正在读 / 刚读完的某一章摘录
+
+### 输出格式
+- 文件：`content/book-list/<YYYY-MM-DD-slug>.md`
+- 模板：`docs/agent/book-list-template.md`
+- 状态：默认 `status: draft`
+
+### 生成规则
+1. 识别素材是否同一本书(看 `tags` / 文件名) — 同本书合并为 1 篇,多本书先问 Coya 要先整理哪本
+2. 选 `genre` 枚举(认知科学 / 工程实践 / 商业思维 / 人物传记 / 历史社会 / 文学小说 / 哲学思辨 / 科普知识 / 职业发展 / 个人成长 / 设计美学 / 其他),不确定用 `其他` 并标 `[待确认]`
+3. 提取 `tags`(2-5 个细标签,概念而非形容词,优先英文专有名词)
+4. 写正文 4 段:
+   - **这本书讲了什么** — 2-4 段客观描述核心论点
+   - **我学到了什么** — 3-5 条 Coya 第一人称 takeaways,Hermes 推断的标 `[待确认]`
+   - **我会怎么用** — 1-3 条具体可执行的改变
+   - **引用与摘录** — 1-5 条原文摘录,标注章节或页码
+5. 写 `summary`(1-2 句,讲清楚**为什么值得读**,不要照抄正文)
+6. 自动填 `englishSummary`(1-2 句英文)
+7. 同一本书的 `content/book-list/<date-slug>.md` 已存在时,先问 Coya 是更新还是跳过(不要重复生成)
+
