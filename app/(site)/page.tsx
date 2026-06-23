@@ -4,6 +4,7 @@ import { ContentCard } from "@/components/content-card";
 import { HeroSection, HeroItem } from "@/components/hero-section";
 import {
   Icons0Blog,
+  Icons0Book,
   Icons0Calendar,
   Icons0Notebook,
   Icons0Portfolio,
@@ -42,6 +43,12 @@ const portalEntries: ReadonlyArray<PortalEntry> = [
     icon: <Icons0Notebook />,
     title: "Learning",
     description: "按主题整理的结构化学习笔记。",
+  },
+  {
+    href: "/book-list",
+    icon: <Icons0Book />,
+    title: "Book List",
+    description: "读过的书、读书笔记、长期沉淀的认知。",
   },
   {
     href: "/projects",

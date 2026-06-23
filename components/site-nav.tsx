@@ -8,6 +8,7 @@ import { useState, useSyncExternalStore } from "react";
 import { triggerSearch } from "@/lib/search-events";
 import {
   Icons0Blog,
+  Icons0Book,
   Icons0Calendar,
   Icons0Notebook,
   Icons0Portfolio,
@@ -20,6 +21,7 @@ const navItems = [
   { href: "/ai-tracker", icon: Icons0Radar, label: "AI Tracker" },
   { href: "/weekly", icon: Icons0Calendar, label: "Weekly" },
   { href: "/learning", icon: Icons0Notebook, label: "Learning" },
+  { href: "/book-list", icon: Icons0Book, label: "Book List" },
   { href: "/projects", icon: Icons0Portfolio, label: "Projects" },
   { href: "/about", icon: Icons0Profile, label: "About" },
 ];

@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { getBlogPosts, getWeeklyPosts } from "@/lib/content";
+import { getBlogPosts, getBookListPosts, getWeeklyPosts } from "@/lib/content";
 
 /**
  * Site-wide footer with three columns:
  *   1. 栏目索引  — link list to top-level sections
- *   2. 最近更新   — latest 1 blog + latest 1 weekly
+ *   2. 最近更新   — latest 1 blog + latest 1 weekly + latest 1 book
  *   3. RSS & contact — RSS, GitHub, email, copyright
  *
  * Server Component. Reads recent posts via reader functions to keep
@@ -14,11 +14,14 @@ export async function SectionFooter() {
   const year = new Date().getFullYear();
 
   // 静默拉取；任意集合为空时回退到"暂无更新"提示。
-  const [latestBlog, latestWeekly] = await Promise.all([
+  const [latestBlog, latestWeekly, latestBook] = await Promise.all([
     getBlogPosts()
       .then((posts) => posts[0])
       .catch(() => undefined),
     getWeeklyPosts()
+      .then((posts) => posts[0])
+      .catch(() => undefined),
+    getBookListPosts()
       .then((posts) => posts[0])
       .catch(() => undefined),
   ]);
@@ -41,6 +44,9 @@ export async function SectionFooter() {
             </li>
             <li>
               <Link href="/learning">Learning</Link>
+            </li>
+            <li>
+              <Link href="/book-list">Book List</Link>
             </li>
             <li>
               <Link href="/projects">Projects</Link>
@@ -70,6 +76,14 @@ export async function SectionFooter() {
               </li>
             ) : (
               <li className="site-footer-empty">No weekly yet.</li>
+            )}
+            {latestBook ? (
+              <li>
+                <span className="site-footer-kind">Book</span>
+                <Link href={`/book-list/${latestBook.slug}`}>{latestBook.title}</Link>
+              </li>
+            ) : (
+              <li className="site-footer-empty">No book yet.</li>
             )}
           </ul>
         </div>
