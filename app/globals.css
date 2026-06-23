@@ -1762,7 +1762,8 @@ main {
 
 .ai-tracker-source,
 .ai-tracker-section,
-.ai-tracker-related {
+.ai-tracker-related,
+.book-detail-info {
   margin: var(--space-5) 0;
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -1772,7 +1773,8 @@ main {
 
 .ai-tracker-source h2,
 .ai-tracker-section h2,
-.ai-tracker-related h2 {
+.ai-tracker-related h2,
+.book-detail-info h2 {
   margin: 0 0 14px;
   font-size: 18px;
   letter-spacing: 0.02em;
@@ -1780,7 +1782,8 @@ main {
   color: var(--accent);
 }
 
-.source-row {
+.source-row,
+.book-detail-row {
   display: grid;
   grid-template-columns: 120px 1fr;
   align-items: baseline;
@@ -1790,11 +1793,13 @@ main {
   font-size: 14px;
 }
 
-.source-row:last-child {
+.source-row:last-child,
+.book-detail-row:last-child {
   border-bottom: 0;
 }
 
-.source-row__label {
+.source-row__label,
+.book-detail-row__label {
   color: var(--muted);
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   font-size: 12px;
@@ -1803,11 +1808,13 @@ main {
   text-transform: uppercase;
 }
 
-.source-row__value {
+.source-row__value,
+.book-detail-row__value {
   color: var(--text);
 }
 
-.source-row__value a {
+.source-row__value a,
+.book-detail-row__value a {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -3252,4 +3259,85 @@ main {
 .timeline-tags a:focus-visible {
   color: var(--accent);
   outline: none;
+}
+
+/* ============================
+   Book List — card grid (v0.3)
+   ============================ */
+
+.book-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.book-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  transition: transform var(--transition-fast);
+}
+
+.book-card:hover {
+  transform: translateY(-2px);
+}
+
+.book-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  text-decoration: none;
+  color: inherit;
+}
+
+.book-card-meta {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.book-card-genre {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 12px;
+  font-family: var(--font-sans), Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.book-card-date {
+  color: var(--muted);
+  font-size: 13px;
+  font-family: var(--font-sans), Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.book-card-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 20px;
+  margin: 0;
+  color: var(--text);
+}
+
+.book-card-author {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0;
+  font-family: var(--font-sans), Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.book-card-summary {
+  font-size: 15px;
+  color: var(--text);
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-body), "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+}
+
+.book-card-tags {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: var(--space-2) 0 0;
 }
