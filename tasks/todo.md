@@ -84,7 +84,7 @@
 - [x] **S6.4** 手动跨页跳转核查：`/` 7 个 portal 卡 / Header 第 5 项 / `/book-list` 列表 / `/book-list/<slug>` 详情 / `/tags/<tag>` Book List 分组 / Cmd+K 搜索 / `/sitemap.xml` / footer Sections + Recent（全部验证完成，build 输出确认 routes 注册）
 - [x] **S6.5** 对照 SPEC §26 验收标准：5 个 slice 逐项打勾 + 工程验证 + 设计未破坏（最终验证记录表已填）
 - [x] **S6.6** 推送分支 `feat/book-list` 到 origin — 6 commits: c18e312 / 805444a / 84bf613 / 06ae6bc / 6a21d00 / 0a0d627
-- [ ] **S6.7** 合并到 main（**用户确认后**）
+- [x] **S6.7** fast-forward merge 到 main（main 现在 = 816beb7）— 已 push origin
 
 ---
 
