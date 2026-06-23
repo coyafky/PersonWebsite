@@ -119,6 +119,7 @@ PersonalWebsite/
 | Skill | 来源 | 触发场景 | 详细文档 |
 |------|------|---------|---------|
 | `web-design-engineer` v1.2.2 | `ConardLi/garden-skills` | 新做/重做页面、视觉组件、动效、数据可视化 | [`docs/agent/skills-usage.md`](docs/agent/skills-usage.md) |
+| `transitions-dev` v1.x | `JakubAntalik/transitions.dev` | 组件级微交互（modal / dropdown / tabs / copy / reveal / 等 21 种） | [`docs/agent/skills-usage.md`](docs/agent/skills-usage.md) |
 
 **通用规则**：
 
