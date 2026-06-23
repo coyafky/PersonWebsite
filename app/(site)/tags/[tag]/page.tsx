@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ContentCard } from "@/components/content-card";
 import { EntryCardAiTracker } from "@/components/entry-card-ai-tracker";
 import { EntryCardBlog } from "@/components/entry-card-blog";
+import { EntryCardBookList } from "@/components/entry-card-book-list";
 import { EntryCardLearning } from "@/components/entry-card-learning";
 import { EntryCardProject } from "@/components/entry-card-project";
 import { EntryCardWeekly } from "@/components/entry-card-weekly";
@@ -140,6 +141,26 @@ export default async function TagPage({ params }: TagPageProps) {
                 topic={topic}
                 postCount={posts.length}
                 posts={posts.map((p) => ({ slug: p.slug, title: p.title, summary: p.summary }))}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {totalByKind.bookList > 0 ? (
+        <section>
+          <h2>Book List</h2>
+          <div className="book-list-grid">
+            {items.bookList.map((post) => (
+              <EntryCardBookList
+                key={post.slug}
+                href={`/book-list/${post.slug}`}
+                title={post.title}
+                author={post.author}
+                genre={post.genre}
+                summary={post.summary}
+                date={post.date}
+                tags={post.tags}
               />
             ))}
           </div>

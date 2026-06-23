@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   getBlogPosts,
+  getBookListPosts,
   getWeeklyPosts,
   getProjectPosts,
   getAiTrackerPosts,
@@ -34,11 +35,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ results: [] });
   }
 
-  const [blog, weekly, projects, aiTracker] = await Promise.all([
+  const [blog, weekly, projects, aiTracker, bookList] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
     getProjectPosts(),
     getAiTrackerPosts(),
+    getBookListPosts(),
   ]);
 
   const hits: SearchHit[] = [];
@@ -61,6 +63,11 @@ export async function GET(request: Request) {
   for (const post of aiTracker) {
     const score = matchScore(post, q);
     if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/ai-tracker/${post.slug}`, date: post.date });
+  }
+
+  for (const post of bookList) {
+    const score = matchScore(post, q);
+    if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/book-list/${post.slug}`, date: post.date });
   }
 
   const topics = await getLearningTopics();

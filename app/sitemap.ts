@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import {
   getBlogPosts,
+  getBookListPosts,
   getWeeklyPosts,
   getProjectPosts,
   getLearningTopics,
@@ -12,11 +13,12 @@ import { buildUrl } from "@/lib/metadata";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /career 已合并到 /about（app/(site)/career/page.tsx 仅 307 跳转）。
   // 不暴露 /career 条目，避免搜索引擎索引跳转链。
-  const [blog, weekly, projects, aiTracker] = await Promise.all([
+  const [blog, weekly, projects, aiTracker, bookList] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
     getProjectPosts(),
     getAiTrackerPosts(),
+    getBookListPosts(),
   ]);
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -27,6 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: buildUrl("/projects"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: buildUrl("/learning"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
     { url: buildUrl("/ai-tracker"), lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
+    { url: buildUrl("/book-list"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
   ];
 
   const blogUrls: MetadataRoute.Sitemap = blog.map((post) => ({
@@ -57,6 +60,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  const bookListUrls: MetadataRoute.Sitemap = bookList.map((post) => ({
+    url: buildUrl(`/book-list/${post.slug}`),
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
   const topics = await getLearningTopics();
   const learningUrls: MetadataRoute.Sitemap = [];
 
@@ -85,6 +95,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...weeklyUrls,
     ...projectUrls,
     ...aiTrackerUrls,
+    ...bookListUrls,
     ...learningUrls,
   ];
 }

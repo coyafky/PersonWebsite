@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { getContentByTag } from "./reader.ts";
 
-test("getContentByTag: matches across all 6 collections", async () => {
+test("getContentByTag: matches across all 7 collections (incl. book-list)", async () => {
   const result = await getContentByTag("hermes");
   const totalHits = Object.values(result.totalByKind).reduce(
     (sum, n) => sum + n,
@@ -46,5 +46,18 @@ test("getContentByTag: nonexistent tag returns all empty", async () => {
   assert.ok(
     Object.values(result.totalByKind).every((n) => n === 0),
     "expected all totals to be zero",
+  );
+});
+
+test("getContentByTag: result always exposes bookList field (array)", async () => {
+  const result = await getContentByTag("hermes");
+  assert.ok(
+    Array.isArray(result.items.bookList),
+    "expected result.items.bookList to be an array",
+  );
+  assert.equal(
+    typeof result.totalByKind.bookList,
+    "number",
+    "expected result.totalByKind.bookList to be a number",
   );
 });
