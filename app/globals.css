@@ -3578,3 +3578,46 @@ main {
     scroll-behavior: auto !important;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   Article layout reveal (transitions-dev P18 header + P3 footer, S4)
+   Stripe Press rhythm: --panel-reveal-open-dur 700ms,
+   --text-reveal-stagger 120ms, --text-reveal-blur 2px,
+   --panel-reveal-translate-y 24px, --panel-reveal-blur 2px.
+   All values read from S2 :root tokens — no hardcoded ms.
+   prefers-reduced-motion is handled by the S2 global guard above.
+   ───────────────────────────────────────────────────────────────────── */
+
+/* P18 Texts reveal — staggered header direct children */
+.article-header-reveal > * {
+  opacity: 0;
+  transform: translateY(8px);
+  filter: blur(var(--text-reveal-blur));
+  transition:
+    opacity var(--panel-reveal-open-dur) var(--text-reveal-ease),
+    transform var(--panel-reveal-open-dur) var(--text-reveal-ease),
+    filter var(--panel-reveal-open-dur) var(--text-reveal-ease);
+  will-change: opacity, transform, filter;
+}
+.article-header-reveal.revealed > * {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* P3 Panel reveal — footer container as a single block */
+.article-footer-reveal {
+  opacity: 0;
+  transform: translateY(var(--panel-reveal-translate-y));
+  filter: blur(var(--panel-reveal-blur));
+  transition:
+    opacity var(--panel-reveal-open-dur) var(--panel-reveal-ease),
+    transform var(--panel-reveal-open-dur) var(--panel-reveal-ease),
+    filter var(--panel-reveal-open-dur) var(--panel-reveal-ease);
+  will-change: opacity, transform, filter;
+}
+.article-footer-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
