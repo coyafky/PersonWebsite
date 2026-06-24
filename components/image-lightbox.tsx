@@ -36,6 +36,11 @@ export function ImageLightbox({ src, alt, children }: LightboxProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
+            style={{
+              transitionDuration: "var(--modal-open-dur)",
+              transitionTimingFunction: "var(--modal-ease)",
+            }}
           >
             <motion.img
               src={src}
@@ -45,6 +50,12 @@ export function ImageLightbox({ src, alt, children }: LightboxProps) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
+              transition={{ duration: 0.6, ease: [0.22, 0.61, 0.36, 1] }}
+              style={{
+                transform: "scale(var(--modal-scale))",
+                transitionDuration: "var(--modal-open-dur)",
+                transitionTimingFunction: "var(--modal-ease)",
+              }}
             />
           </motion.div>
         ) : null}

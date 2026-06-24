@@ -52,7 +52,11 @@ export function Tabs({ tabs }: { tabs: Tab[] }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
+          transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
+            style={{
+              transitionDuration: "var(--tabs-indicator-dur)",
+              transitionTimingFunction: "var(--tabs-indicator-ease)",
+            }}
         >
           {tabs[active]?.children}
         </motion.div>

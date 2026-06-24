@@ -12,7 +12,15 @@ export function CopyButton({ text }: { text: string }) {
   };
 
   return (
-    <button className="code-copy-btn" onClick={handleCopy} aria-label="Copy code">
+    <button
+      className={`code-copy-btn${copied ? " success-check show" : ""}`}
+      onClick={handleCopy}
+      aria-label="Copy code"
+      style={{
+        transitionDuration: "var(--success-check-dur)",
+        transitionTimingFunction: "var(--success-check-ease)",
+      }}
+    >
       {copied ? "✓ Copied" : "Copy"}
     </button>
   );
