@@ -83,23 +83,8 @@ export function SearchDialog() {
   return (
     <>
       {open ? (
-        <div
-          className="search-overlay"
-          onClick={close}
-          style={{
-            transitionDuration: "var(--dropdown-open-dur)",
-            transitionTimingFunction: "var(--dropdown-ease)",
-          }}
-        >
-          <div
-            className="search-dialog"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              transformOrigin: "top center",
-              transitionDuration: "var(--dropdown-open-dur)",
-              transitionTimingFunction: "var(--dropdown-ease)",
-            }}
-          >
+        <div className="search-overlay" onClick={close}>
+          <div className="search-dialog" onClick={(e) => e.stopPropagation()}>
             <input
               ref={inputRef}
               className="search-input"
