@@ -201,8 +201,3 @@
 - [x] `npm test` → 单测全部通过
 - [x] 全文 grep `transitions-dev` 在 CLAUDE.md / SPEC.md / todo.md 三处均出现
 - [x] `git diff --stat` → 6 个 page.tsx + 3 个 docs 文件，无 content 改动
-
-## Slice 6 — 推送 + 合并
-
-- [x] **S6.6** 推送分支 `feat/transitions-dev-blog` 到 origin — 5 commits: d6356e7 / 2428670 / 55d242f / 7a14ef0 / 2ed227c
-- [x] **S6.7** fast-forward merge 到 main（main 现在 = `2ed227c`）— 已 push origin
