@@ -77,26 +77,36 @@ export default async function LearningArticlePage({ params }: ArticlePageProps) 
   const nextPost = postIdx < allPosts.length - 1 ? allPosts[postIdx + 1] : undefined;
 
   return (
-    <ArticleLayout headings={headings}>
-      <BlogPostingJsonLd post={post} path={`learning/${topic}`} />
-      <ArticleKeyboardNav
-        prevUrl={prevPost ? `/learning/${topic}/${prevPost.slug}` : undefined}
-        nextUrl={nextPost ? `/learning/${topic}/${nextPost.slug}` : undefined}
-      />
-      <article className="article-shell">
-        <header className="article-header">
-          <span>{post.date} · <span className="reading-time">{readingTimeLabel(post.body)}</span></span>
-          <h1>{post.title}</h1>
-          <p>{post.summary}</p>
-          {post.englishSummary ? (
-            <p className="english-summary">{post.englishSummary}</p>
-          ) : null}
-        </header>
-        <MdxContent source={post.body} />
-        <SeriesNav series={post.series ?? ""} prev={seriesPrev} next={seriesNext} />
-        <ShareButtons title={post.title} url={url} />
-      </article>
-      <RelatedPosts posts={related} />
+    <ArticleLayout
+      headings={headings}
+      header={
+        <>
+          <BlogPostingJsonLd post={post} path={`learning/${topic}`} />
+          <ArticleKeyboardNav
+            prevUrl={prevPost ? `/learning/${topic}/${prevPost.slug}` : undefined}
+            nextUrl={nextPost ? `/learning/${topic}/${nextPost.slug}` : undefined}
+          />
+          <article className="article-shell">
+            <header className="article-header">
+              <span>{post.date} · <span className="reading-time">{readingTimeLabel(post.body)}</span></span>
+              <h1>{post.title}</h1>
+              <p>{post.summary}</p>
+              {post.englishSummary ? (
+                <p className="english-summary">{post.englishSummary}</p>
+              ) : null}
+            </header>
+          </article>
+        </>
+      }
+      footer={
+        <>
+          <SeriesNav series={post.series ?? ""} prev={seriesPrev} next={seriesNext} />
+          <ShareButtons title={post.title} url={url} />
+          <RelatedPosts posts={related} />
+        </>
+      }
+    >
+      <MdxContent source={post.body} />
     </ArticleLayout>
   );
 }

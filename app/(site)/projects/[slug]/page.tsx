@@ -61,45 +61,55 @@ export default async function ProjectDetailPage({ params }: SlugPageProps) {
   const nextPost = postIdx < allProjects.length - 1 ? allProjects[postIdx + 1] : undefined;
 
   return (
-    <ArticleLayout headings={headings}>
-      <BlogPostingJsonLd post={project} path="projects" />
-      <ArticleKeyboardNav
-        prevUrl={prevPost ? `/projects/${prevPost.slug}` : undefined}
-        nextUrl={nextPost ? `/projects/${nextPost.slug}` : undefined}
-      />
-      <article className="article-shell">
-        <header className="article-header">
-          <span>{project.stack.join(" / ")} · <span className="reading-time">{readingTimeLabel(project.body)}</span></span>
-          <h1>{project.title}</h1>
-          <p>{project.summary}</p>
-          {project.englishSummary ? <p className="english-summary">{project.englishSummary}</p> : null}
-        </header>
-        <section className="evidence-grid">
-          <div>
-            <h2>Role</h2>
-            <p>{project.role}</p>
-          </div>
-          <div>
-            <h2>Impact</h2>
+    <ArticleLayout
+      headings={headings}
+      header={
+        <>
+          <BlogPostingJsonLd post={project} path="projects" />
+          <ArticleKeyboardNav
+            prevUrl={prevPost ? `/projects/${prevPost.slug}` : undefined}
+            nextUrl={nextPost ? `/projects/${nextPost.slug}` : undefined}
+          />
+          <article className="article-shell">
+            <header className="article-header">
+              <span>{project.stack.join(" / ")} · <span className="reading-time">{readingTimeLabel(project.body)}</span></span>
+              <h1>{project.title}</h1>
+              <p>{project.summary}</p>
+              {project.englishSummary ? <p className="english-summary">{project.englishSummary}</p> : null}
+            </header>
+          </article>
+        </>
+      }
+      footer={
+        <>
+          <SeriesNav series={project.series ?? ""} prev={seriesPrev} next={seriesNext} />
+          <section className="resume-block">
+            <h2>Resume Bullets</h2>
             <ul>
-              {project.impact.map((item) => (
-                <li key={item}>{item}</li>
+              {project.resumeBullets.map((bullet) => (
+                <li key={bullet}>{bullet}</li>
               ))}
             </ul>
-          </div>
-        </section>
-        <MdxContent source={project.body} />
-        <SeriesNav series={project.series ?? ""} prev={seriesPrev} next={seriesNext} />
-        <section className="resume-block">
-          <h2>Resume Bullets</h2>
+          </section>
+          <ShareButtons title={project.title} url={url} />
+        </>
+      }
+    >
+      <section className="evidence-grid">
+        <div>
+          <h2>Role</h2>
+          <p>{project.role}</p>
+        </div>
+        <div>
+          <h2>Impact</h2>
           <ul>
-            {project.resumeBullets.map((bullet) => (
-              <li key={bullet}>{bullet}</li>
+            {project.impact.map((item) => (
+              <li key={item}>{item}</li>
             ))}
           </ul>
-        </section>
-        <ShareButtons title={project.title} url={url} />
-      </article>
+        </div>
+      </section>
+      <MdxContent source={project.body} />
     </ArticleLayout>
   );
 }

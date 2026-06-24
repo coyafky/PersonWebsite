@@ -140,3 +140,64 @@
 ---
 
 **Todo 完成。下一步：/dispatch 流水线执行 6 个 slices。**
+
+---
+
+# Todo — v0.4 transitions-dev 接入 + 博客动效
+
+> 与 `plan.md`（v0.4 WIP）配套的逐项任务清单。
+> 5 个 vertical slice，每个 slice 独立 commit。
+
+---
+
+## Slice 1 — transitions-dev skill 安装
+
+- [x] **S1.1** 安装 `transitions-dev` skill 到 `.claude/skills/transitions-dev/`
+- [x] **S1.2** 验证 skill 加载（21 个过渡原语 P1–P21）
+- [x] **S1.3** 选定 5 个原语供本次使用：P3 (panel reveal) / P5 (search dialog) / P6 (image lightbox) / P10 (copy button) / P16 (tabs) / P18 (text stagger)
+
+## Slice 2 — globals.css 变量注入
+
+- [x] **S2.1** 注入 transitions-dev CSS 变量（duration / easing / stagger）
+- [x] **S2.2** Stripe Press 覆写：oklch 暖调色变量、0 radius、1500ms 慢 crossfade
+- [x] **S2.3** 暗色模式（prefers-color-scheme: dark）变量映射
+- [x] **S2.4** a11y 守卫：`@media (prefers-reduced-motion: reduce)` 关闭所有动效
+
+## Slice 3 — 4 client component 过渡
+
+- [x] **S3.1** `image-lightbox` 接 P6（缩放 + fade 进出）
+- [x] **S3.2** `search-dialog` 接 P5（dialog enter/exit）
+- [x] **S3.3** `tabs` 接 P16（content 切换 crossfade）
+- [x] **S3.4** `copy-button` 接 P10（按钮状态切换微动效）
+
+## Slice 4 — article-layout reveal
+
+- [x] **S4.1** 新增 `header?: ReactNode` 和 `footer?: ReactNode` slot props
+- [x] **S4.2** header 包成 P18 stagger reveal（直子节点逐项进场）
+- [x] **S4.3** footer 包成 P3 panel reveal
+- [x] **S4.4** 不传 slot 时回退到 P3 panel reveal（默认行为保持）
+
+## Slice 5 — 6 collection [slug]/page.tsx 接入 slot props
+
+- [x] **S5.1** `app/(site)/blog/[slug]/page.tsx`：header = JsonLd + KeyboardNav + `<article><header>`；footer = SeriesNav + ShareButtons + RelatedPosts + Comments；children = MdxContent
+- [x] **S5.2** `app/(site)/weekly/[slug]/page.tsx`：同 blog 范式
+- [x] **S5.3** `app/(site)/learning/[topic]/[slug]/page.tsx`：同 blog 范式（无 Comments）
+- [x] **S5.4** `app/(site)/projects/[slug]/page.tsx`：header = JsonLd + KeyboardNav + `<article><header>`；footer = SeriesNav + Resume Bullets + ShareButtons；children = evidence-grid + MdxContent
+- [x] **S5.5** `app/(site)/book-list/[slug]/page.tsx`：header = JsonLd + `<article><header>`；footer = ShareButtons；children = book-detail-info + MdxContent
+- [x] **S5.6** `app/(site)/ai-tracker/[slug]/page.tsx`：header = JsonLd + `<article><header>`；footer = ShareButtons；children = ai-tracker-source + MdxContent + takeaways/questions/related-links/related-posts
+
+## Slice 5.5 — Docs 同步
+
+- [x] **S5.5.1** `CLAUDE.md`「当前开发状态」追加 v0.4 行
+- [x] **S5.5.2** `SPEC.md` §18.1 版本演进表追加 v0.4 行（✅ 合入 feat/transitions-dev-blog）
+- [x] **S5.5.3** `tasks/todo.md` 新建 v0.4 章节（5 slice + S5.5 全部 done）
+
+## 验证清单
+
+- [x] 6 个 page.tsx 每个 ArticleLayout 调用都含 `header=` 和 `footer=` 两个 prop
+- [x] `npm run lint` → 0 errors
+- [x] `npm run typecheck` → 0 errors
+- [x] `npm run build` → BUILD_EXIT=0（6 collection 详情页 SSG 全部成功）
+- [x] `npm test` → 单测全部通过
+- [x] 全文 grep `transitions-dev` 在 CLAUDE.md / SPEC.md / todo.md 三处均出现
+- [x] `git diff --stat` → 6 个 page.tsx + 3 个 docs 文件，无 content 改动
