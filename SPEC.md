@@ -735,7 +735,6 @@ test("getContentByTag: empty tag returns all empty", async () => {
 | v0.1 | 信息架构升级（v1） | ✅ 合入 main | 6 个列表页差异化、Career 并入 About、tag 索引 + blog archive、footer 3 列、P2/P3 清理 |
 | v0.2 | About 去冗 + Tags 跨 collection + 词云 | ✅ 合入 main | About 9→6 sections / `getContentByTag` reader + 3 tests / `/tags/cloud` 词云页 / 分页架构预留 |
 | **v0.3** | **Book List 新栏目** | ✅ 合入 feat/book-list | 新增第 7 个 collection `book-list`（card 列表 + 读书笔记详情 + 跨集合接入 + Hermes 工作流） |
-| **v0.4** | **transitions-dev 接入 + 博客动效** | **✅ 合入 feat/transitions-dev-blog** | transitions-dev skill 安装（21 过渡）+ globals.css 变量注入（Stripe Press 覆写 + 暗色模式 + a11y 守卫）+ 4 client component 过渡（image-lightbox P6 / search-dialog P5 / tabs P16 / copy-button P10）+ article-layout reveal（P18 header stagger + P3 footer panel）+ 6 collection [slug]/page.tsx 接入 slot props |
 
 ### 18.2 v0.3 本规约新增的 1 个目标
 
