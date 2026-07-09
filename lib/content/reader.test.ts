@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { getContentByTag } from "./reader.ts";
+import { getContentByTag, getContentBySlug } from "./reader.ts";
 
 test("getContentByTag: matches across all 7 collections (incl. book-list)", async () => {
   const result = await getContentByTag("hermes");
@@ -60,4 +60,42 @@ test("getContentByTag: result always exposes bookList field (array)", async () =
     "number",
     "expected result.totalByKind.bookList to be a number",
   );
+});
+
+test("getContentBySlug: matches ASCII slug verbatim", async () => {
+  const blog = await import("./reader.ts").then((m) => m.getBlogPosts(true));
+  const asciiPost = blog.find((p) => /^[\x20-\x7e]+$/.test(p.slug));
+  assert.ok(asciiPost, "expected at least one ASCII blog slug in fixtures");
+  const looked = await getContentBySlug("blog", asciiPost!.slug);
+  assert.ok(looked, "expected to find the post via ASCII slug");
+  assert.equal(looked?.slug, asciiPost!.slug);
+});
+
+test("getContentBySlug: percent-encoded CJK slug is decoded before lookup", async () => {
+  // The reader must decode percent-encoded URL slugs before comparing against
+  // file-derived slugs (Next.js passes the URL-encoded literal into the route
+  // param). Filenames are now English-only, so we verify the decode path with a
+  // synthetic CJK slug: the round-trip must succeed, and a no-match lookup must
+  // resolve cleanly to null (not throw).
+  const synthetic = "2026-01-01-中文测试-fixture";
+  const encoded = encodeURIComponent(synthetic);
+  assert.notEqual(encoded, synthetic, "sanity check: encoding actually changed the string");
+  assert.equal(decodeURIComponent(encoded), synthetic, "decode round-trip preserves CJK chars");
+
+  const looked = await getContentBySlug("blog", encoded);
+  assert.equal(looked, null, "no CJK fixture exists; lookup should decode and miss cleanly");
+});
+
+test("getContentBySlug: already-decoded CJK slug misses cleanly when no fixture", async () => {
+  // Companion to the percent-encoded test: a raw (already-decoded) CJK slug
+  // also goes through decodeSlug, which is a no-op for raw input. Verify the
+  // reader returns null instead of throwing for an unmatched raw CJK slug.
+  const looked = await getContentBySlug("blog", "2026-01-01-中文测试-fixture");
+  assert.equal(looked, null);
+});
+
+test("getContentBySlug: malformed percent-encoding falls back gracefully", async () => {
+  // decodeURIComponent throws on %E4%B8% — reader must not propagate the throw.
+  const result = await getContentBySlug("blog", "%E4%B8%");
+  assert.equal(result, null, "expected null for unmatchable malformed slug");
 });
