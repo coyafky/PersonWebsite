@@ -12,6 +12,7 @@ import { Comments } from "@/components/comments";
 import { RelatedPosts, getRelatedPosts } from "@/components/related-posts";
 import { SeriesNav } from "@/components/series-nav";
 import { ArticleKeyboardNav } from "@/components/article-keyboard-nav";
+import { PostNav } from "@/components/post-nav";
 
 type SlugPageProps = {
   params: Promise<{ slug: string }>;
@@ -84,6 +85,7 @@ export default async function BlogDetailPage({ params }: SlugPageProps) {
         <MdxContent source={post.body} />
         <SeriesNav series={post.series ?? ""} prev={seriesPrev} next={seriesNext} />
         <ShareButtons title={post.title} url={url} />
+        <PostNav prev={prevPost} next={nextPost} />
       </article>
       <RelatedPosts posts={related} />
       <Comments />
