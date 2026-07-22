@@ -10,6 +10,8 @@
 | `logs/` | 每日/每周碎片记录、做了什么事 | 每条约 3-10 句 | `content/weekly/` |
 | `project-notes/` | 项目进展、踩坑记录、成果、技术决策 | 每次推进一个文件 | `content/projects/` |
 | `career-notes/` | 面试准备、技能复盘、成就记录 | 每条事实/故事一段 | `content/career/` |
+| `ai-notes/` | AI 论文、产品、模型、工具、播客、讨论 | 每个来源或主题一条 | `content/ai-tracker/` |
+| `book-notes/` | 读书摘录、章节笔记、阅读收获 | 单本书或单章节碎片 | `content/book-list/` |
 
 ## 使用原则
 
@@ -56,6 +58,58 @@
 | `logs/` 积累一周 | 每周日或你要求 | `content/weekly/YYYY-WNN.md` | `/weekly-from-inbox` |
 | `project-notes/` 有更新 | 你要求 | `content/projects/<slug>.mdx` | 手动触发 |
 | `career-notes/` 有新素材 | 你要求 | `content/career/bullets.md` 等 | `/project-to-career` |
+| `ai-notes/` 有新素材 | 你要求或 AI source 值得追踪 | `content/ai-tracker/<slug>.md` | `/ai-tracker-from-inbox` |
+| `book-notes/` 有新素材 | 你要求整理一本书 | `content/book-list/<slug>.md` | `/book-list-from-inbox` |
+
+## Obsidian → Inbox 同步
+
+知识场域配置在仓库根目录：
+
+```txt
+knowledge-field.config.json
+```
+
+常用命令：
+
+```bash
+npm run knowledge:doctor
+npm run knowledge:sync
+npm run knowledge:sync:apply
+npm run knowledge:report
+```
+
+`knowledge:sync` 默认只预览；`knowledge:sync:apply` 才会复制文件。`knowledge:sync:apply` 只能由 Coya 通过 Hermes/Lucas 明确下达同步指令后执行，不能放进 cron 或后台 hook。
+
+同步只处理带有标记的 Obsidian 笔记，例如：
+
+```md
+#to-blog
+#to-weekly
+#to-project
+#to-career
+#to-ai-tracker
+#to-book-list
+#to-personal-website
+```
+
+完整工作流见 `docs/agent/knowledge-field-workflow.md`。
+
+## 直接写 Blog 的入口
+
+如果素材已经足够明确，也可以绕过 inbox，直接生成一篇 blog 草稿：
+
+```bash
+npm run knowledge:draft-blog -- --source "<url|path|stdin>" --actor claude --instruction "<Coya request>"
+```
+
+这会写入 `content/blog/<date-slug>.md`，并生成本地 pending id。后续仍然需要 Coya 明确确认：
+
+```bash
+npm run knowledge:confirm-publish -- --pending <id>
+npm run knowledge:deploy-production -- --pending <id>
+```
+
+飞书入口由 Lucas profile 的 `personal-knowledge-field` skill 调用同一套命令。
 
 ## Hermes 不会做的事
 

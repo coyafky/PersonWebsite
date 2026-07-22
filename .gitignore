@@ -8,8 +8,13 @@ build/
 !.env.example
 .vercel/
 .superpowers/
-.agents/
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/knowledge-field-blog-writer/
+!.agents/skills/knowledge-field-blog-writer/**
 *.tsbuildinfo
+.knowledge-field/
 
 .env.local
 .vercel

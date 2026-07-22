@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "owner": "Coya",
+  "fieldName": "Coya Knowledge Field",
+  "diagram": "public/diagrams/knowledge-field-architecture.svg",
+  "nodes": {
+    "obsidian": {
+      "label": "Obsidian / CoyaPersonal",
+      "root": "/Users/fkycoya/Documents/CoyaPersonal",
+      "role": "First capture and raw knowledge storage"
+    },
+    "hermes": {
+      "label": "Hermes / Lucas",
+      "rootCandidates": [
+        "/Users/fkycoya/hermes-workspace",
+        "/Users/fkycoya/.lark-cli/hermes",
+        "/Users/fkycoya/.local/state/hermes"
+      ],
+      "profile": "Lucas",
+      "role": "Feishu/Lark context, reviews, reminders, and personal workflow sync"
+    },
+    "codexCli": {
+      "label": "Codex + CLI",
+      "role": "Repository-aware conversation, transformation, validation, and maintenance"
+    },
+    "personalWebsite": {
+      "label": "PersonalWebsite",
+      "root": "/Users/fkycoya/Documents/Code/PersonalWebsite",
+      "role": "Draft ledger, public archive, project evidence, and career material"
+    }
+  },
+  "syncMarkers": [
+    "#to-personal-website",
+    "#to-blog",
+    "#to-weekly",
+    "#to-project",
+    "#to-career",
+    "#to-ai-tracker",
+    "#to-book-list",
+    "publish: website",
+    "website: true"
+  ],
+  "routes": [
+    {
+      "name": "ideas",
+      "from": [
+        "00-Inbox",
+        "00-Inbox/01-Tech-Hermes",
+        "01-Notes"
+      ],
+      "to": "content/inbox/ideas",
+      "markers": [
+        "#to-blog",
+        "#to-personal-website",
+        "publish: website",
+        "website: true"
+      ],
+      "command": "/blog-from-notes"
+    },
+    {
+      "name": "logs",
+      "from": [
+        "06-System/Session-Logs"
+      ],
+      "to": "content/inbox/logs",
+      "markers": [
+        "#to-weekly",
+        "#to-personal-website",
+        "publish: website",
+        "website: true"
+      ],
+      "command": "/weekly-from-inbox"
+    },
+    {
+      "name": "project-notes",
+      "from": [
+        "02-Projects",
+        "00-Inbox/01-Tech-Hermes"
+      ],
+      "to": "content/inbox/project-notes",
+      "markers": [
+        "#to-project",
+        "#to-personal-website",
+        "publish: website",
+        "website: true"
+      ],
+      "command": "manual project draft/update"
+    },
+    {
+      "name": "career-notes",
+      "from": [
+        "03-Areas/Career"
+      ],
+      "to": "content/inbox/career-notes",
+      "markers": [
+        "#to-career",
+        "#to-personal-website",
+        "publish: website",
+        "website: true"
+      ],
+      "command": "/project-to-career"
+    },
+    {
+      "name": "ai-notes",
+      "from": [
+        "00-Inbox/02-AI-Learning",
+        "04-Resources/AI",
+        "01-Notes/LearnAI-agent"
+      ],
+      "to": "content/inbox/ai-notes",
+      "markers": [
+        "#to-ai-tracker",
+        "#to-personal-website",
+        "publish: website",
+        "website: true"
+      ],
+      "command": "/ai-tracker-from-inbox"
+    },
+    {
+      "name": "book-notes",
+      "from": [
+        "04-Resources/31.Book",
+        "00-Inbox/04-Media"
+      ],
+      "to": "content/inbox/book-notes",
+      "markers": [
+        "#to-book-list",
+        "#to-personal-website",
+        "publish: website",
+        "website: true"
+      ],
+      "command": "/book-list-from-inbox"
+    }
+  ],
+  "cron": {
+    "recommended": "17 21 * * * cd /Users/fkycoya/Documents/Code/PersonalWebsite && npm run knowledge:cron",
+    "timezone": "Asia/Shanghai",
+    "mode": "inspect-only-no-sync",
+    "mayCopyFiles": false
+  },
+  "syncPolicy": {
+    "mode": "hermes-instruction-only",
+    "applyRequires": "Coya explicitly asks Hermes/Lucas to sync",
+    "cronMayCopyFiles": false,
+    "directCliMayPreview": true
+  },
+  "blogPipeline": {
+    "pendingDir": ".knowledge-field/pending",
+    "defaultStatus": "draft",
+    "publishRequiresPendingId": true,
+    "deployRequiresPublishedPending": true,
+    "deployTarget": "production",
+    "entrypoints": [
+      ".claude/commands/write-blog-from-source.md",
+      ".agents/skills/knowledge-field-blog-writer/SKILL.md",
+      "/Users/fkycoya/.hermes/profiles/lucas/skills/personal-knowledge-field/SKILL.md"
+    ]
+  }
+}
