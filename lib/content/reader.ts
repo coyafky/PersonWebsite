@@ -46,6 +46,14 @@ function byNewestDate<T extends { date: string }>(items: T[]) {
   return items.toSorted((a, b) => b.date.localeCompare(a.date));
 }
 
+function decodeSlug(slug: string): string {
+  try {
+    return decodeURIComponent(slug);
+  } catch {
+    return slug;
+  }
+}
+
 function toSlug(fileName: string) {
   return fileName.replace(/\.(md|mdx)$/i, "");
 }
@@ -210,7 +218,8 @@ export async function getLearningPostBySlug(
   slug: string,
 ): Promise<LearningPost | null> {
   const items = await readLearningTopic(topic, false);
-  return items.find((item) => item.slug === slug) ?? null;
+  const decoded = decodeSlug(slug);
+  return items.find((item) => item.slug === decoded) ?? null;
 }
 
 export async function getLearningTopics(includeDrafts = false): Promise<TopicSummary[]> {
@@ -250,7 +259,8 @@ export async function getLearningTopics(includeDrafts = false): Promise<TopicSum
 
 export async function getContentBySlug<K extends ContentKind>(kind: K, slug: string) {
   const items = (await getCollection(kind)) as CollectionMap[K][];
-  return items.find((item) => item.slug === slug) ?? null;
+  const decoded = decodeSlug(slug);
+  return items.find((item) => item.slug === decoded) ?? null;
 }
 
 export type GetContentByTagOptions = {

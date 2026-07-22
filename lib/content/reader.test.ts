@@ -63,9 +63,14 @@ test("getContentByTag: result always exposes bookList field (array)", async () =
 });
 
 test("getContentBySlug: matches ASCII slug verbatim", async () => {
+  // getContentBySlug only returns published posts, so the test fixture must
+  // also be a published post (drafts are excluded from the lookup). Use
+  // includeDrafts=true to scan a wider pool, but still filter to published.
   const blog = await import("./reader.ts").then((m) => m.getBlogPosts(true));
-  const asciiPost = blog.find((p) => /^[\x20-\x7e]+$/.test(p.slug));
-  assert.ok(asciiPost, "expected at least one ASCII blog slug in fixtures");
+  const asciiPost = blog.find(
+    (p) => /^[\x20-\x7e]+$/.test(p.slug) && p.status === "published",
+  );
+  assert.ok(asciiPost, "expected at least one published ASCII blog slug in fixtures");
   const looked = await getContentBySlug("blog", asciiPost!.slug);
   assert.ok(looked, "expected to find the post via ASCII slug");
   assert.equal(looked?.slug, asciiPost!.slug);
