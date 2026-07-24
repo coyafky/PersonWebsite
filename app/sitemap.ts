@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import {
   getBlogPosts,
-  getBookListPosts,
+  getBookNotes,
+  getBookTopics,
   getWeeklyPosts,
   getProjectPosts,
   getLearningTopics,
@@ -13,12 +14,11 @@ import { buildUrl } from "@/lib/metadata";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /career 已合并到 /about（app/(site)/career/page.tsx 仅 307 跳转）。
   // 不暴露 /career 条目，避免搜索引擎索引跳转链。
-  const [blog, weekly, projects, aiTracker, bookList] = await Promise.all([
+  const [blog, weekly, projects, aiTracker] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
     getProjectPosts(),
     getAiTrackerPosts(),
-    getBookListPosts(),
   ]);
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -60,13 +60,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const bookListUrls: MetadataRoute.Sitemap = bookList.map((post) => ({
-    url: buildUrl(`/book-list/${post.slug}`),
-    lastModified: new Date(post.date),
-    changeFrequency: "monthly" as const,
-    priority: 0.6,
-  }));
+  // Book list: book index pages + note detail pages
+  const bookTopics = await getBookTopics();
+  const bookIndexUrls: MetadataRoute.Sitemap = [];
+  const bookNoteUrls: MetadataRoute.Sitemap = [];
 
+  for (const book of bookTopics) {
+    bookIndexUrls.push({
+      url: buildUrl(`/book-list/${book.book}`),
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    });
+
+    const notes = await getBookNotes(book.book);
+    for (const note of notes) {
+      bookNoteUrls.push({
+        url: buildUrl(`/book-list/${book.book}/${note.slug}`),
+        lastModified: new Date(note.date),
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      });
+    }
+  }
+
+  // Learning
   const topics = await getLearningTopics();
   const learningUrls: MetadataRoute.Sitemap = [];
 
@@ -95,7 +113,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...weeklyUrls,
     ...projectUrls,
     ...aiTrackerUrls,
-    ...bookListUrls,
+    ...bookIndexUrls,
+    ...bookNoteUrls,
     ...learningUrls,
   ];
 }

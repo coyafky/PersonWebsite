@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ContentCard } from "@/components/content-card";
 import { EntryCardAiTracker } from "@/components/entry-card-ai-tracker";
 import { EntryCardBlog } from "@/components/entry-card-blog";
-import { EntryCardBookList } from "@/components/entry-card-book-list";
+import { EntryCardBookTopic } from "@/components/entry-card-book-topic";
 import { EntryCardLearning } from "@/components/entry-card-learning";
 import { EntryCardProject } from "@/components/entry-card-project";
 import { EntryCardWeekly } from "@/components/entry-card-weekly";
@@ -147,20 +147,19 @@ export default async function TagPage({ params }: TagPageProps) {
         </section>
       ) : null}
 
-      {totalByKind.bookList > 0 ? (
+      {totalByKind.bookIndex > 0 ? (
         <section>
           <h2>Book List</h2>
-          <div className="book-list-grid">
-            {items.bookList.map((post) => (
-              <EntryCardBookList
+          <div className="book-topic-grid">
+            {items.bookIndex.map((post) => (
+              <EntryCardBookTopic
                 key={post.slug}
-                href={`/book-list/${post.slug}`}
+                href={`/book-list/${post.book}`}
                 title={post.title}
                 author={post.author}
                 genre={post.genre}
                 summary={post.summary}
-                date={post.date}
-                tags={post.tags}
+                noteCount={0}
               />
             ))}
           </div>

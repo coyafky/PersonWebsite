@@ -105,12 +105,24 @@ export const aiTrackerSchema = baseContentSchema.extend({
   lang: z.string().optional(),
 });
 
-export const bookListSchema = baseContentSchema.extend({
-  kind: z.literal("book-list"),
+export const bookIndexSchema = baseContentSchema.extend({
+  kind: z.literal("book-index"),
+  book: z.string(),
   author: z.string(),
   genre: z.string(),
   tags: stringArraySchema,
   lang: z.string().default("zh"),
+  cover: z.string().optional(),
+  translator: z.string().optional(),
+  finishedDate: z.string().optional(),
+});
+
+export const bookNoteSchema = baseContentSchema.extend({
+  kind: z.literal("book-note"),
+  book: z.string(),
+  tags: stringArraySchema,
+  lang: z.string().default("zh"),
+  chapter: z.string().optional(),
 });
 
 export const schemaByKind = {
@@ -120,7 +132,8 @@ export const schemaByKind = {
   career: careerSchema,
   "ai-tracker": aiTrackerSchema,
   learning: learningSchema,
-  "book-list": bookListSchema,
+  "book-index": bookIndexSchema,
+  "book-note": bookNoteSchema,
 } as const;
 
 export type ContentKind = keyof typeof schemaByKind;
@@ -131,7 +144,8 @@ export type ProjectPost = z.infer<typeof projectSchema>;
 export type CareerPost = z.infer<typeof careerSchema>;
 export type AiTrackerPost = z.infer<typeof aiTrackerSchema>;
 export type LearningPost = z.infer<typeof learningSchema>;
-export type BookListPost = z.infer<typeof bookListSchema>;
+export type BookIndexPost = z.infer<typeof bookIndexSchema>;
+export type BookNotePost = z.infer<typeof bookNoteSchema>;
 export type AiTrackerSourceType = z.infer<typeof aiTrackerSourceTypeSchema>;
 export type SiteContent =
   | BlogPost
@@ -140,4 +154,5 @@ export type SiteContent =
   | CareerPost
   | AiTrackerPost
   | LearningPost
-  | BookListPost;
+  | BookIndexPost
+  | BookNotePost;

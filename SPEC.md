@@ -1387,3 +1387,448 @@ v0.3 范围清晰，跨集合聚合靠 reader 单测 + 手工核查覆盖。不�
 ---
 
 **v0.3 规约完成。下一步：/plan 拆任务 → /dispatch 执行 5 个 vertical slices。**
+
+---
+
+## 27. v0.4 增量规约 — Book List 重构为「书籍+笔记」模式
+
+> 版本: v0.4（增量规约）
+> 范围: book-list 从扁平结构重构为 book-name 子目录 + _index.md + 多篇笔记
+> 参考对象: learning 栏目（`content/learning/<topic>/_index.md` + `*.md` → `/learning/<topic>/<slug>`）
+> 设计系统: 沿用 Stripe Press（不动 token、不动字体、不动圆角、不动动效）
+> 起点: v0.3 已合入 main 的 book-list 扁平结构
+> 分支: `feat/book-list-v04`（独立 feature 分支）
+
+### 27.0 版本演进
+
+| 版本 | 范围 | 状态 | 关键改动 |
+|------|------|------|---------|
+| v0.3 | Book List 新栏目（扁平） | ✅ 已合入 main | 第 7 个 collection，1 书 = 1 文件，card 列表 + 详情页 + Hermes 工作流 |
+| **v0.4** | Book List 重构（分组） | 🟡 规约阶段 | 改为 book-name 子目录 + _index.md + 多笔记；路由 3 层；schema 拆分；reader 改建 |
+
+### 27.0.1 本规约新增的 1 个目标
+
+| # | 目标 | 范围 |
+|---|------|------|
+| G1 | Book List 重构为「书籍+笔记」模式（完全对标 learning） | schema 拆分 + reader 改建 + 路由重建 + 跨集合更新 + 内容迁移 + docs 更新 |
+
+---
+
+### 27.1 Objective（目标）
+
+#### 27.1.1 一句话
+
+将 book-list 从"一本书 = 一个 `.md` 文件"的扁平 collection 重构为"一本书 = 一个子目录 + `_index.md` + N 篇笔记文章"的分组结构，完全对标 learning 栏目的组织形式。
+
+#### 27.1.2 关键结果（必须）
+
+1. **Schema 拆分**：`bookListSchema`（旧，kind: `"book-list"`）拆为 `bookIndexSchema`（kind: `"book-index"`，书籍元信息） + `bookNoteSchema`（kind: `"book-note"`，关联 `book` 字段到目录名）。
+2. **目录结构**：`content/book-list/<book-name>/_index.md` + `content/book-list/<book-name>/*.md`，其中 `_index.md` 是书籍介绍页，`*.md` 是章节/主题笔记。
+3. **路由 3 层**：
+   - `/book-list` — 书籍分组列表（每本书显示 note 数量，对标 `/learning`）
+   - `/book-list/<book-name>` — 单本书索引页（书籍信息 + 笔记列表，对标 `/learning/<topic>`）
+   - `/book-list/<book-name>/<slug>` — 单篇笔记详情页（对标 `/learning/<topic>/<slug>`）
+4. **Reader 函数重建**：参照 learning 的函数签名，新增 `getBookTopics` / `getBookTopicIndex` / `getBookNotes` / `getBookNoteBySlug`，废弃 `getBookListPosts`（旧）和 `getContentBySlug("book-list", ...)`。
+5. **现有唯一内容迁移**：`content/book-list/2026-06-23-designing-data-intensive-applications.md` → `content/book-list/designing-data-intensive-applications/_index.md`（保留原内容作为书籍介绍）+ 后续可拆分笔记。
+6. **跨集合引用全量更新**：sitemap、search、tags、footer、homepage、`CrossCollectionLinks`、`TaggedContentByKind` 全部对齐新结构。
+7. **Agent docs 和 commands 更新**：`book-list-template.md`、`book-list-from-inbox.md`、`inbox-to-content-workflow.md`、`inbox/book-notes/README.md`。
+
+#### 27.1.3 不在范围内（红线）
+
+- 设计 token / CSS 变量（沿用 Stripe Press）
+- MDX 组件注册表
+- 其他 6 个 collection 的 schema/reader
+- 新增 npm 依赖
+- 批量添加新书内容（迁移后 Coya 手动操作）
+- RSS feed（book-list 首版就不做）
+
+---
+
+### 27.2 Commands（Claude / Agent 命令）
+
+#### 27.2.1 现有命令改动
+
+| 命令 | 文件 | 改动 |
+|------|------|------|
+| `/book-list-from-inbox` | `.claude/commands/book-list-from-inbox.md` | 🔧 改为生成 `content/book-list/<book-name>/` 子目录结构 |
+
+#### 27.2.2 验证命令（必跑）
+
+```bash
+npm run lint        # ESLint
+npm run typecheck   # tsc --noEmit
+npm run build       # Next.js production build
+npm test            # reader.test.ts（getBookTopics / getContentByTag 跨 book-note）
+```
+
+---
+
+### 27.3 Project Structure（结构变更）
+
+#### 27.3.1 文件树变更（新增 ⭐ / 删除 ✂ / 改造 🔧）
+
+```
+content/book-list/
+├── designing-data-intensive-applications/   ⭐ 新建子目录（旧文件迁移至此）
+│   ├── _index.md                            ⭐ 书籍介绍（kind: "book-index"）
+│   └── *.md                                 ⭐ 章节笔记（kind: "book-note"，后续添加）
+├── 2026-06-23-designing-data-intensive-applications.md  ✂ 删除（迁移后移除）
+
+app/(site)/book-list/
+├── page.tsx                                 🔧 重写：按书籍分组列表（对标 /learning）
+├── [book]/
+│   ├── page.tsx                             ⭐ 新建：书籍索引页（书 info + 笔记列表）
+│   └── [slug]/
+│       └── page.tsx                         ⭐ 新建：单篇笔记详情页
+├── [slug]/
+│   └── page.tsx                             ✂ 删除（被 [book]/[slug] 替代）
+
+lib/content/
+├── schemas.ts                               🔧 新增 bookIndexSchema + bookNoteSchema；
+│                                               schemaByKind 新增 "book-index" + "book-note"；
+│                                               类型新增 BookIndexPost + BookNotePost；
+│                                               SiteContent union 更新；
+│                                               ✂ 移除旧 bookListSchema + BookListPost
+├── reader.ts                                🔧 新增 getBookTopics / getBookTopicIndex /
+│                                               getBookNotes / getBookNoteBySlug；
+│                                               CollectionMap 更新；
+│                                               getAllTags / getContentByTag /
+│                                               emptyKindCounts / TaggedContentByKind 全部
+│                                               改为 "book-index" / "book-note"；
+│                                               ✂ 移除 getBookListPosts + getContentBySlug
+│                                               ("book-list") 支持
+└── reader.test.ts                           🔧 更新测试
+
+components/
+├── entry-card-book-list.tsx                 🔧 改造：props 改为书籍分组卡片
+│                                               （bookName + noteCount + description）
+└── icons0.tsx                               （不动，Icons0Book 保留）
+
+# ── 跨集合文件 ──
+app/(site)/page.tsx                          🔧 portalEntries Book List 入口（路由不变）
+app/(site)/tags/[tag]/page.tsx               🔧 TaggedContentByKind 类型更新
+app/sitemap.ts                               🔧 sitemap 生成逻辑（3 层路由）
+app/api/search/route.ts                      🔧 search 聚合逻辑
+components/site-nav.tsx                      （不动，路由 /book-list 不变）
+components/section-footer.tsx                🔧 latestBook 引用改为 getBookTopics
+app/globals.css                              🔧 .book-list-grid → .book-topic-grid
+
+# ── Agent docs ──
+docs/agent/book-list-template.md             🔧 更新为新结构
+docs/agent/inbox-to-content-workflow.md      🔧 book-list 转化链路更新
+content/inbox/book-notes/README.md           🔧 更新为新结构
+.claude/commands/book-list-from-inbox.md     🔧 改为生成子目录结构
+CLAUDE.md                                    🔧 当前开发状态更新
+```
+
+---
+
+### 27.4 Schema Design（核心变更）
+
+#### 27.4.1 新 Schema
+
+**BookIndexSchema**（`_index.md` 使用）：
+
+```ts
+export const bookIndexSchema = baseContentSchema.extend({
+  kind: z.literal("book-index"),
+  book: z.string(),              // 目录名（由 reader 自动填充，不在 frontmatter 手写）
+  author: z.string(),            // 作者名
+  genre: z.string(),             // 分类
+  tags: stringArraySchema,
+  lang: z.string().default("zh"),
+  cover: z.string().optional(),  // 封面图片路径（可选，预留）
+  translator: z.string().optional(),
+  finishedDate: z.string().optional(), // 读完日期
+});
+```
+
+**BookNoteSchema**（笔记文章使用）：
+
+```ts
+export const bookNoteSchema = baseContentSchema.extend({
+  kind: z.literal("book-note"),
+  book: z.string(),              // 关联的书籍目录名（由 reader 自动填充）
+  tags: stringArraySchema,
+  lang: z.string().default("zh"),
+  chapter: z.string().optional(), // 章节标识（如 "Ch.1" 或 "第 1 章"）
+});
+```
+
+**关键设计决策**：
+- `book` 字段由 reader 层自动从目录名填充，**不在 frontmatter 手写**（与 learning 的 `topic` 字段同理——learning 的 topic 也是由 reader 传入而非从 frontmatter 解析）
+- `_index.md` 是独立的 `kind: "book-index"`，**不是** `kind: "book-note"` 的特殊情况
+- 旧 `bookListSchema`（`kind: "book-list"`）完全移除
+
+#### 27.4.2 对比：Learning vs Book-List v0.4
+
+| 概念 | Learning | Book-List v0.4 |
+|------|----------|----------------|
+| 分组单元 | topic | book-name |
+| 索引文件 | `_index.md` (kind: `"learning"`, topic 字段) | `_index.md` (kind: `"book-index"`, book 字段) |
+| 文章 | `*.md` (kind: `"learning"`, topic 字段) | `*.md` (kind: `"book-note"`, book 字段) |
+| 分组列表页 | `/learning` | `/book-list` |
+| 索引页 | `/learning/<topic>` | `/book-list/<book-name>` |
+| 详情页 | `/learning/<topic>/<slug>` | `/book-list/<book-name>/<slug>` |
+| 文章数统计 | `getLearningTopics()` → `articleCount` | `getBookTopics()` → `noteCount` |
+
+---
+
+### 27.5 Reader Functions（核心变更）
+
+#### 27.5.1 新增函数
+
+参照 learning 的函数签名：
+
+```ts
+// ── Book Topics ──
+
+export type BookTopicSummary = {
+  book: string;          // 目录名（slug）
+  title: string;         // 书名（来自 _index.md）
+  author: string;        // 作者
+  genre: string;         // 分类
+  summary: string;       // 简介
+  noteCount: number;     // 笔记数量（不含 _index）
+};
+
+// 获取所有已发布的书籍分组列表
+export async function getBookTopics(): Promise<BookTopicSummary[]>
+
+// ── Book Index ──
+
+// 获取单本书的 _index.md
+export async function getBookTopicIndex(book: string): Promise<BookIndexPost | null>
+
+// ── Book Notes ──
+
+// 获取某本书的所有笔记（不含 _index）
+export async function getBookNotes(book: string, includeDrafts?: boolean): Promise<BookNotePost[]>
+
+// 获取单篇笔记
+export async function getBookNoteBySlug(book: string, slug: string): Promise<BookNotePost | null>
+```
+
+#### 27.5.2 移除的函数
+
+- `getBookListPosts()` — 被 `getBookTopics()` + `getBookNotes()` 替代
+- `getContentBySlug("book-list", slug)` — 被 `getBookNoteBySlug(book, slug)` 替代
+
+#### 27.5.3 更新的类型
+
+```ts
+type CollectionMap = {
+  blog: BlogPost;
+  weekly: WeeklyPost;
+  projects: ProjectPost;
+  career: CareerPost;
+  "ai-tracker": AiTrackerPost;
+  learning: LearningPost;
+  "book-index": BookIndexPost;    // 旧: "book-list": BookListPost
+  "book-note": BookNotePost;      // 新增
+};
+
+export type TaggedContentByKind = {
+  blog: BlogPost[];
+  weekly: WeeklyPost[];
+  projects: ProjectPost[];
+  career: CareerPost[];
+  learning: LearningPost[];
+  "ai-tracker": AiTrackerPost[];
+  bookIndex: BookIndexPost[];    // 旧: bookList: BookListPost[]
+  bookNote: BookNotePost[];      // 新增
+};
+```
+
+---
+
+### 27.6 Route Pages（路由层变更）
+
+#### 27.6.1 `/book-list` — 书籍分组列表页
+
+**对标**：`/learning`（`app/(site)/learning/page.tsx`）
+
+```
+结构：
+  CollectionList(title="Book List", description="...")
+    └── 书籍卡片列表（每项含书名、作者、genre、noteCount、summary）
+```
+
+**组件策略**：改造 `EntryCardBookList` 或新建 `EntryCardBookTopic`。推荐的 props：
+
+```ts
+type EntryCardBookTopicProps = {
+  book: string;        // href = `/book-list/${book}`
+  title: string;       // 书名
+  author: string;
+  genre: string;
+  summary?: string;
+  noteCount: number;
+};
+```
+
+#### 27.6.2 `/book-list/<book>` — 书籍索引页
+
+**对标**：`/learning/<topic>`（`app/(site)/learning/[topic]/page.tsx`）
+
+```
+结构：
+  CollectionList(title=书名, description="N notes on this book")
+    └── 笔记列表（每项含 title + summary + date）
+    └── 书籍元信息块（author / genre / tags / finishedDate）
+```
+
+#### 27.6.3 `/book-list/<book>/<slug>` — 笔记详情页
+
+**对标**：`/learning/<topic>/<slug>`（`app/(site)/learning/[topic]/[slug]/page.tsx`）
+
+```
+结构：
+  ArticleLayout
+    └── ArticleHeader (title / date / summary / readingTime)
+    └── MdxContent
+    └── SeriesNav (可选)
+    └── ShareButtons
+    └── RelatedPosts (可选)
+    └── ArticleKeyboardNav (prev/next within same book)
+```
+
+**功能对齐 learning 详情页**：
+- `generateStaticParams` — 遍历所有 book + notes
+- `generateMetadata` — `articleMetadata`
+- `SeriesNav` — 如果 note 有 `series` + `seriesOrder`，在同本书内做上下文导航
+- `ArticleKeyboardNav` — 同本书内 prev/next
+- `RelatedPosts` — 同 tag 的 note 推荐
+- `ShareButtons` + `BlogPostingJsonLd`
+
+---
+
+### 27.7 Cross-cutting Updates（跨集合更新）
+
+#### 27.7.1 Sitemap
+
+```
+旧：
+  /book-list                         ← 列表页
+  /book-list/<slug>                  ← 每个 book 的详情页
+
+新：
+  /book-list                         ← 列表页
+  /book-list/<book>                  ← 每本书的索引页
+  /book-list/<book>/<slug>           ← 每篇 note 的详情页
+```
+
+#### 27.7.2 Search（`/api/search`）
+
+```
+旧：遍历 getBookListPosts() 的结果
+新：遍历 getBookTopics() + 对每本书 getBookNotes()，搜索 note body + title
+```
+
+#### 27.7.3 Tags（`/tags/[tag]`）
+
+`TaggedContentByKind` 的 `bookList: BookListPost[]` 改为 `bookIndex: BookIndexPost[]` + `bookNote: BookNotePost[]`。
+Tag 详情页的 Book List 分组区块改为展示 book-note（而非 book-index）。
+
+#### 27.7.4 Footer（`section-footer.tsx`）
+
+```
+旧：getBookListPosts() → latestBook
+新：getBookTopics() → latestBook（从书籍索引中取最近更新的）
+```
+
+#### 27.7.5 Homepage（`app/(site)/page.tsx`）
+
+portalEntries 的 Book List 路由不变（`/book-list`），无需改动。
+
+#### 27.7.6 Reader internal functions
+
+- `emptyKindCounts()` — 加 `"book-index": 0` + `"book-note": 0`
+- `getAllTags()` — bump 循环加 bookIndex + bookNote
+- `getContentByTag()` — 支持 bookIndex + bookNote
+
+---
+
+### 27.8 Content Migration（现有内容迁移）
+
+#### 27.8.1 唯一现有文件
+
+`content/book-list/2026-06-23-designing-data-intensive-applications.md`
+
+→ 迁移为 `content/book-list/designing-data-intensive-applications/_index.md`
+
+#### 27.8.2 迁移步骤
+
+1. 创建子目录 `content/book-list/designing-data-intensive-applications/`
+2. 将原文件内容移入该目录并重命名为 `_index.md`
+3. 修改 frontmatter：`kind: "book-list"` → `kind: "book-index"`，新增 `book: "designing-data-intensive-applications"`
+4. 删除原文件 `content/book-list/2026-06-23-designing-data-intensive-applications.md`
+
+#### 27.8.3 注意
+
+- 现有唯一的 `.md` 文件原本就扮演"书籍总结"的角色，改为 `_index.md` 语义完全匹配
+- 后续章节笔记可以新建在该子目录下（如 `2026-07-24-chapter-2-data-models.md`），无需改代码
+
+---
+
+### 27.9 Agent Docs & Commands 更新
+
+| 文件 | 改动 |
+|------|------|
+| `docs/agent/book-list-template.md` | 拆分为两个模板：`book-index-template` + `book-note-template` |
+| `.claude/commands/book-list-from-inbox.md` | 输出路径改为 `content/book-list/<book-name>/` 子目录 |
+| `docs/agent/inbox-to-content-workflow.md` | book-list 转化链路更新 |
+| `content/inbox/book-notes/README.md` | 新目录结构说明 |
+
+---
+
+### 27.10 Acceptance Criteria
+
+- [ ] `lib/content/schemas.ts`：`bookIndexSchema` + `bookNoteSchema` 存在；旧 `bookListSchema` 已移除；`schemaByKind` 含 `"book-index"` + `"book-note"`
+- [ ] `lib/content/reader.ts`：`getBookTopics` / `getBookTopicIndex` / `getBookNotes` / `getBookNoteBySlug` 实现；旧 `getBookListPosts` 已移除；`CollectionMap` 更新
+- [ ] `content/book-list/designing-data-intensive-applications/_index.md` 存在且 `status: published`
+- [ ] `content/book-list/2026-06-23-designing-data-intensive-applications.md` 已删除
+- [ ] `/book-list` — 渲染书籍列表（含 DDIA 卡片，noteCount ≥ 0）
+- [ ] `/book-list/designing-data-intensive-applications` — 渲染书籍索引页（作者名、genre、标签、笔记列表）
+- [ ] `/book-list/designing-data-intensive-applications/<note-slug>` — 渲染笔记详情页（有笔记时）
+- [ ] `/tags/<tag-used-by-book-note>` — 含 Book Note 分组
+- [ ] `/sitemap.xml` — 含所有 `/book-list/<book>` + `/book-list/<book>/<slug>` 路由
+- [ ] Cmd+K 搜索 — 搜到 book-note 内容
+- [ ] Footer — 显示 latest book（来自 `getBookTopics`）
+- [ ] agent docs 和 commands 更新完毕
+- [ ] `npm run typecheck` passes
+- [ ] `npm run lint` passes
+- [ ] `npm run build` passes
+- [ ] `npm test` passes（reader.test.ts 更新）
+
+---
+
+### 27.11 Risk Assessment
+
+| 风险 | 概率 | 影响 | 缓解 |
+|------|------|------|------|
+| v0.3 flat schema 有隐藏依赖（如其他地方 import `BookListPost` 类型） | 中 | 低 | `tsc --noEmit` 会暴露所有类型引用 |
+| `getContentBySlug("book-list", slug)` 在非路由代码中被调用 | 中 | 高 | Grep 全量扫描后迁移（仅 tags/search/sitemap 用到） |
+| 现有 CSS `.book-list-grid` 与新旧结构不兼容 | 低 | 低 | 新组件可以用新 className，旧样式保留到确认无引用后清理 |
+| 迁移 `_index.md` 时改了 slug，外部链接 404 | 高 | 中 | 旧路由已无反向链接（网站很新）；v0.4 后旧 slug 不再存在 |
+| `site-nav.tsx` / homepage 路由引用不变 | — | — | 路由 `/book-list` 不变，无需改 |
+
+---
+
+### 27.12 Task Slice Plan（7 slices）
+
+| Slice | 标题 | 目标 | 文件数 |
+|-------|------|------|--------|
+| **S1** | Schema 拆分 | 新增 `bookIndexSchema` + `bookNoteSchema`，移除旧的 | 2 (schemas.ts + reader.ts type defs) |
+| **S2** | Reader 重建 | 新增 reader 函数 + 更新 `CollectionMap` | 2 (reader.ts + index.ts) |
+| **S3** | 内容迁移 | 现有唯一文件移到子目录 + 改 frontmatter | 2 (创建 `_index.md` + 删除旧文件) |
+| **S4** | 路由重建 | 重写 `/book-list` + 新建 `[book]/page.tsx` + 新建 `[book]/[slug]/page.tsx` + 删除 `[slug]/page.tsx` | 4 |
+| **S5** | 组件改造 | `EntryCardBookList` → `EntryCardBookTopic`（或新建） | 1–2 |
+| **S6** | 跨集合更新 | sitemap / search / tags / footer / reader internal | 5 |
+| **S7** | Docs 更新 | agent docs + commands + CLAUDE.md | 4–5 |
+
+**依赖关系**：S1 → S2 → S3 + S4 + S5（可并行）→ S6 → S7
+
+---
+
+**v0.4 规约完成。下一步：/plan 拆任务细节 → 执行 7 个 vertical slices。**

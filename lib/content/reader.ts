@@ -5,13 +5,16 @@ import { z } from "zod";
 import {
   type AiTrackerPost,
   type BlogPost,
-  type BookListPost,
+  type BookIndexPost,
+  type BookNotePost,
   type CareerPost,
   type ContentKind,
   type LearningPost,
   type ProjectPost,
   type SiteContent,
   type WeeklyPost,
+  bookIndexSchema,
+  bookNoteSchema,
   contentStatusSchema,
   schemaByKind,
 } from "./schemas.ts";
@@ -30,7 +33,8 @@ type CollectionMap = {
   career: CareerPost;
   "ai-tracker": AiTrackerPost;
   learning: LearningPost;
-  "book-list": BookListPost;
+  "book-index": BookIndexPost;
+  "book-note": BookNotePost;
 };
 
 async function fileExists(filePath: string) {
@@ -139,14 +143,33 @@ async function getCollection(kind: ContentKind, includeDrafts = false) {
   return includeDrafts ? items : publishedOnly(items);
 }
 
-export async function getBlogPosts(
-  includeDrafts = false,
-  // _opts is accepted-but-ignored in v0.3; pagination kicks in later.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _opts?: { page?: number; pageSize?: number },
-): Promise<BlogPost[]> {
+export async function getBlogPosts(includeDrafts = false): Promise<BlogPost[]> {
   const items = await getCollection("blog", includeDrafts);
   return items.filter((item): item is BlogPost => item.kind === "blog");
+}
+
+export type PaginatedPosts<T> = {
+  posts: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+};
+
+export async function getBlogPostsPaginated(
+  includeDrafts = false,
+  opts?: { page?: number; pageSize?: number },
+): Promise<PaginatedPosts<BlogPost>> {
+  const page = opts?.page ?? 1;
+  const pageSize = opts?.pageSize ?? 10;
+  const allPosts = await getBlogPosts(includeDrafts);
+  const total = allPosts.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const clampedPage = Math.min(page, totalPages);
+  const start = (clampedPage - 1) * pageSize;
+  const posts = allPosts.slice(start, start + pageSize);
+
+  return { posts, total, page: clampedPage, pageSize, totalPages };
 }
 
 export async function getWeeklyPosts(includeDrafts = false): Promise<WeeklyPost[]> {
@@ -174,9 +197,121 @@ export async function getAiTrackerPosts(includeDrafts = false): Promise<AiTracke
   return items.filter((item): item is AiTrackerPost => item.kind === "ai-tracker");
 }
 
-export async function getBookListPosts(includeDrafts = false): Promise<BookListPost[]> {
-  const items = await getCollection("book-list", includeDrafts);
-  return items.filter((item): item is BookListPost => item.kind === "book-list");
+export type BookTopicSummary = {
+  book: string;
+  title: string;
+  author: string;
+  genre: string;
+  summary: string;
+  noteCount: number;
+};
+
+async function readBookTopic(book: string, includeDrafts = false): Promise<(BookIndexPost | BookNotePost)[]> {
+  const directory = path.join(CONTENT_ROOT, "book-list", book);
+
+  if (!(await fileExists(directory))) {
+    return [];
+  }
+
+  const entries = await fs.readdir(directory, { withFileTypes: true });
+
+  const items = await Promise.all(
+    entries
+      .filter((entry) => entry.isFile())
+      .filter((entry) => SUPPORTED_EXTENSIONS.has(path.extname(entry.name)))
+      .map(async (entry) => {
+        const filePath = path.join(directory, entry.name);
+        const raw = await fs.readFile(filePath, "utf8");
+        const parsed = matter(raw);
+        const slug = toSlug(entry.name);
+        const extension = path.extname(entry.name) as ".md" | ".mdx";
+        const statusProbe = statusProbeSchema.safeParse(parsed.data);
+        const status = statusProbe.success ? statusProbe.data.status : "draft";
+
+        const isIndex = slug === "_index";
+        const schema = isIndex ? bookIndexSchema : bookNoteSchema;
+        const kind = isIndex ? "book-index" : "book-note";
+
+        const result = schema.safeParse({
+          ...parsed.data,
+          kind,
+          book,
+          slug,
+          filePath,
+          extension,
+          body: parsed.content.trim(),
+        });
+
+        if (!result.success) {
+          if (status === "published") {
+            throw new Error(formatValidationError(kind as ContentKind, slug, result.error));
+          }
+          console.warn(formatValidationError(kind as ContentKind, slug, result.error));
+          return null;
+        }
+
+        return result.data as BookIndexPost | BookNotePost;
+      }),
+  );
+
+  const allItems = items.filter((item): item is BookIndexPost | BookNotePost => item !== null);
+
+  return includeDrafts ? allItems : publishedOnly(allItems);
+}
+
+export async function getBookTopics(): Promise<BookTopicSummary[]> {
+  const root = path.join(CONTENT_ROOT, "book-list");
+  if (!(await fileExists(root))) {
+    return [];
+  }
+
+  const entries = await fs.readdir(root, { withFileTypes: true });
+  const bookDirs = entries.filter((entry) => entry.isDirectory());
+
+  const topics = await Promise.all(
+    bookDirs.map(async (entry) => {
+      const book = entry.name;
+      const [indexPost, notes] = await Promise.all([
+        getBookTopicIndex(book),
+        getBookNotes(book),
+      ]);
+
+      if (!indexPost) {
+        return null;
+      }
+
+      return {
+        book,
+        title: indexPost.title,
+        author: indexPost.author,
+        genre: indexPost.genre,
+        summary: indexPost.summary,
+        noteCount: notes.length,
+      } satisfies BookTopicSummary;
+    }),
+  );
+
+  return topics
+    .filter((topic): topic is BookTopicSummary => topic !== null)
+    .toSorted((a, b) => a.title.localeCompare(b.title));
+}
+
+export async function getBookTopicIndex(book: string): Promise<BookIndexPost | null> {
+  const items = await readBookTopic(book, false);
+  return (items.find((item) => item.kind === "book-index" && item.slug === "_index") as BookIndexPost) ?? null;
+}
+
+export async function getBookNotes(book: string, includeDrafts = false): Promise<BookNotePost[]> {
+  const items = await readBookTopic(book, includeDrafts);
+  return byNewestDate(
+    items.filter((item): item is BookNotePost => item.kind === "book-note" && isArticleSlug(item.slug)),
+  );
+}
+
+export async function getBookNoteBySlug(book: string, slug: string): Promise<BookNotePost | null> {
+  const items = await readBookTopic(book, false);
+  const decoded = decodeSlug(slug);
+  return (items.find((item) => item.kind === "book-note" && item.slug === decoded) as BookNotePost) ?? null;
 }
 
 export type TopicSummary = {
@@ -275,7 +410,8 @@ export type TaggedContentByKind = {
   career: CareerPost[];
   learning: LearningPost[];
   "ai-tracker": AiTrackerPost[];
-  bookList: BookListPost[];
+  bookIndex: BookIndexPost[];
+  bookNote: BookNotePost[];
 };
 
 export async function getContentByTag(
@@ -290,19 +426,28 @@ export async function getContentByTag(
   const needle = tag.toLowerCase();
   const matchesTag = (t: string | undefined) => t?.toLowerCase() === needle;
 
-  const [blog, weekly, projects, career, aiTracker, bookList, topics] =
+  const [blog, weekly, projects, career, aiTracker, topics, bookTopicList] =
     await Promise.all([
       getBlogPosts(),
       getWeeklyPosts(),
       getProjectPosts(),
       getCareerPosts(),
       getAiTrackerPosts(),
-      getBookListPosts(),
       getLearningTopics(),
+      getBookTopics(),
     ]);
 
   const learningPosts = (
     await Promise.all(topics.map((topic) => getLearningPosts(topic.topic)))
+  ).flat();
+
+  // Collect bookIndex and bookNote posts from all book topics
+  const bookIndexPosts = (
+    await Promise.all(bookTopicList.map((bt) => getBookTopicIndex(bt.book)))
+  ).filter((p): p is BookIndexPost => p !== null);
+
+  const bookNotePosts = (
+    await Promise.all(bookTopicList.map((bt) => getBookNotes(bt.book)))
   ).flat();
 
   const blogMatches = blog.filter((p) => p.tags.some(matchesTag));
@@ -316,7 +461,8 @@ export async function getContentByTag(
   );
   const learningMatches = learningPosts.filter((p) => p.tags.some(matchesTag));
   const aiTrackerMatches = aiTracker.filter((p) => p.tags.some(matchesTag));
-  const bookListMatches = bookList.filter((p) => p.tags.some(matchesTag));
+  const bookIndexMatches = bookIndexPosts.filter((p) => p.tags.some(matchesTag));
+  const bookNoteMatches = bookNotePosts.filter((p) => p.tags.some(matchesTag));
 
   const items: TaggedContentByKind = {
     blog: blogMatches,
@@ -325,7 +471,8 @@ export async function getContentByTag(
     career: careerMatches,
     learning: learningMatches,
     "ai-tracker": aiTrackerMatches,
-    bookList: bookListMatches,
+    bookIndex: bookIndexMatches,
+    bookNote: bookNoteMatches,
   };
 
   const totalByKind: Record<keyof TaggedContentByKind, number> = {
@@ -335,7 +482,8 @@ export async function getContentByTag(
     career: careerMatches.length,
     learning: learningMatches.length,
     "ai-tracker": aiTrackerMatches.length,
-    bookList: bookListMatches.length,
+    bookIndex: bookIndexMatches.length,
+    bookNote: bookNoteMatches.length,
   };
 
   return { items, totalByKind };
@@ -362,21 +510,28 @@ function emptyKindCounts(): Record<ContentKind, number> {
     career: 0,
     learning: 0,
     "ai-tracker": 0,
-    "book-list": 0,
+    "book-index": 0,
+    "book-note": 0,
   };
 }
 
 export async function getAllTags(): Promise<TagCount[]> {
-  const [blog, weekly, career, aiTracker, bookList, topics] = await Promise.all([
+  const [blog, weekly, career, aiTracker, topics, bookTopicList] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
     getCareerPosts(),
     getAiTrackerPosts(),
-    getBookListPosts(),
     getLearningTopics(),
+    getBookTopics(),
   ]);
   const learningPosts = (
     await Promise.all(topics.map((topic) => getLearningPosts(topic.topic)))
+  ).flat();
+  const bookIndexPosts = (
+    await Promise.all(bookTopicList.map((bt) => getBookTopicIndex(bt.book)))
+  ).filter((p): p is BookIndexPost => p !== null);
+  const bookNotePosts = (
+    await Promise.all(bookTopicList.map((bt) => getBookNotes(bt.book)))
   ).flat();
 
   const counts = new Map<string, TagCount>();
@@ -395,7 +550,8 @@ export async function getAllTags(): Promise<TagCount[]> {
   for (const post of weekly) for (const tag of post.tags) bump(tag, "weekly");
   for (const post of career) for (const tag of post.tags ?? []) bump(tag, "career");
   for (const post of aiTracker) for (const tag of post.tags) bump(tag, "ai-tracker");
-  for (const post of bookList) for (const tag of post.tags) bump(tag, "book-list");
+  for (const post of bookIndexPosts) for (const tag of post.tags) bump(tag, "book-index");
+  for (const post of bookNotePosts) for (const tag of post.tags) bump(tag, "book-note");
   for (const post of learningPosts) for (const tag of post.tags) bump(tag, "learning");
 
   return [...counts.values()].toSorted((a, b) => {

@@ -49,16 +49,25 @@ test("getContentByTag: nonexistent tag returns all empty", async () => {
   );
 });
 
-test("getContentByTag: result always exposes bookList field (array)", async () => {
+test("getContentByTag: result always exposes bookIndex + bookNote fields", async () => {
   const result = await getContentByTag("hermes");
   assert.ok(
-    Array.isArray(result.items.bookList),
-    "expected result.items.bookList to be an array",
+    Array.isArray(result.items.bookIndex),
+    "expected result.items.bookIndex to be an array",
   );
   assert.equal(
-    typeof result.totalByKind.bookList,
+    typeof result.totalByKind.bookIndex,
     "number",
-    "expected result.totalByKind.bookList to be a number",
+    "expected result.totalByKind.bookIndex to be a number",
+  );
+  assert.ok(
+    Array.isArray(result.items.bookNote),
+    "expected result.items.bookNote to be an array",
+  );
+  assert.equal(
+    typeof result.totalByKind.bookNote,
+    "number",
+    "expected result.totalByKind.bookNote to be a number",
   );
 });
 

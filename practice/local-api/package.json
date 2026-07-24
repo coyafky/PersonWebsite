@@ -1,0 +1,10 @@
+{
+  "name": "local-api-practice",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "手搓 API 服务器 — 理解 http.createServer 的每个细节",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

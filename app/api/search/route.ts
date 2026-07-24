@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import {
   getBlogPosts,
-  getBookListPosts,
+  getBookNotes,
+  getBookTopics,
   getWeeklyPosts,
   getProjectPosts,
   getAiTrackerPosts,
@@ -35,12 +36,11 @@ export async function GET(request: Request) {
     return NextResponse.json({ results: [] });
   }
 
-  const [blog, weekly, projects, aiTracker, bookList] = await Promise.all([
+  const [blog, weekly, projects, aiTracker] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
     getProjectPosts(),
     getAiTrackerPosts(),
-    getBookListPosts(),
   ]);
 
   const hits: SearchHit[] = [];
@@ -65,11 +65,24 @@ export async function GET(request: Request) {
     if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/ai-tracker/${post.slug}`, date: post.date });
   }
 
-  for (const post of bookList) {
-    const score = matchScore(post, q);
-    if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/book-list/${post.slug}`, date: post.date });
+  // Book notes
+  const bookTopics = await getBookTopics();
+  for (const book of bookTopics) {
+    const notes = await getBookNotes(book.book);
+    for (const note of notes) {
+      const score = matchScore(note, q);
+      if (score > 0) {
+        hits.push({
+          title: note.title,
+          summary: note.summary,
+          url: `/book-list/${book.book}/${note.slug}`,
+          date: note.date,
+        });
+      }
+    }
   }
 
+  // Learning
   const topics = await getLearningTopics();
   for (const topic of topics) {
     const articles = await getLearningPosts(topic.topic);

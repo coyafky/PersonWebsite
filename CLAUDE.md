@@ -150,6 +150,7 @@ PersonalWebsite/
 - ✅ **信息架构升级 v1 (2026.06)** — 9 个 vertical slice 落地：portal 首页 / 6 栏目差异化呈现 / 通用列表骨架 / tags+archive 索引 / footer 3 列。详见 `SPEC.md` + `tasks/plan.md` + `tasks/todo.md`，git log `27dc7f1..8691a22`
 - ✅ **信息架构升级 v2 (2026.06)** — 4 个 vertical slice 落地：About 去冗（9→6 section, 305→233 行）/ Tags 跨 6 collection 聚合（`getContentByTag` reader + 3 单测）/ 词云页 `/tags/cloud`（font-size 4 档）/ tag 详情页分页架构预留。详见 `SPEC.md` §0–§17 + `tasks/plan.md` + `tasks/todo.md`，git log `027a337..94590ce`
 - ✅ **Book List 新栏目 v0.3 (2026.06)** — 6 个 vertical slice 落地：第 7 个 collection `book-list`（schema + reader + Icons0Book）/ 列表 card 网格（`.book-list-grid` + `EntryCardBookList`）/ 详情页（book 元信息 + MDX + ShareButtons）/ Header 第 5 项 + 首页 portal + footer 3 列 / 跨集合接入（tags 7 集合聚合 + search + sitemap + 测试）/ Hermes 工作流（inbox/book-notes + template + `/book-list-from-inbox` 命令）。详见 `SPEC.md` §18–§26 + `tasks/plan.md` + `tasks/todo.md`
+- ✅ **Book List 重构 v0.4 (2026.07)** — 7 个 vertical slice：book-list 从扁平 1 书 1 文件重构为「书籍子目录 + `_index.md` + 多笔记」模式，对标 learning 栏目。Schema 拆分 `book-index` / `book-note` 两套，reader 新增 4 个函数，路由 3 层（`/book-list` → `/[book]` → `/[book]/[slug]`），组件 `EntryCardBookList` → `EntryCardBookTopic`，跨集合（sitemap/search/tags/footer/tests）全量更新，Hermes 命令适配子目录结构。详见 `SPEC.md` §27 + `tasks/plan.md` + `tasks/todo.md`
 - 🟡 组件样式微调（off-scale 间距值 12/18/22/28 仍残留，可做 rhythm pass）
 - 🟡 内容持续填充中（Obsidian → Website 同步）
 - 🟡 projects 页面展示待优化

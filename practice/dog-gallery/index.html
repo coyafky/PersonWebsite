@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dog Gallery — API 实践模块</title>
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f6;
+    --surface: #fff;
+    --text: #2d2a26;
+    --text-muted: #8c8680;
+    --border: #e8e4df;
+    --accent: #c77d4b;
+    --accent-hover: #b06a3a;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+    --shadow-hover: 0 2px 6px rgba(0,0,0,.08), 0 8px 28px rgba(0,0,0,.07);
+    --transition: 200ms ease;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ===== Header ===== */
+  .header {
+    text-align: center;
+    padding: 48px 24px 32px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+
+  .header p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  /* ===== Controls ===== */
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 20px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .control-group label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  select, .btn {
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all var(--transition);
+    outline: none;
+  }
+
+  select:hover { border-color: var(--accent); }
+  select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(199,125,75,.15); }
+
+  .btn {
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* ===== Stats ===== */
+  .stats {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding: 0 24px 8px;
+  }
+
+  /* ===== Gallery (CSS Columns Waterfall) ===== */
+  .gallery {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 24px 48px;
+    column-count: 4;
+    column-gap: 16px;
+  }
+
+  .gallery-card {
+    break-inside: avoid;
+    margin-bottom: 16px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .gallery-card img {
+    width: 100%;
+    display: block;
+    background: #f0ede8;
+  }
+
+  .gallery-card .breed-tag {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: capitalize;
+  }
+
+  /* ===== Load More Area ===== */
+  .load-more-area {
+    text-align: center;
+    padding: 0 24px 64px;
+  }
+
+  /* ===== Loading Skeleton ===== */
+  .skeleton-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    column-count: 4;
+    column-gap: 16px;
+  }
+
+  .skeleton-card {
+    break-inside: avoid;
+    margin-bottom: 16px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .skeleton-img {
+    width: 100%;
+    aspect-ratio: auto;
+    background: linear-gradient(90deg, #f0ede8 25%, #e8e4df 50%, #f0ede8 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ===== Modal / Lightbox ===== */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,.85);
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    cursor: pointer;
+  }
+
+  .modal.open { display: flex; }
+
+  .modal img {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: var(--radius);
+    box-shadow: 0 8px 40px rgba(0,0,0,.3);
+    cursor: default;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: .7;
+    transition: opacity var(--transition);
+    line-height: 1;
+  }
+
+  .modal-close:hover { opacity: 1; }
+
+  /* ===== Empty & Error ===== */
+  .empty-state, .error-state {
+    text-align: center;
+    padding: 64px 24px;
+    color: var(--text-muted);
+  }
+
+  .empty-state .icon, .error-state .icon { font-size: 3rem; margin-bottom: 12px; }
+  .error-state .btn { margin-top: 16px; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 1024px) { .gallery, .skeleton-grid { column-count: 3; } }
+  @media (max-width: 768px)  { .gallery, .skeleton-grid { column-count: 2; } }
+  @media (max-width: 480px)  {
+    .gallery, .skeleton-grid { column-count: 1; padding: 12px 16px; }
+    .header { padding: 32px 16px 24px; }
+    .header h1 { font-size: 1.5rem; }
+    .controls { padding: 12px 16px; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Header ===== -->
+<header class="header">
+  <h1>Dog Gallery</h1>
+  <p>一个调用 Dog API 的瀑布流画廊 — 学 API 的实践模块</p>
+</header>
+
+<!-- ===== Controls ===== -->
+<div class="controls">
+  <div class="control-group">
+    <label for="breed-select">品种</label>
+    <select id="breed-select">
+      <option value="">全部品种</option>
+    </select>
+  </div>
+  <div class="control-group">
+    <label for="count-select">每次加载</label>
+    <select id="count-select">
+      <option value="8">8 张</option>
+      <option value="12" selected>12 张</option>
+      <option value="20">20 张</option>
+      <option value="30">30 张</option>
+    </select>
+  </div>
+  <button class="btn btn-primary" id="fetch-btn">获取狗狗</button>
+</div>
+
+<p class="stats" id="stats"></p>
+
+<!-- ===== Gallery ===== -->
+<div class="gallery" id="gallery"></div>
+
+<!-- ===== Loading Skeleton ===== -->
+<div class="skeleton-grid" id="skeleton" style="display:none;">
+  <div class="skeleton-card"><div class="skeleton-img" style="padding-bottom:120%"></div></div>
+  <div class="skeleton-card"><div class="skeleton-img" style="padding-bottom:80%"></div></div>
+  <div class="skeleton-card"><div class="skeleton-img" style="padding-bottom:100%"></div></div>
+  <div class="skeleton-card"><div class="skeleton-img" style="padding-bottom:90%"></div></div>
+  <div class="skeleton-card"><div class="skeleton-img" style="padding-bottom:110%"></div></div>
+  <div class="skeleton-card"><div class="skeleton-img" style="padding-bottom:85%"></div></div>
+  <div class="skeleton-card"><div class="skeleton-img" style="padding-bottom:95%"></div></div>
+  <div class="skeleton-card"><div class="skeleton-img" style="padding-bottom:105%"></div></div>
+</div>
+
+<div class="load-more-area">
+  <button class="btn btn-primary" id="load-more-btn" style="display:none;">加载更多</button>
+</div>
+
+<!-- ===== Modal ===== -->
+<div class="modal" id="modal">
+  <button class="modal-close">&times;</button>
+  <img src="" alt="" id="modal-img">
+</div>
+
+<script>
+  /* ================================================================
+     Dog Gallery — 调用 Dog CEO API 的瀑布流画廊
+     练习目标：理解 fetch / async-await / DOM 操作 / 状态管理
+     ================================================================ */
+
+  // ── 状态 ──────────────────────────────────
+  const state = {
+    breeds: {},           // { breedName: [subBreed, ...] }
+    currentBreed: '',     // 空 = 全部
+    imageCount: 12,       // 每次加载数量
+    loadedTotal: 0,       // 已加载总数
+    loading: false,
+  }
+
+  // ── DOM 引用 ──────────────────────────────
+  const $ = (sel) => document.querySelector(sel)
+  const breedSelect = $('#breed-select')
+  const countSelect = $('#count-select')
+  const fetchBtn = $('#fetch-btn')
+  const loadMoreBtn = $('#load-more-btn')
+  const gallery = $('#gallery')
+  const skeleton = $('#skeleton')
+  const stats = $('#stats')
+  const modal = $('#modal')
+  const modalImg = $('#modal-img')
+
+  // ── API 基础 URL ──────────────────────────
+  const API_BASE = 'https://dog.ceo/api'
+
+  // ── 工具函数 ──────────────────────────────
+  function showSkeleton(show) {
+    skeleton.style.display = show ? 'block' : 'none'
+    gallery.style.display = show ? 'none' : ''
+  }
+
+  function setLoading(loading) {
+    state.loading = loading
+    fetchBtn.disabled = loading
+    loadMoreBtn.disabled = loading
+    if (loading) {
+      fetchBtn.textContent = '加载中...'
+      loadMoreBtn.textContent = '加载中...'
+    } else {
+      fetchBtn.textContent = '获取狗狗'
+      loadMoreBtn.textContent = '加载更多'
+    }
+  }
+
+  function breedDisplayName(breed, sub) {
+    if (!breed) return 'Random'
+    return sub ? `${sub} ${breed}` : breed
+  }
+
+  // ── 提取 URL 中的品种名 ──────────────────
+  function extractBreedFromUrl(url) {
+    // URL 格式: https://images.dog.ceo/breeds/<breed>[/<subbreed>]/<filename>.jpg
+    const match = url.match(/breeds\/([^/]+)(?:\/([^/]+))?\/[^/]+\.jpg$/)
+    if (!match) return ''
+    const [, breed, sub] = match
+    return sub ? `${sub} ${breed}` : breed
+  }
+
+  // ── 获取品种列表 ──────────────────────────
+  async function fetchBreeds() {
+    try {
+      const res = await fetch(`${API_BASE}/breeds/list/all`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      state.breeds = data.message
+
+      // 填充下拉选项（合并 breed + subbreed 为平铺列表）
+      breedSelect.innerHTML = '<option value="">全部品种</option>'
+      for (const [breed, subs] of Object.entries(state.breeds)) {
+        breedSelect.innerHTML += `<option value="${breed}">${breed}</option>`
+        for (const sub of subs) {
+          breedSelect.innerHTML +=
+            `<option value="${breed}/${sub}">${sub} ${breed}</option>`
+        }
+      }
+    } catch (err) {
+      console.error('获取品种列表失败:', err)
+      breedSelect.innerHTML = '<option value="">全部品种（加载失败）</option>'
+    }
+  }
+
+  // ── 获取狗狗图片 ──────────────────────────
+  async function fetchDogImages(breed = '', count = 12) {
+    let url
+    if (!breed) {
+      url = `${API_BASE}/breeds/image/random/${count}`
+    } else {
+      url = `${API_BASE}/breed/${breed}/images/random/${count}`
+    }
+
+    const res = await fetch(url)
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+    const data = await res.json()
+
+    if (data.status !== 'success') {
+      throw new Error('API 返回异常状态')
+    }
+
+    return data.message  // string[]
+  }
+
+  // ── 渲染图片卡片到画廊 ────────────────────
+  function renderImages(urls, append = false) {
+    if (!append) {
+      gallery.innerHTML = ''
+      state.loadedTotal = 0
+    }
+
+    if (urls.length === 0 && !append) {
+      gallery.innerHTML = '<div class="empty-state"><div class="icon">🐕</div><p>还没有狗狗，点「获取狗狗」开始吧</p></div>'
+      updateStats()
+      return
+    }
+
+    const fragment = document.createDocumentFragment()
+
+    for (const url of urls) {
+      const breed = extractBreedFromUrl(url)
+      const card = document.createElement('div')
+      card.className = 'gallery-card'
+      card.innerHTML = `
+        <img src="${url}" alt="${breed}" loading="lazy" />
+        <div class="breed-tag">${breed || 'Unknown breed'}</div>
+      `
+      card.addEventListener('click', () => openModal(url))
+      fragment.appendChild(card)
+    }
+
+    gallery.appendChild(fragment)
+    state.loadedTotal = gallery.querySelectorAll('.gallery-card').length
+    updateStats()
+    loadMoreBtn.style.display = 'inline-flex'
+  }
+
+  function updateStats() {
+    const breedLabel = state.currentBreed || '全部品种'
+    stats.textContent = `${breedLabel} · 已加载 ${state.loadedTotal} 张`
+  }
+
+  // ── 核心：获取并渲染 ──────────────────────
+  async function loadImages(append = false) {
+    if (state.loading) return
+
+    setLoading(true)
+    showSkeleton(!append)  // 首次加载显示骨架屏
+
+    try {
+      const urls = await fetchDogImages(state.currentBreed, state.imageCount)
+      renderImages(urls, append)
+    } catch (err) {
+      console.error('获取图片失败:', err)
+      if (!append) {
+        gallery.innerHTML = `
+          <div class="error-state">
+            <div class="icon">😢</div>
+            <p>获取狗狗图片失败: ${err.message}</p>
+            <button class="btn btn-primary" onclick="loadImages(false)">重试</button>
+          </div>`
+      }
+      loadMoreBtn.style.display = append ? 'inline-flex' : 'none'
+    } finally {
+      showSkeleton(false)
+      setLoading(false)
+    }
+  }
+
+  // ── Modal ─────────────────────────────────
+  function openModal(url) {
+    modalImg.src = url
+    modal.classList.add('open')
+  }
+
+  function closeModal() {
+    modal.classList.remove('open')
+    modalImg.src = ''
+  }
+
+  // ── 事件绑定 ──────────────────────────────
+  breedSelect.addEventListener('change', (e) => {
+    state.currentBreed = e.target.value
+  })
+
+  countSelect.addEventListener('change', (e) => {
+    state.imageCount = Number(e.target.value)
+  })
+
+  fetchBtn.addEventListener('click', () => loadImages(false))
+  loadMoreBtn.addEventListener('click', () => loadImages(true))
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal || e.target.classList.contains('modal-close')) {
+      closeModal()
+    }
+  })
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal()
+  })
+
+  // ── 初始化 ────────────────────────────────
+  async function init() {
+    await fetchBreeds()
+    await loadImages(false)  // 自动加载第一批图片
+  }
+
+  init()
+</script>
+
+</body>
+</html>

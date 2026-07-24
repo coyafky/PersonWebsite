@@ -1,6 +1,6 @@
 # Book Notes — 读书碎片入口
 
-放入这里的内容由 Hermes 通过 `/book-list-from-inbox` 整理为 `content/book-list/` 草稿。
+放入这里的内容由 Hermes 通过 `/book-list-from-inbox` 整理为 `content/book-list/<book-name>/` 目录下的索引页和笔记。
 
 ## 适用素材
 
@@ -9,9 +9,19 @@
 - 对作者观点的初步反应 / 疑问
 - 想做笔记但还没写完的章节
 
+## 目标结构（v0.4）
+
+每本书会生成一个子目录：
+
+```
+content/book-list/<book-name>/
+├── _index.md          # 书籍索引（kind: book-index）
+└── <date>-<slug>.md   # 笔记文章（kind: book-note）
+```
+
 ## 文件命名建议
 
 `<YYYY-MM-DD>-<书名拼音或英文>-<章节或主题>.md`
 例:`2026-06-23-meditation-ch2.md`
 
-> 一本书可以对应多个碎片文件，Hermes 会按 `tags` 合并到同一本书的草稿。
+> 一本书可以对应多个碎片文件，Hermes 会按 `tags` 合并到同一本书。

@@ -1,8 +1,11 @@
 # Book List 模板
 
-> Hermes 在 `/book-list-from-inbox` 时使用此模板生成 `content/book-list/<date-slug>.md`。
+> Hermes 在 `/book-list-from-inbox` 时使用此模板生成内容。
+> v0.4 后结构改为 `content/book-list/<book-name>/` 子目录模式。
 
-## 模板
+## 1. 书籍索引模板（`_index.md`）
+
+路径：`content/book-list/<book-name>/_index.md`
 
 ```markdown
 ---
@@ -16,6 +19,9 @@ tags:                  # 2-5 个细标签
   - ""
 lang: zh
 englishSummary: ""     # 1-2 句英文
+finishedDate: ""       # 可选,读完日期(如与 date 不同)
+translator: ""         # 可选,译者
+cover:                 # 可选,封面图片路径(如 "public/covers/ddia.jpg")
 ---
 
 ## 这本书讲了什么
@@ -27,22 +33,57 @@ englishSummary: ""     # 1-2 句英文
 ## 引用与摘录
 ```
 
+## 2. 笔记模板（`<slug>.md`）
+
+路径：`content/book-list/<book-name>/<YYYY-MM-DD-slug>.md`
+
+```markdown
+---
+title: ""              # 笔记标题（如"Ch.1 可靠性"或"第三章总结"）
+date: ""               # 写作日期 (YYYY-MM-DD,**必须加引号**)
+summary: ""            # 1-2 句本文摘要
+status: draft          # ⚠️ 永远默认 draft
+tags:                  # 2-5 个细标签
+  - ""
+lang: zh
+englishSummary: ""     # 1-2 句英文
+series: ""             # 可选,系列名（同一本书的笔记用同一 series）
+seriesOrder:           # 可选,系列序号
+chapter: ""            # 可选,章节标识（如"Ch.1"）
+---
+
+## 笔记内容
+```
+
 ## 字段语义
 
-### 必填
+### 通用必填
 
-- `title` — 读完后给这本书起的中文短名(≤20 字,避免"《》"书名号)
-- `date` — **读完**日期(非购买日、非开始日)
-- `summary` — 1-2 句中文摘要,讲清楚**为什么值得读**
+- `title` — 索引页：读完后给这本书起的中文短名(≤20 字,避免"《》"书名号)；笔记页：笔记标题
+- `date` — 索引页：读完日期；笔记页：写作日期
+- `summary` — 1-2 句中文摘要,讲清楚**为什么值得读/为什么值得记**
 - `status` — **必须 `draft`**,由 Coya 手动改为 `published`
-- `author` — 作者全名,中文写中文名,英文写英文名
-- `genre` — 单字段粗分类,见下枚举
 - `tags` — 细粒度标签(2-5 个,如 `["注意力", "深度工作", "Tim Ferriss"]`)
 
-### 可选
+### 索引页专用（必填）
+- `author` — 作者全名,中文写中文名,英文写英文名
+- `genre` — 单字段粗分类
 
+### 索引页可选
 - `lang` — 默认 `zh`,英文书写 `en`
 - `englishSummary` — 1-2 句英文摘要
+- `translator` — 译者名
+- `finishedDate` — 读完日期(如与 `date` 不同)
+- `cover` — 封面图片路径
+
+### 笔记页可选
+- `lang` — 默认 `zh`
+- `englishSummary` — 1-2 句英文
+- `series` — 系列名,同本书笔记共享同一系列名(如 "ddia-notes")
+- `seriesOrder` — 系列内的序号(如 1, 2, 3)
+- `chapter` — 章节标识(如 "Ch.1" / "第3章")
+
+注意：`book` 字段无需手写，reader 层从目录名自动填充。
 
 ## `genre` 枚举(建议,可不限于此)
 
@@ -69,7 +110,7 @@ englishSummary: ""     # 1-2 句英文
 - 用**通用术语**而非**个人代号**(`认知偏差` 而不是 `我最近在想的事`)
 - 中英文混排时优先用英文(`"feedback loop"`, `"systems thinking"`)
 
-## 正文 4 段写法
+## 正文写法（索引页）
 
 ### 这本书讲了什么
 

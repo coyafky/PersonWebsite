@@ -1,14 +1,22 @@
 import { CollectionList } from "@/components/collection-list";
 import { EntryCardBlog } from "@/components/entry-card-blog";
-import { getBlogPosts } from "@/lib/content";
+import { Pagination } from "@/components/pagination";
+import { getBlogPostsPaginated } from "@/lib/content";
 
 export const metadata = {
   title: "Blog",
   description: "Long-form essays on engineering, AI, and craft.",
 };
 
-export default async function BlogPage() {
-  const posts = await getBlogPosts();
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const page = Number(params.page) || 1;
+  const { posts, page: currentPage, totalPages } =
+    await getBlogPostsPaginated(false, { page, pageSize: 10 });
 
   return (
     <div className="page-shell">
@@ -27,6 +35,11 @@ export default async function BlogPage() {
           />
         ))}
       </CollectionList>
+      <Pagination
+        page={currentPage}
+        totalPages={totalPages}
+        baseHref="/blog"
+      />
     </div>
   );
 }

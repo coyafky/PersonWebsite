@@ -145,3 +145,14 @@ export function Icons0Book(props: IconProps) {
     </IconBase>
   );
 }
+
+export function Icons0Music(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M11 2a1 1 0 0 1 1 1v14.26a4 4 0 1 0 2 3.26V10h5V4h-7V3a1 1 0 0 1-1-1m-3 24a2 2 0 1 1 2-2a2 2 0 0 1-2 2m12-4a2 2 0 1 0 2 2a2 2 0 0 0-2-2"
+        fill="currentColor"
+      />
+    </IconBase>
+  );
+}

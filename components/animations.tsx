@@ -51,32 +51,32 @@ function resolveMotionTag(tag: ElementType) {
 // ── variants catalogue ────────────────────────────────────────────────
 
 export const fadeUp: Variants = {
-  off: { opacity: 0, y: 24 },
+  off: { opacity: 0, y: 16 },
   on: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: easeOut },
+    transition: { duration: 0.3, ease: easeOut },
   },
 };
 
 export const fadeIn: Variants = {
   off: { opacity: 0 },
-  on: { opacity: 1, transition: { duration: 0.45 } },
+  on: { opacity: 1, transition: { duration: 0.2 } },
 };
 
 export const slideRight: Variants = {
-  off: { opacity: 0, x: -24 },
-  on: { opacity: 1, x: 0, transition: { duration: 0.5, ease: easeOut } },
+  off: { opacity: 0, x: -16 },
+  on: { opacity: 1, x: 0, transition: { duration: 0.25, ease: easeOut } },
 };
 
 export const slideLeft: Variants = {
-  off: { opacity: 0, x: 24 },
-  on: { opacity: 1, x: 0, transition: { duration: 0.5, ease: easeOut } },
+  off: { opacity: 0, x: 16 },
+  on: { opacity: 1, x: 0, transition: { duration: 0.25, ease: easeOut } },
 };
 
 export const scaleIn: Variants = {
-  off: { opacity: 0, scale: 0.94 },
-  on: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: easeOut } },
+  off: { opacity: 0, scale: 0.96 },
+  on: { opacity: 1, scale: 1, transition: { duration: 0.2, ease: easeOut } },
 };
 
 // stagger children with a delay between each
@@ -92,7 +92,7 @@ export const stagger = (delay = 0.1): Variants => ({
 
 /**
  * Wraps children in AnimatePresence for page / route transitions.
- * Stripe Press signature: 1500ms opacity-only crossfade, no translateY.
+ * Vercel-style: swift 200ms opacity crossfade.
  */
 export function PageTransitionWrapper({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -102,8 +102,8 @@ export function PageTransitionWrapper({ children }: { children: ReactNode }) {
       <motion.div
         key={pathname}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { duration: 0.75, ease: easeOut } }}
-        exit={{ opacity: 0, transition: { duration: 0.75, ease: easeOut } }}
+        animate={{ opacity: 1, transition: { duration: 0.2, ease: easeOut } }}
+        exit={{ opacity: 0, transition: { duration: 0.2, ease: easeOut } }}
       >
         {children}
       </motion.div>
@@ -176,11 +176,11 @@ export function RevealOnScroll({
       initial="off"
       animate={inView ? "on" : "off"}
       variants={{
-        off: { opacity: 0, y: 28 },
+        off: { opacity: 0, y: 16 },
         on: {
           opacity: 1,
           y: 0,
-          transition: { duration: 0.8, ease: easeOut, delay },
+          transition: { duration: 0.3, ease: easeOut, delay },
         },
       }}
       {...props}

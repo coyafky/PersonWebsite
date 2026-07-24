@@ -8,7 +8,6 @@ import { articleMetadata, buildUrl } from "@/lib/metadata";
 import { readingTimeLabel } from "@/lib/reading-time";
 import { BlogPostingJsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
-import { Comments } from "@/components/comments";
 import { RelatedPosts, getRelatedPosts } from "@/components/related-posts";
 import { SeriesNav } from "@/components/series-nav";
 import { ArticleKeyboardNav } from "@/components/article-keyboard-nav";
@@ -86,7 +85,6 @@ export default async function WeeklyDetailPage({ params }: SlugPageProps) {
         <ShareButtons title={post.title} url={url} />
       </article>
       <RelatedPosts posts={related} />
-      <Comments />
     </ArticleLayout>
   );
 }

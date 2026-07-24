@@ -140,3 +140,125 @@
 ---
 
 **Todo 完成。下一步：/dispatch 流水线执行 6 个 slices。**
+
+---
+
+# Todo — v0.4 Book List 重构为「书籍+笔记」模式
+
+> 与 `plan.md` 配套的逐项任务清单。
+> 每个任务对应 plan.md 中的某个 slice 子步骤。
+> 状态: pending → in_progress → done
+
+---
+
+## Slice 1 — Schema 拆分
+
+- [ ] **S1.1** 在 `lib/content/schemas.ts` 新增 `bookIndexSchema`（baseContentSchema.extend + kind: "book-index" + book + author + genre + tags + lang + cover? + translator? + finishedDate?）
+- [ ] **S1.2** 在 `lib/content/schemas.ts` 新增 `bookNoteSchema`（baseContentSchema.extend + kind: "book-note" + book + tags + lang + chapter?）
+- [ ] **S1.3** 在 `lib/content/schemas.ts` 的 `schemaByKind` 注册 `"book-index": bookIndexSchema` + `"book-note": bookNoteSchema`，移除 `"book-list": bookListSchema`
+- [ ] **S1.4** 在 `lib/content/schemas.ts` 的 `SiteContent` union 加 `BookIndexPost | BookNotePost`，移除 `BookListPost`，导出 `BookIndexPost` + `BookNotePost` 类型
+- [ ] **S1.5** 移除 `bookListSchema` 定义 + `BookListPost` 类型
+- [ ] **S1.6** 运行 `npm run lint`（预期 typecheck 报错 — reader.ts 还引用旧类型，Slice 2 修复）
+
+**Slice 1 状态：⬜ pending**
+
+---
+
+## Slice 2 — Reader 重建
+
+- [ ] **S2.1** 新增 `readBookTopic(book, includeDrafts?)` 内部函数（调用 `readCollection("book-list", book)`）
+- [ ] **S2.2** 新增 `getBookTopics()` → `Promise<BookTopicSummary[]>`（遍历 `content/book-list/` 子目录）
+- [ ] **S2.3** 新增 `getBookTopicIndex(book)` → `Promise<BookIndexPost | null>`（查找 kind="book-index" + slug="_index"）
+- [ ] **S2.4** 新增 `getBookNotes(book, includeDrafts?)` → `Promise<BookNotePost[]>`（过滤 kind="book-note" + isArticleSlug）
+- [ ] **S2.5** 新增 `getBookNoteBySlug(book, slug)` → `Promise<BookNotePost | null>`（解码 slug 后查找）
+- [ ] **S2.6** 导出 `BookTopicSummary` 类型
+- [ ] **S2.7** 移除 `getBookListPosts()` 函数
+- [ ] **S2.8** 更新 `CollectionMap`：`"book-index": BookIndexPost` + `"book-note": BookNotePost`，移除 `"book-list"`
+- [ ] **S2.9** 更新 `emptyKindCounts()`：加 `"book-index": 0` + `"book-note": 0`，移除 `"book-list": 0`
+- [ ] **S2.10** 更新 `getAllTags()` bump 循环：bookIndex + bookNote 替代 bookList
+- [ ] **S2.11** 更新 `getContentByTag()`：`TaggedContentByKind` 的 `bookList` → `bookIndex` + `bookNote`
+- [ ] **S2.12** 运行 `npm run typecheck`（reader.ts 零报错；其他文件引用旧类型的报错留到后续 Slice）
+
+**Slice 2 状态：⬜ pending**
+
+---
+
+## Slice 3 — 内容迁移
+
+- [ ] **S3.1** 创建目录 `content/book-list/designing-data-intensive-applications/`
+- [ ] **S3.2** 读取旧文件 `content/book-list/2026-06-23-designing-data-intensive-applications.md` 内容
+- [ ] **S3.3** 修改 frontmatter：`kind: "book-list"` → `kind: "book-index"`，新增 `book: "designing-data-intensive-applications"`
+- [ ] **S3.4** 写入 `content/book-list/designing-data-intensive-applications/_index.md`
+- [ ] **S3.5** 删除旧文件 `content/book-list/2026-06-23-designing-data-intensive-applications.md`
+- [ ] **S3.6** 验证：`getBookTopics()` 返回 1 条，noteCount = 0
+
+**Slice 3 状态：⬜ pending**
+
+---
+
+## Slice 4 — 路由重建
+
+- [ ] **S4.1** 重写 `app/(site)/book-list/page.tsx`：用 `getBookTopics()` + `EntryCardBookTopic`（先在 Slice 5 实现前用临时 inline 渲染验证 reader 正确性）
+- [ ] **S4.2** 新建 `app/(site)/book-list/[book]/page.tsx`：书籍索引页（`getBookTopicIndex` + `getBookNotes`）
+- [ ] **S4.3** 新建 `app/(site)/book-list/[book]/[slug]/page.tsx`：笔记详情页（`getBookNoteBySlug` + `getBookNotes`，含 SeriesNav / RelatedPosts / ArticleKeyboardNav）
+- [ ] **S4.4** 删除 `app/(site)/book-list/[slug]/page.tsx`（旧详情页）
+- [ ] **S4.5** 运行 `npm run typecheck`（book-list 路由目录零报错）
+- [ ] **S4.6** 运行 `npm run build`（新路由注册成功，无 404）
+
+**Slice 4 状态：⬜ pending**
+
+---
+
+## Slice 5 — 组件改造
+
+- [ ] **S5.1** 新建 `components/entry-card-book-topic.tsx`（Server Component，props = { href, title, author, genre, summary?, noteCount }）
+- [ ] **S5.2** 删除 `components/entry-card-book-list.tsx`（确认无其他文件 import）
+- [ ] **S5.3** 更新 `app/globals.css`：`.book-list-grid` → `.book-topic-grid`（语义化），不动 token
+- [ ] **S5.4** 验证：`npm run lint && npm run typecheck` 通过
+
+**Slice 5 状态：⬜ pending**
+
+---
+
+## Slice 6 — 跨集合更新
+
+- [ ] **S6.1** 更新 `app/sitemap.ts`：`getBookTopics()` + `getBookNotes()` 替代 `getBookListPosts()`，生成 3 层路由 URL
+- [ ] **S6.2** 更新 `app/api/search/route.ts`：遍历 `getBookTopics()` + 每本书 `getBookNotes()` 搜索
+- [ ] **S6.3** 更新 `app/(site)/tags/[tag]/page.tsx`：`TaggedContentByKind` 的 `bookList` → `bookIndex` + `bookNote`，渲染 Book Notes 分组
+- [ ] **S6.4** 更新 `components/section-footer.tsx`：`latestBook` 改用 `getBookTopics()`
+- [ ] **S6.5** 更新 `lib/content/reader.test.ts`：测试适配新函数名 + 返回类型
+- [ ] **S6.6** 全量验证：`npm run lint && npm run typecheck && npm run build && npm test`
+
+**Slice 6 状态：⬜ pending**
+
+---
+
+## Slice 7 — Docs 同步
+
+- [ ] **S7.1** 更新 `docs/agent/book-list-template.md`：拆为 book-index + book-note 两个模板
+- [ ] **S7.2** 更新 `.claude/commands/book-list-from-inbox.md`：输出路径改为 `content/book-list/<book-name>/`
+- [ ] **S7.3** 更新 `docs/agent/inbox-to-content-workflow.md`：book-list 转化链路描述
+- [ ] **S7.4** 更新 `content/inbox/book-notes/README.md`：新目录结构说明
+- [ ] **S7.5** 更新 `CLAUDE.md`：当前开发状态加 v0.4 条目
+
+**Slice 7 状态：⬜ pending**
+
+---
+
+## 全量验收
+
+- [ ] `/book-list` 渲染书籍列表
+- [ ] `/book-list/designing-data-intensive-applications` 渲染书籍索引页
+- [ ] `/book-list/designing-data-intensive-applications/<slug>` 渲染笔记详情页（有笔记时）
+- [ ] `/tags/<tag>` 含 Book Notes 分组
+- [ ] `/sitemap.xml` 含所有 book-index + book-note 路由
+- [ ] Cmd+K 搜到 book-note 内容
+- [ ] Footer 显示 latest book
+- [ ] `npm run lint` passes
+- [ ] `npm run typecheck` passes
+- [ ] `npm run build` passes
+- [ ] `npm test` passes
+
+---
+
+**Todo 完成。下一步：按 Slice 1 → 2 → 3/4/5 → 6 → 7 顺序执行。**

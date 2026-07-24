@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getBlogPosts, getBookListPosts, getWeeklyPosts } from "@/lib/content";
+import { getBlogPosts, getBookTopics, getWeeklyPosts } from "@/lib/content";
 
 /**
  * Site-wide footer with three columns:
@@ -21,7 +21,7 @@ export async function SectionFooter() {
     getWeeklyPosts()
       .then((posts) => posts[0])
       .catch(() => undefined),
-    getBookListPosts()
+    getBookTopics()
       .then((posts) => posts[0])
       .catch(() => undefined),
   ]);
@@ -80,7 +80,7 @@ export async function SectionFooter() {
             {latestBook ? (
               <li>
                 <span className="site-footer-kind">Book</span>
-                <Link href={`/book-list/${latestBook.slug}`}>{latestBook.title}</Link>
+                <Link href={`/book-list/${latestBook.book}`}>{latestBook.title}</Link>
               </li>
             ) : (
               <li className="site-footer-empty">No book yet.</li>
