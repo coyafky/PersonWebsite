@@ -9,6 +9,8 @@ import {
   type BookNotePost,
   type CareerPost,
   type ContentKind,
+  type CourseIndexPost,
+  type CourseNotePost,
   type LearningPost,
   type ProjectPost,
   type SiteContent,
@@ -16,6 +18,8 @@ import {
   bookIndexSchema,
   bookNoteSchema,
   contentStatusSchema,
+  courseIndexSchema,
+  courseNoteSchema,
   schemaByKind,
 } from "./schemas.ts";
 
@@ -35,6 +39,8 @@ type CollectionMap = {
   learning: LearningPost;
   "book-index": BookIndexPost;
   "book-note": BookNotePost;
+  "course-index": CourseIndexPost;
+  "course-note": CourseNotePost;
 };
 
 async function fileExists(filePath: string) {
@@ -314,6 +320,123 @@ export async function getBookNoteBySlug(book: string, slug: string): Promise<Boo
   return (items.find((item) => item.kind === "book-note" && item.slug === decoded) as BookNotePost) ?? null;
 }
 
+export type CourseTopicSummary = {
+  course: string;
+  title: string;
+  platform: string;
+  instructor: string;
+  summary: string;
+  noteCount: number;
+};
+
+async function readCourseTopic(course: string, includeDrafts = false): Promise<(CourseIndexPost | CourseNotePost)[]> {
+  const directory = path.join(CONTENT_ROOT, "course-list", course);
+
+  if (!(await fileExists(directory))) {
+    return [];
+  }
+
+  const entries = await fs.readdir(directory, { withFileTypes: true });
+
+  const items = await Promise.all(
+    entries
+      .filter((entry) => entry.isFile())
+      .filter((entry) => SUPPORTED_EXTENSIONS.has(path.extname(entry.name)))
+      .map(async (entry) => {
+        const filePath = path.join(directory, entry.name);
+        const raw = await fs.readFile(filePath, "utf8");
+        const parsed = matter(raw);
+        const slug = toSlug(entry.name);
+        const extension = path.extname(entry.name) as ".md" | ".mdx";
+        const statusProbe = statusProbeSchema.safeParse(parsed.data);
+        const status = statusProbe.success ? statusProbe.data.status : "draft";
+
+        const isIndex = slug === "_index";
+        const schema = isIndex ? courseIndexSchema : courseNoteSchema;
+        const kind = isIndex ? "course-index" : "course-note";
+
+        const result = schema.safeParse({
+          ...parsed.data,
+          kind,
+          course,
+          slug,
+          filePath,
+          extension,
+          body: parsed.content.trim(),
+        });
+
+        if (!result.success) {
+          if (status === "published") {
+            throw new Error(formatValidationError(kind as ContentKind, slug, result.error));
+          }
+          console.warn(formatValidationError(kind as ContentKind, slug, result.error));
+          return null;
+        }
+
+        return result.data as CourseIndexPost | CourseNotePost;
+      }),
+  );
+
+  const allItems = items.filter((item): item is CourseIndexPost | CourseNotePost => item !== null);
+
+  return includeDrafts ? allItems : publishedOnly(allItems);
+}
+
+export async function getCourseTopics(): Promise<CourseTopicSummary[]> {
+  const root = path.join(CONTENT_ROOT, "course-list");
+  if (!(await fileExists(root))) {
+    return [];
+  }
+
+  const entries = await fs.readdir(root, { withFileTypes: true });
+  const courseDirs = entries.filter((entry) => entry.isDirectory());
+
+  const topics = await Promise.all(
+    courseDirs.map(async (entry) => {
+      const course = entry.name;
+      const [indexPost, notes] = await Promise.all([
+        getCourseTopicIndex(course),
+        getCourseNotes(course),
+      ]);
+
+      if (!indexPost) {
+        return null;
+      }
+
+      return {
+        course,
+        title: indexPost.title,
+        platform: indexPost.platform,
+        instructor: indexPost.instructor,
+        summary: indexPost.summary,
+        noteCount: notes.length,
+      } satisfies CourseTopicSummary;
+    }),
+  );
+
+  return topics
+    .filter((topic): topic is CourseTopicSummary => topic !== null)
+    .toSorted((a, b) => a.title.localeCompare(b.title));
+}
+
+export async function getCourseTopicIndex(course: string): Promise<CourseIndexPost | null> {
+  const items = await readCourseTopic(course, false);
+  return (items.find((item) => item.kind === "course-index" && item.slug === "_index") as CourseIndexPost) ?? null;
+}
+
+export async function getCourseNotes(course: string, includeDrafts = false): Promise<CourseNotePost[]> {
+  const items = await readCourseTopic(course, includeDrafts);
+  return byNewestDate(
+    items.filter((item): item is CourseNotePost => item.kind === "course-note" && isArticleSlug(item.slug)),
+  );
+}
+
+export async function getCourseNoteBySlug(course: string, slug: string): Promise<CourseNotePost | null> {
+  const items = await readCourseTopic(course, false);
+  const decoded = decodeSlug(slug);
+  return (items.find((item) => item.kind === "course-note" && item.slug === decoded) as CourseNotePost) ?? null;
+}
+
 export type TopicSummary = {
   topic: string;
   title: string;
@@ -412,6 +535,8 @@ export type TaggedContentByKind = {
   "ai-tracker": AiTrackerPost[];
   bookIndex: BookIndexPost[];
   bookNote: BookNotePost[];
+  courseIndex: CourseIndexPost[];
+  courseNote: CourseNotePost[];
 };
 
 export async function getContentByTag(
@@ -426,7 +551,7 @@ export async function getContentByTag(
   const needle = tag.toLowerCase();
   const matchesTag = (t: string | undefined) => t?.toLowerCase() === needle;
 
-  const [blog, weekly, projects, career, aiTracker, topics, bookTopicList] =
+  const [blog, weekly, projects, career, aiTracker, topics, bookTopicList, courseTopicList] =
     await Promise.all([
       getBlogPosts(),
       getWeeklyPosts(),
@@ -435,6 +560,7 @@ export async function getContentByTag(
       getAiTrackerPosts(),
       getLearningTopics(),
       getBookTopics(),
+      getCourseTopics(),
     ]);
 
   const learningPosts = (
@@ -450,6 +576,14 @@ export async function getContentByTag(
     await Promise.all(bookTopicList.map((bt) => getBookNotes(bt.book)))
   ).flat();
 
+  const courseIndexPosts = (
+    await Promise.all(courseTopicList.map((ct) => getCourseTopicIndex(ct.course)))
+  ).filter((p): p is CourseIndexPost => p !== null);
+
+  const courseNotePosts = (
+    await Promise.all(courseTopicList.map((ct) => getCourseNotes(ct.course)))
+  ).flat();
+
   const blogMatches = blog.filter((p) => p.tags.some(matchesTag));
   const weeklyMatches = weekly.filter((p) => p.tags.some(matchesTag));
   // The project schema does not currently carry a `tags` field, so projects
@@ -463,6 +597,8 @@ export async function getContentByTag(
   const aiTrackerMatches = aiTracker.filter((p) => p.tags.some(matchesTag));
   const bookIndexMatches = bookIndexPosts.filter((p) => p.tags.some(matchesTag));
   const bookNoteMatches = bookNotePosts.filter((p) => p.tags.some(matchesTag));
+  const courseIndexMatches = courseIndexPosts.filter((p) => p.tags.some(matchesTag));
+  const courseNoteMatches = courseNotePosts.filter((p) => p.tags.some(matchesTag));
 
   const items: TaggedContentByKind = {
     blog: blogMatches,
@@ -473,6 +609,8 @@ export async function getContentByTag(
     "ai-tracker": aiTrackerMatches,
     bookIndex: bookIndexMatches,
     bookNote: bookNoteMatches,
+    courseIndex: courseIndexMatches,
+    courseNote: courseNoteMatches,
   };
 
   const totalByKind: Record<keyof TaggedContentByKind, number> = {
@@ -484,6 +622,8 @@ export async function getContentByTag(
     "ai-tracker": aiTrackerMatches.length,
     bookIndex: bookIndexMatches.length,
     bookNote: bookNoteMatches.length,
+    courseIndex: courseIndexMatches.length,
+    courseNote: courseNoteMatches.length,
   };
 
   return { items, totalByKind };
@@ -512,17 +652,20 @@ function emptyKindCounts(): Record<ContentKind, number> {
     "ai-tracker": 0,
     "book-index": 0,
     "book-note": 0,
+    "course-index": 0,
+    "course-note": 0,
   };
 }
 
 export async function getAllTags(): Promise<TagCount[]> {
-  const [blog, weekly, career, aiTracker, topics, bookTopicList] = await Promise.all([
+  const [blog, weekly, career, aiTracker, topics, bookTopicList, courseTopicList] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
     getCareerPosts(),
     getAiTrackerPosts(),
     getLearningTopics(),
     getBookTopics(),
+    getCourseTopics(),
   ]);
   const learningPosts = (
     await Promise.all(topics.map((topic) => getLearningPosts(topic.topic)))
@@ -532,6 +675,12 @@ export async function getAllTags(): Promise<TagCount[]> {
   ).filter((p): p is BookIndexPost => p !== null);
   const bookNotePosts = (
     await Promise.all(bookTopicList.map((bt) => getBookNotes(bt.book)))
+  ).flat();
+  const courseIndexPosts = (
+    await Promise.all(courseTopicList.map((ct) => getCourseTopicIndex(ct.course)))
+  ).filter((p): p is CourseIndexPost => p !== null);
+  const courseNotePosts = (
+    await Promise.all(courseTopicList.map((ct) => getCourseNotes(ct.course)))
   ).flat();
 
   const counts = new Map<string, TagCount>();
@@ -552,6 +701,8 @@ export async function getAllTags(): Promise<TagCount[]> {
   for (const post of aiTracker) for (const tag of post.tags) bump(tag, "ai-tracker");
   for (const post of bookIndexPosts) for (const tag of post.tags) bump(tag, "book-index");
   for (const post of bookNotePosts) for (const tag of post.tags) bump(tag, "book-note");
+  for (const post of courseIndexPosts) for (const tag of post.tags) bump(tag, "course-index");
+  for (const post of courseNotePosts) for (const tag of post.tags) bump(tag, "course-note");
   for (const post of learningPosts) for (const tag of post.tags) bump(tag, "learning");
 
   return [...counts.values()].toSorted((a, b) => {

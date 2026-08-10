@@ -7,7 +7,7 @@ import {
   Icons0Blog,
   Icons0Book,
   Icons0Calendar,
-  Icons0Music,
+  Icons0Course,
   Icons0Notebook,
   Icons0Portfolio,
   Icons0Profile,
@@ -20,8 +20,8 @@ const navItems = [
   { href: "/weekly", icon: Icons0Calendar, label: "Weekly" },
   { href: "/learning", icon: Icons0Notebook, label: "Learning" },
   { href: "/book-list", icon: Icons0Book, label: "Book List" },
+  { href: "/course-list", icon: Icons0Course, label: "Course List" },
   { href: "/projects", icon: Icons0Portfolio, label: "Projects" },
-  { href: "/music", icon: Icons0Music, label: "Music" },
   { href: "/about", icon: Icons0Profile, label: "About" },
 ];
 

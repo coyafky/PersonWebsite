@@ -6,6 +6,7 @@ import {
   Icons0Blog,
   Icons0Book,
   Icons0Calendar,
+  Icons0Course,
   Icons0Notebook,
   Icons0Portfolio,
   Icons0Profile,
@@ -49,6 +50,12 @@ const portalEntries: ReadonlyArray<PortalEntry> = [
     icon: <Icons0Book />,
     title: "Book List",
     description: "读过的书、读书笔记、长期沉淀的认知。",
+  },
+  {
+    href: "/course-list",
+    icon: <Icons0Course />,
+    title: "Course List",
+    description: "视频课程笔记、按模块和课时组织。",
   },
   {
     href: "/projects",

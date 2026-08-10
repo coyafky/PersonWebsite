@@ -72,7 +72,7 @@ html {
   min-width: 320px;
   background: var(--background);
   color: var(--text);
-  font-family: var(--font-sans), Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
@@ -791,7 +791,7 @@ main {
 
 .markdown-body {
   color: var(--text);
-  font-family: var(--font-sans), Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.75;
@@ -2936,6 +2936,133 @@ main {
 }
 
 .entry-card-book-note-date {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: var(--space-1);
+}
+
+/* ── Course List ──────────────────────────────────────────────────────── */
+
+.course-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--surface);
+  box-shadow: var(--shadow-border);
+  border-radius: var(--radius-card);
+  transition: box-shadow var(--transition-fast);
+}
+
+.course-card:hover {
+  box-shadow: var(--shadow-card);
+}
+
+.course-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  text-decoration: none;
+  color: inherit;
+}
+
+.course-card-meta {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.course-card-platform {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.course-card-count {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.course-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+.course-card-instructor {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 0;
+}
+
+.course-card-summary {
+  font-size: 15px;
+  color: var(--text);
+  margin: var(--space-1) 0 0;
+}
+
+/* course meta block (on course index page) */
+.course-meta-block {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: var(--space-5);
+}
+
+.course-meta-block a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Course Note List ──────────────────────────────────────────────────── */
+
+.entry-card-course-note-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.entry-card-course-note-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0);
+  padding: var(--space-3) var(--space-4);
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--radius);
+  transition: background var(--transition-fast);
+}
+
+.entry-card-course-note-item:hover {
+  background: var(--surface-hover);
+}
+
+.entry-card-course-note-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+.entry-card-course-note-summary {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: var(--space-0) 0 0;
+}
+
+.entry-card-course-note-date {
   font-size: 13px;
   color: var(--muted);
   margin-top: var(--space-1);

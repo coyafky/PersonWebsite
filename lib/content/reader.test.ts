@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { getContentByTag, getContentBySlug } from "./reader.ts";
 
-test("getContentByTag: matches across all 7 collections (incl. book-list)", async () => {
+test("getContentByTag: matches across all 8 collections (incl. book-list + course-list)", async () => {
   const result = await getContentByTag("hermes");
   const totalHits = Object.values(result.totalByKind).reduce(
     (sum, n) => sum + n,
@@ -68,6 +68,28 @@ test("getContentByTag: result always exposes bookIndex + bookNote fields", async
     typeof result.totalByKind.bookNote,
     "number",
     "expected result.totalByKind.bookNote to be a number",
+  );
+});
+
+test("getContentByTag: result always exposes courseIndex + courseNote fields", async () => {
+  const result = await getContentByTag("hermes");
+  assert.ok(
+    Array.isArray(result.items.courseIndex),
+    "expected result.items.courseIndex to be an array",
+  );
+  assert.equal(
+    typeof result.totalByKind.courseIndex,
+    "number",
+    "expected result.totalByKind.courseIndex to be a number",
+  );
+  assert.ok(
+    Array.isArray(result.items.courseNote),
+    "expected result.items.courseNote to be an array",
+  );
+  assert.equal(
+    typeof result.totalByKind.courseNote,
+    "number",
+    "expected result.totalByKind.courseNote to be a number",
   );
 });
 

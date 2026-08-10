@@ -9,6 +9,7 @@ projects/     Project records and portfolio pages
 career/       Resume bullets, STAR stories, profile material
 ai-tracker/   AI 信息摄取与长期追踪 (`.md` 为主,允许 `.mdx`)
 book-list/    读书笔记 — 读过的书 + 摘要 + 个人收获 (`.md`)
+course-list/  视频课程笔记 — 按模块组织的学习笔记 (`.md`)
 inbox/
   ideas/         → blog
   logs/          → weekly
@@ -16,6 +17,7 @@ inbox/
   career-notes/  → career
   ai-notes/      → ai-tracker
   book-notes/    → book-list
+  course-notes/  → course-list
 ```
 
 Default format is Markdown (`.md`). Use MDX (`.mdx`) only when a page needs React components, richer layout, diagrams, or embedded demos.

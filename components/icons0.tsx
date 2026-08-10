@@ -146,6 +146,17 @@ export function Icons0Book(props: IconProps) {
   );
 }
 
+export function Icons0Course(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M8 5v14l11-7z"
+        fill="currentColor"
+      />
+    </IconBase>
+  );
+}
+
 export function Icons0Music(props: IconProps) {
   return (
     <IconBase {...props}>

@@ -3,6 +3,8 @@ import {
   getBlogPosts,
   getBookNotes,
   getBookTopics,
+  getCourseNotes,
+  getCourseTopics,
   getWeeklyPosts,
   getProjectPosts,
   getAiTrackerPosts,
@@ -76,6 +78,23 @@ export async function GET(request: Request) {
           title: note.title,
           summary: note.summary,
           url: `/book-list/${book.book}/${note.slug}`,
+          date: note.date,
+        });
+      }
+    }
+  }
+
+  // Course notes
+  const courseTopics = await getCourseTopics();
+  for (const course of courseTopics) {
+    const notes = await getCourseNotes(course.course);
+    for (const note of notes) {
+      const score = matchScore(note, q);
+      if (score > 0) {
+        hits.push({
+          title: note.title,
+          summary: note.summary,
+          url: `/course-list/${course.course}/${note.slug}`,
           date: note.date,
         });
       }

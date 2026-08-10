@@ -125,6 +125,24 @@ export const bookNoteSchema = baseContentSchema.extend({
   chapter: z.string().optional(),
 });
 
+export const courseIndexSchema = baseContentSchema.extend({
+  kind: z.literal("course-index"),
+  course: z.string(),
+  platform: z.string(),
+  instructor: z.string(),
+  tags: stringArraySchema,
+  lang: z.string().default("zh"),
+  url: z.string().optional(),
+});
+
+export const courseNoteSchema = baseContentSchema.extend({
+  kind: z.literal("course-note"),
+  course: z.string(),
+  tags: stringArraySchema,
+  lang: z.string().default("zh"),
+  chapter: z.string().optional(),
+});
+
 export const schemaByKind = {
   blog: blogSchema,
   weekly: weeklySchema,
@@ -134,6 +152,8 @@ export const schemaByKind = {
   learning: learningSchema,
   "book-index": bookIndexSchema,
   "book-note": bookNoteSchema,
+  "course-index": courseIndexSchema,
+  "course-note": courseNoteSchema,
 } as const;
 
 export type ContentKind = keyof typeof schemaByKind;
@@ -146,6 +166,8 @@ export type AiTrackerPost = z.infer<typeof aiTrackerSchema>;
 export type LearningPost = z.infer<typeof learningSchema>;
 export type BookIndexPost = z.infer<typeof bookIndexSchema>;
 export type BookNotePost = z.infer<typeof bookNoteSchema>;
+export type CourseIndexPost = z.infer<typeof courseIndexSchema>;
+export type CourseNotePost = z.infer<typeof courseNoteSchema>;
 export type AiTrackerSourceType = z.infer<typeof aiTrackerSourceTypeSchema>;
 export type SiteContent =
   | BlogPost
@@ -155,4 +177,6 @@ export type SiteContent =
   | AiTrackerPost
   | LearningPost
   | BookIndexPost
-  | BookNotePost;
+  | BookNotePost
+  | CourseIndexPost
+  | CourseNotePost;

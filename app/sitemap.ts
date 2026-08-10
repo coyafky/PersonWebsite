@@ -3,6 +3,8 @@ import {
   getBlogPosts,
   getBookNotes,
   getBookTopics,
+  getCourseNotes,
+  getCourseTopics,
   getWeeklyPosts,
   getProjectPosts,
   getLearningTopics,
@@ -30,6 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: buildUrl("/learning"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
     { url: buildUrl("/ai-tracker"), lastModified: new Date(), changeFrequency: "daily", priority: 0.9 },
     { url: buildUrl("/book-list"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: buildUrl("/course-list"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
   ];
 
   const blogUrls: MetadataRoute.Sitemap = blog.map((post) => ({
@@ -84,6 +87,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
+  // Course list: course index pages + note detail pages
+  const courseTopics = await getCourseTopics();
+  const courseIndexUrls: MetadataRoute.Sitemap = [];
+  const courseNoteUrls: MetadataRoute.Sitemap = [];
+
+  for (const course of courseTopics) {
+    courseIndexUrls.push({
+      url: buildUrl(`/course-list/${course.course}`),
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    });
+
+    const notes = await getCourseNotes(course.course);
+    for (const note of notes) {
+      courseNoteUrls.push({
+        url: buildUrl(`/course-list/${course.course}/${note.slug}`),
+        lastModified: new Date(note.date),
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      });
+    }
+  }
+
   // Learning
   const topics = await getLearningTopics();
   const learningUrls: MetadataRoute.Sitemap = [];
@@ -115,6 +142,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...aiTrackerUrls,
     ...bookIndexUrls,
     ...bookNoteUrls,
+    ...courseIndexUrls,
+    ...courseNoteUrls,
     ...learningUrls,
   ];
 }

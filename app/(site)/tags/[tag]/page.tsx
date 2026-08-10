@@ -4,6 +4,7 @@ import { ContentCard } from "@/components/content-card";
 import { EntryCardAiTracker } from "@/components/entry-card-ai-tracker";
 import { EntryCardBlog } from "@/components/entry-card-blog";
 import { EntryCardBookTopic } from "@/components/entry-card-book-topic";
+import { EntryCardCourseTopic } from "@/components/entry-card-course-topic";
 import { EntryCardLearning } from "@/components/entry-card-learning";
 import { EntryCardProject } from "@/components/entry-card-project";
 import { EntryCardWeekly } from "@/components/entry-card-weekly";
@@ -158,6 +159,25 @@ export default async function TagPage({ params }: TagPageProps) {
                 title={post.title}
                 author={post.author}
                 genre={post.genre}
+                summary={post.summary}
+                noteCount={0}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {totalByKind.courseIndex > 0 ? (
+        <section>
+          <h2>Course List</h2>
+          <div className="course-topic-grid">
+            {items.courseIndex.map((post) => (
+              <EntryCardCourseTopic
+                key={post.slug}
+                href={`/course-list/${post.course}`}
+                title={post.title}
+                platform={post.platform}
+                instructor={post.instructor}
                 summary={post.summary}
                 noteCount={0}
               />

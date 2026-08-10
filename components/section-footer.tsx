@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getBlogPosts, getBookTopics, getWeeklyPosts } from "@/lib/content";
+import { getBlogPosts, getBookTopics, getCourseTopics, getWeeklyPosts } from "@/lib/content";
 
 /**
  * Site-wide footer with three columns:
@@ -14,7 +14,7 @@ export async function SectionFooter() {
   const year = new Date().getFullYear();
 
   // 静默拉取；任意集合为空时回退到"暂无更新"提示。
-  const [latestBlog, latestWeekly, latestBook] = await Promise.all([
+  const [latestBlog, latestWeekly, latestBook, latestCourse] = await Promise.all([
     getBlogPosts()
       .then((posts) => posts[0])
       .catch(() => undefined),
@@ -22,6 +22,9 @@ export async function SectionFooter() {
       .then((posts) => posts[0])
       .catch(() => undefined),
     getBookTopics()
+      .then((posts) => posts[0])
+      .catch(() => undefined),
+    getCourseTopics()
       .then((posts) => posts[0])
       .catch(() => undefined),
   ]);
@@ -47,6 +50,9 @@ export async function SectionFooter() {
             </li>
             <li>
               <Link href="/book-list">Book List</Link>
+            </li>
+            <li>
+              <Link href="/course-list">Course List</Link>
             </li>
             <li>
               <Link href="/projects">Projects</Link>
@@ -84,6 +90,14 @@ export async function SectionFooter() {
               </li>
             ) : (
               <li className="site-footer-empty">No book yet.</li>
+            )}
+            {latestCourse ? (
+              <li>
+                <span className="site-footer-kind">Course</span>
+                <Link href={`/course-list/${latestCourse.course}`}>{latestCourse.title}</Link>
+              </li>
+            ) : (
+              <li className="site-footer-empty">No course yet.</li>
             )}
           </ul>
         </div>
