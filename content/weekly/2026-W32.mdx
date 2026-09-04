@@ -1,0 +1,190 @@
+---
+title: "2026 W32 周记"
+week: "2026-W32"
+date: "2026-08-10"
+summary: "从0到1落地周：Lanhui 官网正式上线（备案+SSL+61页SEO就绪）+ GEO 内容引擎建成（GEOFlow 跑通 31 篇上稿 / 5 平台写手矩阵）+ Hermes 服务器 7-profile 机器人矩阵搭起（流式卡片+生图闭环）+ 零到全栈课程毕业与 62 张知识卡收官。"
+highlights:
+  - "Lanhui 官网正式上线 ⭐：备案 → DNS → SSL 443 → 01:55 公网可访问；sitemap 61 页 100%、lint 0、CWV 全绿、SEO 审计 7/10"
+  - "GEO 内容引擎建成 ⭐：geo-expert 诊断→GEOFlow 部署（DeepSeek）→ 21 选题 31 篇全发布；40关键词/21标题/2知识库/23产品文档灌料"
+  - "5 平台写手 subagent 矩阵 + human-writing 活人感质检 + 正文净化规范"
+  - "Hermes 服务器体系 ⭐：7 profile + 独立 DeepSeek key；HFC 流式卡片多轮排坑 + 生图/媒体交付闭环"
+  - "DeepSeek 基线采样：浏览器扩展迭代到 v1.3.0 + 31/40 题 + 30 天行动方案"
+  - "用户学习毕业 ⭐：零到全栈 23 课收官 + learning-path 62/62 知识卡"
+tags:
+  - weekly
+status: draft
+mood: "productive"
+englishSummary: "From-zero-to-one week: Lanhui official website went live; GEO content engine built (GEOFlow deploying 31 articles + 5 platform writers); Hermes server 7-profile robot matrix (streaming cards + image loop); user graduated from zero-to-fullstack plus 62 knowledge cards."
+---
+
+# 2026-W-32 — 从0到1落地周：官网正式上线 + GEO 内容引擎 + Hermes 服务器矩阵
+
+import { Callout } from '@/components/callout'
+
+> **说明：** 这是一个把「筹备已久」真正落地的周。三件大事同时推上节点：蓝辉官网正式上线（从备案到 SEO 收口）、GEO 内容引擎批量产文（31 篇上稿 + 5 写手矩阵）、Hermes 服务器 7-profile 机器人矩阵搭起来（流式卡片排雷 + 生图闭环）。中间还见缝插针把《零到全栈》课程和 62 张知识卡推到了毕业。
+
+---
+
+## 🎯 本周待办（MIT）
+
+| # | 目标 | 状态 |
+|---|------|------|
+| 1 | **Lanhui 官网正式上线**（备案→DNS→SSL→SEO 收口） | ✅ 完成（08-08 01:55 可访问）|
+| 2 | **GEO 内容引擎跑通**（诊断→GEOFlow→31篇发布→写手矩阵） | ✅ 完成 |
+| 3 | **Hermes 服务器矩阵搭建**（7 profile + 流式卡片 + 生图闭环） | ✅ 完成 |
+| 4 | 《零到全栈》课程毕业 + learning-path 62 卡收官 | ✅ 完成 |
+
+---
+
+## ✅ 本周进展
+
+### ✅ 已完成
+
+**1. Lanhui 官网正式上线 — 从备案到 SEO 收口**
+
+真正的难点不是"发布代码"，而是"可被信任"。备案号（粤ICP备2026102356号-2）下来后，上线路才铺开：DNSPod A 记录指向 43.140.225.115 → nginx 3001 改 80 → Let's Encrypt SSL + 443 + `http→301→https` → **08-08 01:55 公网可访问**。
+
+上线后三轮打磨不是结束，而是开始：
+
+- **sitemap** 45→61 页 100% 覆盖（含窗膜套餐/agent/车型页），顺手修掉一处「占位页混进 sitemap」隐患
+- **图片瘦身** 87→77MB：只删 QA 死文件；第一次脚本误删 zeekr 21 文件 → git checkout 恢复 → 换「白名单∪src∪verify」三重保护
+- **lint 清零 + Hero preload 迁移**（Next16 priority 废弃）+ **博客页构建**（手写零依赖 Markdown 解析器 + 3 篇真实文章 + 835 tests）
+- **合规修复** 31 文件：假一赔十→假货赔付、极限词（首选/顶级）、SU7 Ultra 28 处改运动风格、中文标点精准统一
+
+**2. GEO 内容引擎 — 从诊断到批量产文**
+
+geo-expert 全景诊断一句话定位非常扎心："框架齐、代码近 ready、事实未核验、公网零部署、AI 可见性为零。" 点破的核心冲突：**工程"先上线再核验" vs GEO"证据先行"** → 修复顺序反转为先核事实→修技术→上线→采样→产内容。
+
+- **GEOFlow 部署**（DeepSeek 集成）：容器化 + v2.2.0 升级（api_key enc:v1 加密、queue 加内网 DNS 修抖动）
+- **素材灌料**：40 关键词 / 21 标题 / 品牌事实 + 采样洞察 / 23 篇产品文档 → 172 语义分块
+- **三批产文**：P0(5)+P1(7)+P2 → **批量文章计划 21 选题全部生成+审核+发布 31 篇**
+- **DeepSeek 基线采样**：写浏览器扩展（油猴→extension v1.0→v1.3.0，抓引用来源），人工采 31/40 题 → 核心发现「顺德大良+新能源轻改一站式」= DeepSeek 推荐池真空位
+
+**3. 5 平台写手 subagent 矩阵**
+
+smzdm/汽车之家/知乎/公众号/小红书 5 写手注册进 Alma；geo-expert=内容中枢，写手=渠道适配层（母版→改写→回传）；每个写手配平台风格基准；引入 human-writing 活人感质检（check_prose.py 一次过检）+ 正文净化规范（内部标记只进 frontmatter）。
+
+**4. Hermes 服务器 7-profile 机器人矩阵**
+
+- 腾讯云轻量 81.71.132.184（`ssh hermes`，ubuntu 非 root）+ 7 profile（销售 salea/管理 manager/主播 anchor/拍剪 edit-a·b/私域 private）+ 主 gateway，各独立飞书应用 + 独立 DeepSeek key
+- 能力接入：米醋 MCP 生图（config env 注入）+ Tavily web_search + 抖音高赞话术 skill
+- **HFC 流式卡片排雷一天**：`show_reasoning` 不是根因 → `answer_chars=16`（"已清理临时脚本"）挖到 answer 归档机制 → 治本用硬机制：`execute_code` 沙箱查询 + `approvals.deny` 拦 rm + 临时文件归置/cron
+- **生图/媒体交付闭环**：`MEDIA:<绝对路径>` → Gateway → 飞书图片气泡实测成功
+
+**5. 学习毕业**
+
+《零到全栈》23 课全部打完（第 6-14 课连闯收官，55 术语 + 10 考点复盘长文）；learning-path 62/62 知识卡完成（阶段 0-9 + JS 深潜），目标从"会写"升级为"会读+会审查 AI 代码"。
+
+### 🟡 进行中 / 待完成
+
+| 事项 | 说明 |
+|------|------|
+| 搜索引擎站长平台提交 | 收录为 0 是 SEO 审计 7/10 唯一硬缺口（Google/Bing/百度）|
+| 公安备案号 | Footer 已条件渲染，待用户提供|
+| Hermes 服务器内存 | 3.6G 已用 3.3G，13+ 进程，需升配 8G|
+| GEOFlow embedding/RAG | 未配，召回暂不可用，待启用|
+
+---
+
+## 💡 思考（Insights）
+
+<Callout type="info">
+**"先上线再核验"和"证据先行"是两种世界观，内容生意必须选后者。** 官网修 sitemap、修合规、修极限词，本质都是为"证据"打仗——AI 引擎判断你靠不靠谱，看你能否拿出可核验的事实，而不是你宣称什么。蓝辉做 GEO 的第一课不是技术，是把"先核事实"变成习惯。
+</Callout>
+
+<Callout type="success">
+**想约束不守规矩的模型，与其劝，不如用机制。** HFC 表格消失那一整天排雷，最终不是靠多写几行 SOUL 纪律，而是靠 `execute_code` 沙箱 + `approvals.deny` 硬拦截——让 agent 想走错路都走不了。
+</Callout>
+
+<Callout type="tip">
+**"上线"的真实重量是在看不见的地方。** 撑起"可被信任"的，是 sitemap、canonical、备案号、文案体检这些没人注意的活。内容工厂同理：GEOFlow 能批量产文章，但证据纪律不跟上，产得越多埋雷越多。工程化解决"快"，纪律解决"稳"。
+</Callout>
+
+---
+
+## 🕒 Time Log
+
+| 日期 | 活动 | 项目标签 |
+|------|------|----------|
+| **周一 08-03** | 《零到全栈》第 6-14 课（模块3收官→模块5），全课毕业；ego-lite 接入 Alma；geo-expert 构建（18 yao-geo skills）| `#学习 #GEO` |
+| **周二 08-04** | GEO 诊断三报告（全景/监测/DeepSeek 测试）+ 40 条基线清单 + E1 门店核验；DeepSeek 采样扩展迭代；GEOFlow 部署（DeepSeek 集成）| `#GEO` |
+| **周三 08-05** | GEOFlow 三批产文 → 21 选题 31 篇发布；5 平台写手矩阵 + human-writing；产品知识库 23 文档灌入 | `#GEO #内容` |
+| **周四 08-06** | Reasonix 接入 Alma 作 coding 模块 + 25 skills；Hermes 服务器 SSH 接入 | `#工具链 #Hermes` |
+| **周五 08-07** | Hermes 7 profile + 飞书应用映射 + 6 独立 key；HFC 流式卡片排雷一天；生图/媒体交付闭环 | `#Hermes` |
+| **周六 08-08** | 官网正式上线（01:55）+ 三轮打磨 + 合规修复 + SEO 审计 7/10 | `#官网` |
+| **周日 08-09** | learning-path 62/62 知识卡收官 + 文案/标点合规 + 车型页 Tab 分组 | `#学习 #官网` |
+
+---
+
+## 📚 知识资产 / To Resource
+
+| 资产 | 说明 | 状态 |
+|------|------|------|
+| 蓝辉轻改-GEO 诊断/监测/DeepSeek 三报告 | GEO 基线基线，07-12 版 | ✅ 完成 |
+| GEOFlow 部署实例 | 31 篇文章在线，素材库 40关键词/21标题/2知识库 | ✅ 运行中 |
+| 平台写手 agent × 5 | smzdm/autohome/zhihu/wechat/xiaohongshu + 协作关系 | ✅ 可用 |
+| deepseek-refs-extension v1.3.0 | 浏览器扩展，抓引用来源 | ✅ 可用 |
+| Hermes 服务器 7 profile | 销售/管理/主播/拍剪A·B/私域 | ✅ 运行中 |
+| crm-query-playbook | HFC 表格规范化手册（execute_code+deny+归置）| ✅ 可用 |
+| fullstack-course-summary / 62 知识卡 | 零到全栈毕业总结 + learning-path 收口 | ✅ 完成 |
+
+---
+
+## 📋 上周回顾
+
+- **W-31（关键周：7/27-8/2）** — 工具链分界清晰（Agent Reach/卸 OpenClaw/Mac瘦身）+ CoyaWork 设为公司目录 + Resume Bridge + Alma 驱动 Codex + teach 教学启动
+- **W-30（7/20-7/26）** — 官网逼近上线 + GEOFlow 引擎启动 + 搜狐关键词/L9 范文改造
+
+---
+
+## 🎯 下周重点（3 个最重要的方向）
+
+### 🔴 P1 搜索引擎站长平台 + 官网补强
+
+**为什么最重要：** 官网已上线但收录为 0，这是唯一硬缺口；不提交站长平台，花再多精力做内容也没人搜到。
+
+**具体目标：**
+
+- 提交 Google/Bing/百度站长平台 + sitemap
+- 补公安备案号 + LocalBusiness schema
+
+### 🟡 P2 GEO 内容分发与采样回流
+
+**为什么重要：** 引擎能产文了，但"发出去有没有引用"才是闭环的终点。
+
+**具体目标：**
+
+- 31 篇母版批量改写到各平台（写手矩阵实战）
+- GEOFlow 配 embedding 启用 RAG；补采替代组 4 题 + q004 闭合 40 题基线
+- 8-11 发布后 48h 补采验证引用效果
+
+### 🟡 P3 Hermes 服务器升配与实测
+
+**为什么重要：** 内存只剩几百 MB，13 进程互相挤压；不升配卡片链路仍会超时。
+
+**具体目标：**
+
+- 升配内存 8G + 重启 sidecar/gateway
+- 飞书各 bot 群聊/单聊实测流式卡片
+
+---
+
+## 📝 简历素材提取（Evidence）
+
+### 素材 1：从 0 驱动一个品牌官网完成"可信上线"
+
+- **情境：** 蓝辉官网代码近 ready 但公网不可访问、事实口径冲突、合规有风险
+- **行动：** 主导从备案→DNS→SSL→443 的上线路；三轮技术打磨（sitemap 100%/图片瘦身/lint 清零）；完成 31 文件合规修复与证据口径对齐
+- **结果：** 官网 08-08 正式可访问，SEO 审计 7/10、CWV 全绿（LCP 2.4s）
+
+### 素材 2：把"AI 产文"从单点变成批量内容引擎
+
+- **情境：** GEO 可见性为零，需要批量生产可被 AI 引用的结构化内容
+- **行动：** 部署 GEOFlow（DeepSeek）+ 设计素材库灌料 + 三批任务 + 5 平台写手 agent 矩阵 + 证据纪律
+- **结果：** 一周产 31 篇结构化文章全发布；DeepSeek 采样定位到「顺德大良+轻改一站式」真空位
+
+### 素材 3：跨用户/多岗位的机器人矩阵与流式卡片交付
+
+- **情境：** 销售/主播/拍剪/私域四类岗位都需要飞书 bot，且要实时卡片
+- **行动：** 建 7 profile 独立飞书应用+独立 key；排雷 HFC 流式卡片根因并落成硬机制（execute_code 沙箱 + approvals.deny）；打通生图 MEDIA 回传闭环
+- **结果：** 6 个 bot 真实连接飞书，134 条线索完整卡片显示，图片气泡交付成功

@@ -1,0 +1,145 @@
+---
+title: "2026 W30 周记"
+week: "2026-W30"
+date: "2026-07-27"
+summary: "上线冲刺 + GEO 引擎启动周：官网配置生产域名与门店主图逼近上线；本地 GEOFlow 启动搭建 GEO 运营 workflow；产出搜狐 GEO 关键词分析、理想 L9 GEO 范文改造、底盘护板车型表转 JSON、门店运营系统架构图。"
+highlights:
+  - "官网逼近上线：配置生产域名 + 更新门店主图，LanHui-web-static 就位"
+  - "GEO 内容引擎启动 ⭐：本地 GEOFlow 启动 + 搭建 GEO 运营 workflow"
+  - "搜狐 GEO 关键词分析（佛山贴膜/承美车居）+ 理想 L9 GEO 范文改造报告"
+  - "底盘护板车型表→JSON 结构化；smzdm 封面 SKILL 开发；门店运营系统架构图"
+tags:
+  - weekly
+status: draft
+mood: "productive"
+englishSummary: "Approaching launch + starting the GEO engine: configured production domain and store images on the site; started local GEOFlow and a GEO ops workflow; produced Sohu GEO keyword analyses and an Ideal L9 GEO template rework; structured chassis-guard data to JSON; sketched store operations architecture."
+---
+
+# 2026-W-30 — 上线冲刺前置 + GEO 内容引擎启动
+
+import { Callout } from '@/components/callout'
+
+> **说明：** 这是「官网逼近上线」和「GEO 内容引擎启动」交织的一周。官网从代码就位走向生产配置（域名/门店图），同时本地把 GEOFlow 跑起来、搭了 GEO 运营 workflow，还产出一批 GEO 素材（搜狐关键词、L9 范文改造）。
+
+---
+
+## 🎯 本周待办（MIT）
+
+| # | 目标 | 状态 |
+|---|------|------|
+| 1 | 官网配置生产域名 + 门店主图 | ✅ 完成 |
+| 2 | 本地 GEOFlow 启动 + GEO 运营 workflow | ✅ 完成 |
+| 3 | GEO 素材产出（搜狐关键词/L9 范文改造）| ✅ 完成 |
+| 4 | 底盘数据 JSON + smzdm 封面 SKILL + 门店架构图 | ✅ 完成 |
+
+---
+
+## ✅ 本周进展
+
+### ✅ 已完成
+
+**1. 官网逼近上线（07-22）**
+
+- 配置生产域名（www.lanhuiqinggai.com）与部署所需，更新门店主图（/public/images/stores/image.png），LanHui-web-static 生产交付链路就位。
+
+**2. GEO 内容引擎启动 ⭐（07-23）**
+
+- **本地 GEOFlow 启动** + 搭建一条「GEO 运营 workflow」（已知本地有 GEOFlow 作为内容生产源）
+- 这是把「单点出图/出文」推进到「可重复跑的内容引擎」的起点
+
+**3. GEO 素材产出（07-23）**
+
+- **搜狐 GEO 用户意图关键词分析**：佛山贴膜 / 承美车居 两套报告
+- **理想 L9 GEO 范文改造报告**
+
+**4. 数据与工具（07-23~25）**
+
+- **底盘护板车型表 → JSON**：支持底盘护板的车型 + 底盘保护部位的结构化（XLS→JSON，产品知识数据化的第一步）
+- **smzdm 封面 SKILL 开发**：依据文章内容生成符合什么值得买调性的封面图
+- **门店运营系统架构图**绘制（Codex 07-25）
+
+### 🟡 进行中 / 待完成
+
+| 事项 | 说明 |
+|------|------|
+| 官网上线 | 静态站就绪，下一周部署+SEO 冲刺 |
+| GEO 运营 workflow | 起步，待延展 |
+
+---
+
+## 💡 思考（Insights）
+
+<Callout type="tip">
+**GEOFlow 是「内容生产源」，但要有「运营 workflow」配着才叫引擎。** 单点出图/出文是一次性的，能重复跑的 workflow 才可持续。
+</Callout>
+
+<Callout type="info">
+**车型+底盘保护部位的适配数据（XLS→JSON）是产品知识结构化的第一步。** 这一步做好，后面反复从里面取数、做内容对别，成本都低。
+</Callout>
+
+---
+
+## 🕒 Time Log
+
+| 日期 | 活动 | 项目标签 |
+|------|------|----------|
+| **周三 07-22** | 官网配置生产域名 + 更新门店主图 | `#官网` |
+| **周四 07-23** | GEOFlow 启动 + GEO workflow；搜狐关键词×2；L9 范文改造；底盘护板 JSON；smzdm 封面 SKILL | `#GEO` |
+| **周六 07-25** | 门店运营系统架构图 | `#门店` |
+
+---
+
+## 📚 知识资产 / To Resource
+
+| 资产 | 说明 | 状态 |
+|------|------|------|
+| 搜狐佛山/承美车居 GEO 关键词 | 用户意图分析 | ✅ 完成 |
+| 理想 L9 GEO 范文改造 | 范文重写报告 | ✅ 完成 |
+| 底盘护板车型 JSON | 车型+保护部位结构化 | ✅ 完成 |
+| smzdm 封面 SKILL | 文章→封面图 | ✅ 开发 |
+| 门店运营架构图 | 多角色/多流程 | ✅ 完成 |
+
+---
+
+## 📋 上周回顾
+
+- **W-29（7/13-7/19）** — GEOAnalyzer 迁 GEOALL + 竞品拆解 + 官网静态站初次提交
+- **W-28（7/6-7/12）** — GEO 项目立项三报告 + 官网 UI/UX 打磨
+
+---
+
+## 🎯 下周重点（3 个最重要的方向）
+
+### 🔴 P1 官网正式上线（部署+SEO）
+
+**为什么最重要：** 代码就绪、域名就绪，下一周要完成部署和上线。
+
+**具体目标：**
+
+- 备案、SSL、sitemap；push → 部署 → 公网可访问
+
+### 🟡 P2 蓝辉 GEO 多报告沉淀
+
+**为什么重要：** GEO 立项基础要成体系。
+
+**具体目标：**
+
+- GeoLook 评估、40 条基线问题清单、全景诊断收口
+
+### 🟡 P3 GEOFlow→平台→飞书管线
+
+**为什么重要：** 从产文到改写分发要串起来。
+
+**具体目标：**
+
+- 平台写手矩阵 + 飞书登记闭环成型
+
+---
+
+## 📝 简历素材提取（Evidence）
+
+### 素材：让一台本地引擎批量产「可被 AI 引用」的内容源
+
+- **情境：** 内容靠手工/单点，GEO 可见性没起
+- **行动：** 启动 GEOFlow（DeepSeek）搭运营 workflow，同步产出搜狐关键词、竞品拆解、L9 范文改造、结构化数据
+- **结果：** 给了内容生产一个可持续的「源」，为下一周批量产文铺路

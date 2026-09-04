@@ -1,0 +1,174 @@
+---
+title: "2026 W31 周记"
+week: "2026-W31"
+date: "2026-08-03"
+summary: "工具链分界周：Agent Reach 15 平台信息入口 + 卸载 OpenClaw + Mac 瘦身；把 CoyaWork 正式设为公司目录并跑通周复盘→周记管线；建成 Resume Bridge 简历桥；打通 Alma 驱动 Codex 全链路；teach skill 产出 GEO 运营 5 课 + 零到全栈课程启动；Claude skills 激进精简 -71% tokens。"
+highlights:
+  - "工具链分界清晰 ⭐：Agent Reach v1.5.0 + 卸载 OpenClaw + Mac 瘦身（113MB→1164MB），三件套各管一段"
+  - "CoyaWork 设为公司目录：README + 归位 + coya-blog-writer 双管线（周复盘→周记、项目→项目页）"
+  - "Resume Bridge 简历桥建成 + codex-work-log 批量登记 10 模块卡 + 7 STAR 面试素材"
+  - "Alma 驱动 Codex 全链路 ⭐：companion 派单 + 双远程推送 + Codex 识图"
+  - "teach skill 首战：GEO 运营系统 5 课全完"
+  - "零到全栈课程启动（第 1-5 课）+ Claude skills 精简 -71%"
+tags:
+  - weekly
+status: draft
+mood: "productive"
+englishSummary: "Toolkit clarity week: Gave CoyaWork a clear home with a weekly-review pipeline, built the Resume Bridge, got Alma driving Codex end-to-end, used teach skill to produce a 5-lesson GEO course, launched a zero-to-fullstack workspace, and slimmed Claude skills by 71%."
+---
+
+# 2026-W-31 — 工具链分界清晰 + Resume Bridge + 让 Alma 驱动 Codex
+
+import { Callout } from '@/components/callout'
+
+> **说明：** 这周最大的变化不是多装了工具，而是想明白了工具的「分工」——信息进来（Agent Reach）、知识存住（CoyaPersonal+Hermes）、内容出去（PersonalWebsite），三件套各管一段边界清晰，连卸载都变轻松。同时把 CoyaWork 正式定为公司目录，跑通了从周复盘到周记的内容管线，并让 Alma 能驱动 Codex 干活。
+
+---
+
+## 🎯 本周待办（MIT）
+
+| # | 目标 | 状态 |
+|---|------|------|
+| 1 | **工具链分界清晰**（Agent Reach/卸 OpenClaw/Mac 瘦身）| ✅ 完成 |
+| 2 | **CoyaWork 设为公司目录** + 周复盘→周记管线 | ✅ 完成 |
+| 3 | **Resume Bridge 简历桥** + codex-work-log + STAR 素材 | ✅ 完成 |
+| 4 | **Alma 驱动 Codex 全链路**（companion/双远程/识图）| ✅ 完成 |
+| 5 | teach skill 首战（GEO 运营 5 课）+ 零到全栈课程启动 | ✅ 完成 |
+| 6 | 技能精简（Claude skills 152→26）| ✅ 完成 |
+
+---
+
+## ✅ 本周进展
+
+### ✅ 已完成
+
+**1. 工具链分界清晰 ⭐ — Agent Reach / 卸载 OpenClaw / Mac 瘦身**
+
+- **Agent Reach v1.5.0**：「给 Agent 装上阅读世界的眼睛」，15 平台多后端路由；当天 B站/GitHub/RSS/web 直连可用
+- **卸载 OpenClaw**：生态位被更专的工具占掉，工具要少而精
+- **Mac 瘦身**：清常驻服务，空闲内存 113MB→1164MB、resident 5.3G→4.5G
+- **Archscribe 首战**：resume-bridge 手绘动画架构图；⭐发现 Clash mixed-port=**7897**，git 代理配上后下载全提速
+
+**2. CoyaWork 设为公司目录 + 双管线**
+
+- CoyaWork 明确为「公司工作目录」（不是主目录）：README 使用手册 + CLAUDE.md 定位 + 根目录散乱文件归位
+- **coya-blog-writer 升级双管线**：周复盘→周记（content/weekly）、项目→项目页（content/projects），写一次周复盘，周记是格式化产物
+
+**3. Resume Bridge 简历桥 + 面试素材**
+
+- **coya-resume-bridge skill**：PersonalWebsite→extract→STAR 优化→transform→magic-resume.json；Template-First（v3 模板不可变底座）
+- **codex-work-log skill** + 批量登记 10 张模块卡；7 个真实案例转 STAR+QA 面试素材库
+
+**4. Alma 驱动 Codex 全链路 ⭐（08-01）**
+
+- codex app-server 打通（二进制修复链 + companion 插件 + daemon）
+- **Alma→Codex 派单成功**：修 lanhui-content 采集 skill + lanhui-web-static 双远程推送（4397194，42 文件）+ Codex 识图
+- 3 个必修坑：①config.toml [env] 代理对 app-server 无效，须 env 注入 daemon ②companion 带代理 ③多行 prompt 用 `--` 分隔符
+
+**5. teach skill 首战 + 零到全栈启动**
+
+- **GEO 运营系统教学工作区**：teach skill 5 课全完（蓝图/选题状态机/创作一稿两吃/发布观测/复盘迭代）
+- **《零到全栈》启动**：教学工作区 + 交互式测验组件 + 第 1-5 课（模块 1-3）
+
+**6. 技能精简**
+
+- Claude skills 152→26（固定 token 开销 -71%）；agents/skills 111→1（只留 wx-cli）
+
+### 🟡 进行中 / 待完成
+
+| 事项 | 说明 |
+|------|------|
+| 日志断层 | 07-27~29 每日记录缺失，需补 |
+| 生图欠费 | 星狐 gpt-image-2 503 余额不足，待充值 |
+| 零到全栈 | 练习阶段三选一待定 |
+
+---
+
+## 💡 思考（Insights）
+
+<Callout type="tip">
+**工具链的价值不在数量，在分界清晰。** 想明白信息进来/知识存住/内容出去三件套各管一段，连卸载都轻松——OpenClaw 说卸就卸，因为生态位已被更专的工具占掉。
+</Callout>
+
+<Callout type="info">
+**复盘体系最怕的不是没内容，是没习惯。** 断更 10 周的周记不是没素材，是每次写都要重新搭格式、找数据。模板化、管线化之后，写周记的成本从「写一篇文章」降到「审一份草稿」，习惯才养得起来。
+</Callout>
+
+<Callout type="success">
+**Alma 给 Codex 派单的真实边界 = Codex 分析、Alma 写。** Codex 能做根因分析但只读沙箱拦截写操作（git add 被拒），写操作用户侧或 Alma 执行——分工明确才不会反复踩。
+</Callout>
+
+---
+
+## 🕒 Time Log
+
+| 日期 | 活动 | 项目标签 |
+|------|------|----------|
+| **周四 07-30** | Resume Bridge 搭建 + Template-First 重构 + CoyaPersonal↔PersonalWebsite 桥接 | `#简历` |
+| **周五 07-31** | Agent Reach 安装 + OpenClaw 卸载 + Mac 瘦身；CoyaWork 设为公司目录；双管线；codex-work-log + STAR 素材；Archscribe + 代理发现；skill 精选 | `#工具链 #基建` |
+| **周六 08-01** | Alma 驱动 Codex 打通 + 修复采集 skill + 双远程推送；识图；skill 激进精简；teach skill GEO 运营 5 课 | `#Codex #教学` |
+| **周日 08-02** | 零到全栈课程启动（第 1-5 课）+ 交互式测验 | `#学习` |
+
+---
+
+## 📚 知识资产 / To Resource
+
+| 资产 | 说明 | 状态 |
+|------|------|------|
+| Resume Bridge | PersonalWebsite→STAR→magic-resume | ✅ 建成 |
+| codex-work-log + STAR 库 | 10 模块卡 + 7 面试案例 | ✅ 完成 |
+| teach: GEO 运营 5 课 | 教学工作区 0001-0005 | ✅ 完成 |
+| 零到全栈工作区 | lessons 0001-0005 | ✅ 进行中 |
+| opencli 新媒体工具链 | 167 站点 1289 命令 playbook | ✅ 完成 |
+
+---
+
+## 📋 上周回顾
+
+- **W-30（7/20-7/26）** — 官网逼近上线 + GEOFlow 引擎启动 + 搜狐关键词/L9 范文改造
+- **W-29（7/13-7/19）** — GEOAnalyzer 迁 GEOALL + 竞品拆解 + 官网静态站初次提交
+
+---
+
+## 🎯 下周重点（3 个最重要的方向）
+
+### 🔴 P1 GEO 内容引擎跑通
+
+**为什么最重要：** 下周 8/4 起是 GEO 立项+部署，这是内容生意的引擎。
+
+**具体目标：**
+
+- GEOFlow 部署（DeepSeek）+ 素材灌料 + 三批产文
+- geo-expert 诊断 + 40 条基线清单
+
+### 🟡 P2 官网逼近上线
+
+**为什么重要：** 静态站就绪，下周做部署+SEO 冲刺。
+
+**具体目标：**
+
+- 配置生产域名/门店图；备案、SSL、sitemap
+
+### 🟡 P3 学习排期
+
+**为什么重要：** 零到全栈刚起步，保持节奏能毕业。
+
+**具体目标：**
+
+- 第 6 课起推进，learning-path 知识卡并行
+
+---
+
+## 📝 简历素材提取（Evidence）
+
+### 素材 1：整合跨工具的个人知识/输出体系
+
+- **情境：** 工具多、边界乱，周记断更、简历靠手工
+- **行动：** 定分工（Agent Reach 信息/Hermes 知识/PersonalWebsite 输出），CoyaWork 设为公司目录 + 双管线 + Resume Bridge
+- **结果：** 周记成本从「写文章」降到「审草稿」，简历一键从网站生成
+
+### 素材 2：让一个 Agent 调用另一个 Agent 干活
+
+- **情境：** 需要 Codex 参与编码但登录态/通道不通
+- **行动：** 打通 Alma→Codex companion 派单 + 双远程推送 + 识图
+- **结果：** 派单成功修复采集 skill、提交 42 文件双远程，排掉 3 个必修坑

@@ -1,0 +1,144 @@
+---
+title: "2026 W27 周记"
+week: "2026-W27"
+date: "2026-07-06"
+summary: "官网开发周 + CoyaWork 复盘结构：Codex 并行做官网页面（小鹏GX 组件迁移、品牌博客页、文章管理 SPEC 状态机 + 封面上传）；Hermes 销售 agent 文档化 + CRM 线索 SKILL 按销售反馈优化；把 CoyaWork 复盘/知识库结构立起来并写入第一条标准 Daily Work Log。"
+highlights:
+  - "官网开发推进：极氪9X 组件模板 → 小鹏 GX 页面；品牌博客展示页优化；文章管理 SPEC 后台状态机 + 批量 API + 封面上传"
+  - "Hermes 销售 agent 文档化 + 挖掘优化点 + CRM 线索录入 SKILL 优化（微信优先口径）"
+  - "CoyaWork 复盘/知识库结构建立 + 第一条标准 Daily Work Log（2026-07-05）"
+tags:
+  - weekly
+status: draft
+mood: "focused"
+englishSummary: "Straddle week bridging June and July: Codex worked in parallel on site pages (XPENG GX from Zeekr 9X template, blog page, article-management SPEC state machine + cover upload); documented the Hermes sales profile and optimized the CRM lead-entry SKILL per sales feedback; established the CoyaWork review structure with the first standard daily work log."
+---
+
+# 2026-W-27 — 官网开发推进 + Hermes 销售 Agent + CoyaWork 复盘结构
+
+import { Callout } from '@/components/callout'
+
+> **说明：** 这周跨了 6/29-7/5。一头是官网开发（Codex 并行做页面和文章管理后台），一头是 Hermes 销售 agent 的文档化与 CRM 优化，还顺手把 CoyaWork 的复盘/知识库结构立了起来，写入第一条标准 Daily Work Log。
+
+---
+
+## 🎯 本周待办（MIT）
+
+| # | 目标 | 状态 |
+|---|------|------|
+| 1 | 官网页面开发（小鹏GX / 品牌博客 / 文章管理 SPEC）| ✅ 完成 |
+| 2 | Hermes 销售 agent 文档化 + 优化点挖掘 | ✅ 完成 |
+| 3 | CRM 线索录入 SKILL 按销售反馈优化 | ✅ 完成 |
+| 4 | CoyaWork 复盘/知识库结构 + 第一条 Daily Work Log | ✅ 完成 |
+
+---
+
+## ✅ 本周进展
+
+### ✅ 已完成
+
+**1. 官网开发（06-30~07-04）**
+
+- **小鹏 GX 页面**：用 prompt-boost 定位极氪 9X 页面/组件设计，作为模板搭建小鹏 GX 页面
+- **品牌博客展示页优化**（07-04）
+- **文章管理 SPEC 实现**：后台状态机 + 批量 API（forked 分支并行 worker）+ 封面图上传/管理
+- LanHui-ALL 设计素材整理（picture 设计 / 5-1 海报 30 张）
+
+**2. Hermes 销售 agent（06-29~30）**
+
+- **profile 文档化**：建立 Word 文档，记录关键 Skill / Chrome / Hook 及飞书连接模块
+- **挖掘销售优化点**：从销售视角找 profile 可改进处
+- **CRM 线索 SKILL 优化** ⭐：按销售反馈——线索建立初期可能只加了客户微信、不一定有电话，调整为「微信优先」录入口径
+
+**3. CoyaWork 复盘结构（07-05）⭐**
+
+- 配置 weekly/monthly/quarterly 模板 + Dashboard + wiki 入口 + agent 索引
+- **写入第一条标准 Daily Work Log**（2026-W27/2026-07-05），确立「project/month/week/day」工作记录路径
+
+### 🟡 进行中 / 待完成
+
+| 事项 | 说明 |
+|------|------|
+| 官网后续开发 | 持续迭代 |
+| GEO 立项 | 下一周 07-12 开跑 |
+
+---
+
+## 💡 思考（Insights）
+
+<Callout type="info">
+**销售工作面暴露的真相：线索不等于电话。** 销售人员可能先加微信、后知电话。CRM 设计若默认「必须有电话」就会拦路——按销售实际动线调口径，比按理想模型硬套重要。
+</Callout>
+
+<Callout type="success">
+**Codex 并行改多个文件时必须写「不要 revert 你没创建的改动」。** 多 worker 协作，越界 revert 会互相踩，这是并行开发的第一纪律。
+</Callout>
+
+---
+
+## 🕒 Time Log
+
+| 日期 | 活动 | 项目标签 |
+|------|------|----------|
+| **周一 06-29** | 官网 Vibe Coding 页 PRD 问题分析；Hermes profile 建 Word 文档；挖掘销售优化点；改 CRM 线索 SKILL | `#官网 #Hermes` |
+| **周二 06-30** | crm-workorder-entry 梳理；sales agent 对接 | `#CRM` |
+| **周三 07-02** | 极氪9X → 小鹏GX 页面组件迁移 | `#官网` |
+| **周五 07-04** | 品牌博客页优化；文章管理 SPEC 状态机 + 封面上传；海报素材 | `#官网` |
+| **周日 07-05** | CoyaWork 复盘结构 + 第一条 Daily Work Log | `#基建` |
+
+---
+
+## 📚 知识资产 / To Resource
+
+| 资产 | 说明 | 状态 |
+|------|------|------|
+| 小鹏 GX 页面 | 极氪 9X 模板迁移 | ✅ 完成 |
+| 文章管理 SPEC + 状态机 | 批量 API + 封面 | ✅ 完成 |
+| Hermes profile Word 文档 | Skill/Chrome/Hook/飞书 | ✅ 完成 |
+| CRM 线索 SKILL（微信优先）| 符合销售动线 | ✅ 优化 |
+| CoyaWork 复盘结构 + Daily Log | 工作记录路径 | ✅ 建成 |
+
+---
+
+## 📋 上周回顾
+
+- **W-26（6/22-6/28）** — PRD 重构 + 个人知识体系成型 + Codex 编码审查
+- **W-25（6/15-6/21）** — 产品素材 + CRM 命名整顿 + 英语助理架构 + PRD 初读
+
+---
+
+## 🎯 下周重点（3 个最重要的方向）
+
+### 🔴 P1 GEO 项目立项
+
+**为什么最重要：** 下一周 07-12 GEO 三报告立项，这是新的增长引擎。
+
+**具体目标：**
+
+- 全景诊断 / 基础监测 / DeepSeek 测试三报告
+
+### 🟡 P2 官网 UI/UX
+
+**为什么重要：** 页面在铺，体验要跟上。
+
+**具体目标：**
+
+- 首页改进 + 规范对齐
+
+### 🟡 P3 CRM 体系化
+
+**为什么重要：** 单点优化完，要向体系化走。
+
+**具体目标：**
+
+- 施工提成模块 / 线索到成交闭环
+
+---
+
+## 📝 简历素材提取（Evidence）
+
+### 素材：把 Agent 能力做成「符合一线真实动线」的 CRM
+
+- **情境：** 销售建线索时可能只有微信、没电话，理想模型会拦路
+- **行动：** 按销售反馈调整 CRM 线索录入口径为「微信优先」，并文档化 profile、挖掘优化点
+- **结果：** CRM 录入贴合真实工作流，降低了使用门槛

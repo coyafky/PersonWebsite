@@ -1,0 +1,140 @@
+---
+title: "2026 W26 周记"
+week: "2026-W26"
+date: "2026-06-29"
+summary: "官网 PRD 重构 + 代码规范 + 个人知识体系成型周：同步 trellis init codex；审核并更新 LanHui 官网 PRD/SPEC；把「博客项目+Hermes+CLI+Codex+Obsidian」整合成个人知识体系；审查 Codex 编码方式并优化产品页。"
+highlights:
+  - "LanHui 官网 PRD/SPEC 重构 ⭐：审核做得好/待改进模块，按截图更新 PRD/SPEC 页面文档"
+  - "个人知识体系成型 ⭐：博客项目 + Hermes + CLI + Codex + Obsidian 整合为个人体系"
+  - "Codex 编码方式审查 + 优化 /product/wenjie 页（去「电话待补充」）+ imagegen 产品图 + trellis"
+tags:
+  - weekly
+status: draft
+mood: "focused"
+englishSummary: "PRD rework and toolchain week: trellis init codex; reviewed and updated the LanHui site PRD/SPEC; integrated the personal blog + Hermes + CLI + Codex + Obsidian into one knowledge system; audited Codex's coding approach and improved the product page."
+---
+
+# 2026-W-26 — 官网 PRD 重构 + 代码规范 + 个人知识体系成型
+
+import { Callout } from '@/components/callout'
+
+> **说明：** 这周主线是「对齐」。一是把官网早期的 Vibe Coding PRD 重新审核、重构对齐；二是把个人工具链整合成一套知识体系（博客+Hermes+CLI+Codex+Obsidian）；三是审查 Codex 的编码方式、优化产品页。
+
+---
+
+## 🎯 本周待办（MIT）
+
+| # | 目标 | 状态 |
+|---|------|------|
+| 1 | LanHui 官网 PRD/SPEC 审核 + 更新 | ✅ 完成 |
+| 2 | 个人知识体系整合 | ✅ 完成 |
+| 3 | Codex 编码方式审查 + 产品页优化 | ✅ 完成 |
+| 4 | trellis init codex + imagegen 产品图 | ✅ 完成 |
+
+---
+
+## ✅ 本周进展
+
+### ✅ 已完成
+
+**1. LanHui 官网 PRD/SPEC 重构（06-22~24）**
+
+- 审核 PRD 文档：哪些模块做得好、哪些要改进
+- 按截图更新 PRD 与 SPEC 页面文档，为正式开发对齐口径
+
+**2. 个人知识体系成型（06-25）⭐**
+
+- 把「博客项目 + Hermes + CLI + Codex + Obsidian 文件夹整理」整合成一套个人知识体系
+
+**3. 代码规范与页面优化（06-26~27）**
+
+- **审查 Codex 编码方式**：依赖 lanhui-website 的项目执行方式审查
+- **/product/wenjie 页优化**：去除组件中「电话待补充」（产品页不需要）
+- **imagegen 按产品生成符合内容的图** + trellis init codex
+
+### 🟡 进行中 / 待完成
+
+| 事项 | 说明 |
+|------|------|
+| PRD 仍偏杂 | Vibe Coding 遗留，重构持续 |
+| 个人知识体系 | 整合完成，content 结构待落地 |
+
+---
+
+## 💡 思考（Insights）
+
+<Callout type="info">
+**早期 Vibe Coding 留下的 PRD 问题不是「代码」，而是「口径」：偏杂、页面不好看、内容没处理好。** 重构成对齐的一步是「按真实截图更新」，让 PRD 跟得上现实，而不是躺在文档里自说自话。
+</Callout>
+
+<Callout type="success">
+**个人知识体系不是「多装几个工具」，是把 博客输出 / Hermes 记忆 / Codex 执行 / Obsidian 整理串成一条链路。** 这周把四者合一是这个体系的关键一步。
+</Callout>
+
+---
+
+## 🕒 Time Log
+
+| 日期 | 活动 | 项目标签 |
+|------|------|----------|
+| **周一 06-22** | trellis init codex；审核 PRD 做得好/待改进 | `#官网` |
+| **周三 06-24** | 按截图更新 PRD 与 SPEC | `#官网` |
+| **周四 06-25** | 个人知识体系整合（博客+Hermes+CLI+Codex+Obsidian）| `#基建` |
+| **周五 06-26** | 审查 Codex 编码方式；/product/wenjie 去「电话待补充」| `#官网` |
+| **周六 06-27** | imagegen 生成符合产品图 | `#官网` |
+
+---
+
+## 📚 知识资产 / To Resource
+
+| 资产 | 说明 | 状态 |
+|------|------|------|
+| LanHui PRD/SPEC v2 | 重构对齐 | ✅ 完成 |
+| 个人知识体系 | 博客+Hermes+CLI+Codex+Obsidian | ✅ 整合 |
+| product-page 优化 | wenjie 去占位电话 | ✅ 完成 |
+| imagegen 产品图 | 按产品生成 | ✅ 完成 |
+
+---
+
+## 📋 上周回顾
+
+- **W-25（6/15-6/21）** — 产品素材 + CRM 命名整顿 + 英语助理架构 + PRD 初读
+- **W-24（6/8-6/14）** — Personal Website 立项 + Hermes/sales agent 工程化
+
+---
+
+## 🎯 下周重点（3 个最重要的方向）
+
+### 🔴 P1 官网开发推进
+
+**为什么最重要：** PRD 对齐后可以放心铺页面。
+
+**具体目标：**
+
+- 小鹏 GX 组件迁移 / 品牌博客页 / 文章管理 SPEC
+
+### 🟡 P2 Hermes profile 文档化
+
+**为什么重要：** 销售 agent 要能交接、要能优化。
+
+**具体目标：**
+
+- 建 Word 文档 + 挖掘优化点 + CRM 线索口径
+
+### 🟡 P3 CoyaWork 复盘结构
+
+**为什么重要：** 数据台账要立起来。
+
+**具体目标：**
+
+- 周/月复盘 + Daily Work Log 结构
+
+---
+
+## 📝 简历素材提取（Evidence）
+
+### 素材：收敛一个早期 Vibe Coding 项目的 PRD 口径
+
+- **情境：** 官网 PRD 由早期 Vibe Coding 生成，偏杂、口径乱
+- **行动：** 审核 PRD 做得好/待改进的模块，按真实截图重写 PRD/SPEC，并审查编码方式、清掉页面占位信息
+- **结果：** 让 PRD 与真实页面对齐，为后续稳定开发打底

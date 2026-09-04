@@ -1,0 +1,176 @@
+---
+title: "2026 W33 周记"
+week: "2026-W33"
+date: "2026-08-17"
+summary: "知识库建库周 + AI-Video 生产体系成熟：Coyawiki 从 0 建成到 1398 概念全量规整（1398 概念/双链 0 死链）；蓝小辉 IP 资产库 38 JSON + 四个 AI 视频项目落地；新媒体运营基建（抖音采集/账号画像/生图通道）+ 工具技能生态 + GEOFlow 内容管线固化。"
+highlights:
+  - "Coyawiki 知识库建成 ⭐：1398 概念、0 不合规、8936 双链 0 死链；三大域按知识本体重组，Obsidian 零幽灵链接"
+  - "蓝小辉 IP 资产库 38 JSON + projectOne/Two/Four/Five 四个 AI 视频项目，doubao-video-pipeline 六步流水线成熟可复用"
+  - "生图全链路闭合：米醋 MCP + 服务器 mihomo 代理打通，移除星狐"
+  - "GEOFlow→平台→飞书内容管线固化：命名规范 v2 + 写手 agent 全链路跑通 + 活人感写作改造"
+  - "工具技能生态：opencode skill 挂载 + YouTube转文 + GEOHub + vibe-hub 术语库 + 小红书 sub agent"
+  - "《如何独立思考》共读启动 + page-by-page-reading 逐页共读机制建成"
+tags:
+  - weekly
+status: draft
+mood: "focused"
+englishSummary: "Knowledge-base build week + mature AI-video pipeline: Coyawiki grown from zero to 1398 concepts with zero broken links; Lanxiaohui IP asset library (38 JSONs) + 4 AI video projects; new-media ops infrastructure; tool/skill ecosystem; and a solidified GEOFlow-to-platform pipeline."
+---
+
+# 2026-W-33 — 知识库建库 + AI-Video 生产体系 + 工具技能生态
+
+import { Callout } from '@/components/callout'
+
+> **说明：** 这周两大主题：一是把个人/业务知识沉淀成可检索的知识库（Coyawiki 从 0 到 1398 概念），二是让 AI 视频生产体系成熟可复用（doubao 六步流水线 + 蓝小辉 IP 资产库）。中间穿插了新媒体基建、工具技能生态和 GEOFlow 内容管线固化。
+
+---
+
+## 🎯 本周待办（MIT）
+
+| # | 目标 | 状态 |
+|---|------|------|
+| 1 | **Coyawiki 知识库建成**（AI-知识库/LLM Wiki 导入 + 三大域重组 + 双链修复）| ✅ 完成 |
+| 2 | **AI-Video 生产体系**（蓝小辉 38 JSON + projectOne~Five + doubao 六步流水线）| ✅ 完成 |
+| 3 | **新媒体运营基建**（wheel-size 抓取 + 抖音采集 + 生图通道闭合）| ✅ 完成 |
+| 4 | **工具技能生态**（opencode/GEOHub/youtube-to-article/vibe-hub/小红书 sub agent）| ✅ 完成 |
+| 5 | **GEOFlow 内容管线固化**（命名规范 v2 + 活人感写作）| ✅ 完成 |
+| 6 | 《如何独立思考》共读启动 | ✅ 完成 |
+
+---
+
+## ✅ 本周进展
+
+### ✅ 已完成
+
+**1. Coyawiki 知识库 ⭐ — 从 0 到 1398 概念**
+
+这是本周单体最大的工程，核心目标是「知识库 = 知识本体分类，不是导入批次/来源的镜像」。
+
+- **导入**：AI-知识库 67 文件（66 概念）、GEO-AI 时代的流量密码、Hermes 专题（34 概念，脱敏 31 处）、GEO 笔记（82 概念）、**LLM Wiki 全量 1182 概念**（分 10 批 30+ 并行 agent）→ 全库 216→1398
+- **重组**：三大核心域（ai-agent/geo/web-dev）从「来源分区」彻底重组为「知识模块」；entities 按类型分组；删除全部来源镜像层
+- **双链修复** ⭐：11736 双链 → 8998 替换为真实文件名 + 2738 死链转纯文本 → **8936 双链 0 死链、Obsidian 零幽灵链接**
+- **规范体系**：coyawiki-ingest/link/lint 三个子 skill 建成
+
+### ✅ 已完成
+
+**2. AI-Video 生产体系 — 蓝小辉 IP + 四个项目**
+
+- **蓝小辉 IP 资产库**：identity/expression/pose/props/scene 共 **38 JSON** 全校验通过 + 微信表情包 16 个
+- **项目**：projectOne《别扔！你的旧轮毂可能是钱》/ projectTwo《轮毂逃跑了》（新角色 WHEEL_MASCOT_V1）/ projectFour 轮毂变装（GRWM 结构→写实 1:18 合金车模→16:9 横屏）/ projectFive《我是蓝小辉》破冰（100% 复用既有资产）
+- **doubao-video-pipeline 六步流水线**成熟：选题→脚本五段式→分镜→画面画布+主体→关键帧 JSON→video-doc，逐步演进成可复用技能（week后续升级：ChatGPT 6-shot 预览、beats 多帧、豆包免费模式）
+
+### ✅ 已完成
+
+**3. 新媒体运营基建**
+
+- **wheel-size 轮毂规格抓取器**：267 品牌 / 57256 车型年页，launchd 每日 03:00 自动；遇 WAF 果断转人工核录 Markdown 库
+- **抖音采集三件套**：作品清单采集 / 账号风格分析 / 文案批量解析 skill
+- **生图通道统一**：移除星狐 → 米醋 MCP；**服务器 mihomo 代理打通**（跨境 Cloudflare 提速 17 倍），生图全链路闭合
+
+### ✅ 已完成
+
+**4. 工具技能生态**（08-11/12）
+
+- **opencode skill 生态**：8 个工具 skill + SEO 内容增长集合，37 项目级 skill 全局挂载，Alma↔opencode 软链互通
+- **youtube-to-article**：YouTube→中文长文流水线（opencli 免 key + human-writing + check_prose 终检）
+- **GEOHub** 开源引擎接入 geo-expert（证据约束 skill 库）
+- **vibe-hub** 术语库 245 词条 + anti-ai-flavor 25 个 AI 味清单
+- **小红书运营工作台 + sub agent** + create-alma-subagent skill 固化
+
+### ✅ 已完成
+
+**5. GEOFlow 内容管线固化 + 部署工具**
+
+- **命名规范 v2**：`MMDD-平台名-主题-V1`（平台名必填）
+- **GEOFlow→平台→飞书全链路跑通**：母版08(问界M9)→autohome 写手→飞书→CT-0008→母版状态回写
+- **活人感写作改造** ⭐：living-feel-guide 七要素（只改表达不碰数据红线），autohome 稿从机构腔→活人感
+- 数字人口播方案 PDF + OpenSEO + dsh 部署
+
+### 🟡 进行中 / 待完成
+
+| 事项 | 说明 |
+|------|------|
+| 知识库待复核 | 1398 概念 status 全 unverified，待补 verified: human:coya |
+| wheel-size 数据 | 人工核录进度慢，按天推进 |
+| 小红书工作台 | Claude Code 接手开发，P0/P1 待跟进 |
+
+---
+
+## 💡 思考（Insights）
+
+<Callout type="tip">
+**知识库的价值 = 按知识本体分类，不是按导入批次分类。** notes/llm-wiki/books 按来源分区会让同一知识散落三处；重组为知识模块后认知密度翻倍。这是 Coyawiki 最值的一次架构决策。
+</Callout>
+
+<Callout type="info">
+**Obsidian 双链必须指向真实文件名。** 否则点击会新建幽灵空文件——全库 11736 双链清理验证了这条规律。
+</Callout>
+
+<Callout type="success">
+**活人感 ≠ 虚构事实。** 只改表达方式（机构腔→口语化），数据红线一步不碰。「适合家庭用户」→「长辈上车费劲」这种场景翻译才是活人感的正确用法。
+</Callout>
+
+---
+
+## 🕒 Time Log
+
+| 日期 | 活动 | 项目标签 |
+|------|------|----------|
+| **周一 08-10** | Coyawiki 建库 + 导入（AI-知识库/LLM Wiki）| `#知识库` |
+| **周二 08-11** | LLM Wiki 全量 1182 概念（10 批 30+ agent）；工具技能生态（opencode/YouTube转文/GEOHub）；Doubao 流水线升级 | `#知识库 #工具链` |
+| **周三 08-12** | 三大域重组（来源分区→知识模块）；vibe-hub 术语库；《如何独立思考》共读开跑 | `#知识库 #学习` |
+| **周四 08-13** | 双链修复 8998；新媒体基建（wheel-size/抖音采集/生图通道）| `#知识库 #新媒体` |
+| **周五 08-14** | 蓝小辉 IP 资产库 38 JSON + projectFour/Five + 生图全链路闭合 | `#AI视频` |
+| **周六 08-15** | Coyawiki 结构化加工 25 篇 + skill 体系 | `#知识库` |
+| **周日 08-16** | 全库双链统一修复 8936/0 死链 + GEO 域重组 + GEOFlow 管线固化 + 活人感写作 | `#知识库 #内容管线` |
+
+---
+
+## 📚 知识资产 / To Resource
+
+| 资产 | 说明 | 状态 |
+|------|------|------|
+| Coyawiki 知识库 | 1398 概念、8936 双链 0 死链 | ✅ 完成 |
+| cocayawiki-ingest/link/lint | 知识库三个维护 skill | ✅ 建成 |
+| 蓝小辉 IP 资产库 | 38 JSON + 16 表情包 | ✅ 完成 |
+| AI-Video projectOne~Five | 五个视频项目 + 六步流水线 | ✅ 完成 |
+| 抖音采集/账号分析 skill | 3 件套 | ✅ 建成 |
+| dingdoubao-video-pipeline | 六步视频流水线 skill | ✅ v2 |
+| GEOFlow→平台→飞书管线 | 命名规范 v2 + 写手闭环 | ✅ 固化 |
+
+---
+
+## 📋 上周回顾
+
+- **W-32（8/3-8/9）** — 官网正式上线 + GEO 内容引擎（31 篇）+ Hermes 7-profile 矩阵 + 学习毕业
+- **W-31（7/27-8/2）** — 工具链分界 + CoyaWork 设为公司目录 + Alma 驱动 Codex
+
+---
+
+## 🎯 下周重点（3 个最重要的方向）
+
+### 🔴 P1 内容生产工业化
+
+**为什么最重要：** 知识库刚建好，下一个跃迁是把知识变成能规模化的内容。
+
+**具体目标：**
+
+- 11 套「100问」选题库落地 + GEOFlow 批量产母版
+- GEOFlow→平台→飞书改写闭环跑通，母版上量
+
+### 🟡 P2 AI-Video 项目落地推进
+
+**为什么重要：** 资产和流水线成熟了，差的是出片。
+
+**具体目标：**
+
+- projectFour/Five 关键帧生成 → Gate → 豆包抽卡 → 剪辑
+
+### 🟡 P3 知识库收口 + SEO 基建
+
+**为什么重要：** 1398 概念要复核补 verified，官网 SEO 基建要起步。
+
+**具体目标：**
+
+- 补 verified: human:coya
+- 官网 URL契约/robots/sitemap/llms.txt 落地（下一周做）

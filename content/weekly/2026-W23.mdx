@@ -1,0 +1,136 @@
+---
+title: "2026 W23 周记"
+week: "2026-W23"
+date: "2026-06-08"
+summary: "研究与拆解周：用软件工程思维拆解竞品官网（快来效猫 moxiaoer.com.cn）的技术路线/内容策略/业务逻辑，作为官网借鉴蓝本；同时铺 GEO 调研（yao-geo-skills、什么值得买车膜调研）和豆包问题测试流程。"
+highlights:
+  - "竞品官网深拆 ⭐：moxiaoer.com.cn 按「页面模块→内容策略→技术实现→业务逻辑→为什么→怎么借鉴」六层拆解"
+  - "豆包测试闭环探索：缺 API 改用浏览器测试，摸索收集结果与链接"
+  - "GEO 调研起步：yao-geo-skills / hermes-pro / 什么值得买车膜调研"
+tags:
+  - weekly
+status: draft
+mood: "productive"
+englishSummary: "Research and teardown week: dissected a competitor website (moxiaoer.com.cn) by page-module, content strategy, technical implementation, business logic and how to borrow from it; started GEO research (yao-geo-skills, Smzdm car-film research) and a Doubao question-testing loop."
+---
+
+# 2026-W-23 — 研究与拆解：竞品官网深拆 + GEO 调研起步
+
+import { Callout } from '@/components/callout'
+
+> **说明：** 这周是「研究打底」周。用软件工程思维把一个竞品官网按六层拆解，作为我们官网/内容搭建的蓝本；同时把 GEO 调研和豆包问题测试流程起步。
+
+---
+
+## 🎯 本周待办（MIT）
+
+| # | 目标 | 状态 |
+|---|------|------|
+| 1 | 竞品官网深拆（moxiaoer.com.cn 六层）| ✅ 完成 |
+| 2 | 豆包问题测试闭环 | ✅ 探索 |
+| 3 | GEO 调研起步 | ✅ 完成 |
+
+---
+
+## ✅ 本周进展
+
+### ✅ 已完成
+
+**1. 竞品官网深拆（06-04~06）⭐**
+
+- **moxiaoer.com.cn 竞品拆解**：按「页面模块→内容策略→技术实现→业务逻辑→为什么这么做→我们怎么借鉴」六层拆
+- 追加拆技术路线/路由细节/网站布局/功能模块/图片位置
+- 目标明确：先拆懂竞品官网怎么做的，作为官网蓝本
+
+**2. 豆包问题测试闭环（06-01）**
+
+- 场景：要测用户会问豆包的问题，但缺 API；改成浏览器测试，摸索「测试结果 + 源链接该怎么收集」的流程
+
+**3. GEO 调研起步（06-05）**
+
+- 学习 yaojingang/yao-geo-skills；读 hermes-pro 相关文档；什么值得买「车膜」目标调研
+- 素材储备：参考插图项目 helloianneo/ian-xiaohei-illustrations（后续应用）
+
+### 🟡 进行中 / 待完成
+
+| 事项 | 说明 |
+|------|------|
+| 豆包测试 | 浏览器方案在摸索，未定型 |
+
+---
+
+## 💡 思考（Insights）
+
+<Callout type="tip">
+**拆竞品不能只看「好看」，要用「为什么这么做 / 我们怎么借鉴」收口。** 六层拆解里，最后两层才是让拆解变成行动的钥匙。
+</Callout>
+
+<Callout type="info">
+**测试「用户会问 AI 的问题」缺 API 时的兜底是浏览器。** 用真实浏览器测 + 收集结果和链接，能绕开接口成本先把数据拿到。
+</Callout>
+
+---
+
+## 🕒 Time Log
+
+| 日期 | 活动 | 项目标签 |
+|------|------|----------|
+| **周一 06-01** | 豆包问题测试闭环探索 | `#GEO` |
+| **周三 06-03** | 参考插图项目 | `#素材` |
+| **周四 06-04** | moxiaoer 官网六层拆解 | `#官网` |
+| **周五 06-05** | GEO 调研（yao-geo-skills/什么值得买）| `#GEO` |
+| **周六 06-06** | 继续拆 moxiaoer 技术路线/布局 | `#官网` |
+
+---
+
+## 📚 知识资产 / To Resource
+
+| 资产 | 说明 | 状态 |
+|------|------|------|
+| moxiaoer 拆解报告 | 六层官网蓝本 | ✅ 完成 |
+| 豆包测试流程 | 浏览器兜底方案 | 🟡 探索 |
+| GEO 调研笔记 | yao-geo-skills/行业调研 | ✅ 完成 |
+
+---
+
+## 📋 上周回顾
+
+- **W-22（5/25-5/31）** — （数据缺口占位，无可恢复日志）
+
+---
+
+## 🎯 下周重点（3 个最重要的方向）
+
+### 🔴 P1 Personal Website 立项
+
+**为什么最重要：** 研究完要开始建自己的东西。
+
+**具体目标：**
+
+- Vercel + Next.js + MDX + Hermes 接管立项
+
+### 🟡 P2 Hermes 工程化
+
+**为什么重要：** agent 要按项目管起来。
+
+**具体目标：**
+
+- Hermes/sales agent 项目制
+
+### 🟡 P3 GEO 持续积累
+
+**为什么重要：** 调研要沉淀成可用素材。
+
+**具体目标：**
+
+- 整理 GEO 企业应用案例
+
+---
+
+## 📝 简历素材提取（Evidence）
+
+### 素材：用软件工程思维拆解竞品官网为内容蓝本
+
+- **情境：** 官网和内容搭建缺参照系
+- **行动：** 按六层（模块/策略/技术/业务逻辑/为什么/怎么借鉴）拆解竞品官网
+- **结果：** 得到一份可落地的官网/内容蓝本，而非单纯「看对手」

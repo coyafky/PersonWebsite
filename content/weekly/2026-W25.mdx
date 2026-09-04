@@ -1,0 +1,129 @@
+---
+title: "2026 W25 周记"
+week: "2026-W25"
+date: "2026-06-22"
+summary: "多线并行周：产品素材生产（imagegen 4:3）+ CRM skill 命名整顿 + 初中英语学习 Hermes 助理架构设计 + GEO 企业应用调研 + 官网 PRD 初读 + trellis 学习。主线是给 LanHui 官网的 PRD 打底。"
+highlights:
+  - "图片素材生产：imagegen 4:3 1200×900 画布出产品图"
+  - "CRM skill 设计整顿：修订 ymyy-sales-agent 的 crm skill 命名与设计"
+  - "初中英语学习 Hermes 助理架构：需求挖掘 + 基础架构图"
+  - "GEO 企业应用调研：GitHub 搜 AI 搜索引擎优化项目"
+  - "LanHui 官网 PRD 初读；trellis 学习"
+tags:
+  - weekly
+status: draft
+mood: "productive"
+englishSummary: "A parallel-threads week: product image generation (imagegen 4:3), CRM skill naming cleanup, a middle-school English learning Hermes assistant architecture, GEO enterprise research, reading the LanHui PRD, and trellis docs."
+---
+
+# 2026-W-25 — 多线并行：素材 / CRM 整顿 / 英语助理架构 / GEO 调研
+
+import { Callout } from '@/components/callout'
+
+> **说明：** 这周是多线程的一周，主线是给 LanHui 官网的 PRD 打底，同时并列推进产品素材、CRM skill 整顿、英语学习助理架构和 GEO 企业调研。
+
+---
+
+## 🎯 本周待办（MIT）
+
+| # | 目标 | 状态 |
+|---|------|------|
+| 1 | 产品素材（imagegen 4:3）| ✅ 完成 |
+| 2 | CRM skill 命名整顿 | ✅ 完成 |
+| 3 | 初中英语 Hermes 助理架构 | ✅ 完成 |
+| 4 | GEO 企业应用调研 | ✅ 完成 |
+| 5 | 官网 PRD 初读 + trellis 学习 | ✅ 完成 |
+
+---
+
+## ✅ 本周进展
+
+### ✅ 已完成
+
+**1. 产品素材与数据整理**
+
+- **imagegen 生产产品图**：4:3 1200×900 画布出产品配图
+- **CRM skill 整顿**：修订 `ymyy-sales-agent/skills/crm` 的命名与设计问题
+
+**2. 多线调研与设计**
+
+- **初中英语学习 Hermes 助理**：挖掘用户需求 + 拟定基础架构图（如何辅助学习）
+- **GEO 企业应用调研**：GitHub 找「GEO / AI 搜索引擎优化」项目、怎么应用到企业
+- **LanHui 官网 PRD 初读**：阅读 `docs/PRD/00_MASTER_PRD.md`
+- **工具学习**：trytrellis 安装与文档；BOSS 直聘查「AI 专员」岗位
+
+### 🟡 进行中 / 待完成
+
+| 事项 | 说明 |
+|------|------|
+| 官网 PRD | 初读完成，待深度审核/重构（W26）|
+| 英语助理 | 架构拟出，落地待排 |
+
+---
+
+## 💡 思考（Insights）
+
+<Callout type="info">
+**做一个 Hermes 助理（如初中英语）要先「挖掘需求」再画架构，不是上来就写功能。** 需求的源头是「怎么辅助他们更好地学习」，架构是需求的下游。
+</Callout>
+
+<Callout type="tip">
+**CRM 早期命名随意，需要系统性整顿。** 这一点在后面 W33 的「施工单四分类合并」等又出现多次——命名的规范能省掉很多后续混乱。
+</Callout>
+
+---
+
+## 🕒 Time Log
+
+| 日期 | 活动 | 项目标签 |
+|------|------|----------|
+| **周一 06-15** | imagegen 产品图；CRM skill 命名；初中英语助理架构 | `#素材 #CRM #教学` |
+| **周二 06-16** | GEO 企业应用调研（GitHub）| `#GEO` |
+| **周五 06-19** | trellis 学习 | `#工具链` |
+| **周日 06-21** | 官网 PRD 初读；BOSS 直聘 AI 专员 | `#官网` |
+
+---
+
+## 📚 知识资产 / To Resource
+
+| 资产 | 说明 | 状态 |
+|------|------|------|
+| imagegen 产品图 | 4:3 画布 | ✅ 完成 |
+| CRM skill 命名规范 | 修订 | ✅ 完成 |
+| 初中英语助理架构 | 需求+基础图 | ✅ 完成 |
+| GEO 企业项目清单 | GitHub 调研 | ✅ 完成 |
+
+---
+
+## 📋 上周回顾
+
+- **W-24（6/8-6/14）** — Personal Website 立项 + Hermes/sales agent 工程化
+- **W-23（6/1-6/7）** — 竞品官网深拆 + GEO 调研起步
+
+---
+
+## 🎯 下周重点（3 个最重要的方向）
+
+### 🔴 P1 官网 PRD 重构
+
+**为什么最重要：** PRD 初读了，下一步是审核/重新对齐。
+
+**具体目标：**
+
+- 按截图更新 PRD/SPEC，收敛 Vibe Coding 遗留
+
+### 🟡 P2 个人知识体系
+
+**为什么重要：** 工具多，需要整合。
+
+**具体目标：**
+
+- 博客+Hermes+CLI+Codex+Obsidian 串联
+
+### 🟡 P3 Codex 编码审查
+
+**为什么重要：** 编码方式要规范。
+
+**具体目标：**
+
+- 审查 coding 方式 + 优化产品页去占位
