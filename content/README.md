@@ -7,7 +7,6 @@ blog/         Technical writing, ideas, learning notes
 weekly/       Weekly reviews and personal logs
 projects/     Project records and portfolio pages
 career/       Resume bullets, STAR stories, profile material
-ai-tracker/   AI 信息摄取与长期追踪 (`.md` 为主,允许 `.mdx`)
 book-list/    读书笔记 — 读过的书 + 摘要 + 个人收获 (`.md`)
 course-list/  视频课程笔记 — 按模块组织的学习笔记 (`.md`)
 inbox/
@@ -15,12 +14,15 @@ inbox/
   logs/          → weekly
   project-notes/ → projects
   career-notes/  → career
-  ai-notes/      → ai-tracker
   book-notes/    → book-list
   course-notes/  → course-list
 ```
 
 Default format is Markdown (`.md`). Use MDX (`.mdx`) only when a page needs React components, richer layout, diagrams, or embedded demos.
+
+## Blog Images
+
+博客正文图片统一放在 `public/images/blog/<post-slug>/`，通过 `npm run images:add` 导入，并在发布前运行 `npm run images:check`。完整约定见 [`docs/agent/blog-image-workflow.md`](../docs/agent/blog-image-workflow.md)。
 
 ## Status Values
 
@@ -95,34 +97,6 @@ The MDX pipeline (`next-mdx-remote/rsc`) sends JSX props across the React Server
 
 All three custom MDX components (`Callout`, `Timeline`, `Tabs`) render a helpful "missing data" placeholder when their required array prop is undefined, so a partially-broken MDX file no longer crashes the whole page — it just renders an explanatory note in place of the component.
 
-## AI Tracker frontmatter
-
-AI Tracker is a knowledge-radar / reading-log column — not Blog, not Weekly. Each entry is a tracked source (paper, tool, article, …) with my own takeaways, questions, and links to related posts across the site.
-
-### Required fields
-
-- `title`, `date`, `summary`, `status` — same as other collections
-- `tags` — fine-grained labels (e.g. `["GPT-5", "OpenAI", "evaluation"]`)
-- `topics` — coarse grouping (2–4 entries, e.g. `["模型", "研究方法"]`); the list page groups cards by topic, and a post may appear in multiple groups
-- `sourceType` — one of `paper | product | model | agent | tool | article | video | podcast | discussion | other`
-- `signal` — `1 | 2 | 3`; how strongly I want to remember this one
-- `signalLabel` (optional) — short tag next to the number, e.g. `"高价值"`
-
-### Optional fields
-
-- `sourceUrl` / `sourceTitle` / `author` / `publishedAt` — provenance block on the detail page
-- `takeaways` — `string[]`, my distilled conclusions
-- `questions` — `string[]`, things I still don't know
-- `relatedLinks` — `[{ title, url }]`, external references
-- `relatedPosts` — `{ blog?: string[]; weekly?: string[]; projects?: string[]; career?: string[] }`, cross-collection slug links
-- `lang`, `englishSummary` — same as Blog
-
-### Drafts
-
-`status: draft` entries are filtered out of `/ai-tracker` and the detail route. Use drafts for in-progress tracking.
-
-### RSS 订阅 → `/ai-tracker/feed.xml`（RSS 2.0，只 published）
-
 ## Book List frontmatter
 
 Book List 是读书笔记栏目 — 记录读完的书、核心观点、个人收获与可执行改变。每条 = 一本书(不是一章)。
@@ -146,4 +120,3 @@ Book List 是读书笔记栏目 — 记录读完的书、核心观点、个人�
 ### 转化路径
 
 `content/inbox/book-notes/` 的碎片通过 `/book-list-from-inbox` 整理为 `content/book-list/<date>-<slug>.md`。
-
