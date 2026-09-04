@@ -2,6 +2,7 @@
 
 import {
   AnimatePresence,
+  MotionConfig,
   motion,
   useInView,
   type HTMLMotionProps,
@@ -98,16 +99,18 @@ export function PageTransitionWrapper({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={pathname}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { duration: 0.2, ease: easeOut } }}
-        exit={{ opacity: 0, transition: { duration: 0.2, ease: easeOut } }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <MotionConfig reducedMotion="user">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={pathname}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { duration: 0.2, ease: easeOut } }}
+          exit={{ opacity: 0, transition: { duration: 0.2, ease: easeOut } }}
+        >
+          {children}
+        </motion.div>
+      </AnimatePresence>
+    </MotionConfig>
   );
 }
 
@@ -163,7 +166,6 @@ export function RevealOnScroll({
   // `Tag` string, so memoizing by `Tag` keeps the component stable across
   // renders (no remount, no state reset). Cast to ElementType so the union
   // of motion.* components accepts an HTMLElement-typed ref.
-  // eslint-disable-next-line react-hooks/static-components
   const Comp = useMemo(
     () => resolveMotionTag(Tag) as ElementType,
     [Tag],

@@ -16,14 +16,14 @@
 
 > "记录想法、项目和成长，把经历沉淀为求职证据。"
 
-这句话就是整个项目的北极星。所有栏目（Blog / Weekly / Projects / Learning / AI Tracker / Book List / Course List / About）最终都在为这一件事服务：**让经历可追溯、可展示、可证明**。
+这句话就是整个项目的北极星。所有栏目（Blog / Weekly / Projects / Learning / Book List / Course List / About）最终都在为这一件事服务：**让经历可追溯、可展示、可证明**。
 
 ---
 
 ## 2. 它是谁、为了什么
 
 - **主人**：Coya。内容全部是 Coya 真实的工作、学习、踩坑记录。
-- **内容画像**：从 Hermes 飞书机器人搭建、GEO 学习、Next.js/React 学习笔记，到 AI 行业信号追踪、读书笔记、周记——内容质量高、原创性强、大量真实工程经验。
+- **内容画像**：从 Hermes 飞书机器人搭建、GEO 学习、Next.js/React 学习笔记，到读书笔记、周记——内容质量高、原创性强、大量真实工程经验。
 - **双重身份**：
   1. 对外：公开网站（部署在 Vercel），展示写作与能力；
   2. 对内：Coya 自己的知识库和素材流水线终点（Obsidian 记录 → 网站沉淀）。
@@ -56,7 +56,6 @@ PersonalWebsite/
 ├── content/              # 内容源（唯一的内容真源）
 │   ├── blog/ weekly/ projects/ career/
 │   ├── learning/<topic>/     # 主题目录 + _index.md
-│   ├── ai-tracker/           # AI 信号流
 │   ├── book-list/<book>/     # 书目录 + _index.md + 多笔记
 │   ├── course-list/<course>/ # 课程目录 + _index.md + 多笔记
 │   └── inbox/<类别>/         # 素材入口（Obsidian → 这里的过渡区）
@@ -74,7 +73,7 @@ PersonalWebsite/
 └── practice/             # 练习/实验目录（dog-gallery、local-api，与主站无关）
 ```
 
-### 内容集合全景（Zod 定义了 10 种 kind）
+### 内容集合全景（Zod 定义了 9 种 kind）
 
 | kind | 集合 | 说明 |
 |------|------|------|
@@ -83,7 +82,6 @@ PersonalWebsite/
 | projects | content/projects/ | 项目档案（.mdx，可嵌组件，带 resumeBullets） |
 | career | content/career/ | 求职材料（→ /about#career） |
 | learning | content/learning/ | 学习笔记（按 topic 子目录，`_index.md` 为主题介绍） |
-| ai-tracker | content/ai-tracker/ | AI 信号流（signal 1-3 强度 + sourceType 分类） |
 | book-index / book-note | content/book-list/<book>/ | 书目录 `_index.md` + 多篇读书笔记 |
 | course-index / course-note | content/course-list/<course>/ | 课程目录 `_index.md` + 多篇课程笔记 |
 
@@ -92,12 +90,11 @@ PersonalWebsite/
 ### 路由全景
 
 ```
-/                   首页门户（8 栏目入口）
+/                   首页门户（7 栏目入口）
 /blog               博客列表 + /blog/archive 月度归档 + /blog/[slug]
 /weekly             周记时间线 + /weekly/[slug]
 /projects           项目卡片网格 + /projects/[slug]
 /learning           主题树 + /learning/[topic] + /learning/[topic]/[slug]
-/ai-tracker         信号流 + /ai-tracker/[slug]
 /book-list          书网格 + /book-list/[book] + /book-list/[book]/[slug]
 /course-list        课程网格 + /course-list/[course] + /course-list/[course]/[slug]
 /about              关于 + Career 子区
@@ -116,7 +113,7 @@ PersonalWebsite/
 ① 捕捉（Obsidian）  →  ② 收集（inbox）  →  ③ 整理（draft）  →  ④ 发布（published）
 ```
 
-1. **捕捉**：Coya 在 Obsidian（CoyaPersonal）记笔记，打标 `#to-blog` / `#to-weekly` / `#to-project` / `#to-career` / `#to-ai-tracker` / `#to-book-list` 或 `publish: website`。
+1. **捕捉**：Coya 在 Obsidian（CoyaPersonal）记笔记，打标 `#to-blog` / `#to-weekly` / `#to-project` / `#to-career` / `#to-book-list` 或 `publish: website`。
 2. **收集**：knowledge-field 同步脚本（`npm run knowledge:sync`）只把**明确打标**的笔记复制进 `content/inbox/<类别>/`。默认只预览，`--apply` 才真执行——且必须 Coya 明确下达指令。
 3. **整理**：通过 `.claude/commands/` 或 Hermes/Lucas 把 inbox 素材转成 `status: draft` 的正式内容（blog-from-notes / weekly-from-inbox / project-to-career / book-list-from-inbox 等命令）。
 4. **发布**：**只有 Coya 手动把 `status: draft` 改成 `published`**。Agent 永不自动发布。
@@ -130,7 +127,7 @@ draft 只本地可见，published 才进线上渲染。`lib/content/reader.ts` �
 ### Knowledge Field（知识场）体系
 
 - 配置文件：`knowledge-field.config.json`——定义了四个节点：Obsidian（捕捉）、Hermes/Lucas（飞书上下文）、Codex+CLI（转换/维护）、PersonalWebsite（沉淀/公开）。
-- 六条路由：ideas → blog、logs → weekly、project-notes → projects、career-notes → career、ai-notes → ai-tracker、book-notes → book-list，各有 markers 和对应命令。
+- 五条路由：ideas → blog、logs → weekly、project-notes → projects、career-notes → career、book-notes → book-list，各有 markers 和对应命令。
 - 命令：`npm run knowledge:doctor / sync / sync:apply / draft-blog / confirm-publish / deploy-production / report / cron`。
 - 默认模式保守：**sync 只预览不复制；apply 需 Coya 明确要求；cron 只看不写**。
 
@@ -164,10 +161,10 @@ AGENT.md 里 10 条红线我全部认领，核心几条：
 
 **Alma 补充的自我约定**：
 
-- 写内容时先照 `docs/agent/` 里的模板（weekly-template / project-template / book-list-template / course-list-template / ai-tracker-template / content-style-guide），格式与既有内容保持一致。
+- 写内容时先照 `docs/agent/` 里的模板（weekly-template / project-template / book-list-template / course-list-template / content-style-guide），格式与既有内容保持一致。
 - frontmatter 必填：`title` `date` `summary` `tags` `status` `englishSummary`（learning 系还有 `topic` / `book` / `course`）。
 - 新增内容默认 `status: draft`，校验只对 published 硬报错（draft 的 schema 错误只 warn 不炸——所以我的草稿也得自己先跑 `npm run typecheck` / 相关校验）。
-- 文件名 kebab-case，日期前缀 `YYYY-MM-DD-` 是 blog/weekly/ai-tracker 的惯例。
+- 文件名 kebab-case，日期前缀 `YYYY-MM-DD-` 是 blog/weekly 的惯例。
 - 提交信息用 Conventional Commits，验证链：`npm run lint` + `npm run typecheck` + `npm test` + `npm run build`。
 - 修改 schemas.ts 要同步 `docs/agent/` 模板；新 MDX 组件要注册进 `mdx-content.tsx`。
 
@@ -175,7 +172,7 @@ AGENT.md 里 10 条红线我全部认领，核心几条：
 
 ## 7. 当前状态快照（2026-08-10）
 
-**内容规模**：blog 29 篇 · weekly 11 篇 · projects 4 个 · learning 57 篇（4 主题：geo/hermes/nextjs/react）· career 5 · ai-tracker 6 · book-list 2 本书 21 文件 · course-list 3 门课。全库约 109 published / 32 draft。
+**内容规模**：blog 29 篇 · weekly 11 篇 · projects 4 个 · learning 57 篇（4 主题：geo/hermes/nextjs/react）· career 5 · book-list 2 本书 21 文件 · course-list 3 门课。全库约 109 published / 32 draft。
 
 **⚠️ 工作区有未提交改动**（我接手时就这样，不是我改的）：
 

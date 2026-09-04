@@ -118,23 +118,6 @@ export function Icons0ArrowUpRight(props: IconProps) {
   );
 }
 
-export function Icons0Radar(props: IconProps) {
-  return (
-    <IconBase {...props}>
-      <path
-        d="M16 4a12 12 0 1 0 12 12h-2A10 10 0 1 1 16 6Z"
-        fill="currentColor"
-      />
-      <path d="M4 16h2a10 10 0 0 1 10-10V4A12 12 0 0 0 4 16Z" fill="currentColor" />
-      <path
-        d="M16 9a7 7 0 0 0-7 7h2a5 5 0 0 1 5-5Zm0 4a3 3 0 1 0 3 3a3 3 0 0 0-3-3Z"
-        fill="currentColor"
-      />
-      <path d="M5.6 4.4l1.4 1.4L4.4 8.4L3 7Z" fill="currentColor" />
-    </IconBase>
-  );
-}
-
 export function Icons0Book(props: IconProps) {
   return (
     <IconBase {...props}>
@@ -162,6 +145,21 @@ export function Icons0Music(props: IconProps) {
     <IconBase {...props}>
       <path
         d="M11 2a1 1 0 0 1 1 1v14.26a4 4 0 1 0 2 3.26V10h5V4h-7V3a1 1 0 0 1-1-1m-3 24a2 2 0 1 1 2-2a2 2 0 0 1-2 2m12-4a2 2 0 1 0 2 2a2 2 0 0 0-2-2"
+        fill="currentColor"
+      />
+    </IconBase>
+  );
+}
+
+export function Icons0Image(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M19 14a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm0-4a1 1 0 1 1-1 1 1 1 0 0 1 1-1Z"
+        fill="currentColor"
+      />
+      <path
+        d="M26 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 22H6v-6l5-5 5.59 5.59a2 2 0 0 0 2.82 0L26 14.83Zm0-14.83-3.59 3.59a2 2 0 0 1-2.82 0L14 8.17 16.17 6H26Z"
         fill="currentColor"
       />
     </IconBase>

@@ -114,7 +114,6 @@ async function doctor(config) {
     ".claude/commands/write-blog-from-source.md",
     ".claude/commands/weekly-from-inbox.md",
     ".claude/commands/project-to-career.md",
-    ".claude/commands/ai-tracker-from-inbox.md",
     ".claude/commands/book-list-from-inbox.md",
     ".claude/commands/draft-audit.md",
   ]) {
@@ -706,7 +705,7 @@ async function report(config, options) {
   }
 
   const contentRows = [];
-  for (const collection of ["blog", "weekly", "projects", "career", "ai-tracker", "book-list"]) {
+  for (const collection of ["blog", "weekly", "projects", "career", "book-list"]) {
     const target = path.join(repoRoot, "content", collection);
     const files = (await pathExists(target, "dir")) ? await findMarkdownFiles(target) : [];
     const statusCounts = await countStatuses(files);

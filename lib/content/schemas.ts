@@ -60,51 +60,6 @@ export const learningSchema = baseContentSchema.extend({
   updated: z.string().optional(),
 });
 
-const aiTrackerSourceTypeSchema = z.enum([
-  "paper",
-  "product",
-  "model",
-  "agent",
-  "tool",
-  "article",
-  "video",
-  "podcast",
-  "discussion",
-  "other",
-]);
-
-export const aiTrackerSchema = baseContentSchema.extend({
-  kind: z.literal("ai-tracker"),
-  topics: stringArraySchema,
-  tags: stringArraySchema,
-  sourceType: aiTrackerSourceTypeSchema,
-  signal: z.union([z.literal(1), z.literal(2), z.literal(3)]),
-  signalLabel: z.string().optional(),
-  sourceUrl: z.string().url().optional(),
-  sourceTitle: z.string().optional(),
-  author: z.string().optional(),
-  publishedAt: z.string().optional(),
-  takeaways: z.array(z.string()).optional(),
-  questions: z.array(z.string()).optional(),
-  relatedLinks: z
-    .array(
-      z.object({
-        title: z.string(),
-        url: z.string().url(),
-      }),
-    )
-    .optional(),
-  relatedPosts: z
-    .object({
-      blog: z.array(z.string()).optional(),
-      weekly: z.array(z.string()).optional(),
-      projects: z.array(z.string()).optional(),
-      career: z.array(z.string()).optional(),
-    })
-    .optional(),
-  lang: z.string().optional(),
-});
-
 export const bookIndexSchema = baseContentSchema.extend({
   kind: z.literal("book-index"),
   book: z.string(),
@@ -143,17 +98,29 @@ export const courseNoteSchema = baseContentSchema.extend({
   chapter: z.string().optional(),
 });
 
+export const gallerySchema = baseContentSchema.extend({
+  kind: z.literal("gallery"),
+  image: z.string(),
+  model: z.string(),
+  prompt: z.string(),
+  negativePrompt: z.string().optional(),
+  params: z.record(z.string(), z.string()).default({}),
+  tags: stringArraySchema,
+  lang: z.string().default("zh"),
+  updated: z.string().optional(),
+});
+
 export const schemaByKind = {
   blog: blogSchema,
   weekly: weeklySchema,
   projects: projectSchema,
   career: careerSchema,
-  "ai-tracker": aiTrackerSchema,
   learning: learningSchema,
   "book-index": bookIndexSchema,
   "book-note": bookNoteSchema,
   "course-index": courseIndexSchema,
   "course-note": courseNoteSchema,
+  gallery: gallerySchema,
 } as const;
 
 export type ContentKind = keyof typeof schemaByKind;
@@ -162,21 +129,20 @@ export type BlogPost = z.infer<typeof blogSchema>;
 export type WeeklyPost = z.infer<typeof weeklySchema>;
 export type ProjectPost = z.infer<typeof projectSchema>;
 export type CareerPost = z.infer<typeof careerSchema>;
-export type AiTrackerPost = z.infer<typeof aiTrackerSchema>;
 export type LearningPost = z.infer<typeof learningSchema>;
 export type BookIndexPost = z.infer<typeof bookIndexSchema>;
 export type BookNotePost = z.infer<typeof bookNoteSchema>;
 export type CourseIndexPost = z.infer<typeof courseIndexSchema>;
 export type CourseNotePost = z.infer<typeof courseNoteSchema>;
-export type AiTrackerSourceType = z.infer<typeof aiTrackerSourceTypeSchema>;
+export type GalleryPost = z.infer<typeof gallerySchema>;
 export type SiteContent =
   | BlogPost
   | WeeklyPost
   | ProjectPost
   | CareerPost
-  | AiTrackerPost
   | LearningPost
   | BookIndexPost
   | BookNotePost
   | CourseIndexPost
-  | CourseNotePost;
+  | CourseNotePost
+  | GalleryPost;

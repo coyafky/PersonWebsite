@@ -12,7 +12,7 @@ last_updated: 2026-07-30
 
 ## 1. 项目一句话
 
-Coya 的个人网站——基于 Next.js 16 App Router + TypeScript + Markdown/MDX 的内容系统，用于写博客、记周记、维护项目档案、准备求职材料、读书笔记和 AI 信号追踪。部署在 Vercel。
+Coya 的个人网站——基于 Next.js 16 App Router + TypeScript + Markdown/MDX 的内容系统，用于写博客、记周记、维护项目档案、准备求职材料、读书笔记。部署在 Vercel。
 
 ---
 
@@ -66,7 +66,6 @@ PersonalWebsite/
 │   │   ├── weekly/              # 周记（垂直 timeline + 详情）
 │   │   ├── projects/            # 项目（卡片网格 + 详情）
 │   │   ├── learning/            # 学习笔记（主题树 + 详情）
-│   │   ├── ai-tracker/          # AI 信号流（按信号强度 + 详情）
 │   │   ├── book-list/           # 读书笔记（按书分组 + 笔记详情）
 │   │   ├── tags/                # Tag 索引（全集 / 详情 / 词云）
 │   │   └── career/              # （已重定向到 /about#career）
@@ -83,7 +82,6 @@ PersonalWebsite/
 │   ├── entry-card-weekly.tsx    # Weekly 专用卡片（timeline）
 │   ├── entry-card-project.tsx   # Project 专用卡片（案例网格）
 │   ├── entry-card-learning.tsx  # Learning 专用卡片（主题树）
-│   ├── entry-card-ai-tracker.tsx# AI Tracker 专用卡片（信号流）
 │   ├── entry-card-book-list.tsx # Book List 专用卡片
 │   ├── icons0.tsx              # Carbon SVG 图标库
 │   ├── callout.tsx              # Callout 提示卡片
@@ -105,13 +103,11 @@ PersonalWebsite/
 │   │   └── <book>/
 │   │       ├── _index.md        # 书籍信息
 │   │       └── *.md             # 笔记
-│   ├── ai-tracker/              # AI 信号追踪
 │   └── inbox/                   # 素材入口
 │       ├── ideas/               # → blog
 │       ├── logs/                # → weekly
 │       ├── project-notes/       # → projects
 │       ├── career-notes/        # → career
-│       ├── ai-notes/            # → ai-tracker
 │       └── book-notes/          # → book-list
 │
 ├── lib/                         # 工具库
@@ -207,8 +203,6 @@ PersonalWebsite/
 | `/learning` | 列表 | 主题树 |
 | `/learning/[topic]` | 列表 | 主题文章列表 |
 | `/learning/[topic]/[slug]` | 详情 | 学习笔记详情 |
-| `/ai-tracker` | 列表 | 信号流 |
-| `/ai-tracker/[slug]` | 详情 | 信号详情 |
 | `/book-list` | 列表 | 读书卡片网格 |
 | `/book-list/[book]` | 列表 | 单书笔记列表 |
 | `/book-list/[book]/[slug]` | 详情 | 读书笔记详情 |

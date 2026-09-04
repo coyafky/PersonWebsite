@@ -119,34 +119,7 @@ englishSummary: ""  # 1-2 句英文摘要
 
 ---
 
-## 链路 5：`inbox/ai-notes/` → `content/ai-tracker/`
-
-### 触发条件
-- 你明确说「把这个记到 AI Tracker」
-- 或执行 `/ai-tracker-from-inbox`
-
-### 输入格式
-- `content/inbox/ai-notes/` 下单个或多个 `.md` 碎片
-- 可以是论文速记、产品 demo 笔记、播客记录、趋势想法
-
-### 输出格式
-- 文件：`content/ai-tracker/<YYYY-MM-DD-slug>.md`
-- 模板：`docs/agent/ai-tracker-template.md`
-- 状态：默认 `status: draft`
-
-### 生成规则
-1. 选 `sourceType` 枚举（paper / product / model / agent / tool / article / video / podcast / discussion / other）
-2. 选 `signal`（1=存档 / 2=参考 / 3=高价值），不确定时用 2 并标 `[待确认]`
-3. 选 `topics`（2-4 个粗分类，对齐 `content/ai-tracker/` 现有风格）
-4. 提取 `tags`（2-5 个细标签）
-5. 写 `takeaways`（3-5 条 Coya 第一人称要点）
-6. 写 `questions`（2-3 条未解）
-7. 自动填 `englishSummary`（1-2 句英文）
-8. 可选 `relatedPosts`（跨集合 slug，Coya 手动确认）
-
----
-
-## 链路 6：`inbox/book-notes/` → `content/book-list/`
+## 链路 5：`inbox/book-notes/` → `content/book-list/`
 
 ### 触发条件
 - 你明确说「把这本书记到 Book List」或「整理这本书的笔记」

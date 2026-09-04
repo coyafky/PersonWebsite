@@ -3,7 +3,6 @@ import path from "node:path";
 import matter from "gray-matter";
 import { z } from "zod";
 import {
-  type AiTrackerPost,
   type BlogPost,
   type BookIndexPost,
   type BookNotePost,
@@ -11,6 +10,7 @@ import {
   type ContentKind,
   type CourseIndexPost,
   type CourseNotePost,
+  type GalleryPost,
   type LearningPost,
   type ProjectPost,
   type SiteContent,
@@ -35,12 +35,12 @@ type CollectionMap = {
   weekly: WeeklyPost;
   projects: ProjectPost;
   career: CareerPost;
-  "ai-tracker": AiTrackerPost;
   learning: LearningPost;
   "book-index": BookIndexPost;
   "book-note": BookNotePost;
   "course-index": CourseIndexPost;
   "course-note": CourseNotePost;
+  gallery: GalleryPost;
 };
 
 async function fileExists(filePath: string) {
@@ -196,11 +196,6 @@ export async function getCareerPosts(includeDrafts = false): Promise<CareerPost[
 export async function getFeaturedProjects() {
   const projects = await getProjectPosts();
   return projects.filter((project) => project.featured).slice(0, 3);
-}
-
-export async function getAiTrackerPosts(includeDrafts = false): Promise<AiTrackerPost[]> {
-  const items = await getCollection("ai-tracker", includeDrafts);
-  return items.filter((item): item is AiTrackerPost => item.kind === "ai-tracker");
 }
 
 export type BookTopicSummary = {
@@ -437,6 +432,15 @@ export async function getCourseNoteBySlug(course: string, slug: string): Promise
   return (items.find((item) => item.kind === "course-note" && item.slug === decoded) as CourseNotePost) ?? null;
 }
 
+export async function getGalleryPosts(includeDrafts = false): Promise<GalleryPost[]> {
+  const items = await getCollection("gallery", includeDrafts);
+  return items.filter((item): item is GalleryPost => item.kind === "gallery");
+}
+
+export async function getGalleryPostBySlug(slug: string): Promise<GalleryPost | null> {
+  return getContentBySlug("gallery", slug);
+}
+
 export type TopicSummary = {
   topic: string;
   title: string;
@@ -532,7 +536,6 @@ export type TaggedContentByKind = {
   projects: ProjectPost[];
   career: CareerPost[];
   learning: LearningPost[];
-  "ai-tracker": AiTrackerPost[];
   bookIndex: BookIndexPost[];
   bookNote: BookNotePost[];
   courseIndex: CourseIndexPost[];
@@ -551,13 +554,12 @@ export async function getContentByTag(
   const needle = tag.toLowerCase();
   const matchesTag = (t: string | undefined) => t?.toLowerCase() === needle;
 
-  const [blog, weekly, projects, career, aiTracker, topics, bookTopicList, courseTopicList] =
+  const [blog, weekly, projects, career, topics, bookTopicList, courseTopicList] =
     await Promise.all([
       getBlogPosts(),
       getWeeklyPosts(),
       getProjectPosts(),
       getCareerPosts(),
-      getAiTrackerPosts(),
       getLearningTopics(),
       getBookTopics(),
       getCourseTopics(),
@@ -594,7 +596,6 @@ export async function getContentByTag(
     (p.tags ?? []).some(matchesTag),
   );
   const learningMatches = learningPosts.filter((p) => p.tags.some(matchesTag));
-  const aiTrackerMatches = aiTracker.filter((p) => p.tags.some(matchesTag));
   const bookIndexMatches = bookIndexPosts.filter((p) => p.tags.some(matchesTag));
   const bookNoteMatches = bookNotePosts.filter((p) => p.tags.some(matchesTag));
   const courseIndexMatches = courseIndexPosts.filter((p) => p.tags.some(matchesTag));
@@ -606,7 +607,6 @@ export async function getContentByTag(
     projects: [],
     career: careerMatches,
     learning: learningMatches,
-    "ai-tracker": aiTrackerMatches,
     bookIndex: bookIndexMatches,
     bookNote: bookNoteMatches,
     courseIndex: courseIndexMatches,
@@ -619,7 +619,6 @@ export async function getContentByTag(
     projects: 0,
     career: careerMatches.length,
     learning: learningMatches.length,
-    "ai-tracker": aiTrackerMatches.length,
     bookIndex: bookIndexMatches.length,
     bookNote: bookNoteMatches.length,
     courseIndex: courseIndexMatches.length,
@@ -649,20 +648,19 @@ function emptyKindCounts(): Record<ContentKind, number> {
     projects: 0,
     career: 0,
     learning: 0,
-    "ai-tracker": 0,
     "book-index": 0,
     "book-note": 0,
     "course-index": 0,
     "course-note": 0,
+    gallery: 0,
   };
 }
 
 export async function getAllTags(): Promise<TagCount[]> {
-  const [blog, weekly, career, aiTracker, topics, bookTopicList, courseTopicList] = await Promise.all([
+  const [blog, weekly, career, topics, bookTopicList, courseTopicList] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
     getCareerPosts(),
-    getAiTrackerPosts(),
     getLearningTopics(),
     getBookTopics(),
     getCourseTopics(),
@@ -698,7 +696,6 @@ export async function getAllTags(): Promise<TagCount[]> {
   for (const post of blog) for (const tag of post.tags) bump(tag, "blog");
   for (const post of weekly) for (const tag of post.tags) bump(tag, "weekly");
   for (const post of career) for (const tag of post.tags ?? []) bump(tag, "career");
-  for (const post of aiTracker) for (const tag of post.tags) bump(tag, "ai-tracker");
   for (const post of bookIndexPosts) for (const tag of post.tags) bump(tag, "book-index");
   for (const post of bookNotePosts) for (const tag of post.tags) bump(tag, "book-note");
   for (const post of courseIndexPosts) for (const tag of post.tags) bump(tag, "course-index");

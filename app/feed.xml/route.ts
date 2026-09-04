@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
-import { getBlogPosts, getWeeklyPosts, getAiTrackerPosts } from "@/lib/content";
-import type { BlogPost, WeeklyPost, AiTrackerPost } from "@/lib/content/schemas";
+import { getBlogPosts, getWeeklyPosts } from "@/lib/content";
+import type { BlogPost, WeeklyPost } from "@/lib/content/schemas";
 import { buildUrl } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
@@ -52,10 +52,9 @@ function buildItem(item: FeedItem): string {
 }
 
 async function getFeedItems(baseUrl: string): Promise<{ items: FeedItem[]; latestPub: string }> {
-  const [blog, weekly, aiTracker] = await Promise.all([
+  const [blog, weekly] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
-    getAiTrackerPosts(),
   ]);
 
   const feedItems: FeedItem[] = [];
@@ -82,21 +81,6 @@ async function getFeedItems(baseUrl: string): Promise<{ items: FeedItem[]; lates
       pubDate,
       description: post.summary,
       categories: post.tags,
-    });
-  }
-
-  for (const post of aiTracker) {
-    const pubDate = toRfc822(post.publishedAt ?? post.date);
-    if (latestPub === null || pubDate > latestPub) latestPub = pubDate;
-    const descParts = [post.summary];
-    if (post.signalLabel) descParts.push(`Signal: ${post.signalLabel}`);
-    if (post.topics.length > 0) descParts.push(`Topics: ${post.topics.join(", ")}`);
-    feedItems.push({
-      title: `[AI Tracker] ${post.title}`,
-      link: buildUrl(`/ai-tracker/${post.slug}`),
-      pubDate,
-      description: descParts.join(" · "),
-      categories: post.topics,
     });
   }
 

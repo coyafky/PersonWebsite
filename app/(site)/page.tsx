@@ -7,10 +7,10 @@ import {
   Icons0Book,
   Icons0Calendar,
   Icons0Course,
+  Icons0Image,
   Icons0Notebook,
   Icons0Portfolio,
   Icons0Profile,
-  Icons0Radar,
 } from "@/components/icons0";
 
 type PortalEntry = {
@@ -26,12 +26,6 @@ const portalEntries: ReadonlyArray<PortalEntry> = [
     icon: <Icons0Blog />,
     title: "Blog",
     description: "技术、想法和工程实践的长文。",
-  },
-  {
-    href: "/ai-tracker",
-    icon: <Icons0Radar />,
-    title: "AI Tracker",
-    description: "持续追踪的 AI 行业信号流。",
   },
   {
     href: "/weekly",
@@ -64,6 +58,12 @@ const portalEntries: ReadonlyArray<PortalEntry> = [
     description: "做过的项目与可验证的能力证据。",
   },
   {
+    href: "/gallery",
+    icon: <Icons0Image />,
+    title: "Gallery",
+    description: "AI 生图实验、提示词与视觉变量的对照档案。",
+  },
+  {
     href: "/about",
     icon: <Icons0Profile />,
     title: "About",
@@ -73,17 +73,20 @@ const portalEntries: ReadonlyArray<PortalEntry> = [
 
 export default function HomePage() {
   return (
-    <div className="page-shell">
+    <div className="page-shell home-shell">
       <HeroSection
         copy={
           <>
             <HeroItem>
-              <h1>记录想法、项目和成长，把经历沉淀为求职证据。</h1>
+              <h1 id="home-hero-title">
+                把模糊的想法，
+                <span>做成可验证的工作。</span>
+              </h1>
             </HeroItem>
             <HeroItem>
               <p>
-                这是一个面向长期写作和职业准备的个人网站。Blog 记录技术与想法，Weekly
-                保留成长轨迹，Projects 把项目经验整理成可验证的能力索引。
+                我是 Coya，计算机科学背景的 AI 提效实践者。这里记录我如何把 Agent、内容系统和
+                AI 视觉实验接进真实流程，也保留每次学习、试错和交付留下的证据。
               </p>
             </HeroItem>
             <HeroItem>
@@ -92,9 +95,9 @@ export default function HomePage() {
                   <Icons0Portfolio />
                   View Projects
                 </Link>
-                <Link className="button secondary" href="/about#career">
+                <Link className="button secondary" href="/about">
                   <Icons0Profile />
-                  Career Notes
+                  About Coya
                 </Link>
               </div>
             </HeroItem>
@@ -104,23 +107,18 @@ export default function HomePage() {
           <>
             <div className="panel-row strong">
               <Icons0Notebook />
-              <span>Markdown / MDX</span>
-              <span>source</span>
+              <span>Knowledge Field</span>
+              <span>source → proof</span>
             </div>
             <div className="panel-row">
               <Icons0Blog />
-              <span>Blog</span>
-              <span>essays</span>
+              <span>Blog / Learning</span>
+              <span>thinking</span>
             </div>
             <div className="panel-row">
               <Icons0Calendar />
               <span>Weekly</span>
-              <span>log</span>
-            </div>
-            <div className="panel-row">
-              <Icons0Radar />
-              <span>AI Tracker</span>
-              <span>signals</span>
+              <span>trace</span>
             </div>
             <div className="panel-row">
               <Icons0Portfolio />
@@ -131,9 +129,12 @@ export default function HomePage() {
         }
       />
 
-      <section className="content-section" aria-label="Sections">
+      <section className="content-section portal-section" aria-label="Sections">
         <div className="section-heading">
-          <h2>Sections</h2>
+          <div>
+            <span className="section-kicker">EXPLORE THE FIELD</span>
+            <h2>从哪里开始</h2>
+          </div>
           <Link href="/about">About this site</Link>
         </div>
         <div className="card-grid">

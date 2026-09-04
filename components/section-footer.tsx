@@ -40,9 +40,6 @@ export async function SectionFooter() {
               <Link href="/blog">Blog</Link>
             </li>
             <li>
-              <Link href="/ai-tracker">AI Tracker</Link>
-            </li>
-            <li>
               <Link href="/weekly">Weekly</Link>
             </li>
             <li>

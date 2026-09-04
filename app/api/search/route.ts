@@ -7,9 +7,9 @@ import {
   getCourseTopics,
   getWeeklyPosts,
   getProjectPosts,
-  getAiTrackerPosts,
   getLearningTopics,
   getLearningPosts,
+  getGalleryPosts,
 } from "@/lib/content";
 
 type SearchHit = {
@@ -38,11 +38,11 @@ export async function GET(request: Request) {
     return NextResponse.json({ results: [] });
   }
 
-  const [blog, weekly, projects, aiTracker] = await Promise.all([
+  const [blog, weekly, projects, gallery] = await Promise.all([
     getBlogPosts(),
     getWeeklyPosts(),
     getProjectPosts(),
-    getAiTrackerPosts(),
+    getGalleryPosts(),
   ]);
 
   const hits: SearchHit[] = [];
@@ -62,9 +62,9 @@ export async function GET(request: Request) {
     if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/projects/${post.slug}`, date: post.date });
   }
 
-  for (const post of aiTracker) {
+  for (const post of gallery) {
     const score = matchScore(post, q);
-    if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/ai-tracker/${post.slug}`, date: post.date });
+    if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/gallery#${encodeURIComponent(post.slug)}`, date: post.date });
   }
 
   // Book notes

@@ -35,7 +35,6 @@
     "#to-weekly",
     "#to-project",
     "#to-career",
-    "#to-ai-tracker",
     "#to-book-list",
     "publish: website",
     "website: true"
@@ -99,22 +98,6 @@
         "website: true"
       ],
       "command": "/project-to-career"
-    },
-    {
-      "name": "ai-notes",
-      "from": [
-        "00-Inbox/02-AI-Learning",
-        "04-Resources/AI",
-        "01-Notes/LearnAI-agent"
-      ],
-      "to": "content/inbox/ai-notes",
-      "markers": [
-        "#to-ai-tracker",
-        "#to-personal-website",
-        "publish: website",
-        "website: true"
-      ],
-      "command": "/ai-tracker-from-inbox"
     },
     {
       "name": "book-notes",

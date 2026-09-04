@@ -1,14 +1,14 @@
 # Coya 的个人网站
 
 > 基于 Next.js 16 + TypeScript + Markdown/MDX 的内容驱动型个人网站。
-> 博客 · 周记 · 项目 · 学习笔记 · AI 信号追踪 · 读书笔记
+> 博客 · 周记 · 项目 · 学习笔记 · 读书笔记
 > 部署在 [Vercel](https://vercel.com)。
 
 ---
 
 ## 概览
 
-这个网站是 Coya 的长期写作和知识管理空间，涵盖 7 个内容栏目：
+这个网站是 Coya 的长期写作和知识管理空间，涵盖 6 个内容栏目：
 
 | 栏目 | 路由 | 内容类型 |
 |------|------|---------|
@@ -16,7 +16,6 @@
 | 📅 Weekly | `/weekly` | 周记，垂直时间线 |
 | 🛠 Projects | `/projects` | 项目档案，案例卡片 |
 | 📚 Learning | `/learning` | 结构化学习笔记（按主题） |
-| 🤖 AI Tracker | `/ai-tracker` | AI 行业信号追踪 |
 | 📖 Book List | `/book-list` | 读书笔记 |
 | 👤 About | `/about` | 关于 + 求职材料 |
 
@@ -89,7 +88,6 @@ PersonalWebsite/
 │   ├── projects/       # 项目档案
 │   ├── learning/       # 学习笔记（按 topic 分组）
 │   ├── career/         # 求职材料
-│   ├── ai-tracker/     # AI 信号追踪
 │   ├── book-list/      # 读书笔记（按书分组）
 │   └── inbox/          # 素材入口（→ Hermes 工作流）
 ├── lib/                # 工具库

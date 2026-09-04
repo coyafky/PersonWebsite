@@ -1,4 +1,4 @@
-import type { BlogPost, WeeklyPost, ProjectPost, AiTrackerPost } from "@/lib/content/schemas";
+import type { BlogPost, WeeklyPost, ProjectPost } from "@/lib/content/schemas";
 import { buildUrl, SITE_NAME } from "@/lib/metadata";
 
 type ArticleLike = {

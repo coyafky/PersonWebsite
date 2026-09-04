@@ -17,7 +17,6 @@ Generated: 2026-06-25T13:37:40.207Z
 | logs | content/inbox/logs | 0 | /weekly-from-inbox |
 | project-notes | content/inbox/project-notes | 0 | manual project draft/update |
 | career-notes | content/inbox/career-notes | 0 | /project-to-career |
-| ai-notes | content/inbox/ai-notes | 1 | /ai-tracker-from-inbox |
 | book-notes | content/inbox/book-notes | 2 | /book-list-from-inbox |
 
 ## Content Ledger
@@ -28,7 +27,6 @@ Generated: 2026-06-25T13:37:40.207Z
 | weekly | 9 | 1 | 8 | 0 | 0 |
 | projects | 4 | 0 | 4 | 0 | 0 |
 | career | 5 | 3 | 2 | 0 | 0 |
-| ai-tracker | 6 | 1 | 5 | 0 | 0 |
 | book-list | 1 | 0 | 1 | 0 | 0 |
 
 ## Suggested Next Actions

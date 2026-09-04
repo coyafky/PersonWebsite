@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContentCard } from "@/components/content-card";
-import { EntryCardAiTracker } from "@/components/entry-card-ai-tracker";
 import { EntryCardBlog } from "@/components/entry-card-blog";
 import { EntryCardBookTopic } from "@/components/entry-card-book-topic";
 import { EntryCardCourseTopic } from "@/components/entry-card-course-topic";
@@ -106,26 +105,6 @@ export default async function TagPage({ params }: TagPageProps) {
                 featured={post.featured}
                 period={post.period}
                 cover={post.cover}
-              />
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      {totalByKind["ai-tracker"] > 0 ? (
-        <section>
-          <h2>AI Tracker</h2>
-          <div className="stack-list">
-            {items["ai-tracker"].map((post) => (
-              <EntryCardAiTracker
-                key={post.slug}
-                href={`/ai-tracker/${post.slug}`}
-                title={post.title}
-                summary={post.summary}
-                signal={post.signal}
-                signalLabel={post.signalLabel}
-                date={post.date}
-                tags={post.tags}
               />
             ))}
           </div>

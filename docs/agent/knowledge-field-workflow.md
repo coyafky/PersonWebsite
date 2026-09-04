@@ -8,7 +8,7 @@
 - 只有明确打标的 Obsidian 笔记会复制进本仓库的 `content/inbox/`。
 - 即使笔记已经打标，也只有 Coya 通过 Hermes/Lucas 明确下达同步指令时才真正复制。
 - 进入 `content/inbox/` 的素材仍然是草稿素材，不自动发布。
-- 成熟内容经过已有命令转成 `blog`、`weekly`、`projects`、`career`、`ai-tracker`、`book-list`。
+- 成熟内容经过已有命令转成 `blog`、`weekly`、`projects`、`career`、`book-list`。
 - 简历更新必须能追溯到项目、周记或确认过的经历。
 
 ## 机器入口
@@ -43,7 +43,6 @@ npm run knowledge:report
 #to-weekly
 #to-project
 #to-career
-#to-ai-tracker
 #to-book-list
 
 publish: website
@@ -58,7 +57,6 @@ website: true
 | `#to-weekly` | `content/inbox/logs/` | `/weekly-from-inbox` |
 | `#to-project` | `content/inbox/project-notes/` | 手动更新项目页 |
 | `#to-career` | `content/inbox/career-notes/` | `/project-to-career` |
-| `#to-ai-tracker` | `content/inbox/ai-notes/` | `/ai-tracker-from-inbox` |
 | `#to-book-list` | `content/inbox/book-notes/` | `/book-list-from-inbox` |
 
 同步脚本只复制，不移动、不删除 Obsidian 原文。复制出的文件会带 provenance 注释，记录来源路径、同步时间和下一步命令。

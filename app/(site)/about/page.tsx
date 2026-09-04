@@ -1,5 +1,6 @@
 import { type CareerPost, getCareerPosts } from "@/lib/content";
 import { MdxContent } from "@/components/mdx-content";
+import { RevealOnScroll } from "@/components/animations";
 
 export const metadata = {
   title: "About",
@@ -121,23 +122,26 @@ function ExpSection({
   items: ExpItem[];
 }) {
   return (
-    <section className="about-subsection">
-      <h2>{heading}</h2>
-      <ul className="exp-list">
-        {items.map((item) => (
-          <li className="exp-card" key={item.title}>
-            <span className="exp-period">{item.period}</span>
-            <span className="exp-title">{item.title}</span>
-            {item.desc ? <p className="exp-desc">{item.desc}</p> : null}
-            {item.link ? (
-              <a className="exp-link" href={item.link.href}>
-                {item.link.label} →
-              </a>
-            ) : null}
-          </li>
-        ))}
-      </ul>
-    </section>
+    <RevealOnScroll>
+      <section className="about-subsection">
+        <span className="about-section-label">EXPERIENCE</span>
+        <h2>{heading}</h2>
+        <ul className="exp-list">
+          {items.map((item) => (
+            <li className="exp-card" key={item.title}>
+              <span className="exp-period">{item.period}</span>
+              <span className="exp-title">{item.title}</span>
+              {item.desc ? <p className="exp-desc">{item.desc}</p> : null}
+              {item.link ? (
+                <a className="exp-link" href={item.link.href}>
+                  {item.link.label} →
+                </a>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      </section>
+    </RevealOnScroll>
   );
 }
 
@@ -146,26 +150,47 @@ export default async function AboutPage() {
   const sortedCareerItems = sortCareerItems(careerItems);
 
   return (
-    <div className="page-shell narrow">
-      <header className="page-header">
-        <h1>About</h1>
-        <p>冯科雅 (Coya) · 计算机科学本科 · AI 提效实践者</p>
+    <div className="page-shell narrow about-page">
+      <header className="page-header about-hero">
+        <span className="about-kicker">ABOUT / COYA FENG</span>
+        <h1>
+          <span>我把 AI 接进真实业务，</span>
+          <span>让流程更清晰，</span>
+          <span>结果可验证。</span>
+        </h1>
+        <p>
+          计算机科学本科 · AI 提效实践者。关注 Agent 工作流、内容工程与生成式视觉，
+          也持续记录每一次从问题到交付的过程。
+        </p>
+        <div className="about-proof-strip" aria-label="Focus areas">
+          <span>AI WORKFLOWS</span>
+          <span>CONTENT SYSTEMS</span>
+          <span>APPLIED LEARNING</span>
+        </div>
       </header>
 
       {/* Profile */}
-      <section className="about-subsection">
-        <h2>个人简介</h2>
-        <div className="about-profile">
-          <p>
-            2002 年生，佛山大学计算机科学与技术本科（2025 届）。当前在职，任 AI
-            部成员，负责「用 AI 为企业提效」，坐标佛山禅城。
-          </p>
-          <p className="muted-block">
-            联系邮箱：
-            <a href="mailto:coya20020824@gmail.com">coya20020824@gmail.com</a>
-          </p>
-        </div>
-      </section>
+      <RevealOnScroll>
+        <section className="about-subsection about-manifesto">
+          <span className="about-section-label">PROFILE</span>
+          <h2>个人简介</h2>
+          <div className="about-profile">
+            <p>
+              我习惯从一个不够清楚的问题开始：先拆出业务目标、输入、流程和验证方式，再判断
+              AI 应该接管哪一步、哪些判断必须留给人。最终交付的不只是一次演示，而是能继续使用、
+              复盘和迭代的工作方法。
+            </p>
+            <p>
+              2002 年生，佛山大学计算机科学与技术本科（2025 届）。当前在职，任 AI
+              部成员，负责「用 AI 为企业提效」，坐标佛山禅城。
+            </p>
+            <p className="muted-block">
+              联系邮箱：
+              <a href="mailto:coya20020824@gmail.com">coya20020824@gmail.com</a>
+            </p>
+          </div>
+        </section>
+      </RevealOnScroll>
 
       {/* Education */}
       <ExpSection heading="教育" items={education} />
@@ -174,48 +199,55 @@ export default async function AboutPage() {
       <ExpSection heading="工作经历" items={experience} />
 
       {/* Skills & Stack */}
-      <section className="about-subsection">
-        <h2>Skills &amp; Stack</h2>
-        <ul className="exp-list">
-          {skills.map((item) => (
-            <li className="exp-card" key={item.title}>
-              <span className="exp-period">{item.period}</span>
-              <span className="exp-title">{item.title}</span>
-              {item.desc ? <p className="exp-desc">{item.desc}</p> : null}
-            </li>
-          ))}
-        </ul>
-        <div className="tech-grid">
-          {techStack.map((category) => (
-            <div className="tech-category" key={category.label}>
-              <h3>{category.label}</h3>
-              <ul className="tech-pills">
-                {category.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
+      <RevealOnScroll>
+        <section className="about-subsection">
+          <span className="about-section-label">CAPABILITY MAP</span>
+          <h2>Skills &amp; Stack</h2>
+          <ul className="exp-list skills-list">
+            {skills.map((item) => (
+              <li className="exp-card" key={item.title}>
+                <span className="exp-period">{item.period}</span>
+                <span className="exp-title">{item.title}</span>
+                {item.desc ? <p className="exp-desc">{item.desc}</p> : null}
+              </li>
+            ))}
+          </ul>
+          <div className="tech-grid">
+            {techStack.map((category) => (
+              <div className="tech-category" key={category.label}>
+                <h3>{category.label}</h3>
+                <ul className="tech-pills">
+                  {category.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      </RevealOnScroll>
 
       {/* Why this site exists */}
-      <section className="about-subsection">
-        <h2>Why this site exists</h2>
-        <div className="about-profile">
-          <p>
-            这个网站不是一次性作品集，而是一个持续维护的内容系统。它把日常记录、项目复盘和职业材料放到同一个
-            Git 仓库里，让每一次写作都能为长期成长和求职准备留下证据。
-          </p>
-          <p className="muted-block">
-            Built with Next.js App Router + TypeScript + Markdown/MDX. Deployed
-            on Vercel.
-          </p>
-        </div>
-      </section>
+      <RevealOnScroll>
+        <section className="about-subsection about-site-note">
+          <span className="about-section-label">THE SYSTEM</span>
+          <h2>Why this site exists</h2>
+          <div className="about-profile">
+            <p>
+              这个网站不是一次性作品集，而是一个持续维护的内容系统。它把日常记录、项目复盘和职业材料放到同一个
+              Git 仓库里，让每一次写作都能为长期成长和求职准备留下证据。
+            </p>
+            <p className="muted-block">
+              Built with Next.js App Router + TypeScript + Markdown/MDX. Deployed
+              on Vercel.
+            </p>
+          </div>
+        </section>
+      </RevealOnScroll>
 
       {/* Career — 合并自原 /career 路由 */}
-      <section className="about-subsection">
+      <section className="about-subsection career-materials">
+        <span className="about-section-label">CAREER MATERIALS</span>
         <h2 id="career">Career</h2>
         <p className="muted-block">
           一个连接技能、项目证据和求职材料的能力索引。原 /career 路由已合并到此页。

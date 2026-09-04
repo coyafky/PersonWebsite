@@ -10,7 +10,6 @@
 | `logs/` | 每日/每周碎片记录、做了什么事 | 每条约 3-10 句 | `content/weekly/` |
 | `project-notes/` | 项目进展、踩坑记录、成果、技术决策 | 每次推进一个文件 | `content/projects/` |
 | `career-notes/` | 面试准备、技能复盘、成就记录 | 每条事实/故事一段 | `content/career/` |
-| `ai-notes/` | AI 论文、产品、模型、工具、播客、讨论 | 每个来源或主题一条 | `content/ai-tracker/` |
 | `book-notes/` | 读书摘录、章节笔记、阅读收获 | 单本书或单章节碎片 | `content/book-list/` |
 
 ## 使用原则
@@ -58,7 +57,6 @@
 | `logs/` 积累一周 | 每周日或你要求 | `content/weekly/YYYY-WNN.md` | `/weekly-from-inbox` |
 | `project-notes/` 有更新 | 你要求 | `content/projects/<slug>.mdx` | 手动触发 |
 | `career-notes/` 有新素材 | 你要求 | `content/career/bullets.md` 等 | `/project-to-career` |
-| `ai-notes/` 有新素材 | 你要求或 AI source 值得追踪 | `content/ai-tracker/<slug>.md` | `/ai-tracker-from-inbox` |
 | `book-notes/` 有新素材 | 你要求整理一本书 | `content/book-list/<slug>.md` | `/book-list-from-inbox` |
 
 ## Obsidian → Inbox 同步
@@ -87,7 +85,6 @@ npm run knowledge:report
 #to-weekly
 #to-project
 #to-career
-#to-ai-tracker
 #to-book-list
 #to-personal-website
 ```
