@@ -8,7 +8,7 @@ tags:
   - "AI Skill"
   - "知识管理"
   - "工作流"
-status: draft
+status: published
 lang: zh
 englishSummary: "How I turned 'reading a book one page at a time with AI' into a reusable Skill: PDF page splitting, per-physical-page explanations, interactive Q&A, note accumulation, and precise progress tracking via progress.json. Key decisions explained — why interactive co-reading over batch summarization, why verbatim page quotes are essential, and why progress must key on physical pages."
 ---
