@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import {
   getBlogPosts,
+  getDiaryPosts,
   getBookNotes,
   getBookTopics,
   getCourseNotes,
@@ -15,8 +16,9 @@ import { buildUrl } from "@/lib/metadata";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /career 已合并到 /about（app/(site)/career/page.tsx 仅 307 跳转）。
   // 不暴露 /career 条目，避免搜索引擎索引跳转链。
-  const [blog, weekly, projects] = await Promise.all([
+  const [blog, diary, weekly, projects] = await Promise.all([
     getBlogPosts(),
+    getDiaryPosts(),
     getWeeklyPosts(),
     getProjectPosts(),
   ]);
@@ -25,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: buildUrl("/"), lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
     { url: buildUrl("/blog"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: buildUrl("/timeline"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
+    { url: buildUrl("/diary"), lastModified: new Date(), changeFrequency: "daily", priority: 0.7 },
     { url: buildUrl("/weekly"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: buildUrl("/projects"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: buildUrl("/gallery"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
@@ -38,6 +41,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(post.date),
     changeFrequency: "monthly" as const,
     priority: 0.6,
+  }));
+
+  const diaryUrls: MetadataRoute.Sitemap = diary.map((post) => ({
+    url: buildUrl(`/diary/${post.slug}`),
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
   }));
 
   const weeklyUrls: MetadataRoute.Sitemap = weekly.map((post) => ({
@@ -128,6 +138,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticPages,
     ...blogUrls,
+    ...diaryUrls,
     ...weeklyUrls,
     ...projectUrls,
     ...bookIndexUrls,

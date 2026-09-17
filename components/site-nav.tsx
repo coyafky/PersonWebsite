@@ -9,6 +9,7 @@ import {
   Icons0Book,
   Icons0Calendar,
   Icons0Course,
+  Icons0Document,
   Icons0Image,
   Icons0Notebook,
   Icons0Portfolio,
@@ -17,6 +18,7 @@ import {
 
 const navItems = [
   { href: "/blog", icon: Icons0Blog, label: "Blog" },
+  { href: "/diary", icon: Icons0Document, label: "Diary" },
   { href: "/weekly", icon: Icons0Calendar, label: "Weekly" },
   { href: "/learning", icon: Icons0Notebook, label: "Learning" },
   { href: "/book-list", icon: Icons0Book, label: "Book List" },

@@ -26,6 +26,16 @@ export const blogSchema = baseContentSchema.extend({
   canonical: z.string().optional(),
 });
 
+export const diarySchema = baseContentSchema.extend({
+  kind: z.literal("diary"),
+  tags: stringArraySchema,
+  lang: z.string().default("zh"),
+  updated: z.string().optional(),
+  mood: z.string().optional(),
+  // 来源可追溯：log=当日原始日志，weekly=从周记时间轴重建，memory=从记忆笔记重建
+  source: z.enum(["log", "weekly", "memory"]).default("log"),
+});
+
 export const weeklySchema = baseContentSchema.extend({
   kind: z.literal("weekly"),
   week: z.string().regex(/^\d{4}-W\d{2}$/),
@@ -112,6 +122,7 @@ export const gallerySchema = baseContentSchema.extend({
 
 export const schemaByKind = {
   blog: blogSchema,
+  diary: diarySchema,
   weekly: weeklySchema,
   projects: projectSchema,
   career: careerSchema,
@@ -126,6 +137,7 @@ export const schemaByKind = {
 export type ContentKind = keyof typeof schemaByKind;
 export type ContentStatus = z.infer<typeof contentStatusSchema>;
 export type BlogPost = z.infer<typeof blogSchema>;
+export type DiaryPost = z.infer<typeof diarySchema>;
 export type WeeklyPost = z.infer<typeof weeklySchema>;
 export type ProjectPost = z.infer<typeof projectSchema>;
 export type CareerPost = z.infer<typeof careerSchema>;
@@ -137,6 +149,7 @@ export type CourseNotePost = z.infer<typeof courseNoteSchema>;
 export type GalleryPost = z.infer<typeof gallerySchema>;
 export type SiteContent =
   | BlogPost
+  | DiaryPost
   | WeeklyPost
   | ProjectPost
   | CareerPost

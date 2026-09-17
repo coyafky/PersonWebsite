@@ -10,6 +10,7 @@ import {
   type ContentKind,
   type CourseIndexPost,
   type CourseNotePost,
+  type DiaryPost,
   type GalleryPost,
   type LearningPost,
   type ProjectPost,
@@ -32,6 +33,7 @@ const statusProbeSchema = z.object({
 
 type CollectionMap = {
   blog: BlogPost;
+  diary: DiaryPost;
   weekly: WeeklyPost;
   projects: ProjectPost;
   career: CareerPost;
@@ -176,6 +178,49 @@ export async function getBlogPostsPaginated(
   const posts = allPosts.slice(start, start + pageSize);
 
   return { posts, total, page: clampedPage, pageSize, totalPages };
+}
+
+export async function getDiaryPosts(includeDrafts = false): Promise<DiaryPost[]> {
+  const items = await getCollection("diary", includeDrafts);
+  return items.filter((item): item is DiaryPost => item.kind === "diary");
+}
+
+export async function getDiaryPostsPaginated(
+  includeDrafts = false,
+  opts?: { page?: number; pageSize?: number },
+): Promise<PaginatedPosts<DiaryPost>> {
+  const page = opts?.page ?? 1;
+  const pageSize = opts?.pageSize ?? 28;
+  const allPosts = await getDiaryPosts(includeDrafts);
+  const total = allPosts.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const clampedPage = Math.min(page, totalPages);
+  const start = (clampedPage - 1) * pageSize;
+  const posts = allPosts.slice(start, start + pageSize);
+
+  return { posts, total, page: clampedPage, pageSize, totalPages };
+}
+
+/** 按月归档，用于日记列表页的分组展示 */
+export async function getDiaryArchive(): Promise<
+  { month: string; count: number; entries: DiaryPost[] }[]
+> {
+  const posts = await getDiaryPosts();
+  const byMonth = new Map<string, DiaryPost[]>();
+
+  for (const post of posts) {
+    const month = post.date.slice(0, 7);
+    const bucket = byMonth.get(month);
+    if (bucket) {
+      bucket.push(post);
+    } else {
+      byMonth.set(month, [post]);
+    }
+  }
+
+  return [...byMonth.entries()]
+    .toSorted((a, b) => b[0].localeCompare(a[0]))
+    .map(([month, entries]) => ({ month, count: entries.length, entries }));
 }
 
 export async function getWeeklyPosts(includeDrafts = false): Promise<WeeklyPost[]> {
@@ -644,6 +689,7 @@ export type TagCount = {
 function emptyKindCounts(): Record<ContentKind, number> {
   return {
     blog: 0,
+    diary: 0,
     weekly: 0,
     projects: 0,
     career: 0,
@@ -657,8 +703,9 @@ function emptyKindCounts(): Record<ContentKind, number> {
 }
 
 export async function getAllTags(): Promise<TagCount[]> {
-  const [blog, weekly, career, topics, bookTopicList, courseTopicList] = await Promise.all([
+  const [blog, diary, weekly, career, topics, bookTopicList, courseTopicList] = await Promise.all([
     getBlogPosts(),
+    getDiaryPosts(),
     getWeeklyPosts(),
     getCareerPosts(),
     getLearningTopics(),
@@ -694,6 +741,7 @@ export async function getAllTags(): Promise<TagCount[]> {
   }
 
   for (const post of blog) for (const tag of post.tags) bump(tag, "blog");
+  for (const post of diary) for (const tag of post.tags) bump(tag, "diary");
   for (const post of weekly) for (const tag of post.tags) bump(tag, "weekly");
   for (const post of career) for (const tag of post.tags ?? []) bump(tag, "career");
   for (const post of bookIndexPosts) for (const tag of post.tags) bump(tag, "book-index");
