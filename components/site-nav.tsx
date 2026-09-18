@@ -14,6 +14,7 @@ import {
   Icons0Notebook,
   Icons0Portfolio,
   Icons0Profile,
+  Icons0Tools,
 } from "@/components/icons0";
 
 const navItems = [
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/course-list", icon: Icons0Course, label: "Course List" },
   { href: "/projects", icon: Icons0Portfolio, label: "Projects" },
   { href: "/gallery", icon: Icons0Image, label: "Gallery" },
+  { href: "/tools", icon: Icons0Tools, label: "Tools" },
   { href: "/about", icon: Icons0Profile, label: "About" },
 ];
 

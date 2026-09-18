@@ -12,6 +12,7 @@ import {
   getLearningPosts,
 } from "@/lib/content";
 import { buildUrl } from "@/lib/metadata";
+import { TOOLS } from "@/lib/tools/registry";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /career 已合并到 /about（app/(site)/career/page.tsx 仅 307 跳转）。
@@ -34,7 +35,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: buildUrl("/learning"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
     { url: buildUrl("/book-list"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: buildUrl("/course-list"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: buildUrl("/tools"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
   ];
+
+  const toolUrls: MetadataRoute.Sitemap = TOOLS.map((tool) => ({
+    url: buildUrl(`/tools/${tool.id}`),
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
 
   const blogUrls: MetadataRoute.Sitemap = blog.map((post) => ({
     url: buildUrl(`/blog/${post.slug}`),
@@ -146,5 +155,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...courseIndexUrls,
     ...courseNoteUrls,
     ...learningUrls,
+    ...toolUrls,
   ];
 }

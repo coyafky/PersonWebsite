@@ -3938,3 +3938,671 @@ body {
     transition: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Tools — 小工具栏目（番茄钟 / 倒计时）
+   只消费上面既有的 token，不新增颜色、不引入新字体族。
+   全站为 color-scheme: light，因此这里不写暗色分支；
+   动效统一尊重 prefers-reduced-motion。
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 工具索引卡片 ───────────────────────────────────────────────────── */
+
+.tool-index-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+.tool-index-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.tool-index-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px var(--accent), 0 12px 24px -12px rgba(17, 19, 15, 0.22);
+}
+
+.tool-index-card:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.tool-index-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.tool-index-summary {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.tool-index-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tool-index-keywords li {
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-soft);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ── 工具主体：左侧面板 + 右侧设置 ─────────────────────────────────── */
+
+.tool-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--space-6);
+  margin-top: var(--space-7);
+}
+
+@media (max-width: 860px) {
+  .tool-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tool-face {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.tool-phase {
+  margin: 0;
+  /* 与 .brand 同一套窄体大写排版，保持站点语汇一致 */
+  font-family: "Arial Narrow", "Avenir Next Condensed", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tool-face--focus .tool-phase {
+  color: var(--accent);
+}
+
+/* 大号读数。tabular-nums 让每位数字等宽 —— 否则每秒跳动时
+   整串数字会横向抖动，长时间盯着很累。 */
+.tool-readout {
+  margin: 0;
+  font-size: clamp(56px, 12vw, 96px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.tool-hint {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.tool-progress {
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-soft);
+  overflow: hidden;
+}
+
+.tool-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width var(--transition-fast);
+}
+
+.tool-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tool-keyhint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.tool-keyhint kbd {
+  padding: 1px 6px;
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  box-shadow: var(--shadow-border);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* ── 右侧设置块 ─────────────────────────────────────────────────────── */
+
+.tool-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.tool-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.tool-block-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tool-dots {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.tool-dot {
+  flex: 1;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-soft);
+}
+
+.tool-dot.is-done {
+  background: var(--accent);
+}
+
+.tool-stat {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.tool-stat strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.tool-field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.tool-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.tool-field select,
+.tool-field input {
+  min-height: 38px;
+  padding: 0 var(--space-3);
+  border: none;
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  box-shadow: var(--shadow-border);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.tool-field input[type="number"] {
+  width: 76px;
+}
+
+.tool-field select:focus-visible,
+.tool-field input:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.tool-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tool-chip {
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--surface-soft);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.tool-chip:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.tool-chip.is-active {
+  background: var(--text);
+  color: #ffffff;
+}
+
+.tool-chip:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.tool-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.tool-switch input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
+.tool-note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.tool-loading {
+  margin: 0;
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.tool-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── 详情页正文说明 ─────────────────────────────────────────────────── */
+
+.tool-notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 720px;
+  margin-top: var(--space-8);
+}
+
+.tool-notes h2 {
+  margin: var(--space-4) 0 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.tool-notes h2:first-child {
+  margin-top: 0;
+}
+
+.tool-notes p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tool-index-card,
+  .tool-progress-fill,
+  .tool-chip {
+    transition: none;
+  }
+
+  .tool-index-card:hover {
+    transform: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   About v2 — 三段式 + 横向画廊
+   目标：把「从上到下码模块」的简历读感打断。
+   只消费既有 token；动效走已装的 framer-motion（无新依赖）。
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.about-more {
+  margin: var(--space-5) 0 0;
+}
+
+/* ── 横向画廊：我做过什么 ───────────────────────────────────────────── */
+
+.about-rail {
+  margin-top: var(--space-5);
+}
+
+.about-rail-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(280px, 340px);
+  gap: var(--space-4);
+  margin: 0;
+  padding: var(--space-1) var(--space-1) var(--space-5);
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.about-rail-track:focus-visible {
+  outline: none;
+  border-radius: var(--radius-card);
+  box-shadow: var(--focus-ring);
+}
+
+.about-rail-item {
+  scroll-snap-align: start;
+  display: flex;
+}
+
+.about-rail-card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.about-rail-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 0 1px var(--accent),
+    0 14px 28px -14px rgba(17, 19, 15, 0.24);
+}
+
+.about-rail-card:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.about-rail-meta {
+  font-family: "Arial Narrow", "Avenir Next Condensed", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.about-rail-title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.about-rail-summary {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.about-rail-cta {
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.about-rail-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.about-rail-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-border);
+  color: var(--text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.about-rail-btn:hover:not(:disabled) {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.about-rail-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.about-rail-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* 窄屏：横向滚动在小屏上是负体验 → 退回纵向堆叠 */
+@media (max-width: 720px) {
+  .about-rail-track {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding-bottom: 0;
+  }
+
+  .about-rail-nav {
+    display: none;
+  }
+}
+
+/* ── 我的特点和优势 ─────────────────────────────────────────────────── */
+
+.about-traits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.about-trait {
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.about-trait-title {
+  margin: 0 0 var(--space-2);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.about-trait-desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.about-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.about-stack-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.about-stack-label {
+  padding-top: 3px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.about-stack-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.about-stack-chip {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-soft);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .about-stack-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+}
+
+/* ── 折叠：经历与求职材料 ───────────────────────────────────────────── */
+
+.about-fold {
+  margin-top: var(--space-8);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.about-fold > summary {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-5);
+  cursor: pointer;
+  list-style: none;
+}
+
+.about-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.about-fold > summary:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.about-fold-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+/* 展开指示 —— 纯 CSS，不额外加图标 */
+.about-fold-title::after {
+  content: " ＋";
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.about-fold[open] .about-fold-title::after {
+  content: " －";
+}
+
+.about-fold-hint {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.about-fold-body {
+  padding: var(--space-6) var(--space-5);
+  box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
+}
+
+.about-fold-block + .about-fold-block {
+  margin-top: var(--space-7);
+}
+
+.about-fold-block > h3 {
+  margin: 0 0 var(--space-4);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-rail-card,
+  .about-rail-btn {
+    transition: none;
+  }
+
+  .about-rail-card:hover {
+    transform: none;
+  }
+}

@@ -165,3 +165,20 @@ export function Icons0Image(props: IconProps) {
     </IconBase>
   );
 }
+
+/** 秒表：/tools 栏目的导航图标（与既有图标同为 32×32 viewBox + currentColor） */
+export function Icons0Tools(props: IconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="16" cy="18" r="9.5" fill="none" stroke="currentColor" strokeWidth="3" />
+      <path
+        d="M16 11.5V18h5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="square"
+      />
+      <path d="M12 3h8v3h-8z" fill="currentColor" />
+    </IconBase>
+  );
+}

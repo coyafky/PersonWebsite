@@ -1,163 +1,102 @@
-import { type CareerPost, getCareerPosts } from "@/lib/content";
+import Link from "next/link";
+import { AboutHero } from "@/components/about/AboutHero";
+import { ProjectRail, type RailItem } from "@/components/about/ProjectRail";
+import { RevealOnScroll, StaggerContainer, StaggerItem } from "@/components/animations";
 import { MdxContent } from "@/components/mdx-content";
-import { RevealOnScroll } from "@/components/animations";
+import { type CareerPost, getCareerPosts, getProjectPosts } from "@/lib/content";
 
 export const metadata = {
   title: "About",
   description:
-    "冯科雅 (Coya) —— CS 背景，AI 提效实践者。个人介绍、经历、项目与技术栈。",
+    "冯科雅 (Coya) —— 我把 AI 接进真实业务：怎么做事、做过什么、以及我看重什么。",
 };
 
-// 期望的展示顺序：goal-roadmap → goal-checklist → profile → bullets → star-stories
-const careerOrder: Record<string, number> = {
-  "goal-roadmap": 1,
-  "goal-checklist": 2,
-  profile: 3,
-  bullets: 4,
-  "star-stories": 5,
-};
-
-function sortCareerItems(items: CareerPost[]) {
-  return items.toSorted((a, b) => {
-    const orderA = careerOrder[a.slug] ?? 100;
-    const orderB = careerOrder[b.slug] ?? 100;
-    if (orderA !== orderB) {
-      return orderA - orderB;
-    }
-    return b.date.localeCompare(a.date);
-  });
-}
-
-type ExpItem = {
-  period: string;
-  title: string;
-  desc: string;
-  link?: { href: string; label: string };
-};
-
-type TechCategory = {
-  label: string;
-  items: string[];
-};
-
-const education: ExpItem[] = [
+/**
+ * 我的做事方式（原 /about 的「Skills & Stack」+ profile.md 的「工作风格」合并压缩）。
+ *
+ * 前 4 条直接来自 content/career/profile.md 的「工作风格」段（你自己写的原文），
+ * 第 5 条是我从这一周的 lab 记录里提炼的 —— 不合适就删。
+ * 这里刻意用「行为」而不是「能力标签」来描述：能力标签是简历语言，行为不是。
+ */
+const traits: { title: string; desc: string }[] = [
   {
-    period: "2021.09–2025.06",
-    title: "佛山大学 · 计算机科学与技术",
-    desc:
-      "本科。主修：操作系统、数据库、软件工程、软件测试。" +
-      "毕业设计：智能家教推荐系统，参与测试用例编写、接口测试及问题跟进，" +
-      "使用 Postman 发现并协同修复 3 处接口问题。",
+    title: "多件事一起跑",
+    desc: "并行推进是默认模式，不串行等待。手上同时开几条线，互相之间不阻塞。",
+  },
+  {
+    title: "先要「下一步」，不要开放题",
+    desc: "比起「你想怎么做？」，更擅长接过一个明确的目标往下推。目标不清时我会先去把目标问清。",
+  },
+  {
+    title: "能自动跑的绝不手动盯",
+    desc: "重复的事一律做成定时任务或脚本。设一次，让它自己跑，我只在出问题时介入。",
+  },
+  {
+    title: "结论要有依据，不接受空安慰",
+    desc: "数据说话。拿不出依据的结论就是没结论，哪怕它听起来很顺。对自己也一样。",
+  },
+  {
+    title: "不把「看起来对」当成「实测对」",
+    desc: "现象对、理由可能是错的。所以习惯把说法变成能跑出数字的断言 —— 能证伪的才算数。",
   },
 ];
 
-const experience: ExpItem[] = [
-  {
-    period: "2025.06–2025.08",
-    title: "美鑫梳刷制造有限公司 · 阿里巴巴国际站运营",
-    desc:
-      "根据 B2B 买家搜索习惯整理英文标题写法，结合 AI 工具产出 20+ 组标题方案；" +
-      "使用 Excel 清洗 100+ 条客户询盘数据，按内容进行关键词标记和分类整理；" +
-      "结合 Google Trend 趋势上新和上架新品。",
-  },
-  {
-    period: "2025.09–2025.12",
-    title: "广州互诚密胺制品有限公司 · 外贸业务员",
-    desc:
-      "参与海外客户开发、产品介绍、报价沟通和订单跟进；" +
-      "通过客户筛选、主动沟通、需求确认和持续跟进，任职期间促成 2 单成交；" +
-      "根据客户反馈整理需求信息，协助推进后续沟通和销售跟进。",
-  },
+/** 能力面：把原来的 skills 数组 + 4 组 techStack 压成 3 行 */
+const stack: { label: string; items: string[] }[] = [
+  { label: "语言 / 框架", items: ["TypeScript", "Python", "Next.js", "SQL"] },
+  { label: "AI 工程", items: ["Hermes Agent", "Claude Code", "Codex CLI", "Agent Teams", "OpenClaw"] },
+  { label: "内容与协作", items: ["Obsidian", "飞书", "Git / GitHub", "Vercel"] },
 ];
 
-const skills: ExpItem[] = [
-  {
-    period: "能力",
-    title: "AI 应用与工作流",
-    desc:
-      "能使用 OpenClaw、飞书等工具搭建轻量业务 Agent，支持客服、内容起稿和线索整理场景。",
-  },
-  {
-    period: "能力",
-    title: "业务理解与执行",
-    desc:
-      "能围绕门店咨询、内容获客、客户跟进等场景梳理流程，并输出可演示的 AI 原型。",
-  },
-  {
-    period: "能力",
-    title: "沟通与协作",
-    desc: "熟悉使用飞书进行信息同步、问题跟进和跨角色协作。",
-  },
-  {
-    period: "能力",
-    title: "英文沟通",
-    desc: "具备基本英语听说读写能力，参加过第 138 届广交会。",
-  },
-];
+/**
+ * 折叠区只放**已经发生过的事**：学历、任职、简历条目、STAR 故事。
+ *
+ * 刻意排除：
+ *  - profile.md —— 内容已拆进上面三节，再渲染就是重复
+ *  - goal-roadmap / goal-checklist —— 「6 个月路线图 / JD 覆盖度 / 达标自检」，
+ *    全是朝前看的目标，不是「我做过什么」。这两个文件已于 2026-09-18 删除。
+ *
+ * 注意 bullets 目前是 status: draft → 走 getCareerPosts() 时不会渲染。
+ * 保留在名单里，等它改成 published 就会自动出现在折叠区。
+ */
+// 注意 bullets 目前是 status: draft → 走 getCareerPosts() 时不会渲染。
+// 保留在名单里，等它改成 published 就会自动出现在折叠区。
+const CAREER_FOLD_ORDER = ["bullets", "star-stories"];
 
-const techStack: TechCategory[] = [
-  {
-    label: "Languages & Frameworks",
-    items: ["TypeScript", "Python", "JavaScript", "Next.js", "Astro", "SQL"],
-  },
-  {
-    label: "AI & Agent Tools",
-    items: ["Hermes Agent", "Claude Code", "Codex CLI", "OpenCode", "OpenClaw", "Agent Teams"],
-  },
-  {
-    label: "Productivity & Content",
-    items: ["Obsidian", "Feishu / Lark", "Git / GitHub", "VSCode", "Vercel"],
-  },
-  {
-    label: "Testing & Data",
-    items: ["Postman", "Excel", "Mermaid", "gray-matter", "Zod"],
-  },
-];
-
-function ExpSection({
-  heading,
-  items,
-}: {
-  heading: string;
-  items: ExpItem[];
-}) {
-  return (
-    <RevealOnScroll>
-      <section className="about-subsection">
-        <span className="about-section-label">EXPERIENCE</span>
-        <h2>{heading}</h2>
-        <ul className="exp-list">
-          {items.map((item) => (
-            <li className="exp-card" key={item.title}>
-              <span className="exp-period">{item.period}</span>
-              <span className="exp-title">{item.title}</span>
-              {item.desc ? <p className="exp-desc">{item.desc}</p> : null}
-              {item.link ? (
-                <a className="exp-link" href={item.link.href}>
-                  {item.link.label} →
-                </a>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      </section>
-    </RevealOnScroll>
-  );
+function sortCareer(items: CareerPost[]) {
+  return [...items]
+    .filter((item) => CAREER_FOLD_ORDER.includes(item.slug))
+    .sort((a, b) => CAREER_FOLD_ORDER.indexOf(a.slug) - CAREER_FOLD_ORDER.indexOf(b.slug));
 }
 
 export default async function AboutPage() {
-  const careerItems = await getCareerPosts(true);
-  const sortedCareerItems = sortCareerItems(careerItems);
+  const [projects, careerItems] = await Promise.all([
+    getProjectPosts(),
+    // ⚠️ 不传 true。旧版这里写的是 getCareerPosts(true)（includeDrafts），
+    // 而 content/career/ 里有 3 份 status: draft —— 等于把草稿公开发布在
+    // 一个静态页上还进了 sitemap。草稿就是草稿，不该因为「顺手传了个 true」上线。
+    getCareerPosts(),
+  ]);
+
+  // 精选置顶，其余按日期倒序 —— 与 /projects 的口径一致
+  const railItems: RailItem[] = [...projects]
+    .sort((a, b) => {
+      if (a.featured !== b.featured) return a.featured ? -1 : 1;
+      return b.date.localeCompare(a.date);
+    })
+    .map((project) => ({
+      slug: project.slug,
+      title: project.title,
+      summary: project.summary,
+      meta: [project.role, project.period].filter(Boolean).join(" · "),
+      href: `/projects/${project.slug}`,
+    }));
+
+  const foldedCareer = sortCareer(careerItems);
 
   return (
     <div className="page-shell narrow about-page">
-      <header className="page-header about-hero">
-        <span className="about-kicker">ABOUT / COYA FENG</span>
-        <h1>
-          <span>我把 AI 接进真实业务，</span>
-          <span>让流程更清晰，</span>
-          <span>结果可验证。</span>
-        </h1>
+      <AboutHero>
         <p>
           计算机科学本科 · AI 提效实践者。关注 Agent 工作流、内容工程与生成式视觉，
           也持续记录每一次从问题到交付的过程。
@@ -167,13 +106,13 @@ export default async function AboutPage() {
           <span>CONTENT SYSTEMS</span>
           <span>APPLIED LEARNING</span>
         </div>
-      </header>
+      </AboutHero>
 
-      {/* Profile */}
+      {/* ① 我是谁 */}
       <RevealOnScroll>
-        <section className="about-subsection about-manifesto">
-          <span className="about-section-label">PROFILE</span>
-          <h2>个人简介</h2>
+        <section className="about-subsection">
+          <span className="about-section-label">WHO I AM</span>
+          <h2>我是谁</h2>
           <div className="about-profile">
             <p>
               我习惯从一个不够清楚的问题开始：先拆出业务目标、输入、流程和验证方式，再判断
@@ -192,75 +131,114 @@ export default async function AboutPage() {
         </section>
       </RevealOnScroll>
 
-      {/* Education */}
-      <ExpSection heading="教育" items={education} />
-
-      {/* Work Experience */}
-      <ExpSection heading="工作经历" items={experience} />
-
-      {/* Skills & Stack */}
+      {/* ② 我做过什么 —— 横向画廊 */}
       <RevealOnScroll>
         <section className="about-subsection">
-          <span className="about-section-label">CAPABILITY MAP</span>
-          <h2>Skills &amp; Stack</h2>
-          <ul className="exp-list skills-list">
-            {skills.map((item) => (
-              <li className="exp-card" key={item.title}>
-                <span className="exp-period">{item.period}</span>
-                <span className="exp-title">{item.title}</span>
-                {item.desc ? <p className="exp-desc">{item.desc}</p> : null}
-              </li>
+          <span className="about-section-label">WHAT I&apos;VE BUILT</span>
+          <h2>我做过什么</h2>
+          <p className="muted-block">
+            横着看，一共 {railItems.length} 件。每个都能点进去看细节和当时踩过的坑。
+          </p>
+        </section>
+      </RevealOnScroll>
+
+      <ProjectRail items={railItems} />
+
+      <RevealOnScroll>
+        <p className="about-more">
+          <Link className="button secondary" href="/projects">
+            全部项目 →
+          </Link>
+        </p>
+      </RevealOnScroll>
+
+      {/* ③ 我的特点和优势 */}
+      <RevealOnScroll>
+        <section className="about-subsection">
+          <span className="about-section-label">HOW I WORK</span>
+          <h2>我的特点和优势</h2>
+          <StaggerContainer className="about-traits">
+            {traits.map((trait) => (
+              <StaggerItem className="about-trait" key={trait.title}>
+                <h3 className="about-trait-title">{trait.title}</h3>
+                <p className="about-trait-desc">{trait.desc}</p>
+              </StaggerItem>
             ))}
-          </ul>
-          <div className="tech-grid">
-            {techStack.map((category) => (
-              <div className="tech-category" key={category.label}>
-                <h3>{category.label}</h3>
-                <ul className="tech-pills">
-                  {category.items.map((item) => (
-                    <li key={item}>{item}</li>
+          </StaggerContainer>
+
+          <div className="about-stack">
+            {stack.map((group) => (
+              <div className="about-stack-row" key={group.label}>
+                <span className="about-stack-label">{group.label}</span>
+                <span className="about-stack-items">
+                  {group.items.map((item) => (
+                    <span className="about-stack-chip" key={item}>
+                      {item}
+                    </span>
                   ))}
-                </ul>
+                </span>
               </div>
             ))}
           </div>
         </section>
       </RevealOnScroll>
 
-      {/* Why this site exists */}
+      {/* 折叠：经历与求职材料 */}
       <RevealOnScroll>
-        <section className="about-subsection about-site-note">
-          <span className="about-section-label">THE SYSTEM</span>
-          <h2>Why this site exists</h2>
-          <div className="about-profile">
-            <p>
-              这个网站不是一次性作品集，而是一个持续维护的内容系统。它把日常记录、项目复盘和职业材料放到同一个
-              Git 仓库里，让每一次写作都能为长期成长和求职准备留下证据。
-            </p>
-            <p className="muted-block">
-              Built with Next.js App Router + TypeScript + Markdown/MDX. Deployed
-              on Vercel.
-            </p>
-          </div>
-        </section>
-      </RevealOnScroll>
+        <details className="about-fold">
+          <summary>
+            <span className="about-section-label">MORE</span>
+            <span className="about-fold-title">经历与求职材料</span>
+            <span className="about-fold-hint">
+              教育、工作经历、简历条目与 STAR 故事 —— 都是已经发生的事，默认收起
+            </span>
+          </summary>
 
-      {/* Career — 合并自原 /career 路由 */}
-      <section className="about-subsection career-materials">
-        <span className="about-section-label">CAREER MATERIALS</span>
-        <h2 id="career">Career</h2>
-        <p className="muted-block">
-          一个连接技能、项目证据和求职材料的能力索引。原 /career 路由已合并到此页。
-        </p>
-        {sortedCareerItems.map((item) => (
-          <section key={item.slug} className="content-section">
-            <div className="section-heading">
-              <h2>{item.title}</h2>
-            </div>
-            <MdxContent source={item.body} />
-          </section>
-        ))}
-      </section>
+          <div className="about-fold-body">
+            <section className="about-fold-block">
+              <h3>教育</h3>
+              <ul className="exp-list">
+                <li className="exp-card">
+                  <span className="exp-period">2021.09–2025.06</span>
+                  <span className="exp-title">佛山大学 · 计算机科学与技术</span>
+                  <p className="exp-desc">
+                    本科。主修：操作系统、数据库、软件工程、软件测试。
+                    毕业设计：智能家教推荐系统，参与测试用例编写、接口测试及问题跟进。
+                  </p>
+                </li>
+              </ul>
+            </section>
+
+            <section className="about-fold-block">
+              <h3>工作经历</h3>
+              <ul className="exp-list">
+                <li className="exp-card">
+                  <span className="exp-period">2025.06–2025.08</span>
+                  <span className="exp-title">美鑫梳刷制造有限公司 · 阿里巴巴国际站运营</span>
+                  <p className="exp-desc">
+                    整理 B2B 买家搜索习惯与英文标题写法，结合 AI 工具产出 20+ 组标题方案；
+                    清洗 100+ 条客户询盘数据并分类标记。
+                  </p>
+                </li>
+                <li className="exp-card">
+                  <span className="exp-period">2024.09–2024.11</span>
+                  <span className="exp-title">广州互诚密胺制品有限公司 · 外贸业务员</span>
+                  <p className="exp-desc">
+                    参与海外客户开发、产品介绍、报价沟通与订单跟进，任职期间促成 2 单成交。
+                  </p>
+                </li>
+              </ul>
+            </section>
+
+            {foldedCareer.map((item) => (
+              <section className="about-fold-block" key={item.slug}>
+                <h3>{item.title}</h3>
+                <MdxContent source={item.body} />
+              </section>
+            ))}
+          </div>
+        </details>
+      </RevealOnScroll>
     </div>
   );
 }
