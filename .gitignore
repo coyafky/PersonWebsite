@@ -19,3 +19,7 @@ build/
 .env.local
 .vercel
 .alma-snapshots
+
+# 大体积非源码产物（勿入库；image-assept 是从网页另存时落下的资源目录）
+output/
+public/image-assept/
