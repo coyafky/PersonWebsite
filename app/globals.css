@@ -534,7 +534,7 @@ main {
   gap: 10px;
   margin-top: var(--space-5);
   padding-top: var(--space-5);
-  border-top: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
 }
 
 .share-btn {
@@ -782,9 +782,14 @@ main {
   font-weight: 500;
 }
 
+/* 原文是 `border-left: 2px solid var(--accent)` —— 与 callout 同一个反模式
+   （impeccable 的 [side-tab]：单侧彩色竖条）。改用中性层 + 圆角区分，
+   不上彩色：accent 是交互色，而这是一段静态文本。 */
 .english-summary {
-  border-left: 2px solid var(--accent);
-  padding-left: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  box-shadow: var(--shadow-border);
 }
 
 /* ── Markdown Body — article content ────────────────────────────────── */
@@ -1015,7 +1020,7 @@ main {
 .markdown-body .footnotes {
   margin-top: var(--space-8);
   padding-top: var(--space-5);
-  border-top: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
   font-size: 14px;
   color: var(--text-secondary);
 }
@@ -1043,7 +1048,7 @@ main {
 .related-posts {
   margin-top: var(--space-8);
   padding-top: var(--space-6);
-  border-top: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
 }
 
 .related-posts h3 {
@@ -1059,7 +1064,7 @@ main {
   justify-content: space-between;
   margin-top: var(--space-8);
   padding-top: var(--space-6);
-  border-top: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
 }
 
 .series-nav a {
@@ -1089,7 +1094,7 @@ main {
   gap: var(--space-4);
   margin-top: var(--space-8);
   padding-top: var(--space-6);
-  border-top: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
 }
 
 .post-nav__card {
@@ -1140,13 +1145,50 @@ main {
 
 /* ── Callout ────────────────────────────────────────────────────────── */
 
+/* Operate 模式的"第二中性层"做法也适用于这里：靠**底色 + 抬升**把 callout
+   与正文分开，而不是靠一条彩色边。
+   原来那条 `border-left: 3px solid var(--accent)` 有三个问题：
+     · impeccable 判定为「AI 生成 UI 最好认的破绽」
+     · 违反本站「用阴影当边框、不写 border」的约定
+     · accent 是**唯一交互色**，而 callout 不是交互元素 */
 .callout {
-  background: var(--surface);
-  box-shadow: var(--shadow-border);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-4);
   margin: var(--space-5) 0;
-  padding: var(--space-4) 18px;
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  box-shadow: var(--shadow-border);
+}
+
+.callout-label {
+  padding-top: 1px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+/* 只有需要提高权重的两类把标签压深 —— 仍然不上彩色。
+   impeccable 明确反对把高饱和色铺到非交互元素上。 */
+.callout-warning .callout-label,
+.callout-danger .callout-label {
+  color: var(--text);
+}
+
+.callout-body {
+  min-width: 0;
+}
+
+.callout-body > :first-child {
+  margin-top: 0;
+}
+
+.callout-body > :last-child {
+  margin-bottom: 0;
 }
 
 /* ── Career / Evidence Grids ────────────────────────────────────────── */
@@ -1225,7 +1267,7 @@ main {
   color: var(--text-secondary);
   font-size: 14px;
   font-weight: 400;
-  border-top: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
 }
 
 .site-footer-grid {
@@ -1943,7 +1985,7 @@ main {
   flex-wrap: wrap;
   gap: var(--space-2);
   padding-top: var(--space-3);
-  border-top: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
 }
 
 .entry-card-project-stack-item {
@@ -1961,9 +2003,13 @@ main {
 
 /* ── Gallery Grid ───────────────────────────────────────────────────── */
 
+/* ── Gallery — Experience 模式：作品主导，界面后退 ──────────────────── */
+
 .entry-card-gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  /* 280px → 320px：1200px 容器里从 4 列变 3 列。作品要够大才撑得起
+     "let the artifact lead"；塞得越多，每张图越像缩略图。 */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: var(--space-5);
 }
 
@@ -1971,11 +2017,16 @@ main {
   scroll-margin-top: 160px;
   display: grid;
   align-content: start;
-  gap: var(--space-3);
-  padding: var(--space-4);
+  gap: 0;
+  /* 去掉卡片内距：图就是卡片。原来的 16px padding 让第一眼看到的是
+     "一张白卡里嵌了张图"，界面在主导。 */
+  padding: 0;
   background: var(--surface);
   box-shadow: var(--shadow-border);
   border-radius: var(--radius-card);
+  /* 让图被卡片圆角裁切 —— 否则图的 --radius(10px) 和卡片
+     --radius-card(18px) 嵌套不齐，内圆角显脏 */
+  overflow: hidden;
   transition: box-shadow var(--transition-fast);
 }
 
@@ -1989,8 +2040,7 @@ main {
 }
 
 .entry-card-gallery-trigger {
-  display: grid;
-  gap: var(--space-3);
+  display: block;
   width: 100%;
   padding: 0;
   border: none;
@@ -1998,57 +2048,80 @@ main {
   color: inherit;
   text-align: left;
   cursor: pointer;
-  outline: none;
-  border-radius: var(--radius);
 }
 
 .entry-card-gallery-trigger:focus-visible {
+  outline: none;
   box-shadow: var(--focus-ring);
 }
 
 .entry-card-gallery-cover {
+  position: relative;   /* 叠加层的定位基准 */
   margin: 0;
   overflow: hidden;
-  box-shadow: var(--shadow-border);
-  border-radius: var(--radius);
 }
 
 .entry-card-gallery-cover img {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
+  /* 刻意不写 aspect-ratio / object-fit：各篇有自己的 params.ratio（有 1:1 也有 3:4），
+     强行裁成方形会把竖构图的上半身/七分身切掉。保持原生比例还有个副作用是好的 ——
+     卡片高度不再一致，破掉「形状相同的模块一路码下去」的清单感。 */
+  transition: transform var(--transition-smooth);
 }
 
+/* 悬停时给作品一点推近 —— 唯一加的一点"交互感"，不加装饰 */
+.entry-card-gallery-trigger:hover .entry-card-gallery-cover img,
+.entry-card-gallery-trigger:focus-visible .entry-card-gallery-cover img {
+  transform: scale(1.03);
+}
+
+/* 标题 + 模型徽章：叠在图上，默认隐去 */
 .entry-card-gallery-header {
+  position: absolute;
+  inset: auto 0 0 0;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  background: linear-gradient(
+    to top,
+    rgba(17, 19, 15, 0.78) 0%,
+    rgba(17, 19, 15, 0) 100%
+  );
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--transition-smooth),
+    transform var(--transition-smooth);
+}
+
+.entry-card-gallery-trigger:hover .entry-card-gallery-header,
+.entry-card-gallery-trigger:focus-visible .entry-card-gallery-header,
+.entry-card-gallery-expanded .entry-card-gallery-header {
+  opacity: 1;
+  transform: none;
 }
 
 .entry-card-gallery-title {
   margin: 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: -0.02em;
-  color: var(--text);
-  transition: color var(--transition-fast);
-}
-
-.entry-card-gallery-trigger:hover .entry-card-gallery-title,
-.entry-card-gallery-trigger:focus-visible .entry-card-gallery-title {
-  color: var(--accent);
+  /* 压在渐变遮罩上，固定白字，不跟随 --text */
+  color: #ffffff;
 }
 
 .entry-card-gallery-model {
   display: inline-block;
   padding: 2px var(--space-2);
-  color: var(--text-secondary);
-  background: var(--surface-soft);
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.16);
   font-family: "SF Mono", "Fira Code", monospace;
   font-size: 12px;
   font-weight: 500;
@@ -2057,12 +2130,36 @@ main {
   border-radius: var(--radius);
 }
 
+/* 触屏 / 无悬停设备：没有 hover 就等于没有标题 —— 遮罩常驻 */
+@media (hover: none) {
+  .entry-card-gallery-header {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .entry-card-gallery-details {
   display: grid;
   gap: var(--space-4);
-  padding-top: var(--space-3);
-  border-top: 1px solid rgba(0,0,0,0.06);
+  /* 原样式靠卡片 padding 撑内距；卡片去 padding 后必须自己带 */
+  padding: var(--space-4);
+  /* 原来是硬编码的 `border-top: 1px solid rgba(0,0,0,0.06)` —— 违反本站
+     "用阴影当边框、不写 border"的约定，换成 inset 阴影 */
+  box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-card-gallery-cover img,
+  .entry-card-gallery-header {
+    transition: none;
+  }
+
+  .entry-card-gallery-trigger:hover .entry-card-gallery-cover img,
+  .entry-card-gallery-trigger:focus-visible .entry-card-gallery-cover img {
+    transform: none;
+  }
+}
+
 
 .entry-card-gallery-detail-block {
   display: grid;
@@ -2151,7 +2248,7 @@ main {
 .entry-card-learning-tree {
   display: grid;
   gap: 0;
-  border-top: 1px solid rgba(0,0,0,0.06);
+  box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
 }
 
 .entry-card-learning {
@@ -3166,6 +3263,12 @@ main {
   --radius: 10px;
   --radius-card: 18px;
   --header-height: 68px;
+
+  /* 焦点环。原定义只在文件开头那个**已失效**的 :root 里，用的是旧主题蓝
+     #0072F5；而这第二个 :root 覆盖了全部颜色、却唯独漏了它 ——
+     结果全站 18 处焦点环的蓝和 --accent 不是同一个蓝。补在这里覆盖掉。
+     顺便：白环改用 --surface 而不是硬编码 #FFFFFF。 */
+  --focus-ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent);
 }
 
 html {
@@ -4604,5 +4707,424 @@ body {
 
   .about-rail-card:hover {
     transform: none;
+  }
+}
+
+.entry-card-gallery-note {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ── 本地音乐工具 ───────────────────────────────────────────────────── */
+
+.tool-panel--music {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+@media (max-width: 860px) {
+  .tool-panel--music {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tool-readout--sm {
+  font-size: clamp(34px, 6vw, 52px);
+}
+
+.tool-readout-unit {
+  margin-left: var(--space-2);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* 我最初写的是 `box-shadow: inset 3px 0 0 var(--accent)`，以为是"阴影"就没问题
+   —— 但 impeccable 判定成同一个 [side-tab] 反模式：换了个画法，还是那条竖条。
+   现在靠**字重**表达"这是错误、比普通说明更该看"：正文色而不是次级色。 */
+.tool-error {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  box-shadow: var(--shadow-border);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.tool-block--grow {
+  min-width: 0;
+}
+
+/* 曲目列表：365 首必须能滚，而不是把页面撑长 */
+.music-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: 440px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.music-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.music-row:hover {
+  background: var(--surface-soft);
+}
+
+.music-row:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.music-row.is-active {
+  background: var(--surface-soft);
+}
+
+.music-row.is-active .music-row-title {
+  color: var(--accent);
+}
+
+.music-row-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.music-row-title {
+  overflow: hidden;
+  font-size: 14px;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.music-row-meta {
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.music-row-size {
+  flex: none;
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.music-empty {
+  padding: var(--space-4);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* 播放条：横跨整行，贴在工具面板底部 */
+.music-player {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.music-player-now {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.music-player-title {
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.music-player-meta {
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.music-player-progress {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.music-time {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.music-seek,
+.music-volume input {
+  width: 100%;
+  height: 4px;
+  accent-color: var(--accent);
+}
+
+.music-player-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.music-volume {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 160px;
+  margin-left: auto;
+}
+
+.music-volume-label {
+  flex: none;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── 常驻悬浮播放条（Operate 模式）─────────────────────────────────────
+   设计依据 .claude/skills/impeccable/reference/operate.md：
+   fixed 定位逃离容器、状态齐全、动效 200ms、标签用正文字体、
+   accent 只在激活态、作为 toolbar 用第二中性层 + 抬升。
+   ─────────────────────────────────────────────────────────────────── */
+
+.music-np {
+  position: fixed;
+  z-index: 60; /* 高于 .site-header 的 50，低于浮层层级 */
+  inset: auto 0 16px 0;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
+  pointer-events: none; /* 外层不吃点击，只有内层吃 */
+  animation: music-np-in 200ms ease both;
+}
+
+@keyframes music-np-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.music-np-inner {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(180px, 260px) auto auto;
+  align-items: center;
+  gap: var(--space-4);
+  width: min(var(--container), 100%);
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  /* 第二中性层：比内容面稍重，加上抬升 —— 读得出"浮在内容之上" */
+  background: var(--surface);
+  box-shadow:
+    0 0 0 1px rgba(17, 19, 15, 0.1),
+    0 14px 32px -14px rgba(17, 19, 15, 0.28);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+.music-np-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.music-np-title {
+  overflow: hidden;
+  /* 正文字体 —— 不用站点那套窄体展示字（operate.md 的 Don't） */
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.music-np-meta {
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.music-np-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.music-np-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.music-np-btn:hover:not(:disabled) {
+  background: var(--surface-soft);
+  color: var(--text);
+}
+
+.music-np-btn:active:not(:disabled) {
+  background: var(--surface-hover);
+}
+
+.music-np-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.music-np-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* 只有"播放/暂停"这一颗用实心深色 —— 全站 .button.primary 的做法。
+   注意不是 accent：operate.md 明确反对把高饱和色铺到控件上。 */
+.music-np-btn--primary {
+  width: 38px;
+  height: 38px;
+  background: var(--text);
+  color: #ffffff;
+}
+
+.music-np-btn--primary:hover:not(:disabled) {
+  background: #333333;
+  color: #ffffff;
+}
+
+.music-np-progress {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.music-np-time {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.music-np-seek,
+.music-np-volume input {
+  width: 100%;
+  height: 4px;
+  accent-color: var(--accent);
+}
+
+.music-np-seek:disabled {
+  opacity: 0.4;
+}
+
+.music-np-volume {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 110px;
+}
+
+.music-np-volume-label {
+  flex: none;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.music-np-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.music-np-close:hover {
+  background: var(--surface-soft);
+  color: var(--text);
+}
+
+.music-np-close:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* 播放条可见时给页脚让出空间，别把它盖住。
+   用 :has() 就不需要 JS 去改 body 的 padding。 */
+body:has(.music-np) .site-footer {
+  padding-bottom: 112px;
+}
+
+/* 窄屏：结构性地砍掉次要控件，不是把字缩小 */
+@media (max-width: 860px) {
+  .music-np-volume {
+    display: none;
+  }
+
+  .music-np-inner {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+
+  .music-np-progress {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-np {
+    animation: none;
+  }
+
+  .music-np-btn,
+  .music-np-close {
+    transition: none;
   }
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CountdownTimer } from "@/components/tools/CountdownTimer";
+import { MusicLibrary } from "@/components/tools/MusicLibrary";
 import { PomodoroTimer } from "@/components/tools/PomodoroTimer";
 import { buildUrl, SITE_NAME } from "@/lib/metadata";
 import { getAllToolIds, getTool } from "@/lib/tools/registry";
@@ -23,12 +24,13 @@ export const dynamicParams = false;
 
 /**
  * 工具本体在这里映射。
- * 两个工具都不大，所以直接 import；工具变多时应改成按 id 动态加载，
- * 否则每加一个工具都会同时进这两个路由的客户端包。
+ * 三个工具都不大，所以直接 import；工具变多时应改成按 id 动态加载，
+ * 否则每加一个工具都会同时进这个路由的客户端包。
  */
 const TOOL_COMPONENTS: Record<string, () => React.ReactElement> = {
   pomodoro: PomodoroTimer,
   countdown: CountdownTimer,
+  music: MusicLibrary,
 };
 
 export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
@@ -88,6 +90,7 @@ export default async function ToolDetailPage({ params }: ToolPageProps) {
 
       {tool.id === "pomodoro" ? <PomodoroNotes /> : null}
       {tool.id === "countdown" ? <CountdownNotes /> : null}
+      {tool.id === "music" ? <MusicNotes /> : null}
     </div>
   );
 }
@@ -178,6 +181,52 @@ function CountdownNotes() {
       <p>
         只存在本机浏览器的本地存储里，不发送到服务器。清除浏览器数据后回到
         默认的 5 分钟。
+      </p>
+    </article>
+  );
+}
+
+function MusicNotes() {
+  return (
+    <article className="tool-notes">
+      <h2>为什么这个能读到你的本地音乐</h2>
+      <p>
+        它用的是浏览器的 File System Access API：你点一下「选择音乐文件夹」，
+        浏览器会弹出系统自带的文件夹选择框，你授权之后，这个页面就拿到了那个文件夹的
+        <strong>只读</strong>权限。代码里申请的是 <code>{'mode: "read"'}</code> ——
+        它连写入能力都没要，更不可能改你的文件。
+      </p>
+      <p>
+        关键点：文件<strong>从来没有离开你的机器</strong>。播放走的是浏览器给本地文件
+        临时生成的地址，不产生任何网络请求。所以这个页面部署在公网上也能用，
+        但你的音乐一首都不会上传。
+      </p>
+
+      <h2>为什么它只支持 Chrome / Edge</h2>
+      <p>
+        File System Access API 目前只有 Chromium 系实现了。Safari 和 Firefox
+        没有 <code>showDirectoryPicker</code>，所以这两个浏览器上打不开 ——
+        页面会直接告诉你原因，而不是给你一个坏掉的按钮。
+      </p>
+
+      <h2>要不要每次重新选文件夹</h2>
+      <p>
+        不用。选过一次之后，文件夹的句柄会存在浏览器的 IndexedDB 里，下次打开
+        直接点「恢复」就行。但浏览器出于安全考虑，<strong>权限必须由一次真实的点击触发</strong>
+        ——所以不能做到「打开就自动播」，那一步点一下是绕不过去的，这正是它能安全的原因。
+      </p>
+
+      <h2>关于重复曲目</h2>
+      <p>
+        扫描时会自动跳过 <code>Music_副本</code> 这类目录。本机实测那个目录里有 256 首
+        与正式库字节完全相同的重复文件，同时又有 108 首正式库里没有的曲目 ——
+        所以它不该被删除，但不该出现在歌单里。
+      </p>
+
+      <h2>数据存在哪里</h2>
+      <p>
+        只有「你选过哪个文件夹」这一个句柄存在浏览器本地。曲目列表每次都是现场扫描的，
+        不落盘、不上传。清除浏览器数据后重新选一次即可。
       </p>
     </article>
   );

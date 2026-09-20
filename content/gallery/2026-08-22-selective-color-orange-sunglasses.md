@@ -2,9 +2,10 @@
 title: "选择性色彩 · 橙色太阳镜"
 date: "2026-08-22"
 summary: "用选择性色彩让画面里唯一的颜色成为视觉焦点——橙色太阳镜在黑白背景中跳出。"
-image: "/gallery/placeholder-02.svg"
+image: "/gallery/2026-08-22-selective-color-orange-sunglasses.webp"
 model: "micu"
 prompt: "选择性色彩 太阳镜 橙色"
+fullPrompt: "Fashion portrait with selective color: close-up portrait of a person wearing vivid orange sunglasses, the entire scene desaturated to black and white except the orange sunglasses which stay fully saturated, soft studio lighting, cool and focused mood, high-fashion editorial look, no text."
 negativePrompt: "其他彩色物体，过曝"
 params:
   ratio: "1:1"

@@ -23,3 +23,7 @@ build/
 # 大体积非源码产物（勿入库；image-assept 是从网页另存时落下的资源目录）
 output/
 public/image-assept/
+
+# Preview 用 bun 起 dev 时会生成；本项目管理依赖用 npm（package-lock.json）
+bun.lock
+bun.lockb

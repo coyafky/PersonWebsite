@@ -2,9 +2,10 @@
 title: "明朝汉服 · 复古胶片"
 date: "2026-08-22"
 summary: "复古胶片质感与明制汉服结合：诗意、古风、有年代感的肖像。"
-image: "/gallery/placeholder-04.svg"
+image: "/gallery/2026-08-22-ming-dynasty-hanfu-film.webp"
 model: "gpt-image-2"
 prompt: "明朝 汉服 复古胶片"
+fullPrompt: "Ming-dynasty Chinese hanfu portrait photographed on retro analog film. A person wearing elegant Ming-style hanfu, three-quarter body framing, warm analog film color grading, low saturation with a faded aged look, visible film grain and soft vignetting, poetic and still atmosphere, classical ancient-China mood, no text."
 negativePrompt: "现代服饰，数码感，过度磨皮"
 params:
   ratio: "3:4"

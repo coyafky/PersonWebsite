@@ -37,6 +37,13 @@ export const TOOLS: SiteTool[] = [
       "任意时长的倒计时，带快捷预设与进度条。刷新页面或误关标签页不会丢失进度。",
     keywords: ["倒计时", "计时", "刷新不丢", "绝对时间戳"],
   },
+  {
+    id: "music",
+    title: "本地音乐",
+    summary:
+      "直接播放你 Mac 音乐库里的歌。不上传、不经过服务器 —— 文件始终留在你的机器上，浏览器只是读它。",
+    keywords: ["本地播放", "不上传", "零后端", "只读权限"],
+  },
 ];
 
 export function getTool(id: string): SiteTool | undefined {

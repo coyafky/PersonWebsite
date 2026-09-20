@@ -2,9 +2,10 @@
 title: "时代广场 · 慢门街拍"
 date: "2026-08-22"
 summary: "用慢门运动模糊把人群变成流动色块，主体清晰——制造「我是城市中心」的主角感。"
-image: "/gallery/placeholder-01.svg"
+image: "/gallery/2026-08-22-times-square-motion-blur.webp"
 model: "gpt-image-2"
 prompt: "时代广场 运动模糊 纽约"
+fullPrompt: "Times Square street-fashion photograph with slow-shutter motion blur: a stylish blonde woman standing tack-sharp in the foreground, the surrounding crowd reduced to flowing blurred color streaks, deep street perspective, 50-85mm telephoto compression, city daylight mixed with LED billboard light, neon urban color palette, busy fashionable metropolis mood, no text."
 negativePrompt: "静态人群，噪点，低清晰度"
 params:
   ratio: "3:4"
