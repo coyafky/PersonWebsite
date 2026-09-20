@@ -7,12 +7,31 @@ import { EntryCardCourseTopic } from "@/components/entry-card-course-topic";
 import { EntryCardLearning } from "@/components/entry-card-learning";
 import { EntryCardProject } from "@/components/entry-card-project";
 import { EntryCardWeekly } from "@/components/entry-card-weekly";
-import { getContentByTag } from "@/lib/content";
+import { getAllTags, getContentByTag } from "@/lib/content";
 import type { LearningPost } from "@/lib/content/schemas";
 
 type TagPageProps = {
   params: Promise<{ tag: string }>;
 };
+
+/**
+ * 把标签页预渲染成静态页。
+ *
+ * 加这个之前 /tags/[tag] 是 **ƒ Dynamic** —— 每次访问都要全量扫盘
+ * （getContentByTag 会拉全站 9 个集合：blog + diary + weekly + career +
+ * 全部 learning + book index/notes + course index/notes）。
+ * 对照：/blog/[slug]、/learning/*、/diary/* 一直是静态的，只有 tags 这条是动态。
+ *
+ * 2026-09-20 标签精简后只剩 73 个，全部预渲染成本很低。
+ *
+ * ⚠️ 刻意**不设** `export const dynamicParams = false`：
+ * 正文里可能存在指向长尾标签的链接，设成 false 会让那些 /tags/xxx 直接 404。
+ * 保持默认（true）→ 已知的走静态，未知的仍可按需渲染，不会造死链。
+ */
+export async function generateStaticParams() {
+  const tags = await getAllTags();
+  return tags.map((item) => ({ tag: item.tag }));
+}
 
 export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
   const { tag } = await params;
@@ -62,6 +81,31 @@ export default async function TagPage({ params }: TagPageProps) {
               <EntryCardBlog
                 key={post.slug}
                 href={`/blog/${post.slug}`}
+                title={post.title}
+                summary={post.summary}
+                date={post.date}
+                tags={post.tags}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {/*
+        日记段。原先缺失 —— getContentByTag 根本不扫 diary 集合，
+        于是"只在日记里出现"的标签会被 /tags 列出来、点进去却 404
+        （含全站第 1 高频的「工作日记」，68 篇）。
+        2026-09-20：reader 侧补齐 diary 扫描，这里补渲染。
+        位置放在 Blog 之后，与站内导航顺序一致。
+      */}
+      {totalByKind.diary > 0 ? (
+        <section>
+          <h2>Diary</h2>
+          <div className="stack-list">
+            {items.diary.map((post) => (
+              <EntryCardBlog
+                key={post.slug}
+                href={`/diary/${post.slug}`}
                 title={post.title}
                 summary={post.summary}
                 date={post.date}

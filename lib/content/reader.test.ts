@@ -135,3 +135,36 @@ test("getContentBySlug: malformed percent-encoding falls back gracefully", async
   const result = await getContentBySlug("blog", "%E4%B8%");
   assert.equal(result, null, "expected null for unmatchable malformed slug");
 });
+
+// ── 回归：含空格/中文的标签，URL 编码形态也必须命中 ──────────────────
+// 症状：点 /tags/AI%20Skill 得到 404，而 /tags/Hermes 正常。
+// 根因：动态段传来的 tag 是未解码的 "AI%20Skill"，而正文写的是 "AI Skill"。
+test("getContentByTag: 未解码的编码形态也要命中（AI%20Skill → AI Skill）", async () => {
+  const decoded = await getContentByTag("AI Skill");
+  const encoded = await getContentByTag("AI%20Skill");
+  const sum = (r: { totalByKind: Record<string, number> }) =>
+    Object.values(r.totalByKind).reduce((a, b) => a + b, 0);
+  assert.ok(sum(decoded) > 0, "解码形态应命中");
+  assert.equal(sum(encoded), sum(decoded), "编码形态应命中同样数量");
+});
+
+test("getContentByTag: 中文标签的编码形态也要命中", async () => {
+  const decoded = await getContentByTag("AI 生图");
+  const encoded = await getContentByTag("AI%20%E7%94%9F%E5%9B%BE");
+  const sum = (r: { totalByKind: Record<string, number> }) =>
+    Object.values(r.totalByKind).reduce((a, b) => a + b, 0);
+  assert.equal(sum(encoded), sum(decoded));
+  assert.equal(sum(encoded) > 0, true, "「AI 生图」应有内容");
+});
+
+test("getContentByTag: 大小写仍然不敏感（归一化之前的行为不能丢）", async () => {
+  const sum = (r: { totalByKind: Record<string, number> }) =>
+    Object.values(r.totalByKind).reduce((a, b) => a + b, 0);
+  assert.equal(sum(await getContentByTag("hermes")), sum(await getContentByTag("Hermes")));
+});
+
+test("getContentByTag: 非法转义的 % 不应抛错（原样返回不命中即可）", async () => {
+  const r = await getContentByTag("100%");
+  const sum = Object.values(r.totalByKind).reduce((a, b) => a + b, 0);
+  assert.equal(sum, 0, "不存在的标签命中 0，而不是抛异常");
+});

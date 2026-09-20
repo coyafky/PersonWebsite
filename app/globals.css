@@ -1774,13 +1774,17 @@ main {
 
 /* ── Weekly Timeline ────────────────────────────────────────────────── */
 
+/* 时间轴的竖脊线。原为 `border-left: 1px solid rgba(0,0,0,0.08)` ——
+   1px 中性线，impeccable 没报（不到"粗色边"的程度，时间轴竖线也是正当用法），
+   但它确实违反本站"用阴影当边框、不写 border"的约定。
+   改用 inset 阴影：位置与边框盒左边缘一致，**像素级等价**，配色换成暖色系。 */
 .timeline {
   position: relative;
   display: grid;
   gap: var(--space-6);
   padding-left: var(--space-6);
   margin-left: var(--space-2);
-  border-left: 1px solid rgba(0,0,0,0.08);
+  box-shadow: inset 1px 0 0 rgba(17, 19, 15, 0.09);
 }
 
 .entry-card-weekly {

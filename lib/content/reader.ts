@@ -58,10 +58,12 @@ function byNewestDate<T extends { date: string }>(items: T[]) {
   return items.toSorted((a, b) => b.date.localeCompare(a.date));
 }
 
+/** 解码 URL 段。slug 与 tag 共用 —— 两者都会以未解码形态从动态段传进来。 */
 function decodeSlug(slug: string): string {
   try {
     return decodeURIComponent(slug);
   } catch {
+    // 字面 % 且非法转义（如 "100%完成"）→ 原样返回，不当成错误
     return slug;
   }
 }
@@ -577,6 +579,14 @@ export type GetContentByTagOptions = {
 
 export type TaggedContentByKind = {
   blog: BlogPost[];
+  /**
+   * ⚠️ 这一项曾经缺失。getAllTags() 一直扫 diary，但 getContentByTag 不扫 ——
+   * 于是"只在日记里出现"的标签会被 /tags 列出来、点进去却 404
+   * （例：全站第 1 高频的「工作日记」68 篇、以及 官网/素材/门店/Codex 等）。
+   * 2026-09-20 补齐。类型是契约：这里没有 diary 字段，
+   * 后面 items / totalByKind 就一定会漏，编译器也拦不住。
+   */
+  diary: DiaryPost[];
   weekly: WeeklyPost[];
   projects: ProjectPost[];
   career: CareerPost[];
@@ -596,12 +606,19 @@ export async function getContentByTag(
   items: TaggedContentByKind;
   totalByKind: Record<keyof TaggedContentByKind, number>;
 }> {
-  const needle = tag.toLowerCase();
+  // ⚠️ 必须先解码。动态段拿到的 params 可能是**未解码**的字符串
+  // （例如 URL 里的 "AI%20Skill"），而正文里的标签写的是 "AI Skill" ——
+  // 不解码就 0 命中，页面走 notFound()，标签页变成 404。
+  // 实测：getContentByTag("AI Skill") 命中 7；getContentByTag("AI%20Skill") 命中 0。
+  // 这与 getContentBySlug 用 decodeSlug 处理 slug 是同一个坑，只是当初漏了 tag。
+  // decodeSlug 内部有 try/catch：标签里出现字面 % 而非法转义时会原样返回。
+  const needle = decodeSlug(tag).toLowerCase();
   const matchesTag = (t: string | undefined) => t?.toLowerCase() === needle;
 
-  const [blog, weekly, projects, career, topics, bookTopicList, courseTopicList] =
+  const [blog, diary, weekly, projects, career, topics, bookTopicList, courseTopicList] =
     await Promise.all([
       getBlogPosts(),
+      getDiaryPosts(),
       getWeeklyPosts(),
       getProjectPosts(),
       getCareerPosts(),
@@ -632,6 +649,7 @@ export async function getContentByTag(
   ).flat();
 
   const blogMatches = blog.filter((p) => p.tags.some(matchesTag));
+  const diaryMatches = diary.filter((p) => p.tags.some(matchesTag));
   const weeklyMatches = weekly.filter((p) => p.tags.some(matchesTag));
   // The project schema does not currently carry a `tags` field, so projects
   // contribute zero matches for any tag. We still read them in parallel to
@@ -648,6 +666,7 @@ export async function getContentByTag(
 
   const items: TaggedContentByKind = {
     blog: blogMatches,
+    diary: diaryMatches,
     weekly: weeklyMatches,
     projects: [],
     career: careerMatches,
@@ -660,6 +679,7 @@ export async function getContentByTag(
 
   const totalByKind: Record<keyof TaggedContentByKind, number> = {
     blog: blogMatches.length,
+    diary: diaryMatches.length,
     weekly: weeklyMatches.length,
     projects: 0,
     career: careerMatches.length,
