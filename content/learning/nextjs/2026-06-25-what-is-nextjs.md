@@ -3,11 +3,8 @@ title: "Next.js 是什么：React 之上的全栈 Web 框架"
 date: "2026-06-25"
 summary: "Next.js 是构建全栈 Web 应用的 React 框架。它把路由、渲染、数据获取、缓存、优化和部署这些工程问题收进框架，让我能把注意力放在产品和用户体验上。"
 tags:
-  - Next.js
-  - React
-  - App Router
-  - Web Framework
-  - Full-stack
+  - "Next.js"
+  - "React"
 status: published
 lang: zh
 topic: nextjs

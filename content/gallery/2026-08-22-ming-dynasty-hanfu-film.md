@@ -12,10 +12,7 @@ params:
   style: "复古胶片"
   technique: "胶片颗粒"
 tags:
-  - 汉服
-  - 复古
-  - 胶片
-  - 古风
+  - "汉服"
 status: published
 lang: zh
 englishSummary: "Ming-dynasty hanfu portrait with retro film grain: poetic, classical, and full of period atmosphere."

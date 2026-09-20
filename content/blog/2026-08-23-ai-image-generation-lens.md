@@ -4,11 +4,7 @@ date: "2026-08-23"
 summary: "景别管远近、机位管高低，而镜头管的是「空间如何表现」——画面会不会变形、背景是被拉开还是被压缩、细节是不是被放大。拆解正常、广角、长焦压缩、微距特写四种镜头语言，并完整保留每种镜头的可复用 Prompt 模板。"
 tags:
   - "AI 生图"
-  - "商品图"
-  - "构图"
-  - "镜头"
-  - "透视"
-  - "Prompt"
+  - "Prompt 工程"
 status: published
 lang: zh
 englishSummary: "Chapter 10 of the AI image-generation methodology. Shot type controls distance, camera angle controls height, and lens controls how space is rendered — whether the frame distorts, the background stretches or compresses, or details are magnified. Breaks down normal, wide-angle, telephoto, and macro lenses, with full reusable prompt templates."

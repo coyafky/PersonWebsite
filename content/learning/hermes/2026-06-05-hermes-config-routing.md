@@ -3,11 +3,8 @@ title: "Hermes config set 自动路由（秘钥配置 env）"
 date: "2026-06-05"
 summary: "Hermes 自动路由与多 Provider 配置：.env 存秘钥（OPENAI / DEEPSEEK / QWEN / GEMINI / Router）+ config.yaml 引用 + router.mode=auto 自动按 task_type / context_length / complexity 选择 Provider。覆盖 5 类典型路由规则（coding / geo_research / cheap_batch / long_context / high_reasoning）。包含完整 .gitignore 建议与跨环境配置差异。"
 tags:
-  - hermes
-  - 配置
-  - 路由
-  - Provider
-  - 多模型
+  - "Hermes"
+  - "配置"
 status: draft
 lang: zh
 topic: hermes

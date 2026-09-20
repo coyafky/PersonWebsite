@@ -3,13 +3,8 @@ title: "为什么企业做 GEO 第一时间没有看到效果：8 阶段管线 �
 date: "2026-07-09"
 summary: "GEO 不是『做完即见效』的工具，而是长期内容战略。内容从发布到被 AI 引用，需经过一条 8 阶段管线 + 4 关漏斗 + 5/6/7 三道重排，每一关都会过滤掉大部分内容。理解这条链路，才能解释为什么 85% 被检索的页面从未被引用。"
 tags:
-  - GEO
-  - Generative Engine Optimization
-  - AI Search
-  - 内容战略
-  - 引用率
-  - 漏斗
-  - E-E-A-T
+  - "GEO"
+  - "AI Search"
 status: published
 lang: zh
 topic: geo

@@ -3,11 +3,8 @@ title: "Hermes 学习阶段复盘与下一周计划"
 date: "2026-05-16"
 summary: "Hermes 阶段性学习复盘：已掌握（基础使用 4 分 / 云部署 3 分 / 飞书 Gateway 3 分 / Skill 使用 3 分）vs 模糊理解（核心定位 / 执行链路 / Skill 机制 / Memory vs Session vs Context / Gateway 故障定位 / Cron/Delegation/Hooks）。5 个误区（把能用当理解 / 当单一聊天工具 / 过早追复杂 / Skill 当提示词 / 排错无分层）。3 大知识漏洞 + Day 1-7 完整学习计划 + 每日 5 分钟复盘机制 + 9 模块当前估计分。"
 tags:
-  - hermes
-  - 学习复盘
-  - 学习计划
-  - 排错
-  - 架构
+  - "Hermes"
+  - "架构"
 status: draft
 lang: zh
 topic: hermes

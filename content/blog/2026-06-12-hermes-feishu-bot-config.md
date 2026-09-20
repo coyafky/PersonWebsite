@@ -3,11 +3,8 @@ title: "从零配置 Hermes 连接飞书 Bot — 含多 Profile 实战"
 date: "2026-06-12"
 summary: "完整记录 Hermes Agent 连接飞书 Bot 的配置过程：Gateway 连接、Bot 授权、多 Profile 隔离、流式卡片插件、踩坑与排查。结合 W15-W17 三周实战经验。"
 tags:
-  - hermes
-  - feishu
-  - bot
-  - profile
-  - 教程
+  - "Hermes"
+  - "Profile"
 status: published
 lang: zh
 englishSummary: "A step-by-step guide to connecting Hermes Agent with Feishu Bot, covering Gateway connection, bot authorization, multi-profile isolation, streaming card plugins, and real troubleshooting from 3 weeks of production experience."

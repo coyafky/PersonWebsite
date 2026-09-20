@@ -3,14 +3,8 @@ title: "Mention vs Citation：品牌被「提到」和被「引用」的天壤�
 date: "2026-07-21"
 summary: "两个紧密关联的主题：① Mention（提及）≠ Citation（引用）——AI 在答案中提到品牌名和把品牌页面标注为来源，是两个完全不同的动作，来自两个不同的系统（训练记忆 vs Grounding）。拆解 AI 不引用官网的 5 个具体原因（非决策就绪型内容、第三方引用 6.5 倍效应、间接引用就够用、平台权重差异、68% 引用页不在 Google Top 10），以及品牌同时获得推荐+引用的实操路径。② 不同 AI 平台的检索和回答机制差异——三类 AI 系统架构、5 大平台引用行为对比、豆包「双模分裂」（移动端 >90% 抖音视频 vs Web 端权威媒体）及其三阶段演变（筑墙→治理→闭环），以及跨平台 GEO 策略启示。"
 tags:
-  - GEO
-  - Mention
-  - Citation
-  - 品牌引用
-  - 豆包
-  - 平台差异
-  - Grounding
-  - 间接引用
+  - "GEO"
+  - "豆包"
 status: published
 lang: zh
 topic: geo

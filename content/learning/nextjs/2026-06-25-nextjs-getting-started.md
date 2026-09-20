@@ -3,10 +3,8 @@ title: "Next.js 入门：App Router 与约定式路由"
 date: "2026-06-25"
 summary: "Next.js App Router 入门笔记：约定式文件路由、特殊文件（page / layout / loading / error / not-found）、嵌套布局、动态段、路由组（route group）的基本用法与心智模型。"
 tags:
-  - nextjs
-  - App Router
-  - 路由
-  - 入门
+  - "Next.js"
+  - "入门"
 status: draft
 lang: zh
 topic: nextjs

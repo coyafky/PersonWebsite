@@ -3,12 +3,8 @@ title: "Nginx从0-1：从看懂配置到自己写配置"
 date: "2026-07-21"
 summary: "Nginx 是全球 top 百万网站里超过 30% 在用的 Web 服务器和反向代理。但它的配置文件对新手来说像天书——`server`、`location`、`proxy_pass`、`upstream` 全是新概念。这一篇用一个「收发室」类比帮你建立心智模型，然后从 3 个最简配置开始（静态文件 / 反向代理 / SPA 兜底），深入到 location 匹配规则，最后覆盖负载均衡、限流、Gzip、日志调试等实战模式。读完你能自己写一个完整的 Nginx 配置。"
 tags:
-  - zero-to-tech
-  - Nginx
-  - 反向代理
-  - Web服务器
-  - DevOps
-  - 部署
+  - "zero-to-tech"
+  - "部署"
 status: published
 lang: zh
 category: "技术/计算机基础"

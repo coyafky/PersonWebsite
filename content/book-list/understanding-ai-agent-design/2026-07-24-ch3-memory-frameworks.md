@@ -6,11 +6,6 @@ summary: >-
 status: published
 tags:
   - "AI Agent"
-  - "用户记忆"
-  - "Mem0"
-  - "Memobase"
-  - "认知科学"
-  - "隐私保护"
 lang: zh
 englishSummary: ""
 chapter: "Ch.3"

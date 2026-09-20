@@ -3,13 +3,8 @@ title: "服务器部署和 Nginx 配置：从本地代码到线上服务"
 date: "2026-07-09"
 summary: "代码写完了，怎么让它「全世界的浏览器都能访问」？这一篇把服务器部署的最短链路讲清楚：用 SSH + Git 把代码拉到服务器、文件目录权限怎么配（chmod 755 / chown www-data）、Nginx 怎么反向代理你的应用 + serve 静态资源、HTTPS 怎么用 Let's Encrypt 一键签证书、最后用 GitHub Actions 实现 push 即部署。"
 tags:
-  - zero-to-tech
-  - 服务器
-  - 部署
-  - Nginx
-  - HTTPS
-  - CI/CD
-  - Linux
+  - "zero-to-tech"
+  - "部署"
 status: published
 lang: zh
 category: "技术/计算机基础"

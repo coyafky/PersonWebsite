@@ -3,13 +3,7 @@ title: "React Hooks 工具箱：从记忆到副作用的完整地图"
 date: "2026-07-21"
 summary: "Hooks 是 React 16.8 之后组件逻辑的核心载体。这篇笔记先给一张总图（5 大类 10 个 Hooks 的用途和关系），然后用 9 张图逐一拆解：useState（记事本）、useReducer（调度中心）、useContext（广播塔）、useReducer+Context（总部系统）、useRef（储物柜）、useEffect（外部世界同步器）、「你可能不需要 Effect」判断树、useMemo/useCallback（工厂缓存）、Custom Hook（工具包）。读完你能回答「这个场景该用哪个 Hook」。"
 tags:
-  - React
-  - Hooks
-  - useState
-  - useEffect
-  - useRef
-  - useContext
-  - useReducer
+  - "React"
 status: published
 lang: zh
 topic: react

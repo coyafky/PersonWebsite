@@ -4,11 +4,7 @@ date: "2026-08-23"
 summary: "画幅比例决定「画布形状」，景别决定「镜头远近」，这一章的机位决定「镜头从什么高度、什么角度去看主体」。俯视、平视、仰视不只是三个角度，各自带出完全不同的心理感觉——俯视让人变小变安静，平视最自然真实，仰视让人变强变有气场。"
 tags:
   - "AI 生图"
-  - "商品图"
-  - "构图"
-  - "机位"
-  - "视角"
-  - "Prompt"
+  - "Prompt 工程"
 status: published
 lang: zh
 englishSummary: "Chapter 9 of the AI image-generation methodology. Aspect ratio decides the canvas shape, shot type the distance, and camera angle the height and perspective from which the subject is seen. High, eye-level, and low angles each carry distinct psychological weight — small and quiet, natural and real, or powerful and commanding."

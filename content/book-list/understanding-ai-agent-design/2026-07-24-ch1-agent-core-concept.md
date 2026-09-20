@@ -7,8 +7,6 @@ status: published
 tags:
   - "AI Agent"
   - "LLM"
-  - "Tool Calling"
-  - "ReAct"
 lang: zh
 englishSummary: ""
 chapter: "Ch.1"

@@ -5,9 +5,8 @@ date: "2026-06-25"
 status: published
 topic: nextjs
 tags:
-  - Next.js
-  - React
-  - Web
+  - "Next.js"
+  - "React"
 lang: zh
 englishSummary: "A structured Next.js learning track covering what Next.js is, what problems it solves, and how App Router, rendering, data fetching, and deployment fit together."
 ---

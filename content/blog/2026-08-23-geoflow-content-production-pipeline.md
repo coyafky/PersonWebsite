@@ -4,10 +4,7 @@ date: "2026-08-23"
 summary: "我把「内容生产」从手工写、一条条发，改造成了一条可复用的自动化流水线：100问选题库当原料、GEOFlow 批量产母版、五个平台写手 agent 改写、飞书归档闭环。一周产了 700+ 篇高质量母版。这篇拆解这条线怎么搭，以及为什么「证据纪律」才是整条线的保命符。"
 tags:
   - "GEO"
-  - "内容自动化"
   - "内容管线"
-  - "GEOFlow"
-  - "AI 写作"
 status: published
 lang: zh
 englishSummary: "How I turned content production into an automated assembly line: 100-question topic banks as raw material, GEOFlow to generate master articles at scale, five platform-specific writer agents for rewriting, and Feishu for archiving. One person produced 700+ articles in a week. This breaks down the pipeline and argues that evidence discipline is what keeps the whole thing honest."

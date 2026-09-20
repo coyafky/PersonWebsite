@@ -4,11 +4,7 @@ date: "2026-08-23"
 summary: "从 Midjourney 的公开机制出发，拆解 AI 生图的底层原理：生图不是在图库里找图，而是从随机噪声出发、在「视觉概率空间」里采样。理解这一点之后，Prompt 的本质、构图法、Seed、--stylize 这些心法就都有了统一解释。"
 tags:
   - "AI 生图"
-  - "Midjourney"
-  - "Prompt"
-  - "概率空间"
-  - "Seed"
-  - "生图原理"
+  - "Prompt 工程"
 status: published
 lang: zh
 englishSummary: "How Midjourney actually generates images: not searching a gallery, but sampling from a visual probability space through iterative denoising. Once you see prompts as a way to shrink that space, composition rules, seeds, and stylize all snap into one framework."

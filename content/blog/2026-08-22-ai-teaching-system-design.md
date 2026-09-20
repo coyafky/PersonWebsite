@@ -4,10 +4,8 @@ date: "2026-08-22"
 updated: "2026-08-22"
 summary: "「AI 能做私人辅导」这句话大家都听腻了。真正值钱的是背后三个设计原则：在理解边缘教学、把挣扎留给内容本身而不是后勤、让 AI 画依赖图逼它认真推理。读完你就能拿这套思路改造自己的学习方式。"
 tags:
-  - AI学习
-  - 学习系统
-  - 教学法
-  - AI-agent
+  - "AI学习"
+  - "AI Agent"
 status: published
 lang: zh
 englishSummary: "Beyond the obvious 'AI as private tutor' idea, this post extracts three genuinely valuable design principles from an AI teaching system: teach at the edge of understanding, put the struggle in the material not the logistics, and force the AI to draw its dependency graph so it can't fake reasoning."

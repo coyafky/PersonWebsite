@@ -12,10 +12,7 @@ params:
   style: "纸艺剪纸"
   technique: "分层拼贴"
 tags:
-  - 剪纸
-  - 插画
-  - 童话
-  - 分层
+  - "剪纸"
 status: published
 lang: zh
 englishSummary: "Paper-cut layered illustration: a whimsical world built from stacked cut-paper layers, a style that reads well across models."

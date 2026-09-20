@@ -4,10 +4,7 @@ date: "2026-09-10"
 summary: "我给自己门店的销售助理接上了一个 1188 篇《车型适配产品目录》的知识库。整个过程让我意识到：把知识库接进 AI，难的不是「接上」——接口通不通是半小时的事。真正的难点是「匹配」：资料形态是否匹配调用链、能力接入是否匹配行为约束、库里的内容是否匹配能说和不能说的边界。这篇完整拆解这四个匹配点，以及我用什么证据证明它真的接上了。"
 tags:
   - "知识库"
-  - "AI 助理"
   - "Hermes"
-  - "Skill 体系"
-  - "销售数字化"
 status: published
 lang: zh
 englishSummary: "How I wired a 1,188-document product-fitment knowledge base into my sales assistant, and why the hard part of knowledge-base integration is not connecting the API but matching four things: document shape to call chain, capability access to behavioral guardrails, model weakness to a wrapped one-shot script, and the library's content to what the assistant is allowed to say. Includes the exact three-step read chain, the empty-folder trap, and end-to-end verification evidence."

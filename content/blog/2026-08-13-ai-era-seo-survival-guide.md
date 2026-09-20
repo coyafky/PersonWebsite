@@ -4,10 +4,7 @@ date: "2026-08-13"
 updated: "2026-08-23"
 summary: "网站做出来 Google 搜不到？不是网站坏了，是 SEO 链路没走通。这篇把从 Googlebot 发现页面到用户体验的整个过程拆成五步可执行框架，并告诉你哪些步骤可以放心交给 AI、哪些必须自己判断。"
 tags:
-  - SEO
-  - AI
-  - 独立站
-  - 内容营销
+  - "SEO"
 status: published
 lang: zh
 englishSummary: "A practical 5-step SEO framework for the AI era: crawl discovery, indexing, keyword intent, AI-assisted content, and Core Web Vitals — plus which steps to delegate to AI and which to keep for yourself."

@@ -3,11 +3,7 @@ title: "编程思维完整指南：从问题到可验证的解决方案"
 date: "2026-05-25"
 summary: "编程思维不是'写代码的能力'，而是一套把模糊问题变成可计算、可验证、可维护方案的认知框架。本文用 25+ 张 Mermaid 图系统讲解 9 大模块：核心定义、问题建模、数据表示、过程设计、抽象分解、正确性验证、工程化思维、系统思维、最小学习闭环。"
 tags:
-  - 编程思维
-  - Computational-Thinking
-  - 方法论
-  - 工程思维
-  - 科普
+  - "编程思维"
 status: published
 lang: zh
 englishSummary: "Computational thinking is a cognitive framework for transforming fuzzy real-world problems into computable, verifiable, maintainable solutions. This guide systematically covers 9 modules with 25+ Mermaid diagrams: core definition, problem modeling, data representation, process design, abstraction and decomposition, correctness verification, engineering thinking, systems thinking, and minimal learning loop."

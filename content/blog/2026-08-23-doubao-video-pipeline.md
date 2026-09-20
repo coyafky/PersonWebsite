@@ -4,10 +4,7 @@ date: "2026-08-23"
 summary: "我把自己做 AI 视频的整套方法沉淀成了一个可复用的 skill：六步流水线（选题→脚本→分镜→画面画布+主体人物→关键帧 prompt JSON→整段视频 prompt），双轨设计（ChatGPT 6-shot 快速预览 + 正式生产），外加豆包免费模式、台词时长质检、双人 IP 锁比例这些把翻车提前挡掉的机制。这篇就是它的完整说明文档。"
 tags:
   - "AI 视频"
-  - "豆包"
-  - "Seedance"
-  - "内容管线"
-  - "skill"
+  - "Skill"
 status: published
 lang: zh
 englishSummary: "Documentation for my doubao-video-pipeline skill: a 6-step pipeline that turns a one-line topic into a complete video document ready to paste into Doubao (Seedance). Includes a dual-track design (ChatGPT 6-shot fast preview vs full production), beat-based keyframe JSON to save generation credits, a free-mode that splits videos into 10-second segments, lip-sync line-length QC, and dual-IP proportion locking. This post documents exactly how the pipeline works."

@@ -3,12 +3,7 @@ title: "React 渲染机制：从 setState 到 DOM 更新"
 date: "2026-07-21"
 summary: "setState 之后 React 到底做了什么？这篇笔记用 6 张图拆解 React 渲染的全链路：Trigger（触发）→ Render（计算）→ Commit（写入）三站地铁、Virtual DOM 蓝图与真实 DOM 建筑、Reconciliation 找不同游戏、Key 的停车位类比（以及 key=index 为什么会导致状态错位）、State 保存与重置的规则（同类型+同位置→保留，否则→重置）。读完你能解释 React 为什么快、为什么 key 不能乱给、以及 state 什么时候会被意外重置。"
 tags:
-  - React
-  - 渲染机制
-  - Virtual DOM
-  - Reconciliation
-  - Fiber
-  - Key
+  - "React"
 status: published
 lang: zh
 topic: react

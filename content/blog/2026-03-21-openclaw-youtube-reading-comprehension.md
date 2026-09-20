@@ -4,12 +4,7 @@ date: "2026-03-21"
 updated: "2026-03-21"
 summary: "朋友是初中英语老师，每周花 2-3 小时出阅读理解题，最痛苦的是出题环节——一个合理的干扰项能卡半小时。本文记录一个 OpenClaw 技能从需求分析（500-600 词 / CEFR A2-B1 / 5 道中国考试风格题）→ 技术选型（OpenClaw Skill vs Python vs Web）→ 7 张 Mermaid 流程图架构 → 3 个难点（词数控制、题目质量、难度控制）→ 小红书发布计划的完整开发故事。效率提升 24 倍。"
 tags:
-  - OpenClaw
-  - AI 技能开发
-  - 英语教育
-  - 自动化
-  - YouTube
-  - 阅读理解
+  - "OpenClaw"
 status: published
 lang: zh
 englishSummary: "Full development story of a YouTube-to-reading-comprehension OpenClaw skill: from a middle school English teacher's weekly pain (2-3 hours to design questions), through architecture (7 Mermaid diagrams), three hard problems (word count control, question quality, difficulty calibration), to a 24x efficiency win and Xiaohongshu launch plan."

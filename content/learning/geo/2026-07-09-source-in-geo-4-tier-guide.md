@@ -3,15 +3,8 @@ title: "GEO 中的「信源」是什么：AI 引用决策的核心变量与 4 �
 date: "2026-07-09"
 summary: "信源（Source）是 GEO 中 AI 引用决策的核心变量。内容质量 × 平台权重 = AI 引用概率——同样一条内容，发在知乎可能获 1000 次 AI 引用，发在某新闻聚合站可能只有 10 次。本文拆解 5 层信源层级体系、4 梯队信源权重金字塔、双核四轮方法论与季度复盘机制。"
 tags:
-  - GEO
-  - 信源
-  - Source
-  - SourceRank
-  - AI 引用
-  - 知乎
-  - 4 梯队
-  - E-E-A-T
-  - 百度百科
+  - "GEO"
+  - "E-E-A-T"
 status: published
 lang: zh
 topic: geo

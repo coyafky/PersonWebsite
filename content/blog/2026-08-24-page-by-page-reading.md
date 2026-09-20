@@ -4,10 +4,7 @@ date: "2026-08-24"
 summary: "我把自己和 AI 一起『一页页读书』的机制拆成一个可复用 Skill：PDF 拆页、按物理页让 AI 讲解精华、追问互动、累积笔记，并靠 progress.json 精确管理阅读进度。这篇把它设计成系统的关键决策写清楚——为什么是『互动共读』而不是批量总结、为什么原文框是刚需、为什么进度要按物理页记。"
 tags:
   - "阅读"
-  - "共读"
   - "AI Skill"
-  - "知识管理"
-  - "工作流"
 status: published
 lang: zh
 englishSummary: "How I turned 'reading a book one page at a time with AI' into a reusable Skill: PDF page splitting, per-physical-page explanations, interactive Q&A, note accumulation, and precise progress tracking via progress.json. Key decisions explained — why interactive co-reading over batch summarization, why verbatim page quotes are essential, and why progress must key on physical pages."

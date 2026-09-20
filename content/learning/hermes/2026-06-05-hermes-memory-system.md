@@ -3,12 +3,8 @@ title: "Hermes 记忆系统（Memory）详解"
 date: "2026-06-05"
 summary: "Hermes 记忆系统完整解析：5 大核心目标（保留偏好 / 减少重复说明 / 控制成本 / 安全性）、两类核心文件 MEMORY.md（≈2200 字符 Agent 笔记）与 USER.md（≈1375 字符 用户档案）、冻结快照机制（会话开始注入 / 中途不变）、memory 工具三操作（add / replace / remove）的子字符串匹配、80% 容量管理阈值、5 类安全风险扫描（prompt 注入 / 数据外泄 / SSH 后门 / 隐藏 Unicode / 恶意指令）、会话搜索 vs 持久化记忆的 6 维对比、8 类外部记忆提供商（Honcho / OpenViking / Mem0 / Hindsights / Holographic / RetainDB / ByteRover / Supermemory）、推荐写入原则与更新工作流。"
 tags:
-  - hermes
-  - Memory
-  - 记忆系统
-  - MEMORY.md
-  - USER.md
-  - 长期记忆
+  - "Hermes"
+  - "Memory"
 status: draft
 lang: zh
 topic: hermes

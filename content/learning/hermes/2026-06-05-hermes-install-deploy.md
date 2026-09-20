@@ -3,12 +3,8 @@ title: "Hermes 在 macOS 本地和腾讯云服务上的安装与部署流程"
 date: "2026-06-05"
 summary: "Hermes Agent 跨环境部署完整指南：macOS 本地开发版（Homebrew + Python 3.11+ + venv + cfgutil）和腾讯云生产版（CVM/TKE + systemd + PostgreSQL + 任务队列）的环境准备、依赖、配置、运行步骤对比；7 维差异表（运行环境 / 存储 / 部署方式 / 并发 / 网络 / 高可用 / 维护）。"
 tags:
-  - hermes
-  - 安装
-  - 部署
-  - macOS
-  - 腾讯云
-  - 生产
+  - "Hermes"
+  - "部署"
 status: draft
 lang: zh
 topic: hermes

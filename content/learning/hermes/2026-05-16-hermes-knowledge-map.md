@@ -3,11 +3,8 @@ title: "Hermes Agent 知识架构图"
 date: "2026-05-16"
 summary: "基于官方文档整理的 Hermes Agent 一级模块地图——12 大核心模块（安装 / 会话 / 上下文 / Tools / Skills / Memory / Gateway / 自动化 / 集成 / 多模态 / 安全 / 开发者架构）、12 个分支的树状知识图、模块依赖关系、按目标分流的学习顺序（CLI 助手 / Bot / 定时自动化 / 自定义工具 / 生产运行 / 框架贡献 / RL 训练），以及初学者最容易忽略的 12 个盲点。"
 tags:
-  - hermes
-  - 知识架构
-  - 学习路径
-  - 入门
-  - 进阶
+  - "Hermes"
+  - "入门"
 status: draft
 lang: zh
 topic: hermes

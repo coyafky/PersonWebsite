@@ -6,9 +6,6 @@ summary: >-
 status: published
 tags:
   - "AI Agent"
-  - "Agent Skills"
-  - "工具设计"
-  - "KV Cache"
   - "上下文工程"
 lang: zh
 englishSummary: ""

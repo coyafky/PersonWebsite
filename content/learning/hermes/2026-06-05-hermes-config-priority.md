@@ -3,10 +3,8 @@ title: "Hermes 的配置优先级"
 date: "2026-06-05"
 summary: "Hermes 8 层配置优先级链：系统默认 < config.yaml < .env < Profile/Soul/USER < 项目级 < Agent 级 < CLI 参数 < 用户本次明确指令。安全配置（system safety policy > production env safety > agent restrictions > user instruction）单独一条独立通道，始终高于普通配置。给出配置冲突时的 4 个判断原则（安全 / 本次任务 / env 覆盖 / Agent 覆盖项目），以及 config inspect 命令设计。"
 tags:
-  - hermes
-  - 配置优先级
-  - 安全
-  - 覆盖链
+  - "Hermes"
+  - "安全"
 status: draft
 lang: zh
 topic: hermes

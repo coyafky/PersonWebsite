@@ -3,11 +3,7 @@ title: "HermesAgent Sessions 使用整理"
 date: "2026-05-03"
 summary: "HermesAgent Sessions 会话管理完整使用整理：会话存储结构（messages / metadata / summary / tool_calls / tokens）、5 种会话操作（list / resume / export / import / search）、resume 命令（--last / --id / --title / --date / --tag / --interactive）、自动摘要（关键事实 / 决策 / 行动项 / 上下文）、搜索与会话分析、3 个实战场景（跨会话 GEO 项目 / 代码 review 上下文 / 飞书日报）、与 Memory/Profile 协同、最佳实践。"
 tags:
-  - hermes
-  - Sessions
-  - 会话管理
-  - resume
-  - 摘要
+  - "Hermes"
 status: draft
 lang: zh
 topic: hermes

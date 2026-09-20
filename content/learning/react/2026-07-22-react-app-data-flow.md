@@ -3,11 +3,8 @@ title: "React 应用中的数据流：从本地状态到服务器数据"
 date: "2026-07-22"
 summary: "前面的笔记讲了 React 的组件、State、Hooks 和渲染机制——都是「零件」层面的知识。这篇把视角升到「应用」层面：一个真实的 React 应用里，数据从哪来、怎么分类、怎么流转。用 5 张架构图覆盖：三种状态的分类（本地/共享/服务器）、数据请求的完整链路、Loading/Error/Empty/Success 四态机、表单的输入→校验→提交流程、以及状态管理工具的选型阶梯。核心观点：不是所有数据都该进 Context 或全局 Store。"
 tags:
-  - React
-  - 数据流
-  - 表单
-  - 状态管理
-  - 架构
+  - "React"
+  - "架构"
 status: published
 lang: zh
 topic: react

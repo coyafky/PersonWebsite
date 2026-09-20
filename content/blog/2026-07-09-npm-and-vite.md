@@ -3,13 +3,8 @@ title: "现代前端的工具链：npm + Vite + 构建产物（从 npm install �
 date: "2026-07-09"
 summary: "上一篇讲了 ES Modules 和模块化。源码能 import 了，但浏览器还是不能直接跑 .ts / .vue / .jsx / Sass——这一篇讲前端工具链。覆盖：为什么需要构建工具 / npm 是什么 / package.json 核心结构 / 用 npm install 安装依赖 / npm run 脚本的本质 / 构建工具演化（Grunt → Gulp → webpack → Vite）/ Vite 上手 / 源码 vs dist 构建产物 / 用 Git 管理现代前端项目。"
 tags:
-  - zero-to-tech
-  - npm
-  - Vite
-  - 前端构建
-  - 包管理
-  - 工具链
-  - ES Modules
+  - "zero-to-tech"
+  - "工具链"
 status: published
 lang: zh
 category: "技术/前端基础"

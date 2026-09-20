@@ -5,9 +5,8 @@ date: "2026-07-21"
 status: published
 topic: react
 tags:
-  - React
-  - 前端
-  - JavaScript
+  - "React"
+  - "JavaScript"
 lang: zh
 englishSummary: "A structured React learning track covering core concepts (components, state, unidirectional data flow), internals (Virtual DOM, Fiber, Hooks), and engineering practices (performance optimization, state management, testing)."
 ---

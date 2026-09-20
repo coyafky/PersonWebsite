@@ -3,11 +3,8 @@ title: "我使用 Hermes Agent 的目的（以及我是如何使用的）"
 date: "2026-05-06"
 summary: "Hermes Agent 真实使用场景与多 Agent 团队实践：从 OpenClaw 无人问津到 Hermes 多 Agent setup 的转折，包含 Tech Research Agent / Tech Task Master Agent / Lifestyle Agent / Lifestyle Research Agent 四种角色拆解、Provider/Model 选型（OpenRouter 免费模型 / Nous Portal $10/月订阅 / 本地 Qwen 3.5 9B / ChatGPT Plus $20 / NVIDIA NIM 免费 / DeepSeek v4 75% 折扣），以及「先从问题入手，不从技术入手」的方法论。"
 tags:
-  - hermes
-  - 使用场景
-  - 多 Agent
-  - Provider
-  - 成本
+  - "Hermes"
+  - "Provider"
 status: draft
 lang: zh
 topic: hermes

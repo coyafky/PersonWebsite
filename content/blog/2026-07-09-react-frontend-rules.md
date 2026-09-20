@@ -3,13 +3,8 @@ title: "React 入门：UI 框架的第一性原理（和 Vue 有什么关系）"
 date: "2026-07-09"
 summary: "上一篇文章讲了 npm + Vite + 构建产物。这一篇回答一个朴素的问题：React 到底是什么？覆盖：为什么需要 UI 框架 / React 的本质是 npm 包 / 浏览器只认 HTML CSS JS / React 编译后的真实产物 / React vs Vue 本质相同哲学不同 / 组件树：App 是最大的组件 / 写一个最小可用的 React 组件。"
 tags:
-  - zero-to-tech
-  - React
-  - Vue
-  - 前端框架
-  - 组件
-  - JSX
-  - UI
+  - "zero-to-tech"
+  - "React"
 status: published
 lang: zh
 category: "技术/前端基础"

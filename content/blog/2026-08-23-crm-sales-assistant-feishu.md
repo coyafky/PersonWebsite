@@ -4,10 +4,7 @@ date: "2026-08-23"
 summary: "我把自己给门店搭的 CRM 体系打包成成果记录下来：用飞书多维表格当后台、飞书 CLI 当数据接口、Hermes AI 助理当前端，让销售像聊天一样录客资、记跟进、查转化——不用逐格开表。这篇拆解这套「自然语言 → 结构化 CRM」怎么设计，以及为什么它比传统 ERP 更适合小团队。"
 tags:
   - "飞书"
-  - "多维表格"
   - "CRM"
-  - "AI 助理"
-  - "销售数字化"
 status: published
 lang: zh
 englishSummary: "A work-output writeup of the CRM sales assistant I built: Feishu multi-dimensional tables as the backend, the lark-cli as the data interface, and a Hermes AI assistant as a natural-language frontend — letting salespeople log customers, record follow-ups, and check conversion rates by chatting instead of opening a spreadsheet."

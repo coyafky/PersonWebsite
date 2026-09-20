@@ -3,13 +3,8 @@ title: "从手搓API到调用API：一次完整的实践复盘"
 date: "2026-07-21"
 summary: "上一篇 API从0-1 讲了理论，这一篇是实践复盘。我们用 Node.js 手搓了一个 30 行的 API 服务器，又用 Dog API 做了一个瀑布流画廊——两条代码加起来不到 300 行，但把「写 API」和「调 API」两端的知识都覆盖了。这篇复盘拆解每个技术决策背后的原因，把两端串成一条完整的请求-响应链路，最后提炼出 4 个不管用不用框架都成立的核心模式。"
 tags:
-  - zero-to-tech
-  - API
-  - Node.js
-  - fetch
-  - 实践
-  - HTTP
-  - 复盘
+  - "zero-to-tech"
+  - "HTTP"
 status: published
 lang: zh
 category: "技术/前端基础"

@@ -3,13 +3,8 @@ title: "API从0-1：从看懂接口到自己设计接口"
 date: "2026-07-09"
 summary: "前端开发者迟早要面对一个问题：数据从哪来？API 就是答案。这一篇不是 API 百科全书，而是一条从0到1的路径——先用 fetch 拉回第一份数据（0），理解 HTTP 请求和响应的结构，掌握 REST 风格的设计约定，最后自己搭一个能跑的 API 端点（1）。中间穿插 GitHub API 实战和 3 个帮你避坑的心智模型。"
 tags:
-  - zero-to-tech
-  - API
-  - REST
-  - HTTP
-  - fetch
-  - 接口设计
-  - Node.js
+  - "zero-to-tech"
+  - "HTTP"
 status: published
 lang: zh
 category: "技术/前端基础"

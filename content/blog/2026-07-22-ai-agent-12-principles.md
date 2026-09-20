@@ -3,13 +3,8 @@ title: "AI Agent的12个核心原理：从消息数组到多Agent编排"
 date: "2026-07-22"
 summary: "AI Agent 的 12 个核心原理，自下而上逐层拆解：从最底层的消息数组（LLM 的工作记忆）、上下文窗口（稀缺资源管理）、系统提示词（角色设定），到中层的思维链、少样本提示、预填充、停止序列、Tool Use、RAG、ReAct，最后到上层的幻觉问题和多 Agent 编排。每条原理都回答一个问题：它是什么、为什么需要它、怎么正确使用。配有代码示例和正确/错误对比。"
 tags:
-  - zero-to-tech
-  - AI-Agent
-  - LLM
-  - 上下文工程
-  - 提示词工程
-  - RAG
-  - 多Agent
+  - "zero-to-tech"
+  - "AI Agent"
 status: published
 lang: zh
 category: "技术/AI"

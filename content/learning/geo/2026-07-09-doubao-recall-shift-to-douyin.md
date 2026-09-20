@@ -3,14 +3,8 @@ title: "豆包召回信源向抖音倾斜：不是技术事故，而是 KPI 驱�
 date: "2026-07-09"
 summary: "豆包将部分行业的召回信源全面切向抖音——这不是技术事故，而是平台基于当期 KPI 对召回渠道权重的主动调整。理解平台召回策略变化的逻辑（KPI 驱动 / 没有永恒的流量红利 / 多平台布局是唯一对冲）比讨论现象本身更有价值。"
 tags:
-  - GEO
-  - 豆包
-  - 抖音
-  - 召回机制
-  - Recall
-  - KPI
-  - 渠道权重
-  - AI Search
+  - "GEO"
+  - "AI Search"
 status: published
 lang: zh
 topic: geo

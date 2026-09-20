@@ -3,11 +3,8 @@ title: "Hermes 的 config.yaml 详解"
 date: "2026-06-05"
 summary: "Hermes Agent config.yaml（或 provider_config.toml）完整字段解析：provider 模型配置 / runtime 运行参数 / agent 行为规则 / tools 工具调用 / logging 日志 / advanced 高级选项（RAG / 跨会话学习 / 向量检索 / 安全检查）。每个字段都给出中文解释、典型值和工程实践。"
 tags:
-  - hermes
-  - config.yaml
-  - 配置
-  - 字段
-  - Provider
+  - "Hermes"
+  - "配置"
 status: draft
 lang: zh
 topic: hermes

@@ -6,10 +6,7 @@ summary: >-
 status: published
 tags:
   - "AI Agent"
-  - "提示工程"
-  - "Prompt Engineering"
-  - "系统提示词"
-  - "提示注入"
+  - "Prompt 工程"
 lang: zh
 englishSummary: ""
 chapter: "Ch.2"

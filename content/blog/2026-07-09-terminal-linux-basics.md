@@ -3,13 +3,8 @@ title: "终端和 Linux 直觉：AI 工具最常用的 20 个指令"
 date: "2026-07-09"
 summary: "那个黑窗口到底是什么？为什么 AI 工具（Claude Code / Codex / Hermes）几乎都靠终端指挥电脑？这一篇把终端、Shell、家目录、20 个最常用指令、VSCode 集成终端、以及 Claude Code 实战里最高频的命令行用法一次性讲清楚。读完之后你能看懂 AI Agent 在跑什么，也能自己跑最基础的几条命令。"
 tags:
-  - zero-to-tech
-  - 终端
-  - Linux
-  - 命令行
-  - Shell
-  - Claude Code
-  - AI Agent
+  - "zero-to-tech"
+  - "AI Agent"
 status: published
 lang: zh
 category: "技术/计算机基础"

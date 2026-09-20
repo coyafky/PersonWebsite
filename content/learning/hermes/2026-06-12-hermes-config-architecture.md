@@ -3,12 +3,8 @@ title: "Hermes Agent Configuration 配置体系整理"
 date: "2026-06-12"
 summary: "Hermes Agent 配置体系不是单一 config.yaml 决定，而是 CLI 参数、~/.hermes/config.yaml、~/.hermes/.env、内置默认值四层叠加。整理 27 个常用配置模块：终端后端（local/docker/ssh/modal/daytona/vercel_sandbox/singularity）、上下文压缩、辅助模型、显示/语音、Web 搜索、Browser、安全、审批、检查点、子 Agent、Worktree、记忆、人格、Context Files。最后给本地/Docker/远程开发机三套起手配置。"
 tags:
-  - hermes
-  - config
-  - 配置体系
-  - 终端后端
-  - 上下文压缩
-  - 安全
+  - "Hermes"
+  - "安全"
 status: draft
 lang: zh
 topic: hermes

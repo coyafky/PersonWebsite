@@ -3,13 +3,8 @@ title: "React 数据驱动 UI：从 setState 到 DOM 更新的完整链路"
 date: "2026-07-09"
 summary: "上一篇讲了 React 是什么。这一篇深入讲 React 的「数据驱动」：State 是什么 / 什么数据应该放 state / 单向数据流 / setState 后 React 内部发生了什么（reconciliation + commit）/ 父子组件通信（props + 回调）/ 跨组件通信（Context API）/ 一个完整的 TodoList 实战例子。"
 tags:
-  - zero-to-tech
-  - React
-  - 数据驱动
-  - State
-  - Context
-  - 组件通信
-  - 状态管理
+  - "zero-to-tech"
+  - "React"
 status: published
 lang: zh
 category: "技术/前端基础"

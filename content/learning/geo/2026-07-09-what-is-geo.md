@@ -3,11 +3,8 @@ title: "GEO 是什么：让内容被生成式引擎引用，而不是只在 Goog
 date: "2026-07-09"
 summary: "GEO（Generative Engine Optimization）是面向 ChatGPT / Claude / Perplexity 等生成式答案引擎的内容优化方法。它和传统 SEO 不是替代关系，而是回答层、引用层、可抽取性层的一次升级。"
 tags:
-  - GEO
-  - Generative Engine Optimization
-  - AI Search
-  - SEO
-  - LLM
+  - "GEO"
+  - "LLM"
 status: published
 lang: zh
 topic: geo

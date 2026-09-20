@@ -3,11 +3,8 @@ title: "HermesAgent Personality 使用整理"
 date: "2026-05-03"
 summary: "HermesAgent Personality 系统完整使用整理：5 元素人格模型（identity / tone / principles / boundaries / style）+ YAML 完整配置示例 + 3 套人格模板（通用助手 / 严谨工程师 / 创意写手）+ Profile 集成 + 自动注入 + 与 Skills/Memory 协同 + 动态切换 + 5 调优方法 + 5 评估维度。"
 tags:
-  - hermes
-  - Personality
-  - 人格
-  - 配置
-  - Profile
+  - "Hermes"
+  - "配置"
 status: published
 lang: zh
 topic: hermes

@@ -4,11 +4,7 @@ date: "2026-08-23"
 summary: "第一章讲了 Midjourney 的底层原理——生图是在「视觉概率空间」里采样。这一章回答下一个问题：既然 Prompt 的本质是收缩这个空间，那具体该在哪几个维度上收缩？答案是 Google 的「视觉变量公式」——Subject、Action、Scene、Style、Composition 五维，进阶再扩成十层模型。"
 tags:
   - "AI 生图"
-  - "Prompt"
-  - "Google Gemini"
-  - "视觉变量"
-  - "构图"
-  - "生图方法"
+  - "Prompt 工程"
 status: published
 lang: zh
 englishSummary: "Chapter 2 of the AI image-generation methodology. Chapter 1 explained why generation is sampling from a visual probability space. This chapter answers what to do about it: Google's visual-variable formula — Subject, Action, Scene, Style, Composition — the exact axes along which you shrink that space."

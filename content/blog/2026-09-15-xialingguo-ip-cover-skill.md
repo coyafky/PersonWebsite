@@ -5,10 +5,7 @@ updated: "2026-09-15"
 summary: "我用了一段时间的封面生成 Skill，一直以为它的核心是「攒了九种好看风格」。直到认真拆了 peggykangkang02 的 xialingguo-ip 才发现，九种风格只是素材库——真正决定它能不能稳定出活的是另外四件事：一句「风格固定、主次灵活」的原则、一套不把人问烦的信息收集方式、一条「不写死真人 IP」的公共边界，以及一个「不把缩略图当交付」的自我约束。这篇逐层拆开。"
 tags:
   - "AI Skill"
-  - "封面设计"
   - "Prompt 工程"
-  - "内容工作流"
-  - "拆解"
 status: published
 lang: zh
 englishSummary: "A teardown of the xialingguo-ip cover-design Skill. Nine visual styles are just the library; what actually makes it reliable are four other things: the principle that style governs visual language while visual focus governs hierarchy, an intake form that never interrogates the user, a public boundary that refuses to hard-code anyone's real-person IP, and a self-imposed rule against delivering thumbnails as finished work."

@@ -9,8 +9,6 @@ instructor: "通往AGI之路"
 url: "https://space.bilibili.com/259768893/lists/8177398?type=season"
 tags:
   - "AI Agent"
-  - "AI应用"
-  - "企业AI"
 lang: zh
 englishSummary: ""
 ---

@@ -6,9 +6,7 @@ summary: >-
 status: published
 tags:
   - "Vibe Coding"
-  - "AI编程"
   - "Claude Code"
-  - "术语"
 lang: zh
 englishSummary: ""
 ---

@@ -3,11 +3,8 @@ title: "React 组件：拆分、组合和复用 UI 的基本单元"
 date: "2026-07-21"
 summary: "组件是 React 最小的建筑单元。这篇笔记从「为什么需要组件」出发，拆解组件的本质（函数 + props → JSX）、组件的组合模式（children、组合 vs 继承）、组件的渲染规则（纯函数、props 不变则输出不变）、以及 5 种日常高频组件模式（受控/非受控、组合组件、render props、HOC、Slot）。目标是：不是为了学 API，而是为了建立「如何拆组件」的判断力。"
 tags:
-  - React
-  - 组件
-  - props
-  - 组合
-  - 设计模式
+  - "React"
+  - "组件"
 status: published
 lang: zh
 topic: react

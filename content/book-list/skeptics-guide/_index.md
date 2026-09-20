@@ -8,8 +8,6 @@ genre: "科学思维 / 怀疑论"
 series: "skeptics-guide"
 tags:
   - "科学怀疑论"
-  - "批判性思维"
-  - "认知偏误"
 lang: zh
 englishSummary: "Reading notes for 'How to Think Independently / The Skeptics' Guide to the Universe', shared page-by-page with Alma. Covers scientific skepticism, neuropsychological limits & the four tools, and fast/slow thinking. In progress (detailed reading in batches of 3 pages)."
 ---

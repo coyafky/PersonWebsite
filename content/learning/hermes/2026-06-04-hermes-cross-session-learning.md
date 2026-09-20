@@ -4,12 +4,8 @@ date: "2026-06-04"
 summary: >-
   Hermes 跨会话学习的 4 层架构：Working Memory（当前会话）→ Curated Memory（MEMORY.md/USER.md 提炼事实）→ Session Search（SQLite + FTS5 全文检索）→ Skills/Playbooks（程序化经验沉淀）。包含完整工作流程图、用蓝辉轻改 GEO 项目 3 次会话举例，以及「记什么 / 怎么找回来 / 怎么注入当前任务」三个核心设计问题。
 tags:
-  - hermes
-  - 跨会话学习
-  - 记忆
-  - Memory
-  - Session Search
-  - Skills
+  - "Hermes"
+  - "Skill"
 status: draft
 lang: zh
 topic: hermes

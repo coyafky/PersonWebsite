@@ -12,9 +12,7 @@ params:
   style: "时尚肖像"
   technique: "选择性色彩"
 tags:
-  - 肖像
-  - 选择性色彩
-  - 时尚
+  - "肖像"
 status: published
 lang: zh
 englishSummary: "Selective color portrait: the orange sunglasses become the single color in a desaturated scene — the classic trick to make one element pop."

@@ -3,12 +3,8 @@ title: "如何写好 Skill：终极实战经验手册"
 date: "2026-06-17"
 summary: "如何写好 Skill 终极实战手册（基于腾讯程序员团队经验 + Anthropic 官方做法）：Skill 本质是结构化 Prompt Engineering（SKILL.md + scripts + references + assets），Anthropic 渐进式加载 3 层机制（Level 1 元数据常驻 50-150 Token / Level 2 SKILL.md 触发加载 ≤500 行 / Level 3 脚本按需），5 类典型场景（代码迁移 / 代码审查 / 写文档 / 项目初始化 / 自动化测试），6 个核心技巧（Description 决定触发 / 开头讲清目标 / 祈使句+解释为什么 / Before vs After 对比 / Few-Shot 多示例 / 决策树流程图），模块化拆分原则（>500 行就拆 / 主 Skill 编排子 Skill / 单一职责），与 Rule 的本质区别（Rule 是底线全局约束 / Skill 是按需触发的能力包），12 类反模式，13 项检查清单，5 类常见错误与排查，4 步发布流程。"
 tags:
-  - hermes
-  - Skill
-  - Prompt Engineering
-  - 写作规范
-  - Anthropic
-  - 最佳实践
+  - "Hermes"
+  - "Prompt 工程"
 status: draft
 lang: zh
 topic: hermes

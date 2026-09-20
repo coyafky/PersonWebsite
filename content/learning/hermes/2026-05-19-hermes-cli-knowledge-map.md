@@ -3,11 +3,8 @@ title: "Hermes CLI 指令知识文档"
 date: "2026-05-19"
 summary: "Hermes CLI 完整命令地图——分 Shell 命令和 Slash 命令两层；全局选项（--profile / --resume / --continue / --worktree / --yolo / --tui 等）；hermes chat / -z 单次入口；hermes model / fallback / gateway / proxy / lsp / setup / whatsapp / slack / auth / status / cron / kanban 等 Shell 顶级命令逐个解释。"
 tags:
-  - hermes
-  - CLI
-  - 命令
-  - 终端
-  - 运维
+  - "Hermes"
+  - "运维"
 status: draft
 lang: zh
 topic: hermes

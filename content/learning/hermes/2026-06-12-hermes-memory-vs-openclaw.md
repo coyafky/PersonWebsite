@@ -3,12 +3,8 @@ title: "深度拆解 Hermes 记忆系统：它如何修正 OpenClaw 的记忆误
 date: "2026-06-12"
 summary: "深度对比 Hermes 与 OpenClaw 的记忆设计哲学：Hermes 的 11 段系统提示词组装顺序（让稳定前缀保持不变以利用 Prompt Caching）、4 层记忆架构（固化 MEMORY.md+USER.md 提示词 / SQLite session_search / Skills 程序记忆 / Honcho 深层用户建模），对比 OpenClaw 的 Markdown 中心化误区（流水账 / 提示词臃肿 / 缓存命中差）。核心 3 原则：冷热分离（热=常驻 / 温=索引 / 冷=SQLite / 深层=Honcho）、缓存优先（限制常驻容量换提示词稳定）、按需检索。设计哲学：记忆不是越多越好，系统提示词也不是所有信息都该进入的地方——应该在正确层级、以正确成本、记住正确的事情。"
 tags:
-  - hermes
-  - OpenClaw
-  - 记忆系统
-  - 架构对比
-  - Prompt Caching
-  - 设计哲学
+  - "Hermes"
+  - "OpenClaw"
 status: draft
 lang: zh
 topic: hermes

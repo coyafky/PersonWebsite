@@ -3,13 +3,8 @@ title: "现代前端的第一步：模块化与 ES Modules（从 IIFE 到 import
 date: "2026-07-09"
 summary: "为什么 JavaScript 一开始没有模块系统？为什么一段 `<script>` 改个变量名就把整个网站搞炸？从 IIFE、CommonJS、AMD/UMD 一路进化到 ES Modules（import / export），这一篇把模块化的历史和 ES Modules 的完整语法、它和 CommonJS 的本质差异、Tree Shaking 为什么是 ESM 带来的最大胜利、模块解析机制一次性讲清楚。"
 tags:
-  - zero-to-tech
-  - JavaScript
-  - ES Modules
-  - 模块化
-  - CommonJS
-  - Tree Shaking
-  - 前端基础
+  - "zero-to-tech"
+  - "JavaScript"
 status: published
 lang: zh
 category: "技术/前端基础"

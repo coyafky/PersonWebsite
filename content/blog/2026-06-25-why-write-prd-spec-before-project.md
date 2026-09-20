@@ -3,8 +3,7 @@ title: "为什么写具体项目前，要先写清楚 PRD 和 Spec"
 date: "2026-06-25"
 summary: "design-draft 的 PRD / Spec 模板，帮助把模糊想法变成可协作、可验证、可回滚的工程对象。"
 tags:
-  - claude
-  - 教程
+  - "Claude Code"
 status: published
 lang: zh
 englishSummary: "design-draft 的 PRD / Spec 模板，帮助把模糊想法变成可协作、可验证、可回滚的工程对象。"

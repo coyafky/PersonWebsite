@@ -6,10 +6,6 @@ summary: >-
 status: published
 tags:
   - "AI Agent"
-  - "感知工具"
-  - "执行工具"
-  - "协作工具"
-  - "安全性"
   - "Agent 架构"
 lang: zh
 englishSummary: ""

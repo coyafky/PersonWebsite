@@ -3,12 +3,7 @@ title: "React State 与页面交互：从事件到状态更新"
 date: "2026-07-21"
 summary: "State 是 React 组件最核心的概念——它是组件用来「记住」交互信息的机制。这篇笔记用 6 张图覆盖 State 的全链路：事件触发（门铃）→ setState 通知重渲染（不等于直接修改变量）→ 渲染快照（每次渲染的 state 是常量）→ 更新队列（批量处理的原理）→ 不可变更新（为什么要用展开运算符而不是直接赋值）。读完你不仅会用 useState，还能解释闭包陷阱和批量更新的底层原因。"
 tags:
-  - React
-  - State
-  - useState
-  - setState
-  - 事件处理
-  - 不可变
+  - "React"
 status: published
 lang: zh
 topic: react

@@ -4,10 +4,7 @@ date: "2026-08-23"
 summary: "我把小红书图文的整套做法也做成了 skill：从 GEOFlow 母版整理成固定 5 张图的结构化提示词（封面→原理→对比→决策+商业→FAQ 避坑），贴给 ChatGPT 一次出图，再配封面和标题/Tag。核心是三条我踩出来的规则：固定 5 张、商业只在图4、FAQ 是图文长尾搜索的核心资产。这篇是它的完整说明文档。"
 tags:
   - "小红书"
-  - "内容管线"
   - "AI 生图"
-  - "skill"
-  - "图文"
 status: published
 lang: zh
 englishSummary: "Documentation for my xiaohongshu-graphic-pipeline skill: turns a GEOFlow master article into a fixed 5-image set of structured prompts for Xiaohongshu (cover → principle → comparison → decision+business → FAQ anti-pitfall), image generation via ChatGPT, then cover and title/tag metadata. Core rules: always exactly 5 images, commercial content only on image 4, and FAQ as the long-tail search asset. This post documents the full pipeline."

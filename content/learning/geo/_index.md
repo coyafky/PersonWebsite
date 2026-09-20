@@ -5,11 +5,8 @@ date: "2026-07-09"
 status: published
 topic: geo
 tags:
-  - GEO
-  - Generative Engine Optimization
-  - AI Search
-  - LLM
-  - SEO
+  - "GEO"
+  - "LLM"
 lang: zh
 englishSummary: "A structured Generative Engine Optimization (GEO) track: how to make content discoverable, citable, and useful inside AI-driven search and answer engines such as ChatGPT, Claude, Perplexity, and Gemini."
 ---

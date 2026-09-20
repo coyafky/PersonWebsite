@@ -5,9 +5,6 @@ updated: "2026-09-17"
 summary: "Google 的 cwebp 是个 单文件转化器：cwebp input.png -o output.webp。它没有 --glob 也没有文件夹模式 —— 这不是设计缺陷，而是 Unix 哲学：保持一个目标单一，让 find/for/xargs 去编排。本文整理 5 个真实场景下的批量写法，以及 quality/preset/lossless 怎么选。"
 tags:
   - "图片优化"
-  - "WebP"
-  - "工具"
-  - "前端性能"
 lang: zh
 englishSummary: "Google's cwebp is a single-file encoder with no built-in batch mode — and that is fine. This post walks through five real batch patterns (find -exec, bash for, find -exec ... {}, xargs), how to pick quality vs lossless vs preset, and why composability beats a --glob flag."
 status: published

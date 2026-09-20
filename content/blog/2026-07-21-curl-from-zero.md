@@ -3,13 +3,8 @@ title: "curl从0-1：Agent最常用的HTTP探针"
 date: "2026-07-21"
 summary: "AI Agent（Claude Code / Codex / Hermes）在终端里跑得最多的命令之一就是 curl。它不是浏览器，没有「回车就出页面」的便利——但它让 Agent 能精确控制 HTTP 请求的每一个字节，然后一字不漏地读每一个字节的响应。这一篇从 Agent 的视角讲 curl：为什么 Agent 不用 Postman、13 个核心标志怎么用、Agent 高频使用的 8 个实战模式、以及 curl 输出背后的 HTTP 协议细节。读完你能像 Agent 一样高效地探索任何 API。"
 tags:
-  - zero-to-tech
-  - curl
-  - HTTP
-  - API
-  - 命令行
-  - AI Agent
-  - 调试
+  - "zero-to-tech"
+  - "AI Agent"
 status: published
 lang: zh
 category: "技术/计算机基础"

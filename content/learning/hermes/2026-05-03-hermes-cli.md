@@ -3,11 +3,8 @@ title: "HermesAgent"
 date: "2026-05-03"
 summary: "HermesAgent 整体介绍与 CLI 命令完全指南：核心定位（自改进 / 跨会话记忆 / 多平台集成 / Skills 程序化经验）、核心模块（Agent Loop / Memory / Skills / Tools / Gateway / Cron）、5 步快速开始（安装 → 配置 Provider → 启动 → 创建 Profile → 第一个任务）、CLI 全命令列表（chat / profile / skill / memory / session / plugin / cron / mcp / status / update）、6 个实际使用场景。"
 tags:
-  - hermes
-  - CLI
-  - 入门
-  - 快速开始
-  - 命令
+  - "Hermes"
+  - "入门"
 status: published
 lang: zh
 topic: hermes

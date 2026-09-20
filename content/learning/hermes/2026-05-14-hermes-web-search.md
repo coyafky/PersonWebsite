@@ -3,11 +3,8 @@ title: "Hermes Web Search 配置指南"
 date: "2026-05-14"
 summary: "Hermes Agent Web Search 完整配置指南：基础启用（toolsets 启用 web_search）、Provider 选型对比（SerpAPI / Brave Search / Tavily / DuckDuckGo / Bing / Google CSE / 自建 SearXNG）、env 与 config.yaml 双层配置、防滥用措施（rate_limit / 缓存 TTL / 黑名单 / 人工审批）、4 类典型查询场景（事实查询 / GEO 基线测试 / 竞品监控 / 实时新闻）以及 6 条最佳实践。"
 tags:
-  - hermes
-  - Web Search
-  - 联网搜索
-  - 配置
-  - Provider
+  - "Hermes"
+  - "配置"
 status: draft
 lang: zh
 topic: hermes

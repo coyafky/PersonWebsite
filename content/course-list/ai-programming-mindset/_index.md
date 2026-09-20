@@ -9,8 +9,6 @@ instructor: "名校课程-顶级中配"
 url: "https://www.bilibili.com/video/BV1GUNa6tEfM/"
 tags:
   - "AI编程"
-  - "编程思维"
-  - "Python入门"
   - "Vibe Coding"
 lang: zh
 englishSummary: ""

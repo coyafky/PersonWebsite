@@ -3,12 +3,8 @@ title: "网络是怎么工作的：从浏览器输入网址，到页面出现在
 date: "2026-07-09"
 summary: "打开浏览器、输入网址、回车，页面就出现了——但这背后到底发生了什么？拆开 DNS 解析、TCP 三次握手、TLS 握手、HTTP 请求/响应、浏览器渲染 6 个关键阶段，建立对 Web 网络请求的完整心智模型。"
 tags:
-  - zero-to-tech
-  - 网络
-  - HTTP
-  - DNS
-  - TCP/IP
-  - 浏览器
+  - "zero-to-tech"
+  - "HTTP"
 status: published
 lang: zh
 category: "技术/网络基础"

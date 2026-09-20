@@ -7,10 +7,6 @@ author: "Martin Kleppmann"
 genre: "工程实践"
 tags:
   - "数据系统"
-  - "DDIA"
-  - "分布式"
-  - "可靠性"
-  - "可扩展性"
 lang: zh
 englishSummary: "DDIA separates data systems into three concerns: reliability, scalability, and maintainability. After reading, an engineer can reason about architecture trade-offs without getting stuck in specific tech stacks."
 ---

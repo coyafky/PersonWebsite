@@ -10,9 +10,6 @@ url: "https://www.bilibili.com/video/BV1ukgi62EwL/"
 tags:
   - "AI编程"
   - "Claude Code"
-  - "Vibe Coding"
-  - "原型开发"
-  - "TypeScript"
 lang: zh
 englishSummary: ""
 ---

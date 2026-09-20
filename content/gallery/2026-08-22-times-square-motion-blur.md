@@ -12,10 +12,7 @@ params:
   style: "时尚街拍"
   lens: "50-85mm 长焦"
 tags:
-  - 街拍
-  - 运动模糊
-  - 都市
-  - 慢门
+  - "街拍"
 status: published
 lang: zh
 englishSummary: "Times Square motion-blur street photography: slow shutter turns the crowd into flowing color blocks while the subject stays sharp — creating a 'I am the center of the city' hero feel."

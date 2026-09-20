@@ -3,12 +3,8 @@ title: "怎么让车辆渲染到我们合适的色卡中——ark-seedream-car-p
 date: "2026-06-12"
 summary: "深入解析 ymyy-sales-agent profile 中 ark-seedream-car-preview skill 的核心实现：色彩资产库、多 Provider 链式轮询、宽高比严格校验、模块化 Python 包架构。记录当前遇到的已知问题和解决方向。"
 tags:
-  - 车膜
-  - 生图系统
-  - hermes
-  - 色彩资产库
-  - Seedream
-  - 技术深度
+  - "车膜"
+  - "Hermes"
 status: published
 lang: zh
 englishSummary: "Technical deep-dive into the ark-seedream-car-preview skill: color asset library, multi-provider chain failover, strict aspect ratio validation, and modular Python architecture. Documents current known issues and resolution directions."

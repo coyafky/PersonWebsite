@@ -3,11 +3,7 @@ title: "HermesAgent Plugins 使用整理"
 date: "2026-05-03"
 summary: "HermesAgent Plugins 系统完整使用整理：Plugin vs Skill 的 5 维对比、4 种 Plugin 类型（Tool / Hook / Memory Provider / Context Engine）、完整目录结构、Plugin manifest 编写、3 个示例 Plugin（自定义工具 / pre_llm_call hook / 自定义 memory provider）、生命周期与热加载、与 Skills/Memory/Profile 的协同、4 步开发流程、最佳实践与常见错误。"
 tags:
-  - hermes
-  - Plugins
-  - 扩展
-  - 工具
-  - Hook
+  - "Hermes"
 status: published
 lang: zh
 topic: hermes

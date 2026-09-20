@@ -3,12 +3,8 @@ title: "Hermes Agent 实战项目设计"
 date: "2026-05-16"
 summary: "三个递进式 Hermes Agent 实战项目设计：项目一「飞书日报助手」（入门 — Installation + Gateway + Cron）、项目二「Code Review Agent」（进阶 — Plugin + MCP + Skill 自改进 + 并发执行）、项目三「HermesOps 全链路运营平台」（高级 — Delegation + Honcho + 多 Gateway + Credential Pools + Trajectory 导出）。每个项目给出适合阶段、知识点、MVP、进阶版本、具体步骤、交付物、评价标准、常见坑、作品化方法。"
 tags:
-  - hermes
-  - 实战项目
-  - 飞书
-  - Code Review
-  - 自动化
-  - 作品集
+  - "Hermes"
+  - "飞书"
 status: draft
 lang: zh
 topic: hermes

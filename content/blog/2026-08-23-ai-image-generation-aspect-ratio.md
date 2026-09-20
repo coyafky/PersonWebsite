@@ -4,11 +4,7 @@ date: "2026-08-23"
 summary: "第六章预告了「构图变量」，这一章从它的第一个模块讲起：画幅比例（Aspect Ratio）。它是构图里最常被忽略、却又最早决定一切的东西——一旦比例定了，空间方向、主体大小、留白方式、信息布局全跟着变。拆解六种常用比例，并给出一套「先问用途，再定比例」的决策法。"
 tags:
   - "AI 生图"
-  - "商品图"
-  - "构图"
-  - "画幅比例"
-  - "Prompt"
-  - "控制变量"
+  - "Prompt 工程"
 status: published
 lang: zh
 englishSummary: "Chapter 7 of the AI image-generation methodology: the first module of composition variables — aspect ratio. The most overlooked yet earliest-decided variable: once the ratio is set, spatial direction, subject size, negative space and information layout all follow. Breaks down six common ratios plus a use-case-first decision method."

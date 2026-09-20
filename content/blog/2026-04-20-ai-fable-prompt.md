@@ -3,11 +3,7 @@ title: "让 AI 用寓言故事帮你理解复杂概念——一个 Prompt 技巧
 date: "2026-04-20"
 summary: "遇到难啃的抽象概念怎么都记不住？别硬背——试试这个 Prompt 技巧：让 AI 用寓言故事的方式讲给你听。大脑天生喜欢故事。"
 tags:
-  - prompt
-  - AI
-  - 学习技巧
-  - 寓言
-  - 概念学习
+  - "Prompt 工程"
 status: published
 lang: zh
 category: "AI/Prompt库"

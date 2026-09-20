@@ -3,13 +3,8 @@ title: "Next.js 个人网站从0到1部署：7个真实踩坑全记录"
 date: "2026-07-21"
 summary: "用 Next.js 16 App Router + MDX 搭个人网站，从本地能跑到公网能访问，中间踩了 TypeScript 严格模式的 build 报错、中文文件名跨平台编码错乱、MDX 配置遗漏、路由组布局继承、draft/published 内容过滤、以及 Vercel 自动部署的「push即上线」风险。这篇把 7 个坑的完整因果链——从第一个报错到最终修复——全部记录下来，每个坑都附了错误信息、根因和修复方案。"
 tags:
-  - zero-to-tech
-  - Next.js
-  - Vercel
-  - 部署
-  - TypeScript
-  - MDX
-  - 踩坑
+  - "zero-to-tech"
+  - "Next.js"
 status: published
 lang: zh
 category: "技术/前端部署"

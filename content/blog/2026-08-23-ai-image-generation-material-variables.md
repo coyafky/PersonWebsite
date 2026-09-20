@@ -4,11 +4,7 @@ date: "2026-08-23"
 summary: "第三章测了「光线」这个单一变量，这一章测另一个单一变量——「承托材质」。同一个商品主体、同角度、同构图、同光线逻辑，只换承载或包围商品的材质：木质、大理石、金属、丝绸、纸张。拆解五种材质的视觉倾向，并给出汽车后市场商品的选型建议。"
 tags:
   - "AI 生图"
-  - "商品图"
-  - "材质"
-  - "Prompt"
-  - "背景"
-  - "控制变量"
+  - "Prompt 工程"
 status: published
 lang: zh
 englishSummary: "Chapter 5 of the AI image-generation methodology. Another single-variable test, symmetric to lighting: vary only the surface material that holds or surrounds the product — wood, marble, metal, silk, paper — while keeping subject, angle, composition and lighting identical. Maps each material to its visual temperament."

@@ -6,10 +6,7 @@ summary: >-
 status: published
 tags:
   - "AI Agent"
-  - "工具发现"
-  - "Skills"
-  - "KV Cache"
-  - "MCP"
+  - "Skill"
 lang: zh
 englishSummary: ""
 chapter: "Ch.4"

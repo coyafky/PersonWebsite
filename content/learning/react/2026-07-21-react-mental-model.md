@@ -3,11 +3,8 @@ title: "React 的心智模型：UI 是状态的函数"
 date: "2026-07-21"
 summary: "React 最核心的心智模型只有一句话：UI = f(state)。理解了这句话，就理解了为什么 React 要发明组件、JSX、Virtual DOM、单向数据流这些概念。这篇笔记从「jQuery 时代的 UI 开发痛点」出发，推导出 React 的设计动机，然后拆解这个心智模型的三层含义。"
 tags:
-  - React
-  - 心智模型
-  - 组件
-  - Virtual DOM
-  - 单向数据流
+  - "React"
+  - "组件"
 status: published
 lang: zh
 topic: react

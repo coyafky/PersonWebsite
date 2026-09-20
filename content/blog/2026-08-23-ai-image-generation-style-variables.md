@@ -4,11 +4,7 @@ date: "2026-08-23"
 summary: "这是五维公式里「Style 怎么表现」那一维的深入。同一个商品主体、构图、角度、背景复杂度都不变，只换最终视觉表达方式：商业摄影、极简草稿、线稿图、杂志插画、水彩风。拆解五种表现形式的用途，并把整个「商品图变量测试」体系收束成六类变量。"
 tags:
   - "AI 生图"
-  - "商品图"
-  - "表现形式"
-  - "Prompt"
-  - "风格"
-  - "控制变量"
+  - "Prompt 工程"
 status: published
 lang: zh
 englishSummary: "Chapter 6 of the AI image-generation methodology. The deep-dive on the Style dimension: keeping subject, composition, angle and background complexity fixed while varying only the visual medium — commercial photography, minimal sketch, line art, magazine illustration, watercolor. Closes the series by consolidating product-image variables into six categories."

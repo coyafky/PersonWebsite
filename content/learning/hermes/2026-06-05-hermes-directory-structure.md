@@ -3,10 +3,8 @@ title: "Hermes Agent 的典型目录结构"
 date: "2026-06-05"
 summary: "Hermes Agent 项目的标准目录结构与各文件作用：main.py / provider_config.toml / .env / README.md / SOUL.md / USER.md / Profile/ / Skills/ / Tools/ / Memory/ / Logs/ / Docs/ / scripts/ / tests/。每个模块的职责清晰划分——入口、Provider、行为价值观、用户档案、Agent Profile、可执行技能、外部工具接口、跨会话记忆、日志、脚本、测试。"
 tags:
-  - hermes
-  - 目录结构
-  - 项目组织
-  - 配置
+  - "Hermes"
+  - "配置"
 status: draft
 lang: zh
 topic: hermes

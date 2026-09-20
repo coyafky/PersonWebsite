@@ -4,10 +4,7 @@ date: "2026-08-23"
 summary: "我给拍摄剪辑的同事做了一个『一句话生成抖音封面』的 AI Skill：草稿图 + 提示词 → 图生图 → 回传飞书。这中间最值的不是生成，而是两个设计——如何在高并发多个需求时不搞混各自的草稿图，以及如何用『执行电路』而不是一堆『禁止』来让流程自然走对。"
 tags:
   - "抖音"
-  - "封面"
   - "AI Skill"
-  - "图生图"
-  - "工作流设计"
 status: published
 lang: zh
 englishSummary: "A Douyin cover-generation Skill for video editors: draft image + prompt → image-to-image → deliver back to Feishu. The real value is two design decisions — how to keep concurrent cover requests from mixing up their drafts, and how to use an 'execution circuit' instead of a pile of prohibitions so the flow naturally goes right."

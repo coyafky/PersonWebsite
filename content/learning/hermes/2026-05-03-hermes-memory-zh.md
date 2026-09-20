@@ -3,11 +3,8 @@ title: "HermesAgent Memory 使用整理"
 date: "2026-05-03"
 summary: "HermesAgent Memory 完整使用整理：4 类记忆层级（Working / Short-term Session / Long-term Persistent / Vector RAG）、4 种 Memory 类型（用户档案 / 项目事实 / 偏好 / 程序化）、5 种记忆操作（remember / recall / forget / list / consolidate）、嵌入工作流（自动检测偏好与事实 / 手动强制记录）、3 个实战场景（蓝辉 GEO / 飞书日报 / 个人 Coding 助手）、4 条隐私保护机制。"
 tags:
-  - hermes
-  - Memory
-  - 长期记忆
-  - 记忆层级
-  - 偏好
+  - "Hermes"
+  - "Memory"
 status: published
 lang: zh
 topic: hermes

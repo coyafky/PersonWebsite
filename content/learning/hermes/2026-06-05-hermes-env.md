@@ -3,12 +3,8 @@ title: "Hermes .env 配置文件完全指南"
 date: "2026-06-05"
 summary: "Hermes .env 配置完全指南：与 config.yaml 的职责分工（配置描述运行 / .env 提供秘密值）、8 大核心作用（API Key / Provider 地址 / 运行环境 / 数据库与记忆 / 工具权限 / 工作目录 / Web 与 Browser / 消息网关）、完整 .env 示例（基础运行 / LLM Provider / Memory / 工具权限 / Web Search / 安全 / 消息网关 7 大模块）、macOS 本地开发版 vs 腾讯云生产版对比、4 类最易踩的坑（提交到 Git / Key 名称不一致 / 路径不可移植 / 生产环境危险工具）、推荐的 3 文件拆分（.env.example / .env.local / .env.production）。"
 tags:
-  - hermes
-  - .env
-  - 配置
-  - 环境变量
-  - 密钥管理
-  - 安全
+  - "Hermes"
+  - "配置"
 status: draft
 lang: zh
 topic: hermes

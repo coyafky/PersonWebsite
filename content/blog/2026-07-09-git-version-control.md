@@ -3,13 +3,8 @@ title: "Git 和版本管理：你的代码时光机，以及它和 Claude Code �
 date: "2026-07-09"
 summary: "为什么每个项目都有一个 .git 文件夹？为什么 Git 成了程序员的标配？这一篇把 Git 的核心概念（仓库、暂存区、提交、分支）、日常命令、.gitignore、版本穿梭、工作区切换讲清楚，最后用一个实战场景把 Git Worktree 和 Claude Code Subagent 联动起来——多个 AI Agent 在同一个仓库并行干活不打架。"
 tags:
-  - zero-to-tech
-  - Git
-  - 版本控制
-  - Worktree
-  - Claude Code
-  - Subagent
-  - Mermaid
+  - "zero-to-tech"
+  - "Claude Code"
 status: published
 lang: zh
 category: "技术/计算机基础"

@@ -4,10 +4,7 @@ date: "2026-08-23"
 summary: "给飞书机器人搭实时流式卡片，我踩了一整天雷才跑通：从『卡片出了但表格秒消失』这种看似玄学的问题，挖到其实是『AI 输出完又去清理临时脚本触发了归档机制』这个根因。这篇把整套 HFC 流式卡片的排坑链路、机制认知和最终方案写成可复用的记录。"
 tags:
   - "飞书"
-  - "流式卡片"
   - "Hermes"
-  - "HFC"
-  - "AI 助理"
 status: published
 lang: zh
 englishSummary: "How I debugged Feishu streaming cards for an AI assistant: a full-day hunt ended when I found the 'disappearing table' root cause (the agent cleaned up temp scripts after output, triggering the answer-archival mechanism). A reusable account of the HFC setup, the mechanism, and the hard-mechanism fix."

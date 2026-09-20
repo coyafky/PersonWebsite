@@ -6,9 +6,6 @@ summary: >-
 status: published
 tags:
   - "AI Agent"
-  - "工具设计"
-  - "MCP"
-  - "ACI"
   - "Agent 架构"
 lang: zh
 englishSummary: ""

@@ -4,11 +4,7 @@ date: "2026-08-23"
 summary: "第七章的画幅比例决定「画布是什么形状」，这一章的景别决定「镜头离主体有多远」。同样是构图变量，画幅管空间框架，景别管主体尺度。用实拍式成图拆解远景、全景、中景、近景、特写五档，并给出每一档可复用的 Prompt。"
 tags:
   - "AI 生图"
-  - "商品图"
-  - "构图"
-  - "景别"
-  - "Prompt"
-  - "控制变量"
+  - "Prompt 工程"
 status: published
 lang: zh
 englishSummary: "Chapter 8 of the AI image-generation methodology. Where aspect ratio decides the canvas shape, shot type decides how far the camera is from the subject. Five image-backed examples distinguish extreme wide, full, medium, close-up, and extreme close-up shots, each with a reusable prompt."

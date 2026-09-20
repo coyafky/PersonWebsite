@@ -3,11 +3,8 @@ title: "HermesAgent Configuration 使用整理"
 date: "2026-05-03"
 summary: "HermesAgent Configuration 完整使用整理：架构与目录（hermes-agent 主目录 / config/ / profiles/ / logs/）、config.yaml 主配置（agent / providers / models / tools / memory / logging / security 等 9 大模块）、Profile 多环境隔离机制、CLI 与 env 覆盖优先级、热加载与运行时修改、3 个生产案例（蓝辉 GEO Agent / 飞书日报 / 个人 Coding 助手）。"
 tags:
-  - hermes
-  - Configuration
-  - 配置
-  - Profile
-  - 多环境
+  - "Hermes"
+  - "配置"
 status: published
 lang: zh
 topic: hermes

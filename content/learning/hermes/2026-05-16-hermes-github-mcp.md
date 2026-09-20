@@ -3,12 +3,8 @@ title: "Hermes 连接 GitHub MCP 项目实战"
 date: "2026-05-16"
 summary: "Project 01 实战整理：Hermes Agent 通过 MCP 连接 GitHub 的完整方案——链路结构（Hermes CLI → MCP Client → GitHub MCP Server → GitHub API）、为何不用废弃的 npm 包而采用官方 Docker 镜像 ghcr.io/github/github-mcp-server、当前连接状态（stdio transport / 26 个 GitHub MCP tools 列表）、本机前置检查（Hermes / Docker 29.4.3 / Node v24.15）、Fine-grained GitHub Token 权限矩阵、Token 存放位置 ~/.hermes/.env、Docker wrapper 启动脚本、hermes mcp add / test / configure 完整流程、5 项成功标准、5 个常见问题排查、5 步下一步练习。"
 tags:
-  - hermes
-  - GitHub
-  - MCP
-  - Docker
-  - 项目实战
-  - 集成
+  - "Hermes"
+  - "MCP"
 status: draft
 lang: zh
 topic: hermes

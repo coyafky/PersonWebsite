@@ -3,12 +3,8 @@ title: "Hermes-Agent 记忆系统拆解（by dotey）"
 date: "2026-05-03"
 summary: "X 平台 @dotey 对 Hermes Agent 记忆系统的深度拆解：会话上下文与长期记忆的关系、传统 Chat 工具的局限、Memory 工具（add / replace / remove）的正确使用、容量管理（80% 阈值整合优于追加）、安全扫描（防 prompt 注入 / 凭据泄露 / SSH 后门 / Unicode 隐藏字符）、外部记忆提供商（Honcho / OpenViking / Mem0 / Hindsights / Holographic / RetainDB / ByteRover / Supermemory）的对比与适用场景。"
 tags:
-  - hermes
-  - 记忆系统
-  - 拆解
-  - dotey
-  - 长期记忆
-  - 外部记忆
+  - "Hermes"
+  - "拆解"
 status: published
 lang: zh
 topic: hermes

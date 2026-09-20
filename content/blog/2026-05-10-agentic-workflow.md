@@ -3,11 +3,8 @@ title: "Agentic AI 工作流：不是一口气写完，而是分阶段完成"
 date: "2026-05-10"
 summary: "Agentic AI workflow 的本质：把复杂任务拆成多个步骤，让 LLM 分阶段完成。从普通用法 vs Agentic 对比、研究代理案例、到自主性连续光谱——DeepLearning.AI 课程核心笔记。"
 tags:
-  - Agentic-AI
-  - 工作流
-  - LLM
-  - 课程笔记
-  - AI-Agent
+  - "Agentic-AI"
+  - "AI Agent"
 status: published
 lang: zh
 category: "AI/LLM与Agent框架"

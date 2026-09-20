@@ -3,11 +3,8 @@ title: "Hermes Agent 学习资料库"
 date: "2026-05-16"
 summary: "基于 Hermes 官方文档整理的学习资源索引：入门资料（Quickstart / Learning Path / Discord）、系统教材（Configuration / Architecture / Memory / Skills / Tools / MCP / Cron / Delegation / Voice / Security / Atropos）、代表性案例（hermes-example-plugins、Reddit Use Cases）、工具平台（agentskills.io、SKILL.md 规范、Provider 生态）、行业前沿（Overview、Atropos）。给出 Day 1 → 第 3 周 的速查学习路径与 5 条学完应产出。"
 tags:
-  - hermes
-  - 学习资料
-  - 入门
-  - 进阶
-  - 资源
+  - "Hermes"
+  - "入门"
 status: draft
 lang: zh
 topic: hermes

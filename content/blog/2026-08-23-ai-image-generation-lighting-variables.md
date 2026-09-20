@@ -4,11 +4,7 @@ date: "2026-08-23"
 summary: "第二章把 Prompt 拆成了五维/十层，其中「Lighting 光线」这一维最值得单独做控制变量。想判断哪种光最适合一个商品，唯一正确的做法是：主体、构图、背景、风格全锁定，只换光线。这篇拆解自然光、侧光、逆光、霓虹光四种光的语义差异，并给一套可复用的「固定模板 + 光线变量库」。"
 tags:
   - "AI 生图"
-  - "商品图"
-  - "光线"
-  - "Prompt"
-  - "控制变量"
-  - "摄影"
+  - "Prompt 工程"
 status: published
 lang: zh
 englishSummary: "Chapter 3 of the AI image-generation methodology. To test which lighting suits a product, lock the subject, composition, background and style, and vary only the light — a controlled-variable method. Breaks down natural / side / back / neon lighting, plus a reusable master template and lighting variable library."

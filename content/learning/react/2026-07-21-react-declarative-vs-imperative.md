@@ -3,12 +3,8 @@ title: "声明式与命令式：React 和原生 DOM 的思维方式对比"
 date: "2026-07-21"
 summary: "React 最关键的范式转变是「声明式」取代「命令式」。这篇笔记用同一个功能（计数器、Todo List、搜索过滤）在原生 JS DOM 和 React 中的两种实现做并排对比，拆解声明式的三个核心优势（可预测、自描述、易测试）和一个真实代价（diff 开销），最后给出判断框架：什么时候声明式帮你省事，什么时候命令式更直接。"
 tags:
-  - React
-  - JavaScript
-  - DOM
-  - 声明式
-  - 命令式
-  - 心智模型
+  - "React"
+  - "JavaScript"
 status: published
 lang: zh
 topic: react

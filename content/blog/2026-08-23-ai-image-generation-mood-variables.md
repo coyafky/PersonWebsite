@@ -4,11 +4,7 @@ date: "2026-08-23"
 summary: "第三章测了「光线」这个单一变量。这一章往上走一层：情绪不是一个能直接写进 Prompt 的孤立参数，它由「光线表现 + 色彩氛围 + 空间构图节奏」三个底层变量共同决定。拆解柔和、安静、强烈、神秘、轻松五种情绪，给出可复用的「情绪变量生成器」。"
 tags:
   - "AI 生图"
-  - "商品图"
-  - "情绪"
-  - "Prompt"
-  - "色彩"
-  - "光线"
+  - "Prompt 工程"
 status: published
 lang: zh
 englishSummary: "Chapter 4 of the AI image-generation methodology. Lighting (Chapter 3) is a single variable; mood is a compound one — it is not an isolated parameter but the joint effect of lighting, color, and spatial composition rhythm. Breaks down soft / calm / intense / mysterious / relaxed moods into three underlying variables each."

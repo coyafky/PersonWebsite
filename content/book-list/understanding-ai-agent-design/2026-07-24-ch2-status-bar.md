@@ -6,10 +6,7 @@ summary: >-
 status: published
 tags:
   - "AI Agent"
-  - "Agent 状态栏"
   - "上下文工程"
-  - "上下文蒸馏"
-  - "注意力机制"
 lang: zh
 englishSummary: ""
 chapter: "Ch.2"

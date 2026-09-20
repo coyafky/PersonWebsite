@@ -5,11 +5,8 @@ date: "2026-08-22"
 status: published
 topic: ai-image-generation
 tags:
-  - AI生图
-  - 提示词
-  - Diffusion
-  - 视觉语言
-  - 生图API
+  - "AI 生图"
+  - "Prompt 工程"
 lang: zh
 englishSummary: "A from-zero-to-one AI image generation learning track: diffusion fundamentals, key parameters, prompt engineering, visual language, and generation API workflows, with reproducible hands-on notes."
 ---

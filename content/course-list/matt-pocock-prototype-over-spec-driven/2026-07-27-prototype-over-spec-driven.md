@@ -7,10 +7,7 @@ status: published
 course: matt-pocock-prototype-over-spec-driven
 tags:
   - "AI编程"
-  - "原型开发"
-  - "Vibe Coding"
   - "Claude Code"
-  - "敏捷开发"
 lang: zh
 chapter: "原型 vs Spec-Driven"
 ---

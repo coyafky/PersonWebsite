@@ -3,14 +3,8 @@ title: "GitHub 和远程同步：从本地仓库到开源世界，以及 AI Agen
 date: "2026-07-09"
 summary: "上一篇讲了 Git 本地操作和 Worktree。这一篇把视线移到「Git 之外」——GitHub 这个全球最大的代码托管平台。覆盖：什么是开源 / 怎么创建 GitHub repo / SSH key 怎么配 / 怎么把本地仓库推上去 / GitHub CLI（gh）怎么在终端替代网页 / GitHub MCP 服务怎么让 Claude Code 直接读 issue / 创建 PR。"
 tags:
-  - zero-to-tech
-  - GitHub
-  - 开源
-  - SSH
-  - gh CLI
-  - MCP
-  - Claude Code
-  - AI Agent
+  - "zero-to-tech"
+  - "AI Agent"
 status: published
 lang: zh
 category: "技术/计算机基础"

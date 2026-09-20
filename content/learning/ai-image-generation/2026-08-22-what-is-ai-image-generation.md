@@ -3,11 +3,7 @@ title: "AI 生图是什么：一张能力地图"
 date: "2026-08-22"
 summary: "AI 生图不是一种技术，而是一张能力光谱——从文生图、图生图、参考生图到视频生成。先建立这张地图，才知道自己该学什么、已经会什么。"
 tags:
-  - AI生图
-  - 能力地图
-  - Diffusion
-  - 文生图
-  - 图生图
+  - "AI 生图"
 status: published
 lang: zh
 topic: ai-image-generation

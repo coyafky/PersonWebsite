@@ -3,11 +3,8 @@ title: "HermesAgent Profiles 使用整理"
 date: "2026-05-03"
 summary: "HermesAgent Profiles 多环境隔离完整使用整理：4 类内置 Profile（default / work / personal / coding）、3 大核心特性（隔离 / 切换 / 继承）、完整 YAML 配置（覆盖 Provider/Tools/Memory/Plugins/Personality/Context/Cron 等）、CLI 与运行时切换、3 个实战场景（蓝辉 GEO / 个人 Coding / 飞书日报）、环境变量注入与多 Profile 组合、与 Skills/Memory 协同、5 步配置流程、最佳实践与常见错误。"
 tags:
-  - hermes
-  - Profiles
-  - 多环境
-  - 隔离
-  - 切换
+  - "Hermes"
+  - "Profile"
 status: published
 lang: zh
 topic: hermes

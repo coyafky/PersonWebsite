@@ -6,10 +6,7 @@ summary: >-
 status: published
 tags:
   - "AI Agent"
-  - "异步"
-  - "事件驱动"
   - "Agent 架构"
-  - "OpenClaw"
 lang: zh
 englishSummary: ""
 chapter: "Ch.4"
