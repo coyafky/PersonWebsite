@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CollectionList } from "@/components/collection-list";
+import { MdxContent } from "@/components/mdx-content";
 import { getCourseNotes, getCourseTopicIndex, getCourseTopics } from "@/lib/content";
 import { SITE_NAME } from "@/lib/metadata";
 
@@ -73,6 +74,12 @@ export default async function CourseTopicPage({ params }: CoursePageProps) {
             </span>
           ) : null}
         </div>
+
+        {indexPost.body ? (
+          <div className="course-index-body">
+            <MdxContent source={indexPost.body} />
+          </div>
+        ) : null}
 
         {notes.length === 0 ? (
           <p className="empty-state">尚无笔记。开始写第一篇 →</p>

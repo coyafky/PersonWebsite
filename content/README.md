@@ -70,6 +70,20 @@ The `chart` prop must be a **plain string**. Do not use a JSX template-literal e
 - **Security**: Mermaid runs with `securityLevel: "strict"`, so click events in flowcharts and external scripts are disabled.
 - **Client JS cost**: Mermaid is a ~600 KB client bundle loaded only on pages that contain a `<Mermaid>` component.
 
+## No `<url>` Autolinks (`.md` Included)
+
+`.md` content is compiled by the same MDX pipeline as `.mdx`, so CommonMark autolinks break the build:
+
+```md
+- 官方站点：<https://example.com/>              <!-- ✗ aborts the build -->
+- 官方站点：[example.com](https://example.com/) <!-- ✓ -->
+```
+
+MDX parses `<` as the start of a JSX element, so `<https://…>` fails with
+`[next-mdx-remote] error compiling MDX: Unexpected character '/' (U+002F) before local name`.
+The failure surfaces at prerender time and aborts `next build` for that route — `npm run dev`
+can still serve other pages, so it is easy to miss until you hit the page or build.
+
 ## JSX Serialization Gotcha
 
 The MDX pipeline (`next-mdx-remote/rsc`) sends JSX props across the React Server → Client boundary as part of the RSC payload. Two patterns **silently drop the value** and the prop arrives as `undefined` at runtime:

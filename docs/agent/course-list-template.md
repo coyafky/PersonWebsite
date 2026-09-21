@@ -78,6 +78,12 @@ englishSummary: ""
 | `series` | | 系列名（可选，用于章节导航） |
 | `seriesOrder` | | 系列内的顺序（可选） |
 
+## 正文渲染到哪里
+
+- `_index.md` 的正文渲染在课程页 `/course-list/<course>` 上，位置在「元信息条」与「课时笔记列表」之间（2026-09-20 起生效；此前正文不渲染）。
+- 课时笔记的正文渲染在 `/course-list/<course>/<slug>`。
+- 两处都走 MDX 编译（`.md` 也一样），所以**不要用 `<https://...>` 这种 CommonMark 自动链接** —— MDX 会把 `<` 当成 JSX 开始标签并中断构建，请用 `[文字](url)`。详见 `content/README.md`。
+
 ## 写作指南
 
 ### 正文结构建议
