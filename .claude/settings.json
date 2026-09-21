@@ -1,10 +1,38 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -n \"prevPost\\\\|nextPost\\\\|上一篇\\\\|下一篇\\\\|PrevPost\\\\|NextPost\" /Users/fkycoya/Documents/Code/PersonalWebsite/app/\\\\\\(site\\\\\\)/weekly/[slug]/page.tsx /Users/fkycoya/Documents/Code/PersonalWebsite/app/\\\\\\(site\\\\\\)/projects/[slug]/page.tsx /Users/fkycoya/Documents/Code/PersonalWebsite/app/\\\\\\(site\\\\\\)/learning/[topic]/[slug]/page.tsx /Users/fkycoya/Documents/Code/PersonalWebsite/app/\\\\\\(site\\\\\\)/book-list/[slug]/page.tsx /Users/fkycoya/Documents/Code/PersonalWebsite/app/\\\\\\(site\\\\\\)/ai-tracker/[slug]/page.tsx)",
+      "Bash(grep -n \"prevPost\\\\|nextPost\\\\|上一篇\\\\|下一篇\\\\|PrevPost\\\\|NextPost\" /Users/fkycoya/Documents/Code/PersonalWebsite/app/\\\\\\(site\\\\\\)/weekly/[slug]/page.tsx /Users/fkycoya/Documents/Code/PersonalWebsite/app/\\\\\\(site\\\\\\)/projects/[slug]/page.tsx /Users/fkycoya/Documents/Code/PersonalWebsite/app/\\\\\\(site\\\\\\)/learning/[topic]/[slug]/page.tsx /Users/fkycoya/Documents/Code/PersonalWebsite/app/\\\\\\(site\\\\\\)/book-list/[slug]/page.tsx)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(下一篇\" UI on the blog detail page.:*)"
+    ]
+  },
+  "description": "Impeccable design detector: immediate-tier checks after Edit/Write on UI files, full-rule deep pass on Stop.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/impeccable\" ] || \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/impeccable\" hook",
+            "timeout": 5,
+            "statusMessage": "Checking UI changes"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/impeccable\" ] || \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/impeccable\" hook",
+            "timeout": 30,
+            "statusMessage": "Design deep pass"
+          }
+        ]
+      }
     ]
   }
 }
