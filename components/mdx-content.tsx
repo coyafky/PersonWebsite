@@ -13,6 +13,7 @@ import { Tabs } from "@/components/tabs";
 import { CopyButton } from "@/components/copy-button";
 import { Tweet } from "@/components/tweet-embed";
 import { YouTube } from "@/components/youtube-embed";
+import { getImageMeta } from "@/lib/image-manifest";
 import { ImageLightbox } from "@/components/image-lightbox";
 
 const prettyCodeOptions = {
@@ -50,13 +51,26 @@ function MdxImage(props: ComponentPropsWithoutRef<"img">) {
     return null;
   }
 
+  /*
+    宽高原先是 0/0（响应式写法）+ CSS `width:100%; height:auto` —— 浏览器因此
+    推断不出宽高比，图片加载前的高度是 0，加载完突然撑开。实测（2026-09-20）：
+    单张图 0px → 450px，等于视口的 58%，是真实的 CLS。
+
+    清单里给了真实宽高之后，宽高比在图片到达之前就已知，高度按比例就位，CLS 归零；
+    24px 模糊缩略图则让加载期呈现「显影」而不是空白。
+    清单里没有这张图 → 退回原来的 0/0 行为，不报错、不阻塞构建。
+  */
+  const meta = getImageMeta(src);
+
   const image = (
     <Image
       src={src}
       alt={alt}
-      width={0}
-      height={0}
+      width={meta?.width ?? 0}
+      height={meta?.height ?? 0}
       sizes="(max-width: 820px) 100vw, 720px"
+      placeholder={meta ? "blur" : "empty"}
+      blurDataURL={meta?.blurDataURL}
       className="markdown-image"
     />
   );

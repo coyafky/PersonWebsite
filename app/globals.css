@@ -1582,6 +1582,8 @@ main {
 }
 
 .article-toc a {
+  /* 给 .article-toc__marker 当定位基准 */
+  position: relative;
   display: block;
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius);
@@ -1597,8 +1599,28 @@ main {
 
 .article-toc a[aria-current="location"] {
   color: var(--accent);
-  background: var(--surface-soft);
   font-weight: 600;
+  /* 底从这里移走了 —— 交给 .article-toc__marker 承载。
+     原因是这块底既是「当前项标记」也是「hover 高亮」（见上面 a:hover），
+     而作为当前项标记时它应该「滑过去」而不是各画各的再硬切。
+     hover 那条保持原样：即时反馈，不参与滑动。 */
+}
+
+/* 当前项的位置标记。颜色 / 圆角 / 尺寸与原来那条 background 逐字相同
+   （inset:0 + 同一个 --radius），静止时是像素级一致的 ——
+   这里只加运动，不加任何新视觉。
+   framer-motion 的 layoutId 会让同一个元素在项与项之间迁移，并插值
+   位置与尺寸（二级项和三级项的字号/缩进不同，所以两者都在变）。 */
+.article-toc__marker {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+}
+
+/* 文字要盖在标记之上。两者都是 positioned，DOM 里靠后的画在上面。 */
+.article-toc__label {
+  position: relative;
 }
 
 .article-toc__toggle {
@@ -2820,6 +2842,11 @@ main {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* course index body - _index.md 正文（课程介绍 + 课时清单） */
+.course-index-body {
+  margin-bottom: var(--space-6);
 }
 
 /* ── Course Note List ──────────────────────────────────────────────────── */
@@ -4182,9 +4209,18 @@ body {
 }
 
 .tool-progress-fill {
+  /* 宽度恒为 100%，进度用 transform: scaleX() 表达 —— 不用 width。
+     design.md 的 Don'ts 明禁 transition: width（会触发 layout 抖动，
+     要求改用 transform: scaleX()）；站内的阅读进度条 .article-progress__bar
+     本来就是这个写法，这里对齐它。
+     原先每秒 5 次 width 变更（lib/tools/use-countdown.ts 的 TICK_MS=200）
+     = 每秒 5 次布局失效，一次 25 分钟番茄钟 7500 次；现在只动合成层。 */
+  width: 100%;
   height: 100%;
   background: var(--accent);
-  transition: width var(--transition-fast);
+  transform-origin: left center;
+  will-change: transform;
+  transition: transform var(--transition-fast);
 }
 
 .tool-controls {
@@ -5130,5 +5166,321 @@ body:has(.music-np) .site-footer {
   .music-np-btn,
   .music-np-close {
     transition: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Fluid Orb —— 移植自 Rare UI 的 fluid-orb（MIT）
+   组件不依赖任何工具类，几何/裁切全在这两个类里。
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.fluid-orb {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  vertical-align: middle;
+}
+
+.fluid-orb-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* hero 面板右上角的 LIVE 信号位：球 + 文字一行 */
+.hero-panel-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   /labs/motion —— 动效候选预览
+   只服务于这一页，不进任何正式页面。样式只用 design.md 里列出的 token，
+   不新增色值 / 圆角档位 / 间距硬编码。
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.ml-head { margin-bottom: var(--space-6); }
+.ml-head p { max-width: 64ch; color: var(--text-secondary); }
+
+.ml-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-7);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-border);
+}
+
+.ml-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+/* 能力徽标：用 CSS 自己判断浏览器支不支持，没有一行 JS */
+.ml-cap {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-soft);
+  color: var(--text-secondary);
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 11px;
+}
+.ml-cap::after { content: "view() 时间线 · 不支持 → 元素静态显示（这就是降级）"; }
+@supports (animation-timeline: view()) {
+  .ml-cap { color: var(--text); }
+  .ml-cap::after { content: "view() 时间线 · 支持"; }
+}
+
+.ml-demo {
+  margin-bottom: var(--space-6);
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.ml-demo > h2 { font-size: 20px; margin-bottom: var(--space-2); }
+.ml-demo > p { max-width: 64ch; color: var(--text-secondary); }
+
+.ml-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 var(--space-5);
+  padding: 0;
+  list-style: none;
+}
+.ml-meta li {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-soft);
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.ml-meta li.ok { color: var(--text); font-weight: 600; }
+.ml-meta li.no { text-decoration: line-through; }
+
+/* ── Demo 1：滚动驱动的显影 ─────────────────────────────────────────── */
+
+.ml-reveal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-3);
+}
+
+/* 静态基线 = 完全显示。这就是"不支持 view() 时用户看到的样子"，
+   也是 prefers-reduced-motion 用户看到的样子。天然降级，无需 JS 兜底。 */
+.ml-reveal {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  box-shadow: var(--shadow-border);
+}
+.ml-reveal img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+@keyframes ml-reveal-in {
+  from { opacity: 0; clip-path: inset(12% 12% 12% 12% round var(--radius)); }
+  to   { opacity: 1; clip-path: inset(0% 0% 0% 0% round var(--radius)); }
+}
+
+/* 两个条件都满足才启用；任一不满足 → 停在上面那个静态基线 */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ml-reveal {
+      animation: ml-reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 8% cover 32%;
+    }
+    /* 错开，避免整片网格同时闪 */
+    .ml-reveal:nth-child(3n + 2) { animation-range: entry 14% cover 38%; }
+    .ml-reveal:nth-child(3n)     { animation-range: entry 20% cover 44%; }
+  }
+}
+
+/* ── Demo 2：图片占位（blur-up）对照 ───────────────────────────────── */
+
+.ml-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+@media (max-width: 720px) { .ml-compare { grid-template-columns: minmax(0, 1fr); } }
+
+.ml-shot {
+  position: relative;
+  /* lab 里刻意用固定比例：这里比的是"加载态"，不是画廊的原生比例策略 */
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  box-shadow: var(--shadow-border);
+}
+.ml-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* A：现状 —— 没有占位，加载完"啪"一下出现 */
+.ml-shot[data-mode="current"][data-state="loading"] img { visibility: hidden; }
+
+/* B：候选 —— 先给模糊占位，加载完过渡到清晰 */
+.ml-shot[data-mode="blur"][data-state="loading"] img { filter: blur(16px); transform: scale(1.06); }
+.ml-shot[data-mode="blur"][data-state="loaded"] img {
+  filter: blur(0);
+  transform: scale(1);
+  transition: filter var(--transition-smooth), transform var(--transition-smooth);
+}
+
+.ml-caption { margin-top: var(--space-2); font-size: 13px; color: var(--muted); }
+.ml-actions { margin-top: var(--space-4); }
+
+/* ── Demo 3：TOC 当前项指示器 ──────────────────────────────────────── */
+
+.ml-toc { max-width: 280px; }
+/* 指示器定位在 button 内部（不是整列）：layoutId 要量的是每个实例自己的盒子，
+   撑满整列就会变成一根通高的条，滑不动。 */
+.ml-toc button { position: relative; }
+.ml-toc-ind {
+  position: absolute;
+  left: 0;
+  top: var(--space-1);
+  bottom: var(--space-1);
+  width: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+}
+.ml-toc ol { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.ml-toc button {
+  display: block;
+  width: 100%;
+  padding: 6px var(--space-3) 6px var(--space-5);
+  border: none;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+.ml-toc button:hover { background: var(--surface-soft); }
+.ml-toc button[aria-current="location"] { color: var(--text); font-weight: 600; }
+
+/* ── 降级预览开关：近似模拟 prefers-reduced-motion: reduce ─────────── */
+
+.ml[data-reduce="true"] .ml-reveal {
+  animation: none !important;
+  opacity: 1 !important;
+  clip-path: none !important;
+}
+.ml[data-reduce="true"] .ml-shot img {
+  transition: none !important;
+  filter: none !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Gallery 封面「显影」—— Experience 面唯一的入场动效
+
+   /gallery 是 design.md 里唯一的 Experience 模式，但此前它只有 hover 缩放，
+   卡片是硬出现的。这里给封面加一层滚动驱动的显影：零 JS、零依赖、零 token。
+
+   静态基线 = 完全显示。不支持 view() 的浏览器、以及要求减少动效的用户，
+   看到的都是它 —— 降级不是"补一段兜底代码"，而是动效本来就叠在基线上。
+
+   ⚠️ 裁切放在 .entry-card-gallery-cover 上，不放卡片 (.entry-card-gallery) 上：
+      卡片的描边是 box-shadow（--shadow-border），而 clip-path 会把阴影一起裁掉。
+      cover 自身没有阴影，裁它安全。（trigger 的 focus-ring 也是 box-shadow，
+      裁 cover 同样不碰它。）
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@keyframes gallery-develop-in {
+  from { opacity: 0; clip-path: inset(11% 11% 11% 11%); }
+  to   { opacity: 1; clip-path: inset(0% 0% 0% 0%); }
+}
+
+/* ⚠️ 时间线声明在卡片上，动画声明在封面上 —— 这个分工是必须的，不能反过来。
+   卡片为了让图的圆角和卡片圆角对齐，带 overflow: hidden；而 overflow: hidden
+   会让卡片自己成为一个**滚动容器**。如果封面自己带 view() 时间线，浏览器量的就是
+   卡片那个永不滚动的滚动口 → 时间线冻在区间之外、playState 恒为 finished、
+   整段动画一动不动（已实测复现：5 个封面 × 5 个滚动位置全无变化）。
+   声明在卡片上，主体就是卡片，而卡片的最近滚动容器才是视口。
+
+   填充用 both：滚动驱动的惯用写法（from 态覆盖元素还在视口下方那段）。
+   代价是区间外留一个常驻的 inset(0%) 裁切 —— 对 cover 无害：cover 自身没有阴影，
+   卡片的 --shadow-border 在卡片自己身上，不会被裁。 */
+
+@supports ((animation-timeline: view()) and (view-timeline-name: --gallery-entry)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .entry-card-gallery {
+      view-timeline-name: --gallery-entry;
+    }
+
+    .entry-card-gallery-cover {
+      animation: gallery-develop-in linear both;
+      animation-timeline: --gallery-entry;
+      animation-range: entry 6% cover 30%;
+    }
+
+    /* 容器 1200px 时网格是 3 列（minmax(320px, 1fr)）→ 按列错开，
+       形成从左到右的波，避免整片网格同时闪。窄屏列数变了只是节奏不同。 */
+    .entry-card-gallery:nth-child(3n + 2) .entry-card-gallery-cover {
+      animation-range: entry 12% cover 36%;
+    }
+    .entry-card-gallery:nth-child(3n) .entry-card-gallery-cover {
+      animation-range: entry 18% cover 42%;
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   <details> 折叠展开过渡
+
+   站上有两处原生 <details>（/about 的「经历与求职材料」、/learning 的
+   topic 卡），展开时内容是"跳"出来的。design.md 的 Don'ts 点名了这类场景：
+   「不要 transition width/height/padding/margin —— 改用 transform: scaleX()
+   或 grid-template-rows」，但 <details> 的展开走不通 grid 那条路
+   （entry-card-learning 里是多个直接子元素，得加包裹层改 markup）。
+   这里用 ::details-content 这一路：两处都零 markup 改动。
+
+   ⚠️ 守卫必须同时罩住两个能力：
+      · 只有 ::details-content 支持而 interpolate-size 不支持时，
+        block-size:0 会生效但 0 → auto 插不了值 → 内容永久停在 0 高度。
+        两个都测，缺一个就整块不生效（退回现在的硬切）。
+   ⚠️ interpolate-size 只挂在 details 上，不挂 :root：它让 auto 变成可插值，
+      等于放宽 design.md 那条"别动 width/height"的护栏 —— 只放宽到这两处折叠，
+      别让它影响全站。
+
+   实测（真浏览器，3/3 轮可复现）：distinctHeights=20，高度 25 → 26 → … → 45
+   连续爬升，是真实过渡不是硬切。
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@supports ((selector(::details-content)) and (interpolate-size: allow-keywords)) {
+  @media (prefers-reduced-motion: no-preference) {
+    details {
+      interpolate-size: allow-keywords;
+    }
+
+    details::details-content {
+      block-size: 0;
+      overflow: hidden;
+      /* content-visibility 必须一起过渡 + allow-discrete：
+         否则收起时内容直接消失，只有展开方向有过渡。 */
+      transition:
+        block-size var(--transition-smooth),
+        content-visibility var(--transition-smooth);
+      transition-behavior: allow-discrete;
+    }
+
+    details[open]::details-content {
+      block-size: auto;
+    }
   }
 }

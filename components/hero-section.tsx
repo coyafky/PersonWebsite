@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+
+import { FluidOrb } from "./fluid-orb";
 import {
   useEffect,
   useRef,
@@ -185,7 +187,10 @@ export function HeroSection({
       >
         <div className="hero-panel-label">
           <span>FIELD INDEX</span>
-          <span>LIVE / 2026</span>
+          <span className="hero-panel-live">
+            <FluidOrb aria-hidden="true" size={22} />
+            LIVE / 2026
+          </span>
         </div>
         {panel}
       </motion.div>

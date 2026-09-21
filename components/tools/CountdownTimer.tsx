@@ -180,7 +180,7 @@ export function CountdownTimer() {
         <div className="tool-progress" aria-hidden="true">
           <div
             className="tool-progress-fill"
-            style={{ width: `${Math.round(countdown.progress * 100)}%` }}
+            style={{ transform: `scaleX(${Math.round(countdown.progress * 1000) / 1000})` }}
           />
         </div>
 

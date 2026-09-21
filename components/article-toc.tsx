@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import type { Heading } from "@/lib/content/headings";
 
 type ArticleTocProps = {
@@ -16,6 +17,11 @@ export function ArticleToc({ headings }: ArticleTocProps) {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
   const rafRef = useRef<number | null>(null);
+
+  // framer-motion 的 layout 动画默认不看 prefers-reduced-motion，要自己接。
+  // （A1/B1 是纯 CSS 动效，降级写在 @media 里；这里是 JS 驱动的，
+  //   所以降级点从 CSS 移到了这里 —— 换成 duration: 0 即"直接落位"。）
+  const prefersReduced = useReducedMotion();
 
   // Track viewport breakpoint (desktop = true when >= 1100px)
   useEffect(() => {
@@ -110,20 +116,35 @@ export function ArticleToc({ headings }: ArticleTocProps) {
 
   const navContent = (
     <ol>
-      {headings.map((h) => (
-        <li key={h.id} data-level={h.level}>
-          <a
-            href={`#${h.id}`}
-            aria-current={h.id === activeId ? "location" : undefined}
-            onClick={(e) => {
-              e.preventDefault();
-              handleClick(h.id);
-            }}
-          >
-            {h.text}
-          </a>
-        </li>
-      ))}
+      {headings.map((h) => {
+        const isActive = h.id === activeId;
+        return (
+          <li key={h.id} data-level={h.level}>
+            <a
+              href={`#${h.id}`}
+              aria-current={isActive ? "location" : undefined}
+              onClick={(e) => {
+                e.preventDefault();
+                handleClick(h.id);
+              }}
+            >
+              {isActive ? (
+                <motion.span
+                  aria-hidden="true"
+                  className="article-toc__marker"
+                  layoutId="article-toc-marker"
+                  transition={
+                    prefersReduced
+                      ? { duration: 0 }
+                      : { type: "spring", stiffness: 420, damping: 34 }
+                  }
+                />
+              ) : null}
+              <span className="article-toc__label">{h.text}</span>
+            </a>
+          </li>
+        );
+      })}
     </ol>
   );
 
