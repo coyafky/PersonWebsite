@@ -27,3 +27,6 @@ public/image-assept/
 # Preview 用 bun 起 dev 时会生成；本项目管理依赖用 npm（package-lock.json）
 bun.lock
 bun.lockb
+
+# playwright-cli 浏览器会话产物（console 日志 + yml 快照），非交付内容
+.playwright-cli/
