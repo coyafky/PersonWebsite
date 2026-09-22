@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>找库 → 验库 → REPL → 接项目</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 20px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 16px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 四步流程 */
+  .flow {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+    align-items: stretch;
+  }
+  .step {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .step .num {
+    display: inline-block;
+    width: 26px; height: 26px;
+    line-height: 26px;
+    border-radius: 50%;
+    background: #0d9488; color: #fff;
+    font-size: 14px; font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .step h4 { font-size: 15px; color: #0f766e; margin-bottom: 3px; }
+  .step .d { font-size: 12px; color: #6b7280; line-height: 1.5; }
+  .arrow-x { display: flex; align-items: center; color: #9ca3af; font-size: 20px; }
+
+  /* 验库两层 */
+  .verify { display: flex; gap: 16px; margin-bottom: 18px; }
+  .vbox {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 14px 18px;
+  }
+  .vbox h4 { font-size: 15px; color: #374151; margin-bottom: 8px; }
+  .vbox .li { font-size: 13px; line-height: 1.8; color: #374151; }
+  .vbox .li b { color: #111827; }
+
+  /* 两个库 */
+  .libs { display: flex; gap: 16px; margin-bottom: 16px; }
+  .lib {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 12px 16px;
+  }
+  .lib h4 { font-size: 15px; margin-bottom: 4px; }
+  .lib.py h4 { color: #0f766e; }
+  .lib.sn h4 { color: #7c3aed; }
+  .lib .d { font-size: 12.5px; color: #6b7280; margin-bottom: 6px; }
+  .lib code {
+    display: block;
+    background: #0f172a; color: #e2e8f0;
+    border-radius: 6px; padding: 6px 10px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 11.5px; line-height: 1.6;
+  }
+  .footer {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #fff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 6.1 · 第三方库与 PyPI</span>
+    <h1>找库 → 验库 → REPL → 接项目</h1>
+    <div class="subtitle">不是两个库的事，是一套<b>任何领域都通用</b>的套路。</div>
+  </div>
+
+  <div class="flow">
+    <div class="step"><span class="num">1</span><h4>找库</h4><div class="d">pypi.org / 搜索引擎 / 问 AI<br>AI 会幻觉，只给线索</div></div>
+    <div class="arrow-x">→</div>
+    <div class="step"><span class="num">2</span><h4>验库</h4><div class="d">靠不靠谱？能不能用？<br>别急着 pip install</div></div>
+    <div class="arrow-x">→</div>
+    <div class="step"><span class="num">3</span><h4>REPL 玩</h4><div class="d">python3 进<br>敲一行看一行</div></div>
+    <div class="arrow-x">→</div>
+    <div class="step"><span class="num">4</span><h4>接进项目</h4><div class="d">import 进代码<br>pip freeze 记账</div></div>
+  </div>
+
+  <div class="verify">
+    <div class="vbox">
+      <h4>验第一层：靠不靠谱</h4>
+      <div class="li">· <b>GitHub 星数</b>——多少人点过赞，人气与信任</div>
+      <div class="li">· <b>最近更新时间</b>——还在维护吗？几年没动要谨慎</div>
+    </div>
+    <div class="vbox">
+      <h4>验第二层：能不能用</h4>
+      <div class="li">· 翻 README，拿函数<b>对照自己的需求</b></div>
+      <div class="li">· 拼音：带声调 + 认多音字；情感：给 0~1 分</div>
+    </div>
+  </div>
+
+  <div class="libs">
+    <div class="lib py">
+      <h4>pypinyin</h4>
+      <div class="d">拼音 + 多音字，重庆 chóng / 重要 zhòng 都判对</div>
+      <code>lazy_pinyin("重庆", style=Style.TONE)<br># ['chóng', 'qìng']</code>
+    </div>
+    <div class="lib sn">
+      <h4>snownlp</h4>
+      <div class="d">sentiments 给 0~1 分，越近 1 越积极（自带训练好的模型）</div>
+      <code>SnowNLP("今天的风很轻").sentiments<br># 0.94...　消极句 0.003...</code>
+    </div>
+  </div>
+
+  <div class="footer">别重新造轮子。pip freeze &gt; requirements.txt 记账，下一节把两个库装进 /api/analyze——只换内部实现，前端一行不改。</div>
+</body>
+</html>

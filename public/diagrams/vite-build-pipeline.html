@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>构建工具 Vite：从源码到 dist</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 主流水线 */
+  .pipe {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+  .pipe-row { display: flex; align-items: stretch; gap: 0; }
+  .side {
+    flex: 1;
+    border-radius: 12px;
+    padding: 14px 14px;
+  }
+  .side h4 { font-size: 15.5px; margin-bottom: 6px; }
+  .side .files {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    padding: 8px 10px;
+    line-height: 1.7;
+    color: #374151;
+  }
+  .s-src { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+  .s-dist { background: #ecfdf5; border: 1.5px solid #99f6e4; }
+  .mid {
+    width: 280px;
+    flex-shrink: 0;
+    padding: 0 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+  }
+  .mid .vite {
+    text-align: center;
+    background: #dbeafe;
+    color: #1e40af;
+    font-weight: 800;
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 15px;
+  }
+  .mid .task {
+    font-size: 12.5px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: #334155;
+    line-height: 1.4;
+  }
+
+  /* 两依赖 */
+  .row { display: flex; gap: 16px; margin-bottom: 18px; }
+  .dep {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    border: 1px solid #eef0f3;
+    border-top: 4px solid #d1d5db;
+  }
+  .dep h3 { font-size: 16px; margin-bottom: 4px; }
+  .dep .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    background: #f3f4f6;
+    padding: 2px 7px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .dep p { font-size: 13.5px; color: #4b5563; line-height: 1.55; }
+  .dep.bul { border-top-color: #059669; }
+  .dep.scaffold { border-top-color: #d97706; }
+
+  /* 三命令 */
+  .cmds {
+    background: #1f2937;
+    border-radius: 14px;
+    padding: 14px 22px;
+    margin-bottom: 18px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    line-height: 1.9;
+  }
+  .cmds .c { color: #e5e7eb; }
+  .cmds .flag { color: #93c5fd; }
+  .cmds .cmt { color: #6b7280; }
+
+  .footer {
+    text-align: center;
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 4.2 · Vite 与 npm</span>
+    <h1>构建工具夹在中间做翻译</h1>
+    <div class="subtitle">你写<b>源码</b>（多文件），Vite 把它变成浏览器要的 <b>dist</b>（少文件、带 hash）。</div>
+  </div>
+
+  <div class="pipe">
+    <div class="pipe-row">
+      <div class="side s-src">
+        <h4>你写的源码</h4>
+        <div class="files">
+          js/cards.js<br>
+          js/score.js<br>
+          js/nav.js<br>
+          js/main.js<br>
+          css/ ── 8 个文件
+        </div>
+      </div>
+      <div class="mid">
+        <div class="vite">Vite 做三件事</div>
+        <div class="task">① 本地起服务器，保存即热更新</div>
+        <div class="task">② 碎文件合并：8 css → 1，多 js → 1</div>
+        <div class="task">③ 文件名加 hash，内容变名字变，缓存失效</div>
+      </div>
+      <div class="side s-dist">
+        <h4>dist（上线跑的）</h4>
+        <div class="files">
+          index.html<br>
+          assets/<br>
+          &nbsp;&nbsp;main-Beya6efK.css<br>
+          &nbsp;&nbsp;main-_go62SDo.js
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dep scaffold">
+      <h3>devDependencies · 脚手架</h3>
+      <span class="mono">npm install -D vite</span>
+      <p>开发时帮你干活的工具（Vite），盖完房就撤——<b>上线的网站里没有它</b>。</p>
+    </div>
+    <div class="dep bul">
+      <h3>dependencies · 砖</h3>
+      <span class="mono">npm install animejs</span>
+      <p>网站运行时真要用的库（anime），<b>被打进 dist 随之上线</b>。</p>
+    </div>
+  </div>
+
+  <div class="cmds">
+    <div class="c"><span class="cmt">// 三条命令，写在 package.json 的 scripts 里</span></div>
+    <div class="c"><span class="flag">npm run dev</span>     <span class="cmt"># 开发：localhost:5173 热更新</span></div>
+    <div class="c"><span class="flag">npm run build</span>   <span class="cmt"># 上线前：产出 dist/</span></div>
+    <div class="c"><span class="flag">npm run preview</span> <span class="cmt"># 本地验 dist 产物</span></div>
+  </div>
+
+  <div class="footer">源码 ≠ 运行代码：永远改源码再 build；node_modules 和 dist 写进 .gitignore。</div>
+</body>
+</html>

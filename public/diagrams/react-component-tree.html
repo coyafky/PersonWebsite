@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>React 组件树：从空壳到零件</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  .main { display: flex; gap: 18px; margin-bottom: 18px; }
+  .tree {
+    flex: 1.6;
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 20px 22px;
+  }
+  .tree h3 { font-size: 15px; color: #374151; margin-bottom: 14px; }
+  .node {
+    border-radius: 9px;
+    padding: 8px 12px;
+    font-size: 13.5px;
+    margin: 0 auto;
+    text-align: center;
+    width: fit-content;
+  }
+  .node b { font-size: 14px; }
+  .node small { display: block; font-size: 11.5px; color: #4b5563; margin-top: 1px; }
+  .n-shell { background: #f3f4f6; border: 1.5px dashed #9ca3af; color: #374151; }
+  .n-entry { background: #eff6ff; border: 1.5px solid #93c5fd; color: #1e40af; }
+  .n-app   { background: #ecfdf5; border: 2px solid #10b981; color: #065f46; }
+  .n-page  { background: #f5f3ff; border: 1.5px solid #c4b5fd; color: #5b21b6; }
+  .n-leaf  { background: #fff7ed; border: 1.5px solid #fdba74; color: #9a3412; }
+  .connector { text-align: center; color: #9ca3af; font-size: 16px; line-height: 1; margin: 4px 0; }
+  .branch { display: flex; gap: 16px; justify-content: center; margin-top: 4px; }
+  .branch-col { flex: 1; }
+
+  .anatomy {
+    flex: 1;
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 20px 22px;
+  }
+  .anatomy h3 { font-size: 15px; color: #374151; margin-bottom: 12px; }
+  .part {
+    border-radius: 9px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .part b { display: block; font-size: 13.5px; margin-bottom: 1px; }
+  .p-data { background: #fef2f2; } .p-data b { color: #b91c1c; }
+  .p-struct { background: #eff6ff; } .p-struct b { color: #1d4ed8; }
+  .p-style { background: #f5f3ff; } .p-style b { color: #6d28d9; }
+  .p-behav { background: #fff7ed; } .p-behav b { color: #b45309; }
+
+  .rules {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    padding: 14px 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    margin-bottom: 18px;
+    display: flex;
+    gap: 24px;
+  }
+  .rule { flex: 1; font-size: 13.5px; color: #374151; line-height: 1.5; }
+  .rule b { color: #0f766e; display: block; margin-bottom: 2px; }
+  .footer {
+    text-align: center;
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 4.3 · React 登场</span>
+    <h1>React 组件树：从空壳到零件</h1>
+    <div class="subtitle">HTML 退化成 <b>一个挂载点</b>，真正的页面由 <b>App</b> 把组件一颗一颗画出来。</div>
+  </div>
+
+  <div class="main">
+    <div class="tree">
+      <h3>最终项目骨架</h3>
+      <div class="node n-shell"><b>index.html</b><small>空壳，只留 &lt;div id="root"&gt;</small></div>
+      <div class="connector">│</div>
+      <div class="node n-entry"><b>src/main.jsx</b><small>入口：createRoot 把 App 挂进去</small></div>
+      <div class="connector">│</div>
+      <div class="node n-app"><b>App.jsx</b><small>总管：记住当前显示哪一页</small></div>
+      <div class="connector">┌─────────┴─────────┐</div>
+      <div class="branch">
+        <div class="branch-col">
+          <div class="node n-page"><b>HomePage</b><small>个人主页</small></div>
+          <div class="connector">├─</div>
+          <div class="node n-leaf"><b>Nav</b><small>导航（两页复用）</small></div>
+          <div class="node n-leaf"><b>PageHeading</b><small>props 传标题</small></div>
+        </div>
+        <div class="branch-col">
+          <div class="node n-page"><b>TextLabPage</b><small>文字实验室</small></div>
+          <div class="connector">├─</div>
+          <div class="node n-leaf"><b>Nav · PageHeading</b></div>
+          <div class="node n-leaf"><b>InputCard · ResultCard</b></div>
+          <div class="node n-leaf"><b>AnimatedCardGrid</b><small>布局容器组件</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="anatomy">
+      <h3>一个组件 = 一个 UI 单元</h3>
+      <div class="part p-data"><b>数据</b>原文 / 分数 / 判断等要显示的内容</div>
+      <div class="part p-struct"><b>结构</b>return 里的 JSX 标签层级</div>
+      <div class="part p-style"><b>样式</b>className 指向外部 CSS</div>
+      <div class="part p-behav"><b>行为</b>useEffect 里的入场动画</div>
+    </div>
+  </div>
+
+  <div class="rules">
+    <div class="rule"><b>大小写</b>大写开头是组件（&lt;Nav /&gt;），小写是原生标签（&lt;article&gt;）。</div>
+    <div class="rule"><b>props 传参</b>&lt;PageHeading title="…" /&gt;，同一组件喂不同参数就复用。</div>
+    <div class="rule"><b>createRoot</b>进入 React 世界的门，整个项目只在入口做一次。</div>
+    <div class="rule"><b>拆组件</b>只为「能复用」或「更好读」，别为了专业而拆。</div>
+  </div>
+
+  <div class="footer">浏览器最后拿到的还是 HTML/CSS/JS——React 只是写起来更舒服，Vite 负责翻译。</div>
+</body>
+</html>

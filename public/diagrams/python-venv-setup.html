@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>Python 环境：venv 工作流与前后端对照</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 22px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  .top { display: flex; gap: 16px; margin-bottom: 18px; }
+  .panel {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 18px 20px;
+  }
+  .venv { flex: 1.3; }
+  .map { flex: 1; }
+  .panel h3 { font-size: 15px; color: #374151; margin-bottom: 12px; }
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+  .num {
+    flex: 0 0 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #0d9488;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .step code {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    background: #f3f4f6;
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: #0f766e;
+  }
+  .step small { color: #6b7280; }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 13.5px;
+  }
+  .row:last-child { border-bottom: none; }
+  .frontend, .backend {
+    flex: 1;
+    text-align: center;
+    border-radius: 7px;
+    padding: 5px 8px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12.5px;
+  }
+  .frontend { background: #eff6ff; color: #1e40af; }
+  .backend { background: #ecfdf5; color: #065f46; }
+  .vs { color: #9ca3af; font-size: 12px; }
+  .note { font-size: 12px; color: #6b7280; text-align: center; margin-top: 8px; }
+
+  .codebox {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 16px 20px;
+    margin-bottom: 18px;
+  }
+  .codebox h3 { font-size: 15px; color: #374151; margin-bottom: 10px; }
+  .code-line {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    padding: 4px 0;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .code-line code {
+    flex: 1.2;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12.5px;
+    background: #f9fafb;
+    border-left: 3px solid #0d9488;
+    padding: 3px 9px;
+    border-radius: 0 6px 6px 0;
+    color: #1f2937;
+  }
+  .code-line .what { flex: 1; font-size: 12.5px; color: #6b7280; }
+
+  .footer {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #fff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 13px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 5.2 · 后端环境备齐</span>
+    <h1>venv 工作流 + 前后端工具对照</h1>
+    <div class="subtitle">每个项目一套自己的 Python：建、激活、装包、干、退出。<b>装包前先看提示符 (zero-to-tech) 在不在。</b></div>
+  </div>
+
+  <div class="top">
+    <div class="panel venv">
+      <h3>venv 生命周期（在 backend/ 里）</h3>
+      <div class="step"><span class="num">1</span><span><code>python3 -m venv --prompt=zero-to-tech .venv</code><br><small>建虚拟环境（--prompt 自定义提示符）</small></span></div>
+      <div class="step"><span class="num">2</span><span><code>source .venv/bin/activate</code><br><small>激活，提示符变成 (zero-to-tech)</small></span></div>
+      <div class="step"><span class="num">3</span><span><code>pip install requests</code><br><small>装包只进这个项目的 .venv；<code>pip show</code> 确认 Location</small></span></div>
+      <div class="step"><span class="num">4</span><span><code>python3 api_demo.py</code><br><small>干活——运行 .py 文件，不用构建</small></span></div>
+      <div class="step"><span class="num">5</span><span><code>deactivate</code><br><small>退出；.venv 不进 Git，requirements.txt 进 Git</small></span></div>
+    </div>
+
+    <div class="panel map">
+      <h3>前端 ↔ 后端 工具对照</h3>
+      <div class="row"><span class="frontend">npm</span><span class="vs">↔</span><span class="backend">pip</span></div>
+      <div class="row"><span class="frontend">node_modules/</span><span class="vs">↔</span><span class="backend">.venv/</span></div>
+      <div class="row"><span class="frontend">package.json</span><span class="vs">↔</span><span class="backend">requirements.txt</span></div>
+      <div class="note">换皮不换骨：装包工具 / 装到哪 / 依赖清单</div>
+    </div>
+  </div>
+
+  <div class="codebox">
+    <h3>第一个程序 first_json.py —— 认得结构（不是语法课）</h3>
+    <div class="code-line"><code>import json</code><span class="what">① 引入标准库（装 Python 时自带）</span></div>
+    <div class="code-line"><code>site_name = "zero-to-tech"</code><span class="what">② 变量：名字 = 值</span></div>
+    <div class="code-line"><code>def make_data(): … return json.dumps(data)</code><span class="what">③ def 定义函数；<b>缩进本身就是语法</b>，return 给出结果</span></div>
+    <div class="code-line"><code>print(make_data())</code><span class="what">④ 打印到终端</span></div>
+  </div>
+
+  <div class="footer">requests = 代码版 curl；resp.json() 把 JSON 解析成 Python 字典（字典 ≈ JSON）。</div>
+</body>
+</html>

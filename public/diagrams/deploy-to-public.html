@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>从本地到公网的最后一公里</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 38px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 主链路 */
+  .chain {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+  .chain-row { display: flex; align-items: stretch; }
+  .node {
+    flex: 1;
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .node h4 { font-size: 15.5px; margin-bottom: 4px; }
+  .node p { font-size: 12.5px; color: #4b5563; line-height: 1.45; }
+  .n-mac    { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+  .n-gh     { background: #f5f3ff; border: 1.5px solid #ddd6fe; }
+  .n-server { background: #fff7ed; border: 1.5px solid #fed7aa; }
+  .n-web    { background: #ecfdf5; border: 1.5px solid #99f6e4; }
+  .seg {
+    width: 86px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .seg .t {
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.35;
+  }
+  .seg.push { color: #059669; }
+  .seg.pull { color: #d97706; }
+  .seg.root { color: #2563eb; }
+
+  /* 破案 */
+  .detective {
+    background: #ffffff;
+    border: 1.5px dashed #f59e0b;
+    border-radius: 14px;
+    padding: 16px 22px;
+    margin-bottom: 18px;
+  }
+  .detective h3 { font-size: 16px; color: #b45309; margin-bottom: 8px; }
+  .dt-row { display: flex; align-items: center; gap: 12px; }
+  .dt-step {
+    flex: 1;
+    background: #fffbeb;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.45;
+  }
+  .dt-step b { color: #92400e; }
+  .dt-step .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    background: #fef3c7;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .dt-arrow { color: #d97706; font-size: 18px; flex-shrink: 0; }
+
+  /* 更新循环 */
+  .loop {
+    background: #1f2937;
+    border-radius: 14px;
+    padding: 14px 22px;
+    margin-bottom: 18px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    line-height: 1.9;
+  }
+  .loop .c { color: #e5e7eb; }
+  .loop .flag { color: #93c5fd; }
+  .loop .cmt { color: #9ca3af; }
+
+  .footer {
+    text-align: center;
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 3.5 · 发布到公网</span>
+    <h1>从本地到公网的最后一公里</h1>
+    <div class="subtitle">把四个点串起来：Mac → GitHub → 云服务器 → <b>Nginx 80 端口</b> → 任何人的浏览器。</div>
+  </div>
+
+  <div class="chain">
+    <div class="chain-row">
+      <div class="node n-mac">
+        <h4>你的 Mac</h4>
+        <p>index.html / style.css / script.js</p>
+      </div>
+      <div class="seg push"><div class="t">git push<br>↑</div></div>
+      <div class="node n-gh">
+        <h4>GitHub</h4>
+        <p>zero-to-tech 仓库<br>云端副本</p>
+      </div>
+      <div class="seg pull"><div class="t">git clone / pull<br>↓</div></div>
+      <div class="node n-server">
+        <h4>云服务器</h4>
+        <p>~/zero-to-tech<br>root 指向这里</p>
+      </div>
+      <div class="seg root"><div class="t">Nginx :80<br>→</div></div>
+      <div class="node n-web">
+        <h4>任何人的浏览器</h4>
+        <p>http://公网IP<br>看到你的卡片页</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="detective">
+    <h3>404 破案：Nginx 以 www-data 的身份读文件</h3>
+    <div class="dt-row">
+      <div class="dt-step">
+        <b>Nginx 想读</b> /home/ubuntu/zero-to-tech/index.html
+      </div>
+      <div class="dt-arrow">→</div>
+      <div class="dt-step">
+        走到 <span class="mono">/home/ubuntu</span> 发现权限 <span class="mono">drwxr-x---</span>，others 是 ---，<b>被挡住</b>
+      </div>
+      <div class="dt-arrow">→</div>
+      <div class="dt-step">
+        <b>修一次</b>：<span class="mono">sudo chmod o+x /home/ubuntu</span><br>给 others 开「能穿过、不能列目录」的缝
+      </div>
+    </div>
+  </div>
+
+  <div class="loop">
+    <div class="c"><span class="cmt">// 以后每次更新，就这三步</span></div>
+    <div class="c">本地：git add . &amp;&amp; git commit -m "…" &amp;&amp; git <span class="flag">push</span></div>
+    <div class="c">服务器：cd ~/zero-to-tech &amp;&amp; git <span class="flag">pull</span></div>
+    <div class="c">浏览器：Cmd+Shift+R 强刷</div>
+  </div>
+
+  <div class="footer">模块 3 闭环：本地开发 → Git 存档 → GitHub 托管 → 服务器部署 → 公网可见。</div>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>一个网页里的三层代码</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 38px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 三层卡 */
+  .layers { display: flex; gap: 16px; margin-bottom: 18px; }
+  .layer {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    border: 1px solid #eef0f3;
+    overflow: hidden;
+  }
+  .layer .top {
+    padding: 16px 20px 12px;
+    color: #fff;
+  }
+  .layer h2 { font-size: 21px; font-weight: 800; }
+  .layer .tagline { font-size: 13.5px; opacity: .92; margin-top: 4px; }
+  .layer .body { padding: 16px 20px 18px; }
+  .layer .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    background: #f3f4f6;
+    padding: 2px 7px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .layer .does {
+    font-size: 14.5px;
+    color: #1f2937;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .layer .what { font-size: 13.5px; color: #4b5563; line-height: 1.55; }
+
+  .l-html .top { background: #2563eb; }
+  .l-css  .top { background: #7c3aed; }
+  .l-js   .top { background: #d97706; }
+
+  /* 三步演进 */
+  .evo {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    padding: 18px 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    margin-bottom: 18px;
+  }
+  .evo-title { font-size: 15px; font-weight: 700; color: #374151; margin-bottom: 14px; }
+  .evo-row { display: flex; align-items: center; gap: 12px; }
+  .evo-step {
+    flex: 1;
+    border-radius: 10px;
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .evo-step .num {
+    display: inline-block;
+    width: 22px; height: 22px;
+    line-height: 22px;
+    border-radius: 50%;
+    background: #0f766e;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .evo-step h4 { font-size: 15px; margin-bottom: 4px; }
+  .evo-step p { font-size: 12.5px; color: #4b5563; }
+  .e1 { background: #f3f4f6; border: 1.5px solid #e5e7eb; }
+  .e2 { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+  .e3 { background: #ecfdf5; border: 1.5px solid #99f6e4; }
+  .evo-arrow { color: #9ca3af; font-size: 20px; flex-shrink: 0; }
+
+  .footer {
+    text-align: center;
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 3.1 · 前端基础 HTML</span>
+    <h1>一个网页里的三层代码</h1>
+    <div class="subtitle">同一个 index.html 文件里，同时住着三种语言，<b>各管一摊</b>。</div>
+  </div>
+
+  <div class="layers">
+    <div class="layer l-html">
+      <div class="top">
+        <h2>HTML</h2>
+        <div class="tagline">内容和结构 · 页面上有什么</div>
+      </div>
+      <div class="body">
+        <span class="mono">&lt;body&gt; 里的标签</span>
+        <div class="does">骨架</div>
+        <div class="what">尖括号标签组织内容：标题、段落、按钮。head 放元信息，body 放显示出来的东西。</div>
+      </div>
+    </div>
+    <div class="layer l-css">
+      <div class="top">
+        <h2>CSS</h2>
+        <div class="tagline">样式和外观 · 这些东西长什么样</div>
+      </div>
+      <div class="body">
+        <span class="mono">&lt;style&gt; 里的大括号 {}</span>
+        <div class="does">妆造</div>
+        <div class="what">选择器 + 规则：白底变卡片、居中、按钮变蓝。浏览器只按 .card 这条规则套样式。</div>
+      </div>
+    </div>
+    <div class="layer l-js">
+      <div class="top">
+        <h2>JavaScript</h2>
+        <div class="tagline">行为和交互 · 发生事该做什么</div>
+      </div>
+      <div class="body">
+        <span class="mono">&lt;script&gt; 里的函数</span>
+        <div class="does">动作</div>
+        <div class="what">onclick 触发 changeText()，getElementById('msg') 找到元素、改掉文字。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="evo">
+    <div class="evo-title">这节课把同一张页面走了三步</div>
+    <div class="evo-row">
+      <div class="evo-step e1">
+        <span class="num">1</span>
+        <h4>纯 HTML</h4>
+        <p>白底黑字，只有内容</p>
+      </div>
+      <div class="evo-arrow">→</div>
+      <div class="evo-step e2">
+        <span class="num">2</span>
+        <h4>加 CSS</h4>
+        <p>浅灰背景 + 白色卡片居中</p>
+      </div>
+      <div class="evo-arrow">→</div>
+      <div class="evo-step e3">
+        <span class="num">3</span>
+        <h4>加 JavaScript</h4>
+        <p>点按钮，文字真的会变</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">现在三层还挤在同一个文件里——下一节就把它们拆成三个文件。</div>
+</body>
+</html>

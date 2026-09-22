@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>SQL 五件套 + SQL 注入 vs 占位符</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 18px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 16px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  .pick {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 10px 20px;
+    margin-bottom: 16px;
+    font-size: 13.5px;
+    color: #374151;
+  }
+  .pick b { color: #0f766e; }
+  .pill {
+    display: inline-block;
+    background: #ecfdf5; color: #0f766e;
+    border-radius: 5px; padding: 1px 8px; font-size: 12px;
+    margin: 0 2px;
+  }
+
+  .crud {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .op {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 10px 16px;
+  }
+  .op h4 { font-size: 14px; color: #0f766e; margin-bottom: 3px; }
+  .op code {
+    display: block;
+    background: #0f172a; color: #e2e8f0;
+    border-radius: 6px; padding: 6px 10px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 11.5px; line-height: 1.6;
+  }
+  .op .note { font-size: 12px; color: #6b7280; margin-top: 4px; }
+
+  .inject { display: flex; gap: 16px; margin-bottom: 16px; }
+  .jbox {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 12px 16px;
+  }
+  .jbox.bad { border-top: 4px solid #ef4444; }
+  .jbox.good { border-top: 4px solid #10b981; }
+  .jbox h4 { font-size: 15px; margin-bottom: 6px; }
+  .jbox.bad h4 { color: #b91c1c; }
+  .jbox.good h4 { color: #059669; }
+  .jbox code {
+    display: block;
+    border-radius: 6px; padding: 6px 10px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 11.5px; line-height: 1.6;
+    margin-bottom: 4px;
+  }
+  .jbox.bad code { background: #fef2f2; color: #b91c1c; }
+  .jbox.good code { background: #ecfdf5; color: #065f46; }
+  .jbox p { font-size: 12.5px; color: #374151; line-height: 1.5; }
+
+  .footer {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #fff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 11px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 6.4 · SQLite 与 SQL</span>
+    <h1>SQL 五件套 + 注入 vs 占位符</h1>
+    <div class="subtitle">一个数据库就是硬盘上<b>一个 .db 文件</b>；Python 标准库自带，不用起服务。</div>
+  </div>
+
+  <div class="pick">
+    选型落点：<span class="pill">关系型</span>（结构化小数据）+ <span class="pill">嵌入式</span>（单应用、不养服务）→ <b>SQLite</b>。手机里微信聊天记录、浏览器历史底下都是它。
+  </div>
+
+  <div class="crud">
+    <div class="op">
+      <h4>① 建表 CREATE TABLE</h4>
+      <code>CREATE TABLE films (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, ...)</code>
+      <div class="note">id 自增主键；日期/布尔 SQLite 用 TEXT / 0-1 凑</div>
+    </div>
+    <div class="op">
+      <h4>② 插入 INSERT</h4>
+      <code>INSERT INTO films (title) VALUES (?); conn.commit()</code>
+      <div class="note">commit 才落盘；datetime('now') 是函数不加引号</div>
+    </div>
+    <div class="op">
+      <h4>③ 查询 SELECT + WHERE</h4>
+      <code>SELECT * FROM films WHERE language = ?</code>
+      <div class="note">WHERE 是筛选条件；fetchall() 一次拿成列表</div>
+    </div>
+    <div class="op">
+      <h4>④ 排序限量 ORDER BY / DESC / LIMIT</h4>
+      <code>SELECT * FROM history ORDER BY created_at DESC LIMIT 10</code>
+      <div class="note">只说要什么，怎么排怎么快数据库自己安排</div>
+    </div>
+  </div>
+
+  <div class="inject">
+    <div class="jbox bad">
+      <h4>危险：拼用户输入</h4>
+      <code>"WHERE title = '" + keyword + "'"</code>
+      <p>片名是 <b>' OR '1'='1</b> 时，引号提前闭合，'1'='1' 永真——整表被吐出来。</p>
+    </div>
+    <div class="jbox good">
+      <h4>安全：? 占位符</h4>
+      <code>"WHERE title = ?", [keyword]</code>
+      <p>值单独交给 execute，数据库认定 ? 处铁定是值，什么符号都只当数据。</p>
+    </div>
+  </div>
+
+  <div class="footer">DELETE 千万别漏 WHERE（否则清空整表）。LIMIT 10 只攥 10 把椅子、按页读盘、索引提前排序——所以百万行排序也不爆内存。下一节在项目里真正用起来。</div>
+</body>
+</html>

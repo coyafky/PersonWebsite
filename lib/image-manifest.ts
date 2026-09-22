@@ -14,6 +14,11 @@ export type ImageMeta = {
 };
 
 export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
+  "/diagrams/api-swap-internal.png": {
+    "width": 1200,
+    "height": 860,
+    "blurDataURL": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAAAwBACdASoYABIAPt1cqU6opKOiMBgIARAbiWkAw6wR9iUCC509w3oAkMAA/vA5zOaF2/m7HDmzWY2HH6GJ3TGO792fhLuqEbp7LG/iicYW/4ElRx4b5dtDl6t5apT9rAATEqRDfE5K5KAA"
+  },
   "/diagrams/ark-architecture.png": {
     "width": 4480,
     "height": 2720,
@@ -23,6 +28,126 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "width": 3680,
     "height": 2880,
     "blurDataURL": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAABQAwCdASoYABMAPt1kqE+opaOiKAqpEBuJZwDMHBEcSr/HsAD+8uPBopJKyoqe8ojpQ8R93gaqFWWgAAA="
+  },
+  "/diagrams/cors-debugging.png": {
+    "width": 1200,
+    "height": 860,
+    "blurDataURL": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADQAwCdASoYABIAPt1orFCopaQiqAgBEBuJaQAAMWav7q1k74zjNQAA/u3XunxOxMUg5Ci1bwrWGOvkb+xyduksLkDLX1bSQcH53tB6jgAAAA=="
+  },
+  "/diagrams/data-driven-ui.png": {
+    "width": 1200,
+    "height": 820,
+    "blurDataURL": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADwAwCdASoYABEAPt1mp1AopaMiqAqpEBuJZwDO7BEUDhScxtyfPPAAAP7t2VpDCwNlsM8JTivUdsIEJAYjMYmtb0ibK5rzeUKnpW68DI0AAA=="
+  },
+  "/diagrams/deploy-naive-architecture.png": {
+    "width": 1200,
+    "height": 800,
+    "blurDataURL": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAACwAwCdASoYABAAPt1cpkyopSOiMAgBEBuJaQAAW/BMbbEMcXvgAAD+8DskqASJyyigcBD0dsYE5QNgJEGyjU3eMdPSsf+oQAA="
+  },
+  "/diagrams/deploy-to-public.png": {
+    "width": 1200,
+    "height": 800,
+    "blurDataURL": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAwBACdASoYABAAPt1apkyopSOiMAgBEBuJZwDLLCIKEj/y+k8iTOTOUAAA/u3XsrHW9oFuEKxOzoIbooUEPhb1DfwLUHUfJwl2aOBsL693anGEH0O06h++8rF25SXxeN4yVtAjTwC+xF8AAAA="
+  },
+  "/diagrams/fastapi-handmade-vs-framework.png": {
+    "width": 1200,
+    "height": 840,
+    "blurDataURL": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADwAwCdASoYABEAPt1gqU4opaOiMBgIARAbiWcAAC4/TctuMVFVO9MAAP7v4w8THlpKl+adno6ExvcZuQo800tcwWg6lfvPYg74YuGzG0bwiTctldKOu/E19zQdzMcAAAA="
+  },
+  "/diagrams/frontend-three-layers.png": {
+    "width": 1200,
+    "height": 800,
+    "blurDataURL": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAAAQBACdASoYABAAPt1apkyopSOiMAgBEBuJZACsEf/gPQgV5houzFRsAAD+7dwMSzmkM3qvm/BE/A5dhhMFwBDkNZpG/KsQ5qMPVgHPtRDDItfl9DRmcoIIrBpNWQXJ0fvzr44P5NyMc6WFXb1by5KfV5siIAAA"
+  },
+  "/diagrams/git-commit-pipeline.png": {
+    "width": 1200,
+    "height": 800,
+    "blurDataURL": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACQAwCdASoYABAAPt1apkyopSOiMAgBEBuJaQAAXK/zG55bCCkAAP7wOZhzjWsMx6QmqB4d3XjRycNKk/lSx+WsBAAAAA=="
+  },
+  "/diagrams/github-push-pull.png": {
+    "width": 1200,
+    "height": 800,
+    "blurDataURL": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAADQAwCdASoYABAAPt1cpkyopSOiMAgBEBuJZwAAXlvuo9rCZ+V/sxgA/u/jDL/xN01wdtvvO78YP1MyQUuOjHL6JUu8sHicH5/U4Ysagwdb/4tVZgrz2rD2HKKN3w+fBDyALajWAAA="
+  },
+  "/diagrams/how-the-internet-works.png": {
+    "width": 1200,
+    "height": 860,
+    "blurDataURL": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADQAgCdASoYABIAPt1orFEopaQiqAgBEBuJZwAAPaOgAP7wrECi73Yvrjy2fGXUI/mJB14tl7OWbFLhebtCabaPv1Q85y4g+3MAAA=="
+  },
+  "/diagrams/http-request-response.png": {
+    "width": 1200,
+    "height": 840,
+    "blurDataURL": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAACwAwCdASoYABEAPt1orFEopaQiqAgBEBuJZwDOdBEl5b7wRVmcAAD+7+JvbDjvcz3bgI44BOQhdUA3nETMF3wKHa6TvgAA"
+  },
+  "/diagrams/js-modules-before-after.png": {
+    "width": 1200,
+    "height": 820,
+    "blurDataURL": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAADwAwCdASoYABEAPt1kqE2opiOiMBgIARAbiWUAyRAQ68TyMFdOfrwAAP7ti0W9CseVREiYHzO3O6eI9zIXfpNsDKC+Q/f2b0K2nKyXOzne162vNe810jZFpjjTxdYN55+ih4KHQ7/YUAAA"
+  },
+  "/diagrams/nextjs-deploy-paths.png": {
+    "width": 1200,
+    "height": 880,
+    "blurDataURL": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAABQAwCdASoYABIAPt1mp1AopaMiqAqpEBuJZwAALne1kgMUAAD+7+LvaH8VJr6rAW6DI+teMtTBsmOZyrCEqbemAyLHJ3NkPyEAAA=="
+  },
+  "/diagrams/nextjs-prerender.png": {
+    "width": 1200,
+    "height": 800,
+    "blurDataURL": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACQAwCdASoYABAAPt1apkyopSOiMAgBEBuJZwDImCHgVzT0rdQAAP7wOcal5m7zTJMSGjaG1Tao7tQUm8/8W5kIAAA="
+  },
+  "/diagrams/path-absolute-vs-relative.png": {
+    "width": 1200,
+    "height": 1030,
+    "blurDataURL": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAABwBACdASoYABUAPt1orVCopaQiqAgBEBuJaQAALtfzTuYCs1rlD+Jprga9kAD+7eGbYP6oMSdVGtf69AGRNUsqEBngdA4i2DflsI7rSfV/KgzYT6t39t3pm2wAAA=="
+  },
+  "/diagrams/pypi-lib-workflow.png": {
+    "width": 1200,
+    "height": 800,
+    "blurDataURL": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAADQAwCdASoYABAAPt1cpkyopSOiMAgBEBuJaQAAXfEJxZ5TUHbGtIAA/u/i/2UCWbnkSJtOmeWAKGmmky+DTtL/LMS7tuVUy9OAFi/bsm5J2gvjbDjwzWNx0xaIo3c+zak85ffFJeAAAA=="
+  },
+  "/diagrams/python-venv-setup.png": {
+    "width": 1200,
+    "height": 860,
+    "blurDataURL": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAABwAwCdASoYABIAPt1orVEopaQiqAgBEBuJaQDO7BELg1PFGAAA/vA5zNpBfVuJU70l7IvXnQNGEnn9w02erl11EEnCOanrUAAAAA=="
+  },
+  "/diagrams/react-component-tree.png": {
+    "width": 1200,
+    "height": 920,
+    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAACQAwCdASoYABMAPt1orFEopaQjqAgBEBuJZwAALj+nzNcKYn+AAP7wOcS1V0mqw7AWBkGQrNK3DbqNcOH+SJzNa+VV2eAZ+thEKZN7tgOOAAAA"
+  },
+  "/diagrams/refactor-storage-two-steps.png": {
+    "width": 1200,
+    "height": 880,
+    "blurDataURL": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAAAwAwCdASoYABIAPt1orFCopaQiqAgBEBuJaWtyWeAJzXGAAP7wwFnjHBazIUe8ZpUp9lG70KmO3GdE6J6GBYAA"
+  },
+  "/diagrams/server-ssh-nginx.png": {
+    "width": 1200,
+    "height": 840,
+    "blurDataURL": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAQBACdASoYABEAPt1iqE4opaOiMBgIARAbiWcAAC7R38vd1ZdB7JSYAAD+7deyikg3CVxTNugNJOhmwuv1OvqCED0SLRt+VrQdogdxWvLJLscFIxnxDiRBKBgZCDoZ06V6CwubGNAAAA=="
+  },
+  "/diagrams/session-cookie-why-stateless.png": {
+    "width": 1200,
+    "height": 820,
+    "blurDataURL": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAACwAwCdASoYABEAPt1orFCopaQiqAgBEBuJaQAALkeg+uvqV7ZHgAD+7+MPEx5aRHRSx1sMBEoUiZ2IZYvSPUHnKmFXGkAAAAA="
+  },
+  "/diagrams/sqlite-crud-injection.png": {
+    "width": 1200,
+    "height": 840,
+    "blurDataURL": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADwAwCdASoYABEAPt1gqU4opaOiMBgIARAbiWkAzYQRSe2qL8FMWTcAAP7wObPiu+Icj80Ck1jjSfxQT3jScN7IVwS4GUlU53capqyYjaY+qEAzkgo9ccuABBqFqveBDAA="
+  },
+  "/diagrams/terminal-commands-cheatsheet.png": {
+    "width": 1200,
+    "height": 920,
+    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAgCdASoYABMAPt1orVCopaQiqAgBEBuJZwAAPa2oAAD+8NNnZ8Vfhpe+uKemz+/xMokukzsU4T7jXygk7dTdIfZ8iOHvf4/Iy9fne5wUoQAA"
+  },
+  "/diagrams/vite-build-pipeline.png": {
+    "width": 1200,
+    "height": 820,
+    "blurDataURL": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAwBACdASoYABEAPt1cqU6opKOiMBgIARAbiWcAznQREfUMLw3ze0IlaAAA/u3gvguDsFZLms65qKzTMGcqPDjOPV+uC58vVWvnmamAe95q6r7hn74ArAecaiZ+kMY7oqe40QAA"
+  },
+  "/diagrams/what-is-api.png": {
+    "width": 1200,
+    "height": 860,
+    "blurDataURL": "data:image/webp;base64,UklGRmoAAABXRUJQVlA4IF4AAAAwBACdASoYABIAPt1eqU6opKOiMBgIARAbiWkAy6QREfyoAlWlFky5QAAA/vA5mFuOUCaXQyPiqGNW/EATc5EJMbaK/4bxYAe8Z/ieKBRovqqkdxdX7f/Go9uxqAAA"
   },
   "/gallery/2026-08-22-ming-dynasty-hanfu-film.webp": {
     "width": 1088,

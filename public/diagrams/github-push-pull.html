@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>本地仓库与远程仓库的双向同步</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 38px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  .topo {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 24px 28px;
+    margin-bottom: 18px;
+  }
+  .topo-row { display: flex; align-items: stretch; }
+  .side {
+    flex: 1;
+    border-radius: 12px;
+    padding: 18px 16px;
+    text-align: center;
+  }
+  .side h3 { font-size: 18px; margin-bottom: 6px; }
+  .side p { font-size: 13px; color: #4b5563; line-height: 1.5; }
+  .side .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    background: #f3f4f6;
+    padding: 2px 7px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 6px;
+  }
+  .s-local  { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+  .s-remote { background: #f5f3ff; border: 1.5px solid #ddd6fe; }
+
+  .mid {
+    width: 220px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 10px;
+  }
+  .flow {
+    font-size: 13.5px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.4;
+    padding: 8px 6px;
+    border-radius: 8px;
+  }
+  .flow.push { background: #dcfce7; color: #15803d; }
+  .flow.pull { background: #fee2e2; color: #b91c1c; }
+  .flow .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    background: rgba(255,255,255,.7);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* SSH 钥匙对 */
+  .ssh-row { display: flex; gap: 16px; margin-bottom: 18px; }
+  .ssh {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    border: 1px solid #eef0f3;
+    border-top: 4px solid #d1d5db;
+  }
+  .ssh h3 { font-size: 15px; margin-bottom: 4px; }
+  .ssh .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    background: #f3f4f6;
+    padding: 2px 7px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .ssh p { font-size: 13px; color: #4b5563; line-height: 1.5; }
+  .k-private { border-top-color: #dc2626; }
+  .k-public  { border-top-color: #059669; }
+
+  .cmd-strip {
+    background: #1f2937;
+    border-radius: 14px;
+    padding: 14px 22px;
+    margin-bottom: 18px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    line-height: 1.9;
+  }
+  .cmd-strip .c { color: #e5e7eb; }
+  .cmd-strip .flag { color: #93c5fd; }
+  .cmd-strip .cmt { color: #6b7280; }
+
+  .footer {
+    text-align: center;
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 3.4 · GitHub 与远程同步</span>
+    <h1>本地 ↔ 远程的双向同步</h1>
+    <div class="subtitle">本地 Git 管历史，GitHub 存副本——<b>push</b> 上传、<b>pull</b> 拉回。</div>
+  </div>
+
+  <div class="topo">
+    <div class="topo-row">
+      <div class="side s-local">
+        <h3>你的 Mac（本地仓库）</h3>
+        <p>一串 commit 存档点，随时可回退</p>
+        <span class="mono">~/zero-to-tech</span>
+      </div>
+      <div class="mid">
+        <div class="flow push">push  ↑<br><span class="mono">git push</span> 把存档上传</div>
+        <div class="flow pull">pull  ↓<br><span class="mono">git pull</span> 把更新拉回</div>
+      </div>
+      <div class="side s-remote">
+        <h3>GitHub（远程仓库）</h3>
+        <p>云端可信副本：备份 · 协作 · 部署拉取</p>
+        <span class="mono">git@github.com:你/zero-to-tech.git</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ssh-row">
+    <div class="ssh k-private">
+      <h3>私钥（留在本地，别外传）</h3>
+      <span class="mono">~/.ssh/id_ed25519</span>
+      <p>证明「我是我」的钥匙，谁持有谁能连。</p>
+    </div>
+    <div class="ssh k-public">
+      <h3>公钥（贴到 GitHub）</h3>
+      <span class="mono">~/.ssh/id_ed25519.pub</span>
+      <p>可公开，GitHub 拿它认你的身份，免密码推送。</p>
+    </div>
+  </div>
+
+  <div class="cmd-strip">
+    <div class="c">git remote add <span class="flag">origin</span> git@github.com:你/zero-to-tech.git <span class="cmt"># 挂钩远程</span></div>
+    <div class="c">git push <span class="flag">-u origin main</span> <span class="cmt"># 第一次推送，建立跟踪</span></div>
+    <div class="c">git add .  &&  git commit -m "…"  &&  git push <span class="cmt"># 日常三步</span></div>
+  </div>
+
+  <div class="footer">本地 + 远程双备份，代码再也不会因为电脑出事而丢。</div>
+</body>
+</html>

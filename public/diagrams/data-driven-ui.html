@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>数据驱动界面：值的三种玩法</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 22px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  .three { display: flex; gap: 16px; margin-bottom: 18px; }
+  .card {
+    flex: 1;
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 18px 18px 16px;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .b1 { background: #fee2e2; color: #b91c1c; }
+  .b2 { background: #fef3c7; color: #b45309; }
+  .b3 { background: #dbeafe; color: #1d4ed8; }
+  .card h3 { font-size: 18px; margin-bottom: 6px; }
+  .card .where { font-size: 13px; color: #6b7280; margin-bottom: 10px; }
+  .card ul { list-style: none; }
+  .card li {
+    font-size: 13.5px;
+    line-height: 1.55;
+    padding: 5px 0 5px 18px;
+    position: relative;
+    color: #374151;
+  }
+  .card li::before { content: "•"; position: absolute; left: 4px; color: #0d9488; font-weight: 700; }
+  .card li b { color: #111827; }
+  .demo {
+    margin-top: 10px;
+    background: #f9fafb;
+    border-left: 3px solid #0d9488;
+    padding: 8px 10px;
+    font-size: 12.5px;
+    color: #4b5563;
+    border-radius: 0 6px 6px 0;
+    line-height: 1.5;
+  }
+
+  .deploy {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 16px 22px;
+    margin-bottom: 18px;
+  }
+  .deploy h3 { font-size: 15px; color: #374151; margin-bottom: 10px; }
+  .flow { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
+  .step {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 7px 11px;
+    font-size: 13px;
+    color: #374151;
+    white-space: nowrap;
+  }
+  .step.hot { background: #ecfdf5; border-color: #5eead4; color: #065f46; font-weight: 600; }
+  .arrow { color: #9ca3af; font-size: 15px; }
+  .vs { font-size: 12px; color: #9ca3af; margin: 0 4px; }
+
+  .footer {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 13px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 4.4 · 数据驱动界面</span>
+    <h1>界面照着「值」显示——值的三种玩法</h1>
+    <div class="subtitle">值存在哪儿，决定了它<b>会不会自己变、刷新丢不丢、能不能分享</b>。</div>
+  </div>
+
+  <div class="three">
+    <div class="card">
+      <span class="badge">玩法 1 · 从外面喂</span>
+      <h3>props + 数据分离</h3>
+      <div class="where">值存哪：集中在 site.js，由父组件读出来喂进去</div>
+      <ul>
+        <li>组件<b>空出位置</b>，喂什么字就显示什么字</li>
+        <li>所有文案收进 <b>src/data/site.js</b> 这张内容表</li>
+        <li>组件只管<b>怎么显示</b>，不写死文案</li>
+        <li>改文案只动这一个文件；做多语言再备一份表</li>
+      </ul>
+      <div class="demo">demo：改 site.js 的 heroTitle 保存，大标题当场变，组件一行没碰。</div>
+    </div>
+
+    <div class="card">
+      <span class="badge">玩法 2 · 自己揣着</span>
+      <h3>state 状态</h3>
+      <div class="where">值存哪：组件自己的内存，有默认值、允许改</div>
+      <ul>
+        <li>不是外面喂的，是组件<b>用着用着自己变</b></li>
+        <li>值一变，<b>界面当场跟着重渲染</b></li>
+        <li>React 内部替你盯着这个值——这是它的引擎</li>
+        <li>App 记住「当前在哪页」也是 state</li>
+      </ul>
+      <div class="demo">demo：输入框打字，下面「已输入 N 字」当场跟着跳。</div>
+    </div>
+
+    <div class="card">
+      <span class="badge">玩法 3 · 写进网址</span>
+      <h3>URL 路由</h3>
+      <div class="where">值存哪：浏览器地址栏的 URL 里</div>
+      <ul>
+        <li>state 存内存，<b>刷新就清空</b>——路由不能这么存</li>
+        <li>把「在哪页」写进 URL：/text-lab</li>
+        <li><b>刷新不丢、链接能发、前进后退都好使</b></li>
+        <li>真实项目用现成库 <b>react-router</b>（认得名字即可）</li>
+      </ul>
+      <div class="demo">demo：点「文字实验室」地址栏变 /text-lab，刷新、复制给朋友都还在。</div>
+    </div>
+  </div>
+
+  <div class="deploy">
+    <h3>工程化项目上线：比 4.1 多一步 build</h3>
+    <div class="flow">
+      <span class="step">本地 git push</span>
+      <span class="arrow">→</span>
+      <span class="step">服务器 git pull</span>
+      <span class="arrow">→</span>
+      <span class="step hot">npm install（装 Node 依赖）</span>
+      <span class="arrow">→</span>
+      <span class="step hot">npm run build 出 dist/</span>
+      <span class="arrow">→</span>
+      <span class="step">Nginx root 指向 dist/ + reload</span>
+    </div>
+  </div>
+
+  <div class="footer">下一节请 Next.js 出场——它把「组件化 + 数据驱动 + 路由」再往前推一步。</div>
+</body>
+</html>

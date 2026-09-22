@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>Git 的后悔药：工作区到存档点</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 38px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 主流程 */
+  .pipeline {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 24px 26px;
+    margin-bottom: 18px;
+  }
+  .p-row { display: flex; align-items: stretch; }
+  .stage {
+    flex: 1;
+    border-radius: 12px;
+    padding: 16px 16px;
+    text-align: center;
+  }
+  .stage h4 { font-size: 17px; margin-bottom: 6px; }
+  .stage p { font-size: 13px; color: #4b5563; line-height: 1.5; }
+  .stage .cmd {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    background: #f3f4f6;
+    padding: 2px 7px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 6px;
+  }
+  .s-work { background: #fef2f2; border: 1.5px solid #fecaca; }
+  .s-stage { background: #fffbeb; border: 1.5px solid #fde68a; }
+  .s-hist { background: #ecfdf5; border: 1.5px solid #99f6e4; }
+
+  .arr-col {
+    width: 120px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .arr {
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.4;
+    padding: 4px 2px;
+  }
+  .arr.add { color: #b45309; }
+  .arr.cmt { color: #047857; }
+
+  /* 时间线 */
+  .timeline {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    padding: 16px 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    margin-bottom: 18px;
+  }
+  .tl-title { font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 12px; }
+  .tl-row { display: flex; align-items: center; }
+  .dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #0f766e;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px #ccfbf1;
+  }
+  .line { flex: 1; height: 3px; background: #5eead4; }
+  .commit {
+    font-size: 13px;
+    color: #1f2937;
+    text-align: center;
+    flex-shrink: 0;
+    width: 220px;
+  }
+  .commit .msg { font-weight: 700; }
+  .commit .when { font-size: 11.5px; color: #6b7280; }
+
+  /* 三条建议 */
+  .row { display: flex; gap: 16px; margin-bottom: 18px; }
+  .tip {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    border: 1px solid #eef0f3;
+    border-top: 4px solid #d1d5db;
+  }
+  .tip h3 { font-size: 15px; margin-bottom: 4px; }
+  .tip p { font-size: 13px; color: #4b5563; line-height: 1.5; }
+  .t1 { border-top-color: #dc2626; }
+  .t2 { border-top-color: #d97706; }
+  .t3 { border-top-color: #7c3aed; }
+
+  .footer {
+    text-align: center;
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 3.3 · Git 入门</span>
+    <h1>Git 的后悔药：三段流程</h1>
+    <div class="subtitle">改坏了能回到上一版——靠的就是这条<b>工作区 → 暂存区 → 存档点</b>的流水线。</div>
+  </div>
+
+  <div class="pipeline">
+    <div class="p-row">
+      <div class="stage s-work">
+        <h4>工作区</h4>
+        <p>你正在改的文件</p>
+        <span class="cmd">index.html · css · js</span>
+      </div>
+      <div class="arr-col">
+        <div class="arr add">git add .<br>↓<br>挑这次存什么</div>
+      </div>
+      <div class="stage s-stage">
+        <h4>暂存区</h4>
+        <p>本次要存档的改动</p>
+        <span class="cmd">git status 查看</span>
+      </div>
+      <div class="arr-col">
+        <div class="arr cmt">git commit -m "…"<br>↓<br>落成存档点</div>
+      </div>
+      <div class="stage s-hist">
+        <h4>历史存档</h4>
+        <p>一串可回退的 commit</p>
+        <span class="cmd">每个都有说明</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-title">存档点串成时间线——随时能跳回去</div>
+    <div class="tl-row">
+      <div class="commit">
+        <div class="msg">第一次提交</div>
+        <div class="when">v1 · 初始三文件</div>
+      </div>
+      <div class="line"></div>
+      <div class="dot"></div>
+      <div class="line"></div>
+      <div class="commit">
+        <div class="msg">修改首页标题文案</div>
+        <div class="when">v2 · 小改动</div>
+      </div>
+      <div class="line"></div>
+      <div class="dot"></div>
+      <div class="line"></div>
+      <div class="commit">
+        <div class="msg">改坏了 → 跳回 v2</div>
+        <div class="when">后悔药生效</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="tip t1">
+      <h3>小步提交</h3>
+      <p>改动有意义就提交，别攒大包——回退时损失才小。</p>
+    </div>
+    <div class="tip t2">
+      <h3>说明当场写人话</h3>
+      <p>commit -m 写「为什么这么改」，一周后才看得懂。</p>
+    </div>
+    <div class="tip t3">
+      <h3>.gitignore 早建</h3>
+      <p>把 .DS_Store 之类无关文件提前排除，仓库才干净。</p>
+    </div>
+  </div>
+
+  <div class="footer">这节只跑通本地；下一节把这串存档点推到 GitHub 做云端备份。</div>
+</body>
+</html>

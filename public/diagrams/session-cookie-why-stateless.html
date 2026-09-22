@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>无状态 → 会话：cookie 带 session_id</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 18px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 16px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 无状态 → 会话 */
+  .flow {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 14px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .node {
+    flex: 1;
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px 8px;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .node.req { background: #eff6ff; color: #1e40af; }
+  .node.forget { background: #fef2f2; color: #b91c1c; }
+  .node.sol { background: #ecfdf5; color: #065f46; }
+  .node b { display: block; font-size: 13px; margin-bottom: 2px; }
+  .flow-ar { color: #9ca3af; font-size: 20px; font-weight: 700; }
+
+  /* cookie vs session + 两种解法 */
+  .two { display: flex; gap: 16px; margin-bottom: 16px; }
+  .box {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 12px 16px;
+  }
+  .box h4 { font-size: 15px; margin-bottom: 6px; }
+  .box.cs h4 { color: #7c3aed; }
+  .box.mm h4 { color: #0f766e; }
+  table.mini { width: 100%; border-collapse: collapse; font-size: 12px; }
+  table.mini td { padding: 4px 6px; border-bottom: 1px solid #f3f4f6; color: #374151; }
+  table.mini td:first-child { color: #6b7280; width: 70px; }
+  .box p { font-size: 12.5px; color: #374151; line-height: 1.6; }
+  .box p b { color: #111827; }
+  code {
+    background: #0f172a; color: #e2e8f0;
+    border-radius: 5px; padding: 1px 6px;
+    font-family: ui-monospace, Menlo, monospace; font-size: 11px;
+  }
+
+  .note {
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 11px 20px;
+    margin-bottom: 14px;
+    font-size: 13.5px;
+    color: #065f46;
+    line-height: 1.6;
+  }
+  .note b { color: #0f766e; }
+  .footer {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #fff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 11px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 6.6 · 状态与会话</span>
+    <h1>无状态 → 会话：cookie 带 session_id</h1>
+    <div class="subtitle">HTTP 处理完就把这一轮<b>全忘了</b>；解法不是改 HTTP，而是让浏览器每次自动带一个<b>编号</b>。</div>
+  </div>
+
+  <div class="flow">
+    <div class="node req"><b>第 1 次请求</b>服务器不认识<br>发新 UUID 纸条</div>
+    <div class="flow-ar">→</div>
+    <div class="node forget"><b>处理完</b>服务器把这一轮<br>状态全扔掉</div>
+    <div class="flow-ar">→</div>
+    <div class="node sol"><b>第 2 次请求</b>浏览器自动带<br>Cookie: session_id=…</div>
+    <div class="flow-ar">→</div>
+    <div class="node sol"><b>认出来了</b>WHERE session_id=?<br>只给这个人的历史</div>
+  </div>
+
+  <div class="two">
+    <div class="box cs">
+      <h4>cookie vs session：一个工具，一个概念</h4>
+      <table class="mini">
+        <tr><td>session</td><td>「认定」——把散落请求认成同一个人（一段<b>关系</b>）</td></tr>
+        <tr><td>cookie</td><td>「机制/工具」——浏览器自动存、自动带的小纸条</td></tr>
+      </table>
+      <p style="margin-top:6px;">cookie 里装的就是 <code>session_id</code>；跨源带它要<b>两头点头</b>：后端 <code>allow_credentials=True</code> + 前端 <code>credentials:"include"</code>。</p>
+    </div>
+    <div class="box mm">
+      <h4>两种「记忆」解法，同一件事</h4>
+      <table class="mini">
+        <tr><td>Web 会话</td><td>状态存<b>服务器</b>，每次只带一个 id（32 字符）</td></tr>
+        <tr><td>大模型 API</td><td>状态存<b>客户端</b>，每次把整段 messages 重发</td></tr>
+      </table>
+      <p style="margin-top:6px;">所以上下文窗口=messages 长度上限；对话越长越贵——每轮都在为整段历史重新付费。</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>会话 ≠ 认证。</b>它只认得出「这是同一个浏览器」，认不出「你到底是谁」——清掉 cookie 就当你是新访客。登录/密码/OAuth 是在会话地基上再盖的一层。
+  </div>
+
+  <div class="footer">模块 6 收官：静态前端 + FastAPI 后端 + SQLite。下一个模块把这套搬上云服务器——功能到此完整，只差上线。</div>
+</body>
+</html>

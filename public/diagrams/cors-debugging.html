@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>联调三站排查 + CORS 两副面孔</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 20px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 16px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 三站排查 */
+  .stops {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+    align-items: stretch;
+  }
+  .stop {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 12px 16px;
+  }
+  .stop .num {
+    display: inline-block;
+    width: 24px; height: 24px;
+    line-height: 24px; text-align: center;
+    border-radius: 50%;
+    background: #0d9488; color: #fff;
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .stop h4 { font-size: 15px; color: #0f766e; margin-bottom: 3px; }
+  .stop .q { font-size: 12.5px; color: #6b7280; line-height: 1.5; }
+  .arrow-x { display: flex; align-items: center; color: #9ca3af; font-size: 20px; }
+
+  /* 两副面孔 */
+  .faces { display: flex; gap: 16px; margin-bottom: 18px; }
+  .face {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 14px 18px;
+  }
+  .face.get { border-top: 4px solid #f59e0b; }
+  .face.post { border-top: 4px solid #ef4444; }
+  .face h4 { font-size: 16px; margin-bottom: 8px; }
+  .face.get h4 { color: #b45309; }
+  .face.post h4 { color: #b91c1c; }
+  .flow { font-size: 12.5px; line-height: 1.7; color: #374151; }
+  .flow b { color: #111827; }
+  .tag-bad {
+    display: inline-block;
+    background: #fee2e2; color: #b91c1c;
+    border-radius: 5px; padding: 1px 7px; font-size: 11.5px;
+  }
+  .tag-ok {
+    display: inline-block;
+    background: #dcfce7; color: #15803d;
+    border-radius: 5px; padding: 1px 7px; font-size: 11.5px;
+  }
+
+  .env {
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 16px;
+    font-size: 13.5px;
+    color: #065f46;
+    line-height: 1.6;
+  }
+  .env code {
+    background: #0f172a; color: #e2e8f0;
+    padding: 2px 8px; border-radius: 5px;
+    font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+  }
+  .footer {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #fff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 5.5 · 前后端联调与 CORS</span>
+    <h1>联调三站排查 + CORS 两副面孔</h1>
+    <div class="subtitle">别看见红字就改代码——一次请求在<b>三处</b>留痕，一站一站定位断在哪。</div>
+  </div>
+
+  <div class="stops">
+    <div class="stop">
+      <span class="num">1</span>
+      <h4>浏览器 Network</h4>
+      <div class="q">请求<b>发出去了</b>吗？看到 /api/profile 这一项 = 发了。</div>
+    </div>
+    <div class="arrow-x">→</div>
+    <div class="stop">
+      <span class="num">2</span>
+      <h4>后端终端</h4>
+      <div class="q">后端<b>收到了吗</b>？看到 <code style="font-family:ui-monospace,monospace;font-size:12px;">GET ... 200 OK</code> = 收到且成功。</div>
+    </div>
+    <div class="arrow-x">→</div>
+    <div class="stop">
+      <span class="num">3</span>
+      <h4>浏览器 Console</h4>
+      <div class="q">结果为什么<b>没交到代码手里</b>？红字说 CORS blocked。</div>
+    </div>
+  </div>
+
+  <div class="faces">
+    <div class="face get">
+      <h4>面孔一：简单 GET（直接发）</h4>
+      <div class="flow">
+        3000 → <b>直接发 GET</b> 到 8000<br>
+        后端收到、回 200<br>
+        <span class="tag-bad">没许可</span> 浏览器不让网页 JS <b>读</b>这份响应<br>
+        解法：<code style="font-family:ui-monospace,monospace;font-size:11.5px;">allow_origins=["http://localhost:3000"]</code>
+      </div>
+    </div>
+    <div class="face post">
+      <h4>面孔二：带 JSON 的 POST（先问后发）</h4>
+      <div class="flow">
+        3000 → <b>OPTIONS 预检</b>（浏览器自动发）<br>
+        问：允许这个源？允许 POST？<br>
+        第一次 <span class="tag-bad">方法不在名单</span> → POST 根本没出门<br>
+        解法：<code style="font-family:ui-monospace,monospace;font-size:11.5px;">allow_methods=["GET","POST"]</code><br>
+        通过后 <span class="tag-ok">真 POST 才发出</span>，结果区更新
+      </div>
+    </div>
+  </div>
+
+  <div class="env">
+    <b>源 = 协议 + 域名 + 端口</b>；3000≠8000 就是跨源。CORS 是<b>浏览器</b>的规则——curl 不是网页，所以一直畅通。写死的后端地址收进 <code>.env.local</code>：<code>NEXT_PUBLIC_API_BASE_URL</code>（可进浏览器，不能放密钥；改完要重启 dev）。
+  </div>
+
+  <div class="footer">模块 5 收官：输入 → HTTP → 后端计算 → 响应 → 界面更新，全链路自己搭起来了。下模块用第三方库把分析变真。</div>
+</body>
+</html>

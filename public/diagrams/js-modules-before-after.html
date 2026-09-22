@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>模块化：改造前 vs 改造后</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  .compare { display: flex; gap: 18px; margin-bottom: 18px; }
+  .panel {
+    flex: 1;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  }
+  .panel .ph {
+    padding: 14px 20px;
+    color: #fff;
+  }
+  .panel h2 { font-size: 20px; font-weight: 800; }
+  .panel .sub { font-size: 13px; opacity: .92; margin-top: 2px; }
+  .panel .pb {
+    background: #ffffff;
+    padding: 16px 20px 18px;
+  }
+  .panel ul { list-style: none; }
+  .panel li {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #374151;
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .panel li::before {
+    position: absolute;
+    left: 2px;
+    font-weight: 800;
+  }
+  .before .ph { background: #dc2626; }
+  .before li::before { content: "✕"; color: #dc2626; }
+  .after .ph { background: #059669; }
+  .after li::before { content: "✓"; color: #059669; }
+  .panel .code {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin: 8px 0 12px;
+    line-height: 1.6;
+    color: #1f2937;
+  }
+  .panel .code .cmt { color: #6b7280; }
+
+  /* 历史 */
+  .history {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    padding: 14px 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    margin-bottom: 18px;
+  }
+  .h-title { font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 10px; }
+  .h-row { display: flex; align-items: center; }
+  .h-node {
+    text-align: center;
+    width: 180px;
+    flex-shrink: 0;
+  }
+  .h-node .yr { font-weight: 800; color: #0f766e; font-size: 15px; }
+  .h-node .txt { font-size: 12px; color: #4b5563; margin-top: 2px; }
+  .h-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #0f766e;
+    box-shadow: 0 0 0 4px #ccfbf1;
+  }
+  .h-line { flex: 1; height: 3px; background: #5eead4; }
+
+  .footer {
+    text-align: center;
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 4.1 · 现代前端第一步</span>
+    <h1>模块化：把两个灾难一起治了</h1>
+    <div class="subtitle">同一个 anime.js、同一份 HTML/CSS，换的只是<b>怎么组织代码</b>——这就是「工程化」。</div>
+  </div>
+
+  <div class="compare">
+    <div class="panel before">
+      <div class="ph">
+        <h2>改造前 · 传统 script</h2>
+        <div class="sub">全堆全局，顺序手排</div>
+      </div>
+      <div class="pb">
+        <div class="code">
+          &lt;script src="…anime.iife.min.js"&gt;&lt;/script&gt;<br>
+          &lt;script src="js/cards.js"&gt;&lt;/script&gt; <span class="cmt"># 顺序错一格就崩</span><br>
+          &lt;script src="js/score.js"&gt;&lt;/script&gt;
+        </div>
+        <ul>
+          <li><b>暗依赖</b>：cards.js 用 anime 却没声明，顺序只藏在排列里</li>
+          <li><b>全局污染</b>：anime 挂在 window 上，库一多就撞名</li>
+          <li>双击 index.html 就能跑</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel after">
+      <div class="ph">
+        <h2>改造后 · ES 模块</h2>
+        <div class="sub">明文 import / export，各文件小柜子</div>
+      </div>
+      <div class="pb">
+        <div class="code">
+          &lt;script type="module" src="js/main.js"&gt;&lt;/script&gt;<br>
+          <span class="cmt"># main.js 里：</span><br>
+          import { animate } from "…anime/+esm"
+        </div>
+        <ul>
+          <li><b>明依赖</b>：谁依赖谁写在文件顶部 import，浏览器自己算顺序</li>
+          <li><b>作用域隔离</b>：同名 animate 各活各的，撞不上</li>
+          <li>必须走服务器（3.5 那台 Nginx），不能 file:// 双击</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="history">
+    <div class="h-title">模块化是 20 年的痛逼出来的</div>
+    <div class="h-row">
+      <div class="h-node"><div class="yr">1995</div><div class="txt">JS 诞生，没有模块系统</div></div>
+      <div class="h-line"></div>
+      <div class="h-dot"></div>
+      <div class="h-line"></div>
+      <div class="h-node"><div class="yr">2009</div><div class="txt">Node.js 带出 CommonJS（社区方案）</div></div>
+      <div class="h-line"></div>
+      <div class="h-dot"></div>
+      <div class="h-line"></div>
+      <div class="h-node"><div class="yr">2015</div><div class="txt">ES6 正式定义 import / export</div></div>
+      <div class="h-line"></div>
+      <div class="h-dot"></div>
+      <div class="h-line"></div>
+      <div class="h-node"><div class="yr">2017→</div><div class="txt">浏览器原生支持 type="module"</div></div>
+    </div>
+  </div>
+
+  <div class="footer">工程化第一块基石：共享靠明文声明，不靠公共台面。</div>
+</body>
+</html>

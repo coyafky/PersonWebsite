@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>终端命令速查</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 38px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  .row { display: flex; gap: 18px; margin-bottom: 18px; }
+  .card {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    border: 1px solid #eef0f3;
+    border-top: 4px solid #d1d5db;
+  }
+  .card h3 { font-size: 17px; margin-bottom: 10px; }
+  .cmd-row {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 14.5px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .cmd {
+    font-weight: 700;
+    background: #f3f4f6;
+    padding: 2px 8px;
+    border-radius: 5px;
+    color: #111827;
+    white-space: nowrap;
+  }
+  .desc { font-size: 13.5px; color: #4b5563; }
+  .tip { font-size: 13px; color: #6b7280; margin-top: 6px; line-height: 1.5; }
+
+  .c-locate { border-top-color: #0d9488; }
+  .c-move    { border-top-color: #2563eb; }
+  .c-move .cmd { background: #dbeafe; }
+  .c-create  { border-top-color: #7c3aed; }
+  .c-create .cmd { background: #ede9fe; }
+  .c-view    { border-top-color: #0d9488; }
+  .c-del     { border-top-color: #dc2626; }
+  .c-del .cmd { background: #fee2e2; }
+  .c-warn {
+    margin-top: 8px;
+    background: #fef2f2;
+    border: 1px dashed #fca5a5;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: #b91c1c;
+  }
+  .c-vim { border-top-color: #d97706; }
+  .c-vim .cmd { background: #fef3c7; }
+  .vim-flow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .step {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    background: #fef3c7;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .arrow { color: #9ca3af; font-size: 14px; }
+
+  /* 路径符号条 */
+  .symbols {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    padding: 14px 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 18px;
+    font-size: 14.5px;
+  }
+  .symbols .label { font-weight: 700; color: #374151; white-space: nowrap; }
+  .sym { font-family: "SF Mono", Menlo, Consolas, monospace; font-weight: 700; color: #0f766e; }
+
+  /* 闭环流程 */
+  .flow-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    border: 1px solid #eef0f3;
+    margin-bottom: 18px;
+  }
+  .flow-title { font-size: 15px; font-weight: 700; color: #374151; margin-bottom: 10px; }
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    background: #ecfdf5;
+    border: 1px solid #99f6e4;
+    color: #0f766e;
+    padding: 6px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+  .flow-arrow { color: #9ca3af; }
+
+  .footer {
+    text-align: center;
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 2.2 · 终端与 Linux 直觉</span>
+    <h1>终端命令速查</h1>
+    <div class="subtitle">不靠鼠标点，直接用文字指挥电脑——一迷路就先问：<b>我现在在哪个路径下？</b></div>
+  </div>
+
+  <div class="row">
+    <div class="card c-locate">
+      <h3>① 定位</h3>
+      <div class="cmd-row"><span class="cmd">pwd</span><span class="desc">我在哪（当前路径）</span></div>
+      <div class="cmd-row"><span class="cmd">ls</span><span class="desc">这里有什么（列出文件）</span></div>
+    </div>
+    <div class="card c-move">
+      <h3>② 移动</h3>
+      <div class="cmd-row"><span class="cmd">cd 目标</span><span class="desc">进入某个目录</span></div>
+      <div class="cmd-row"><span class="cmd">cd ~</span><span class="desc">回家目录</span></div>
+      <div class="cmd-row"><span class="cmd">cd /</span><span class="desc">去根目录</span></div>
+      <div class="cmd-row"><span class="cmd">cd ..</span><span class="desc">回上一层</span></div>
+    </div>
+    <div class="card c-create">
+      <h3>③ 创建</h3>
+      <div class="cmd-row"><span class="cmd">mkdir 名字</span><span class="desc">建目录</span></div>
+      <div class="cmd-row"><span class="cmd">touch 名字</span><span class="desc">建文件</span></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card c-view">
+      <h3>④ 查看</h3>
+      <div class="cmd-row"><span class="cmd">cat 文件</span><span class="desc">看文本内容</span></div>
+      <div class="cmd-row"><span class="cmd">Tab</span><span class="desc">命令自动补全</span></div>
+    </div>
+    <div class="card c-del">
+      <h3>⑤ 删除</h3>
+      <div class="cmd-row"><span class="cmd">rm 文件</span><span class="desc">删文件</span></div>
+      <div class="cmd-row"><span class="cmd">rmdir 目录</span><span class="desc">删空目录</span></div>
+      <div class="c-warn">⚠ 没有确认框！删之前先 pwd + ls</div>
+    </div>
+    <div class="card c-vim">
+      <h3>⑥ Vim 生存四步</h3>
+      <div class="vim-flow">
+        <span class="step">i 编辑</span><span class="arrow">→</span>
+        <span class="step">Esc</span><span class="arrow">→</span>
+        <span class="step">:wq 保存退出</span>
+      </div>
+      <div class="tip">乱输了想跑？按 <span class="step" style="display:inline-block">:q!</span> 不保存退出。</div>
+    </div>
+  </div>
+
+  <div class="symbols">
+    <span class="label">路径符号</span>
+    <span><span class="sym">~</span> 家目录</span>
+    <span><span class="sym">/</span> 根目录</span>
+    <span><span class="sym">..</span> 上一级</span>
+    <span><span class="sym">./</span> 当前</span>
+  </div>
+
+  <div class="flow-card">
+    <div class="flow-title">练习闭环：走一遍就不黑箱</div>
+    <div class="flow">
+      <span class="flow-step">mkdir terminal-practice</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">cd 进去</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">touch hello.txt</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">vim 写内容</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">cat 看结果</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">rm / rmdir 删除</span>
+    </div>
+  </div>
+
+  <div class="footer">终端不是高手专属——它是后面整条开发路径最基础的工作方式。</div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>换芯：接口约定不变，内部随便换</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 20px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 16px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 换芯对照 */
+  .swap { display: flex; gap: 16px; margin-bottom: 18px; align-items: stretch; }
+  .side {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 14px 18px;
+  }
+  .side.old { border-top: 4px solid #d1d5db; }
+  .side.new { border-top: 4px solid #0d9488; }
+  .side h4 { font-size: 16px; margin-bottom: 8px; }
+  .side.old h4 { color: #6b7280; }
+  .side.new h4 { color: #0f766e; }
+  .side code {
+    display: block;
+    background: #0f172a; color: #e2e8f0;
+    border-radius: 7px; padding: 8px 12px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 11.5px; line-height: 1.7;
+  }
+  .swap-arrow { display: flex; align-items: center; color: #0d9488; font-size: 28px; font-weight: 700; }
+
+  /* 模型边界 + 谱系 */
+  .two { display: flex; gap: 16px; margin-bottom: 18px; }
+  .box {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 14px 18px;
+  }
+  .box h4 { font-size: 15px; margin-bottom: 8px; }
+  .box.boundary h4 { color: #b91c1c; }
+  .box.spectrum h4 { color: #7c3aed; }
+  .box .li { font-size: 12.5px; line-height: 1.7; color: #374151; }
+  .box .li b { color: #111827; }
+  table.cmp {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  table.cmp td {
+    padding: 4px 6px;
+    border-bottom: 1px solid #f3f4f6;
+    color: #374151;
+  }
+  table.cmp td:first-child { color: #6b7280; width: 56px; }
+
+  .keep {
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: #065f46;
+    line-height: 1.6;
+  }
+  .keep b { color: #0f766e; }
+  .footer {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #fff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 6.2 · 让网页真的会分析文字</span>
+    <h1>换芯：接口约定不变，内部随便换</h1>
+    <div class="subtitle">路径/方法/请求体/返回字段<b>一个没动</b>，只把函数内部从占位换成真计算——前端零改动。</div>
+  </div>
+
+  <div class="swap">
+    <div class="side old">
+      <h4>之前：写死的占位</h4>
+      <code>"score": 0.5<br>"label": "偏平静"<br>"pinyin": "（模块 6 再说）"</code>
+    </div>
+    <div class="swap-arrow">→</div>
+    <div class="side new">
+      <h4>现在：真计算</h4>
+      <code>score = round(SnowNLP(text).sentiments, 2)<br>"label": score_label(score)　# 数字→结论<br>"pinyin": " ".join(lazy_pinyin(text, style=Style.TONE))</code>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="box boundary">
+      <h4>模型的边界</h4>
+      <div class="li">· 「今天下午三点开会」→ 0.26 偏<b>消极</b>（中性句被误判）</div>
+      <div class="li">· 「呵呵，真是太棒了呢」→ 0.94 偏<b>积极</b>（反讽当了真）</div>
+      <div class="li" style="margin-top:6px;">snownlp 训自<b>商品评论</b>语料；模型没有常识，只有<b>训练时见过的世界</b>。</div>
+    </div>
+    <div class="box spectrum">
+      <h4>小模型 ↔ 大模型 谱系</h4>
+      <table class="cmp">
+        <tr><td>花费</td><td>本地库免费 / API 按量</td></tr>
+        <tr><td>联网</td><td>本地不需要 / API 必须</td></tr>
+        <tr><td>速度</td><td>毫秒级 / 秒级</td></tr>
+        <tr><td>精度</td><td>够用有边界 / 连反讽都懂</td></tr>
+        <tr><td>隐私</td><td>不出本机 / 文本发第三方</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="keep">
+    <b>只要守住约定，内部随便换。</b>换模型、换算法、甚至用 Java 重写后端——调用方不知道也不需要知道。阈值 0.6/0.4 是<b>产品决定</b>：分数模型给，「多少算积极」我们说了算。
+  </div>
+
+  <div class="footer">代码部分到这基本就绪。下一节数据库前传——给文字实验室加上「记忆」，查过的句子不再用完即弃。</div>
+</body>
+</html>

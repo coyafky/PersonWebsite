@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>Next.js 两条部署路：选 B 静态导出</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 22px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  .paths { display: flex; gap: 16px; margin-bottom: 18px; }
+  .card {
+    flex: 1;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    background: #fff;
+  }
+  .card.a { border: 1.5px solid #e5e7eb; }
+  .card.b { border: 2px solid #10b981; background: #ecfdf5; }
+  .pick {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+  }
+  .pick.a { background: #f3f4f6; color: #6b7280; }
+  .pick.b { background: #10b981; color: #fff; }
+  .card h3 { font-size: 18px; margin-bottom: 8px; }
+  .card .meta { font-size: 13px; color: #6b7280; margin-bottom: 10px; line-height: 1.5; }
+  .row { font-size: 13.5px; line-height: 1.5; padding: 4px 0; color: #374151; }
+  .row b { color: #111827; }
+
+  .flow {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    padding: 14px 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  }
+  .flow h3 { font-size: 14px; color: #374151; margin-bottom: 10px; }
+  .steps { display: flex; align-items: center; gap: 7px; }
+  .step {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 6px 9px;
+    font-size: 12.5px;
+    color: #374151;
+    white-space: nowrap;
+  }
+  .step.hot { background: #ecfdf5; border-color: #5eead4; color: #065f46; font-weight: 600; }
+  .arrow { color: #9ca3af; }
+
+  .arch {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    padding: 14px 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .arch .side {
+    flex: 1;
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .arch .fe { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+  .arch .be { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; }
+  .arch .vs { font-size: 13px; color: #6b7280; font-weight: 600; }
+  .arch b { display: block; font-size: 14px; margin-bottom: 2px; }
+
+  .footer {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ffffff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 13px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 4.6 · 前端收官</span>
+    <h1>Next.js 两条部署路——我们选 B：静态导出</h1>
+    <div class="subtitle">「内容动态」≠「必须常驻服务」。静态前端 + 后端 API，是更轻、更稳的那条路。</div>
+  </div>
+
+  <div class="paths">
+    <div class="card a">
+      <span class="pick a">路 A · 没走</span>
+      <h3>常驻 Next 服务</h3>
+      <div class="meta">服务器上跑着 next start，Node 进程 7×24</div>
+      <div class="row"><b>能耐</b>：按每个请求当场拼 HTML（连库、读密钥）</div>
+      <div class="row"><b>代价</b>：重、费服务器资源</div>
+      <div class="row"><b>适合</b>：电商/新闻/社媒重内容</div>
+      <div class="row" style="color:#b91c1c;">Next 全栈还年轻：2025.12 RSC 爆出 CVSS 10.0 漏洞</div>
+    </div>
+    <div class="card b">
+      <span class="pick b">路 B · 我们选这条</span>
+      <h3>静态导出 out/</h3>
+      <div class="meta">build 出干净静态文件夹，Nginx 直接发，服务器无常驻进程</div>
+      <div class="row"><b>做法</b>：next.config.mjs 加 output: "export"</div>
+      <div class="row"><b>代价</b>：页面内容 build 时定死；动态数据靠浏览器调 API</div>
+      <div class="row"><b>适合</b>：博客/文档/纯展示 + 后端 API</div>
+      <div class="row" style="color:#065f46;">轻、稳，和 3.5/4.1/4.4 同一套 Nginx 肌肉记忆</div>
+    </div>
+  </div>
+
+  <div class="flow">
+    <h3>选 B 的落地（和 4.4 只有两处不同）</h3>
+    <div class="steps">
+      <span class="step hot">next.config.mjs 加 output: "export"</span>
+      <span class="arrow">→</span>
+      <span class="step">npm run build 出 out/</span>
+      <span class="arrow">→</span>
+      <span class="step hot">Nginx root 指向 out/</span>
+      <span class="arrow">→</span>
+      <span class="step hot">location 加 try_files $uri $uri.html $uri/ =404</span>
+      <span class="arrow">→</span>
+      <span class="step">reload，/text-lab 直达</span>
+    </div>
+  </div>
+
+  <div class="arch">
+    <div class="side fe"><b>静态前端 out/</b>Nginx 直接发的 HTML/CSS/JS</div>
+    <div class="vs">API 通话</div>
+    <div class="side be"><b>独立 Python 后端</b>模块 5 登场：算情感分数、拼音</div>
+  </div>
+
+  <div class="footer">模块 4 闭环完成：4.1 手写 → 4.2 构建 → 4.3 React → 4.4 数据驱动 → 4.5 Next → 4.6 静态导出上线。</div>
+</body>
+</html>

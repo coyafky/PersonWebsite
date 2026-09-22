@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>Next.js 预渲染：一招治三病</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 22px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  .vs { display: flex; gap: 16px; margin-bottom: 18px; align-items: stretch; }
+  .panel {
+    flex: 1;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  }
+  .bad { background: #fff; border: 1.5px solid #fecaca; }
+  .good { background: #ecfdf5; border: 1.5px solid #5eead4; }
+  .panel h3 { font-size: 17px; margin-bottom: 4px; }
+  .bad h3 { color: #b91c1c; }
+  .good h3 { color: #065f46; }
+  .panel .flow {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 9px 11px;
+    font-size: 13px;
+    color: #374151;
+    margin: 10px 0;
+    line-height: 1.5;
+  }
+  .good .flow { background: #ffffff; }
+  .tags { display: flex; flex-direction: column; gap: 6px; }
+  .tag {
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 7px;
+    line-height: 1.4;
+  }
+  .bad .tag { background: #fef2f2; color: #b91c1c; }
+  .good .tag { background: #ffffff; color: #065f46; border: 1px solid #a7f3d0; }
+  .tag b { font-weight: 700; }
+
+  .mid { display: flex; gap: 16px; margin-bottom: 18px; }
+  .route {
+    flex: 1.3;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  }
+  .route h3, .switch h3 { font-size: 14px; color: #374151; margin-bottom: 10px; }
+  .tree-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    padding: 4px 0;
+  }
+  .file {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    padding: 4px 9px;
+    color: #1e40af;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12.5px;
+  }
+  .arrow { color: #9ca3af; }
+  .url {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 6px;
+    padding: 4px 9px;
+    color: #065f46;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12.5px;
+  }
+  .switch {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  }
+  .sw-row { font-size: 13px; line-height: 1.5; padding: 5px 0; color: #374151; }
+  .sw-row b { color: #111827; }
+  .mono { font-family: ui-monospace, Menlo, monospace; font-size: 12px; background: #f3f4f6; padding: 1px 5px; border-radius: 4px; }
+
+  .footer {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ffffff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 13px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 4.5 · Next.js 登场</span>
+    <h1>从「浏览器现画」到「预渲染成真实 HTML」</h1>
+    <div class="subtitle">纯 React 的三个尴尬其实是<b>同一个病根</b>，Next.js 用<b>预渲染</b>一招治。</div>
+  </div>
+
+  <div class="vs">
+    <div class="panel bad">
+      <h3>纯 React（Vite 打包）</h3>
+      <div class="flow">空壳 index.html + 一个大 JS → <b>浏览器跑完 JS 才现画</b></div>
+      <div class="tags">
+        <div class="tag">① 直接访问 /text-lab → <b>404</b>（服务器上没这文件）</div>
+        <div class="tag">② 网速慢 → 访客先看一片<b>白屏</b></div>
+        <div class="tag">③ 爬虫不跑 JS → 拿到空壳 → <b>SEO 差</b></div>
+      </div>
+    </div>
+    <div class="panel good">
+      <h3>Next.js 预渲染</h3>
+      <div class="flow">build 时把每页画成<b>真实 HTML 文件</b>放服务器 → 访客一来就拿到成品</div>
+      <div class="tags">
+        <div class="tag">① /text-lab 真有文件 → <b>不 404</b></div>
+        <div class="tag">② 内容已在 HTML 里 → <b>不白屏、首屏快</b></div>
+        <div class="tag">③ 爬虫直接读到内容 → <b>SEO 友好</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mid">
+    <div class="route">
+      <h3>文件夹 = 路由（约定优于配置）</h3>
+      <div class="tree-row"><span class="file">app/page.jsx</span><span class="arrow">→</span><span class="url">/</span></div>
+      <div class="tree-row"><span class="file">app/text-lab/page.jsx</span><span class="arrow">→</span><span class="url">/text-lab</span></div>
+      <div class="tree-row" style="color:#6b7280;font-size:12.5px;">加新页 = 新建文件夹，不用注册路由；跳转用 &lt;Link&gt;。</div>
+    </div>
+    <div class="switch">
+      <h3>"use client" 开关</h3>
+      <div class="sw-row"><b>不写（默认）</b>＝服务端组件：build 时画成 HTML 就完，快、利于 SEO</div>
+      <div class="sw-row"><b>写<span class="mono">"use client"</span></b>＝客户端组件：除 HTML 再多送一份 JS 让它交互</div>
+      <div class="sw-row" style="color:#6b7280;">客户端组件<span style="color:#0f766e;">也会预渲染</span>，只是额外在浏览器再跑一遍。</div>
+    </div>
+  </div>
+
+  <div class="footer">build 后 .next/server/app/ 下真有 index.html 和 text-lab.html——404 的病根除了；怎么部署是 4.6 的事。</div>
+</body>
+</html>

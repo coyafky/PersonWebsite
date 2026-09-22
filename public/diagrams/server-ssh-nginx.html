@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>从你的电脑到公网页面</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 38px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 主图：你—服务器—访客 */
+  .topology {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 26px 28px;
+    margin-bottom: 18px;
+  }
+  .topo-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .node {
+    flex: 1;
+    border-radius: 12px;
+    padding: 18px 16px;
+    text-align: center;
+  }
+  .node h4 { font-size: 17px; margin-bottom: 6px; }
+  .node p { font-size: 13px; color: #4b5563; line-height: 1.5; }
+  .node .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    background: #f3f4f6;
+    padding: 2px 7px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 5px;
+  }
+  .n-mac   { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+  .n-guest { background: #ecfdf5; border: 1.5px solid #99f6e4; }
+  .n-server {
+    background: #fff7ed;
+    border: 2px solid #fb923c;
+  }
+  .ports {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+  .port {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+  .port-ssh { background: #dbeafe; color: #1d4ed8; }
+  .port-web { background: #fef3c7; color: #92400e; }
+
+  .link-col {
+    width: 150px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+  }
+  .link {
+    font-size: 12.5px;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .link.ssh { color: #1d4ed8; font-weight: 600; }
+  .link.web { color: #059669; font-weight: 600; }
+  .link .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    background: #f3f4f6;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* 两行卡片 */
+  .row { display: flex; gap: 16px; margin-bottom: 18px; }
+  .card {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    border: 1px solid #eef0f3;
+    border-top: 4px solid #d1d5db;
+  }
+  .card h3 { font-size: 16px; margin-bottom: 8px; }
+  .card ul { list-style: none; }
+  .card li {
+    font-size: 13.5px;
+    color: #374151;
+    line-height: 1.7;
+    padding-left: 16px;
+    position: relative;
+  }
+  .card li::before {
+    content: "·";
+    position: absolute;
+    left: 4px;
+    color: #0d9488;
+    font-weight: 800;
+  }
+  .c-get  { border-top-color: #7c3aed; }
+  .c-open { border-top-color: #dc2626; }
+
+  /* 命令条 */
+  .cmd-strip {
+    background: #1f2937;
+    border-radius: 14px;
+    padding: 14px 22px;
+    margin-bottom: 18px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    line-height: 1.9;
+  }
+  .cmd-strip .c { color: #e5e7eb; }
+  .cmd-strip .flag { color: #93c5fd; }
+  .cmd-strip .cmt { color: #6b7280; }
+
+  .footer {
+    text-align: center;
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 2.4 · 服务器实战</span>
+    <h1>从你的电脑到公网页面</h1>
+    <div class="subtitle">租一台 Ubuntu 云服务器，<b>SSH</b> 远程登录它，<b>Nginx</b> 把它变成任何人都能访问的网页。</div>
+  </div>
+
+  <div class="topology">
+    <div class="topo-row">
+      <div class="node n-mac">
+        <h4>你的 Mac（终端）</h4>
+        <p>SSH 登录进去操作它</p>
+        <span class="mono">ssh ubuntu@IP</span>
+      </div>
+      <div class="link-col">
+        <div class="link ssh"><span class="mono">:22</span> 远程登录<br>敲命令、改文件</div>
+      </div>
+      <div class="node n-server">
+        <h4>云服务器（Ubuntu）</h4>
+        <p>另一台电脑，无屏幕、24h 开机、跑 Linux</p>
+        <div class="ports">
+          <span class="port port-ssh">22 · SSH 登录口</span>
+          <span class="port port-web">80 · Nginx 网页口</span>
+        </div>
+      </div>
+      <div class="link-col">
+        <div class="link web"><span class="mono">:80</span> 访问网页<br>看 Welcome to nginx!</div>
+      </div>
+      <div class="node n-guest">
+        <h4>任何人的浏览器</h4>
+        <p>输入公网 IP 就能打开</p>
+        <span class="mono">http://公网IP</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card c-get">
+      <h3>买完拿到的三样东西</h3>
+      <ul>
+        <li><b>公网 IP</b>：别人能找到你的地址</li>
+        <li><b>用户名</b>：通常 ubuntu 或 root</li>
+        <li><b>密码</b>：登录用，输时屏幕不显示</li>
+      </ul>
+    </div>
+    <div class="card c-open">
+      <h3>云控制台放行两个端口</h3>
+      <ul>
+        <li><b>22</b>：SSH 登录要走（安全组 / 防火墙）</li>
+        <li><b>80</b>：浏览器访问要走（最容易漏！）</li>
+        <li>不放行就连不上 / 打不开</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cmd-strip">
+    <div class="c">ssh <span class="flag">ubuntu@公网IP</span> <span class="cmt"># 远程登录（端口 22）</span></div>
+    <div class="c">sudo apt install nginx -y <span class="cmt"># 装 Nginx</span></div>
+    <div class="c">systemctl status nginx <span class="cmt"># 看到 Active: active (running)</span></div>
+  </div>
+
+  <div class="footer">这一次，2.3 的整条链路（浏览器 → IP → 服务器 → 端口 → 内容）真的跑通了。</div>
+</body>
+</html>

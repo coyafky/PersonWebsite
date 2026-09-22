@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>手搓 vs FastAPI：杂活去哪了</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 22px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  .map {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 16px 22px;
+    margin-bottom: 18px;
+  }
+  .map h3 { font-size: 15px; color: #374151; margin-bottom: 10px; }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 13.5px;
+  }
+  .row:last-child { border-bottom: none; }
+  .hand {
+    flex: 1.2;
+    background: #fef2f2;
+    border-radius: 7px;
+    padding: 6px 10px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    color: #b91c1c;
+  }
+  .arrow { color: #9ca3af; }
+  .auto {
+    flex: 1.2;
+    background: #ecfdf5;
+    border-radius: 7px;
+    padding: 6px 10px;
+    font-size: 12.5px;
+    color: #065f46;
+  }
+
+  .roles { display: flex; gap: 16px; margin-bottom: 18px; }
+  .role {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 14px 18px;
+  }
+  .role h4 { font-size: 15px; margin-bottom: 4px; }
+  .role.fast h4 { color: #0f766e; }
+  .role.uv h4 { color: #7c3aed; }
+  .role .what { font-size: 12.5px; color: #6b7280; margin-bottom: 8px; }
+  .cmd {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 7px;
+    padding: 7px 10px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .note {
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: #065f46;
+    line-height: 1.6;
+  }
+  .note b { color: #0f766e; }
+  .footer {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #fff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 13px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 5.4 · FastAPI 登场</span>
+    <h1>手搓 vs FastAPI：杂活去哪了</h1>
+    <div class="subtitle">5.3 亲手写过每一行，所以现在能确切知道<b>框架替我们藏了什么</b>。</div>
+  </div>
+
+  <div class="map">
+    <h3>同一个 GET /api/profile</h3>
+    <div class="row"><span class="hand">if self.path == ... 路由判断</span><span class="arrow">→</span><span class="auto">@app.get("/api/profile") 一行装饰器</span></div>
+    <div class="row"><span class="hand">self.send_response(200)</span><span class="arrow">→</span><span class="auto">自动</span></div>
+    <div class="row"><span class="hand">send_header("Content-Type", ...)</span><span class="arrow">→</span><span class="auto">自动设 JSON 类型</span></div>
+    <div class="row"><span class="hand">json.dumps().encode()</span><span class="arrow">→</span><span class="auto">自动把 dict 序列化成 JSON</span></div>
+    <div class="row"><span class="hand">else 兜底 404</span><span class="arrow">→</span><span class="auto">自动回 {"detail":"Not Found"}</span></div>
+  </div>
+
+  <div class="roles">
+    <div class="role fast">
+      <h4>FastAPI —— 管「接口该做什么」</h4>
+      <div class="what">定义路由、声明请求形状、自动校验</div>
+      <div class="cmd">@app.get("/api/profile")<br>def get_profile(): return profile</div>
+    </div>
+    <div class="role uv">
+      <h4>uvicorn —— 管「让接口跑起来」</h4>
+      <div class="what">守端口、收请求、交给 FastAPI</div>
+      <div class="cmd">fastapi dev          # 自动挡（= uvicorn main:app --reload）</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>两个顺手福利：</b>① <b>/docs</b> 自动长出接口文档，代码一改文档跟着变；② POST 的请求体用 <b>BaseModel</b> 一句 <code style="font-family:ui-monospace,Menlo,monospace;">text: str</code> 声明，自动解析+校验——字段错了回 422，我们自己代码写错回 500，谁的错状态码分得清。
+  </div>
+
+  <div class="footer">读报错先看最后一行（什么错），再往上找 main.py 的行号（在哪儿）；读不懂整段丢给 AI。</div>
+</body>
+</html>

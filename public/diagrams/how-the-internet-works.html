@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>输入网址后发生了什么</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 24px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 38px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 17px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 主链路 */
+  .chain {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 26px 28px;
+    margin-bottom: 18px;
+  }
+  .chain-title { font-size: 15px; font-weight: 700; color: #374151; margin-bottom: 18px; }
+  .steps {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+  .step {
+    flex: 1;
+    border-radius: 12px;
+    padding: 16px 14px;
+    text-align: center;
+  }
+  .step .num {
+    display: inline-block;
+    width: 26px; height: 26px;
+    line-height: 26px;
+    border-radius: 50%;
+    background: #0f766e;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .step h4 { font-size: 16.5px; margin-bottom: 6px; }
+  .step p { font-size: 13px; color: #4b5563; line-height: 1.5; }
+  .step .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    background: #f3f4f6;
+    border-radius: 5px;
+    padding: 2px 7px;
+    display: inline-block;
+    margin-top: 4px;
+  }
+  .s-browser { background: #eff6ff; border: 1.5px solid #bfdbfe; }
+  .s-dns     { background: #f5f3ff; border: 1.5px solid #ddd6fe; }
+  .s-server  { background: #fff7ed; border: 1.5px solid #fed7aa; }
+  .s-show    { background: #ecfdf5; border: 1.5px solid #99f6e4; }
+
+  .arrow-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 90px;
+    flex-shrink: 0;
+  }
+  .arrow {
+    font-size: 12.5px;
+    text-align: center;
+    line-height: 1.4;
+    padding: 4px 2px;
+  }
+  .arrow.req { color: #2563eb; font-weight: 600; }
+  .arrow.res { color: #059669; font-weight: 600; }
+  .arrow .line { font-size: 16px; }
+
+  /* 概念卡 */
+  .row { display: flex; gap: 16px; margin-bottom: 18px; }
+  .card {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    border: 1px solid #eef0f3;
+    border-top: 4px solid #d1d5db;
+  }
+  .card h3 { font-size: 16px; margin-bottom: 6px; }
+  .card .mono {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    background: #f3f4f6;
+    padding: 2px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .card p { font-size: 13.5px; color: #4b5563; line-height: 1.55; }
+  .c-domain { border-top-color: #2563eb; }
+  .c-ip     { border-top-color: #7c3aed; }
+  .c-dns    { border-top-color: #d97706; }
+  .c-port   { border-top-color: #dc2626; }
+
+  /* 本地 vs 远程 */
+  .local-strip {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    padding: 14px 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    font-size: 14.5px;
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+  .local-strip b { color: #0f766e; }
+
+  .footer {
+    text-align: center;
+    font-size: 16.5px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 2.3 · 互联网是怎么工作的</span>
+    <h1>输入网址后发生了什么</h1>
+    <div class="subtitle">浏览器看到的一切，都要先找到<b>那台服务器</b>——这是一条七步链路。</div>
+  </div>
+
+  <div class="chain">
+    <div class="chain-title">从按下回车，到网页出现</div>
+    <div class="steps">
+      <div class="step s-browser">
+        <span class="num">1</span>
+        <h4>你的浏览器</h4>
+        <p>在地址栏输入域名</p>
+        <span class="mono">github.com</span>
+      </div>
+      <div class="arrow-col">
+        <div class="arrow req"><span class="line">→</span><br>请求：域名是哪台？</div>
+      </div>
+      <div class="step s-dns">
+        <span class="num">2</span>
+        <h4>DNS 翻译官</h4>
+        <p>把域名翻译成 IP</p>
+        <span class="mono">140.82.121.3</span>
+      </div>
+      <div class="arrow-col">
+        <div class="arrow req"><span class="line">→</span><br>请求：按 IP 找服务器</div>
+      </div>
+      <div class="step s-server">
+        <span class="num">3</span>
+        <h4>那台服务器</h4>
+        <p>通过端口连上具体服务</p>
+        <span class="mono">IP : 443</span>
+      </div>
+      <div class="arrow-col">
+        <div class="arrow res"><span class="line">←</span><br>响应：返回网页内容</div>
+      </div>
+      <div class="step s-show">
+        <span class="num">4</span>
+        <h4>浏览器显示</h4>
+        <p>读取并渲染成网页</p>
+        <span class="mono">你看到的页面</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card c-domain">
+      <h3>域名</h3>
+      <span class="mono">github.com</span>
+      <p>给机器地址起的好记名字——给<b>人</b>记、给人输入用。</p>
+    </div>
+    <div class="card c-ip">
+      <h3>IP 地址</h3>
+      <span class="mono">140.82.121.3</span>
+      <p>一台联网设备在网络中的地址——机器之间找路用。</p>
+    </div>
+    <div class="card c-dns">
+      <h3>DNS</h3>
+      <span class="mono">翻译系统</span>
+      <p>你输的是域名，它负责把域名<b>翻译成 IP</b>。</p>
+    </div>
+    <div class="card c-port">
+      <h3>端口</h3>
+      <span class="mono">80 / 443</span>
+      <p>同一台服务器上不同服务的入口：80 普通网页，443 加密网页。</p>
+    </div>
+  </div>
+
+  <div class="local-strip">
+    <b>本地网页是同一套：</b>html 文件就是网页内容，浏览器负责读取并显示。当你打开本地文件时，「服务器」其实就是你自己的电脑——远程访问，只是把这台电脑换成了另一台。
+  </div>
+
+  <div class="footer">浏览器发出去的叫请求（request），服务器回来的叫响应（response）。</div>
+</body>
+</html>

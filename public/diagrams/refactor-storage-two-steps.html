@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>两步走：搬家 → 装修，换芯不换壳</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 18px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 16px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 两步走 */
+  .two { display: flex; gap: 14px; margin-bottom: 18px; align-items: stretch; }
+  .step {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 14px 18px;
+  }
+  .step.move { border-top: 4px solid #3b82f6; }
+  .step.decor { border-top: 4px solid #0d9488; }
+  .step h4 { font-size: 16px; margin-bottom: 4px; }
+  .step.move h4 { color: #1d4ed8; }
+  .step.decor h4 { color: #0f766e; }
+  .step .what { font-size: 13px; color: #374151; line-height: 1.6; }
+  .step .what b { color: #111827; }
+  .tag {
+    display: inline-block;
+    border-radius: 5px; padding: 1px 8px; font-size: 11.5px;
+    margin-top: 6px;
+  }
+  .tag.r { background: #dbeafe; color: #1d4ed8; }
+  .tag.g { background: #d1fae5; color: #047857; }
+  .arrow-x { display: flex; align-items: center; color: #9ca3af; font-size: 26px; font-weight: 700; }
+
+  /* 六处对照 */
+  .map {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 12px 20px;
+    margin-bottom: 18px;
+  }
+  .map h3 { font-size: 14px; color: #374151; margin-bottom: 8px; }
+  .row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 12.5px;
+  }
+  .row:last-child { border-bottom: none; }
+  .old { flex: 1.2; color: #b91c1c; background: #fef2f2; border-radius: 6px; padding: 4px 9px; font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; }
+  .new { flex: 1.2; color: #065f46; background: #ecfdf5; border-radius: 6px; padding: 4px 9px; font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; }
+  .ar { color: #9ca3af; }
+
+  /* 三层换芯 */
+  .layers {
+    display: flex; gap: 12px;
+    background: #ecfdf5;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    align-items: center;
+  }
+  .layers h4 { font-size: 14px; color: #065f46; margin-right: 8px; }
+  .layer {
+    flex: 1;
+    background: #fff; border-radius: 8px;
+    padding: 6px 10px; font-size: 12px; color: #0f766e;
+    text-align: center;
+  }
+  .layer b { display: block; color: #111827; font-size: 12.5px; margin-bottom: 1px; }
+
+  .footer {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #fff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 11px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 6.5 · 重构，在项目中用 SQLite</span>
+    <h1>两步走：搬家 → 装修</h1>
+    <div class="subtitle">只动<b>存储层</b>；搬坏和改坏是两种问题，所以一次只做一件事。</div>
+  </div>
+
+  <div class="two">
+    <div class="step move">
+      <h4>① 搬家（重构）</h4>
+      <div class="what">存储层<b>原样</b>搬进 <code style="font-family:ui-monospace,monospace;">storage.py</code>，还是 history.json。<b>行为零变化</b>——跑一遍没变就是搬对了。顺手把 10 改成参数 <code style="font-family:ui-monospace,monospace;">get_history(limit)</code>。</div>
+      <span class="tag r">行为不变 · 自带尺子</span>
+    </div>
+    <div class="arrow-x">→</div>
+    <div class="step decor">
+      <h4>② 装修（换实现）</h4>
+      <div class="what">把 storage.py 整个换成 SQLite 版。<b>行为该变</b>，没有尺子——坏了一定是装修弄的。main.py 只多两行（import init_db + init_db()）。</div>
+      <span class="tag g">换实现 · 边界后面随便换</span>
+    </div>
+  </div>
+
+  <div class="map">
+    <h3>装修六处，全在 storage.py</h3>
+    <div class="row"><span class="old">import json</span><span class="ar">→</span><span class="new">import sqlite3</span></div>
+    <div class="row"><span class="old">HISTORY_FILE = "history.json"</span><span class="ar">→</span><span class="new">DB_FILE + get_conn()（row_factory=Row）</span></div>
+    <div class="row"><span class="old">（无）</span><span class="ar">→</span><span class="new">init_db() 启动时建表</span></div>
+    <div class="row"><span class="old">读全量→追加→整个写回</span><span class="ar">→</span><span class="new">一句 INSERT，值全走 ? 占位</span></div>
+    <div class="row"><span class="old">全量读 + reverse + 切片</span><span class="ar">→</span><span class="new">SELECT ... ORDER BY created_at DESC LIMIT ?</span></div>
+    <div class="row"><span class="old">load_history()</span><span class="ar">→</span><span class="new">删掉（不用整份读进内存）</span></div>
+  </div>
+
+  <div class="layers">
+    <h4>换芯不换壳，三层都成立：</h4>
+    <div class="layer"><b>HTTP 接口</b>没变→前端无感</div>
+    <div class="layer"><b>函数签名</b>没变→analyze 没动</div>
+    <div class="layer"><b>storage.py 对外</b>没变→main.py 只多两行</div>
+  </div>
+
+  <div class="footer">善后：*.db 不进 Git、history.json 退役、给 created_at 建索引。下一节会话——让历史分到每个人。</div>
+</body>
+</html>

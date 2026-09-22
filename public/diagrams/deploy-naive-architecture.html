@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>朴素部署架构：Nginx:80 + uvicorn:8000</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2937;
+    padding: 40px 44px;
+  }
+  .header { margin-bottom: 18px; }
+  .kicker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #0d9488;
+    background: #ccfbf1;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: 1px; }
+  .subtitle { font-size: 16px; color: #6b7280; margin-top: 8px; }
+  .subtitle b { color: #0f766e; }
+
+  /* 架构 */
+  .arch {
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 18px 22px;
+    margin-bottom: 16px;
+  }
+  .rowline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .rowline:last-child { margin-bottom: 0; }
+  .node {
+    border-radius: 10px;
+    padding: 10px 14px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.4;
+    min-width: 130px;
+  }
+  .node b { display: block; font-size: 13.5px; margin-bottom: 2px; }
+  .browser { background: #f1f5f9; color: #334155; }
+  .nginx { background: #dbeafe; color: #1e40af; }
+  .static { background: #ecfdf5; color: #065f46; }
+  .uvicorn { background: #fef3c7; color: #92400e; }
+  .db { background: #fce7f3; color: #9d174d; }
+  .arr { color: #9ca3af; font-size: 13px; white-space: nowrap; }
+  .arr b { color: #0d9488; }
+
+  /* 四件事 + nohup */
+  .two { display: flex; gap: 16px; margin-bottom: 16px; }
+  .box {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eef0f3;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    padding: 13px 18px;
+  }
+  .box h4 { font-size: 15px; margin-bottom: 8px; }
+  .box.todo h4 { color: #1d4ed8; }
+  .box.nohup h4 { color: #92400e; }
+  .li { font-size: 12.5px; line-height: 1.8; color: #374151; }
+  .li b { color: #111827; }
+  .parts { font-size: 12px; color: #374151; line-height: 1.9; }
+  .parts b { color: #92400e; }
+  code {
+    background: #0f172a; color: #e2e8f0;
+    border-radius: 5px; padding: 1px 6px;
+    font-family: ui-monospace, Menlo, monospace; font-size: 11px;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f766e;
+    background: #fff;
+    border: 1px dashed #5eead4;
+    border-radius: 12px;
+    padding: 11px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="kicker">模块 7.1 · 先上线</span>
+    <h1>朴素部署：Nginx:80 送前端，uvicorn:8000 送后端</h1>
+    <div class="subtitle">部署 = 把你电脑上能跑的东西，在另一台机器上跑起来；前后端<b>两个端口，直接暴露</b>。</div>
+  </div>
+
+  <div class="arch">
+    <div class="rowline">
+      <div class="node browser"><b>浏览器</b>用户的电脑</div>
+      <div class="arr">──80端口──></div>
+      <div class="node nginx"><b>Nginx</b>送静态前端 out/</div>
+      <div class="arr">──></div>
+      <div class="node static"><b>静态前端</b>React/Next.js 产物</div>
+    </div>
+    <div class="rowline">
+      <div class="node browser" style="visibility:hidden">.</div>
+      <div class="arr">──8000端口──></div>
+      <div class="node uvicorn"><b>uvicorn</b>fastapi run<br>听 0.0.0.0:8000</div>
+      <div class="arr">──></div>
+      <div class="node db"><b>history.db</b>SQLite 单文件</div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="box todo">
+      <h4>撞上的墙 → 四件事</h4>
+      <div class="li">① <b>配置抽离</b>：.env 不进 git，.env.example 进 git</div>
+      <div class="li">② 换 <code>fastapi run</code>（听 0.0.0.0）</div>
+      <div class="li">③ 云平台安全组放行 <b>8000</b></div>
+      <div class="li">④ 后端<b>后台常驻</b>（nohup）</div>
+    </div>
+    <div class="box nohup">
+      <h4>nohup 四零件</h4>
+      <div class="parts">
+        <b>&amp;</b> 丢后台，终端不干等<br>
+        <b>nohup</b> no hang up，不随 SSH 死<br>
+        <b>&gt; backend.log</b> 接住输出不丢<br>
+        <b>2&gt;&amp;1</b> 错误输出并进同一文件
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">上线了但很朴素：nohup 不重启不自愈、8000 裸奔无日志无加密、前后端跨源——这三件正是 7.2 要换的（systemd + Nginx 反代同源）。</div>
+</body>
+</html>
