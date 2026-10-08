@@ -1,33 +1,34 @@
 import Link from "next/link";
-import { getBlogPosts, getBookTopics, getCourseTopics, getWeeklyPosts } from "@/lib/content";
+import { getBlogPosts, getNoteCollections } from "@/lib/content";
 
 /**
  * Site-wide footer with three columns:
  *   1. 栏目索引  — link list to top-level sections
- *   2. 最近更新   — latest 1 blog + latest 1 weekly + latest 1 book
+ *   2. 最近更新   — latest 1 blog + latest 1 book + latest 1 course
  *   3. RSS & contact — RSS, GitHub, email, copyright
  *
  * Server Component. Reads recent posts via reader functions to keep
  * the call site (`layout.tsx`) free of data-fetching props.
+ *
+ * Diary 与 Weekly 已于 2026-10-07 下架（内容归档、路由 308 → /blog），
+ * 因此两列里都不再有它们的入口。
  */
 export async function SectionFooter() {
   const year = new Date().getFullYear();
 
   // 静默拉取；任意集合为空时回退到"暂无更新"提示。
-  const [latestBlog, latestWeekly, latestBook, latestCourse] = await Promise.all([
+  const [latestBlog, noteCollections] = await Promise.all([
     getBlogPosts()
       .then((posts) => posts[0])
       .catch(() => undefined),
-    getWeeklyPosts()
-      .then((posts) => posts[0])
-      .catch(() => undefined),
-    getBookTopics()
-      .then((posts) => posts[0])
-      .catch(() => undefined),
-    getCourseTopics()
-      .then((posts) => posts[0])
-      .catch(() => undefined),
+    getNoteCollections().catch(() => []),
   ]);
+
+  // 内容模块三合一后「最近的书 / 最近的一门课」从同一份集合列表里各取第一个
+  // （getNoteCollections 按 title 排序，取的都是字母序最前的那本/那门 —— 与
+  // 合并前 book/course 两个列表函数取 [0] 的行为一致）。
+  const latestBook = noteCollections.find((item) => item.kind === "book");
+  const latestCourse = noteCollections.find((item) => item.kind === "course");
 
   return (
     <footer className="site-footer">
@@ -40,19 +41,7 @@ export async function SectionFooter() {
               <Link href="/blog">Blog</Link>
             </li>
             <li>
-              <Link href="/diary">Diary</Link>
-            </li>
-            <li>
-              <Link href="/weekly">Weekly</Link>
-            </li>
-            <li>
-              <Link href="/learning">Learning</Link>
-            </li>
-            <li>
-              <Link href="/book-list">Book List</Link>
-            </li>
-            <li>
-              <Link href="/course-list">Course List</Link>
+              <Link href="/notes">Notes</Link>
             </li>
             <li>
               <Link href="/projects">Projects</Link>
@@ -78,18 +67,10 @@ export async function SectionFooter() {
             ) : (
               <li className="site-footer-empty">No posts yet.</li>
             )}
-            {latestWeekly ? (
-              <li>
-                <span className="site-footer-kind">Weekly</span>
-                <Link href={`/weekly/${latestWeekly.slug}`}>{latestWeekly.title}</Link>
-              </li>
-            ) : (
-              <li className="site-footer-empty">No weekly yet.</li>
-            )}
             {latestBook ? (
               <li>
                 <span className="site-footer-kind">Book</span>
-                <Link href={`/book-list/${latestBook.book}`}>{latestBook.title}</Link>
+                <Link href={`/notes/${latestBook.collection}`}>{latestBook.title}</Link>
               </li>
             ) : (
               <li className="site-footer-empty">No book yet.</li>
@@ -97,7 +78,7 @@ export async function SectionFooter() {
             {latestCourse ? (
               <li>
                 <span className="site-footer-kind">Course</span>
-                <Link href={`/course-list/${latestCourse.course}`}>{latestCourse.title}</Link>
+                <Link href={`/notes/${latestCourse.collection}`}>{latestCourse.title}</Link>
               </li>
             ) : (
               <li className="site-footer-empty">No course yet.</li>

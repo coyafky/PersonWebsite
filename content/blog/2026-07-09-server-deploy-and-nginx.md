@@ -5,10 +5,12 @@ summary: "代码写完了，怎么让它「全世界的浏览器都能访问」�
 tags:
   - "zero-to-tech"
   - "部署"
-status: published
+status: archived
 lang: zh
 category: "技术/计算机基础"
 englishSummary: "Code is written — how does it become accessible to browsers worldwide? This piece walks through the shortest deployment path: SSH + Git to pull code to the server, file/directory permissions (chmod 755 / chown www-data), Nginx as reverse proxy + static file server, HTTPS with Let's Encrypt one-click certificates, and finally GitHub Actions for push-to-deploy automation."
+cover: /images/blog/2026-07-09-server-deploy-and-nginx/cover.webp
+coverAlt: 一张纸被提起，放落到一叠整齐的纸上
 ---
 
 # 服务器部署和 Nginx 配置：从本地代码到线上服务
@@ -722,5 +724,5 @@ Nginx 反代到新版本
 - **zero-to-tech / 进程、线程、内存：你的电脑同时在跑多少事**
 - **zero-to-tech / VSCode 进阶：调试器、断点、launch.json**
 
-上一篇：[GitHub 和远程同步：从本地仓库到开源世界](/blog/github-remote-and-mcp)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[GitHub 和远程同步：从本地仓库到开源世界](/blog/2026-07-09-github-remote-and-mcp)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

@@ -6,10 +6,6 @@ import { usePathname } from "next/navigation";
 import { triggerSearch } from "@/lib/search-events";
 import {
   Icons0Blog,
-  Icons0Book,
-  Icons0Calendar,
-  Icons0Course,
-  Icons0Document,
   Icons0Image,
   Icons0Notebook,
   Icons0Portfolio,
@@ -19,12 +15,10 @@ import {
 
 const navItems = [
   { href: "/blog", icon: Icons0Blog, label: "Blog" },
-  { href: "/diary", icon: Icons0Document, label: "Diary" },
-  { href: "/weekly", icon: Icons0Calendar, label: "Weekly" },
-  { href: "/learning", icon: Icons0Notebook, label: "Learning" },
-  { href: "/book-list", icon: Icons0Book, label: "Book List" },
-  { href: "/course-list", icon: Icons0Course, label: "Course List" },
-  { href: "/projects", icon: Icons0Portfolio, label: "Projects" },
+  // Diary 与 Weekly 已下架（内容归档，旧路由 308 → /blog）
+  // 内容模块三合一：原 /learning、/book-list、/course-list → /notes
+  { href: "/notes", icon: Icons0Notebook, label: "Notes" },
+  { href: "/projects", icon: Icons0Portfolio, label: "Work" },
   { href: "/gallery", icon: Icons0Image, label: "Gallery" },
   { href: "/tools", icon: Icons0Tools, label: "Tools" },
   { href: "/about", icon: Icons0Profile, label: "About" },

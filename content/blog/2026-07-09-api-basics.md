@@ -5,10 +5,12 @@ summary: "前端开发者迟早要面对一个问题：数据从哪来？API 就
 tags:
   - "zero-to-tech"
   - "HTTP"
-status: published
+status: archived
 lang: zh
 category: "技术/前端基础"
 englishSummary: "Every frontend developer eventually faces the question: where does the data come from? The answer is APIs. This piece is not an API encyclopedia — it's a 0-to-1 path: first pull data with fetch (0), understand HTTP request/response structure, master REST design conventions, then build a working API endpoint yourself (1). Includes GitHub API hands-on practice and 3 mental models to help you avoid common pitfalls."
+cover: /images/blog/2026-07-09-api-basics/cover.webp
+coverAlt: 两块纸板以凸舌与凹槽精确咬合成一块
 ---
 
 # API从0-1：从看懂接口到自己设计接口
@@ -602,5 +604,5 @@ function GitHubUser({ username }) {
 - **zero-to-tech / TypeScript 是什么：为什么新项目应该用 TypeScript**
 - **zero-to-tech / 进程、线程、内存：你的电脑同时在跑多少事**
 
-上一篇：[React 数据驱动 UI：从 setState 到 DOM 更新的完整链路](/blog/react-data-driven-ui)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[React 数据驱动 UI：从 setState 到 DOM 更新的完整链路](/blog/2026-07-09-react-data-driven-ui)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

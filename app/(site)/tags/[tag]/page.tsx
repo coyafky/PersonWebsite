@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContentCard } from "@/components/content-card";
 import { EntryCardBlog } from "@/components/entry-card-blog";
-import { EntryCardBookTopic } from "@/components/entry-card-book-topic";
-import { EntryCardCourseTopic } from "@/components/entry-card-course-topic";
-import { EntryCardLearning } from "@/components/entry-card-learning";
+import { EntryCardNote } from "@/components/entry-card-note";
 import { EntryCardProject } from "@/components/entry-card-project";
 import { EntryCardWeekly } from "@/components/entry-card-weekly";
 import { getAllTags, getContentByTag } from "@/lib/content";
@@ -18,9 +16,10 @@ type TagPageProps = {
  * 把标签页预渲染成静态页。
  *
  * 加这个之前 /tags/[tag] 是 **ƒ Dynamic** —— 每次访问都要全量扫盘
- * （getContentByTag 会拉全站 9 个集合：blog + diary + weekly + career +
- * 全部 learning + book index/notes + course index/notes）。
- * 对照：/blog/[slug]、/learning/*、/diary/* 一直是静态的，只有 tags 这条是动态。
+ * （getContentByTag 会拉全站 8 个集合：blog + projects + career +
+ * notes 的 topic / book index+notes / course index+notes —— 注：projects 无
+ * tags 字段，恒贡献 0，读取只为保持跨集合契约稳定）。
+ * 对照：/blog/[slug]、/notes/* 一直是静态的，只有 tags 这条是动态。
  *
  * 2026-09-20 标签精简后只剩 73 个，全部预渲染成本很低。
  *
@@ -92,47 +91,10 @@ export default async function TagPage({ params }: TagPageProps) {
       ) : null}
 
       {/*
-        日记段。原先缺失 —— getContentByTag 根本不扫 diary 集合，
-        于是"只在日记里出现"的标签会被 /tags 列出来、点进去却 404
-        （含全站第 1 高频的「工作日记」，68 篇）。
-        2026-09-20：reader 侧补齐 diary 扫描，这里补渲染。
-        位置放在 Blog 之后，与站内导航顺序一致。
+        Diary 与 Weekly 两段已移除（2026-10-07）：两个模块整体下架、内容归档，
+        渲染段留着只会输出指向 308 桩的链接。
+        若日后恢复，需同时补回 reader 的 TaggedContentByKind + 扫描逻辑。
       */}
-      {totalByKind.diary > 0 ? (
-        <section>
-          <h2>Diary</h2>
-          <div className="stack-list">
-            {items.diary.map((post) => (
-              <EntryCardBlog
-                key={post.slug}
-                href={`/diary/${post.slug}`}
-                title={post.title}
-                summary={post.summary}
-                date={post.date}
-                tags={post.tags}
-              />
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      {totalByKind.weekly > 0 ? (
-        <section>
-          <h2>Weekly</h2>
-          <div className="timeline">
-            {items.weekly.map((post) => (
-              <EntryCardWeekly
-                key={post.slug}
-                href={`/weekly/${post.slug}`}
-                week={post.week}
-                title={post.title}
-                highlights={post.highlights}
-                mood={post.mood}
-              />
-            ))}
-          </div>
-        </section>
-      ) : null}
 
       {totalByKind.projects > 0 ? (
         <section>
@@ -155,15 +117,20 @@ export default async function TagPage({ params }: TagPageProps) {
         </section>
       ) : null}
 
+      {/*
+        Notes 段（原 Learning / Book List / Course List 三段合并）。
+        topic 用「按主题折叠」形态保留原来的文章清单；书 / 课用卡片形态。
+        href 都是合并后的扁平 URL `/notes/<collection>`。
+      */}
       {totalByKind.learning > 0 ? (
         <section>
-          <h2>Learning</h2>
+          <h2>Notes — Topics</h2>
           <div className="stack-list">
             {[...learningByTopic.entries()].map(([topic, posts]) => (
-              <EntryCardLearning
+              <EntryCardNote
                 key={topic}
-                topic={topic}
-                postCount={posts.length}
+                href={`/notes/${topic}`}
+                title={topic}
                 posts={posts.map((p) => ({ slug: p.slug, title: p.title, summary: p.summary }))}
               />
             ))}
@@ -173,17 +140,17 @@ export default async function TagPage({ params }: TagPageProps) {
 
       {totalByKind.bookIndex > 0 ? (
         <section>
-          <h2>Book List</h2>
-          <div className="book-topic-grid">
+          <h2>Notes — Books</h2>
+          <div className="entry-card-note-grid">
             {items.bookIndex.map((post) => (
-              <EntryCardBookTopic
+              <EntryCardNote
                 key={post.slug}
-                href={`/book-list/${post.book}`}
+                href={`/notes/${post.book}`}
+                kindLabel="Book"
                 title={post.title}
-                author={post.author}
-                genre={post.genre}
+                meta={post.genre}
+                byline={post.author}
                 summary={post.summary}
-                noteCount={0}
               />
             ))}
           </div>
@@ -192,17 +159,17 @@ export default async function TagPage({ params }: TagPageProps) {
 
       {totalByKind.courseIndex > 0 ? (
         <section>
-          <h2>Course List</h2>
-          <div className="course-topic-grid">
+          <h2>Notes — Courses</h2>
+          <div className="entry-card-note-grid">
             {items.courseIndex.map((post) => (
-              <EntryCardCourseTopic
+              <EntryCardNote
                 key={post.slug}
-                href={`/course-list/${post.course}`}
+                href={`/notes/${post.course}`}
+                kindLabel="Course"
                 title={post.title}
-                platform={post.platform}
-                instructor={post.instructor}
+                meta={post.platform}
+                byline={post.instructor}
                 summary={post.summary}
-                noteCount={0}
               />
             ))}
           </div>

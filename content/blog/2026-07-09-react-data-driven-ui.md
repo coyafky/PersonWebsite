@@ -5,10 +5,12 @@ summary: "上一篇讲了 React 是什么。这一篇深入讲 React 的「数�
 tags:
   - "zero-to-tech"
   - "React"
-status: published
+status: archived
 lang: zh
 category: "技术/前端基础"
 englishSummary: "The previous piece covered what React is. This one dives deep into React's 'data-driven' nature: what State is, what data should live in state, unidirectional data flow, what happens internally after setState (reconciliation + commit), parent-child component communication (props + callbacks), cross-component communication (Context API), and a complete practical TodoList example."
+cover: /images/blog/2026-07-09-react-data-driven-ui/cover.webp
+coverAlt: 一排像多米诺一样立着的空白卡片依次倾倒
 ---
 
 # React 数据驱动 UI：从 setState 到 DOM 更新的完整链路
@@ -556,5 +558,5 @@ function TodoApp() {
 - **zero-to-tech / TypeScript 是什么：为什么新项目 100% 应该用 TypeScript**
 - **zero-to-tech / 进程、线程、内存：你的电脑同时在跑多少事**
 
-上一篇：[React 入门：UI 框架的第一性原理](/blog/react-frontend-rules)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[React 入门：UI 框架的第一性原理](/blog/2026-07-09-react-frontend-rules)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

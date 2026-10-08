@@ -5,9 +5,11 @@ updated: "2026-08-23"
 summary: "网站做出来 Google 搜不到？不是网站坏了，是 SEO 链路没走通。这篇把从 Googlebot 发现页面到用户体验的整个过程拆成五步可执行框架，并告诉你哪些步骤可以放心交给 AI、哪些必须自己判断。"
 tags:
   - "SEO"
-status: published
+status: archived
 lang: zh
 englishSummary: "A practical 5-step SEO framework for the AI era: crawl discovery, indexing, keyword intent, AI-assisted content, and Core Web Vitals — plus which steps to delegate to AI and which to keep for yourself."
+cover: /images/blog/2026-08-13-ai-era-seo-survival-guide/cover.webp
+coverAlt: 一叠纸中只有一角被光束照亮，其余沉在暗处
 ---
 
 现在大家都能用 AI 把网站做出来，但做完之后有没有发现：Google 根本搜不到？

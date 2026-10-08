@@ -5,10 +5,12 @@ summary: "上一篇文章讲了 npm + Vite + 构建产物。这一篇回答一�
 tags:
   - "zero-to-tech"
   - "React"
-status: published
+status: archived
 lang: zh
 category: "技术/前端基础"
 englishSummary: "The previous piece covered npm + Vite + build artifacts. This one answers a fundamental question: what is React really? Covers: why we need UI frameworks, React is essentially an npm package, browsers only understand HTML / CSS / JS, the real output after React compilation, React vs Vue are essentially the same with different philosophies, the component tree where App is the largest component, and writing a minimal viable React component."
+cover: /images/blog/2026-07-09-react-frontend-rules/cover.webp
+coverAlt: 少量平板纸块搭成一个极简的立体结构
 ---
 
 # React 入门：UI 框架的第一性原理（和 Vue 有什么关系）
@@ -614,5 +616,5 @@ const Greeting = ({ name }) => <h1>Hello, {name}</h1>;
 - **zero-to-tech / TypeScript 是什么：为什么新项目 100% 应该用 TypeScript**
 - **zero-to-tech / 进程、线程、内存：你的电脑同时在跑多少事**
 
-上一篇：[现代前端的工具链：npm + Vite + 构建产物](/blog/npm-and-vite)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[现代前端的工具链：npm + Vite + 构建产物](/blog/2026-07-09-npm-and-vite)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

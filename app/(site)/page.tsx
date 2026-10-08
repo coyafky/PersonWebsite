@@ -1,12 +1,11 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ContentCard } from "@/components/content-card";
+import { FeaturedProjects } from "@/components/featured-projects";
 import { HeroSection, HeroItem } from "@/components/hero-section";
+import { getFeaturedProjects } from "@/lib/content";
 import {
   Icons0Blog,
-  Icons0Book,
-  Icons0Calendar,
-  Icons0Course,
   Icons0Image,
   Icons0Notebook,
   Icons0Portfolio,
@@ -28,28 +27,10 @@ const portalEntries: ReadonlyArray<PortalEntry> = [
     description: "技术、想法和工程实践的长文。",
   },
   {
-    href: "/weekly",
-    icon: <Icons0Calendar />,
-    title: "Weekly",
-    description: "每周记录读了什么、做了什么、卡在哪。",
-  },
-  {
-    href: "/learning",
+    href: "/notes",
     icon: <Icons0Notebook />,
-    title: "Learning",
-    description: "按主题整理的结构化学习笔记。",
-  },
-  {
-    href: "/book-list",
-    icon: <Icons0Book />,
-    title: "Book List",
-    description: "读过的书、读书笔记、长期沉淀的认知。",
-  },
-  {
-    href: "/course-list",
-    icon: <Icons0Course />,
-    title: "Course List",
-    description: "视频课程笔记、按模块和课时组织。",
+    title: "Notes",
+    description: "学习笔记、读书笔记与课程笔记，按集合归档。",
   },
   {
     href: "/projects",
@@ -71,7 +52,9 @@ const portalEntries: ReadonlyArray<PortalEntry> = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const featuredProjects = await getFeaturedProjects(3);
+
   return (
     <div className="page-shell home-shell">
       <HeroSection
@@ -112,13 +95,8 @@ export default function HomePage() {
             </div>
             <div className="panel-row">
               <Icons0Blog />
-              <span>Blog / Learning</span>
+              <span>Blog / Notes</span>
               <span>thinking</span>
-            </div>
-            <div className="panel-row">
-              <Icons0Calendar />
-              <span>Weekly</span>
-              <span>trace</span>
             </div>
             <div className="panel-row">
               <Icons0Portfolio />
@@ -128,6 +106,8 @@ export default function HomePage() {
           </>
         }
       />
+
+      <FeaturedProjects projects={featuredProjects} />
 
       <section className="content-section portal-section" aria-label="Sections">
         <div className="section-heading">

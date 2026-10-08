@@ -4,10 +4,12 @@ date: "2026-05-20"
 summary: "企业AI落地从工具层开始，但必须走向流程层、数据层和业务层才算真正落地。从4个阶段、7类工具、4层架构到3个落地关键点——拆解AI如何重构企业的知识生产方式。"
 tags:
   - "AI工具"
-status: published
+status: archived
 lang: zh
 category: "AI/行业洞察"
 englishSummary: "Enterprise AI adoption starts at the tool layer but must progress through process, data, and business layers to truly land. Breaking down 4 stages, 7 tool categories, 4-layer architecture, and 3 key landing factors."
+cover: /images/blog/2026-05-20-ai-enterprise-efficiency/cover.webp
+coverAlt: 左三摞纸与右侧一摞更薄的纸，一条细蓝线贯穿
 ---
 
 # AI工具如何赋能企业的效率提升

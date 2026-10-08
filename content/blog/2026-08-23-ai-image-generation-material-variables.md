@@ -5,9 +5,11 @@ summary: "第三章测了「光线」这个单一变量，这一章测另一个�
 tags:
   - "AI 生图"
   - "Prompt 工程"
-status: published
+status: archived
 lang: zh
 englishSummary: "Chapter 5 of the AI image-generation methodology. Another single-variable test, symmetric to lighting: vary only the surface material that holds or surrounds the product — wood, marble, metal, silk, paper — while keeping subject, angle, composition and lighting identical. Maps each material to its visual temperament."
+cover: /images/blog/2026-08-23-ai-image-generation-material-variables/cover.webp
+coverAlt: 四个相同的小方块分别放在纸、亚麻、陶土、木四种底材上
 ---
 
 第三章讲「光线作为唯一变量」，这一章是它的对称——**材质作为唯一变量**。

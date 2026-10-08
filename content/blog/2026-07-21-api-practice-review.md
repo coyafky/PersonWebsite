@@ -5,10 +5,12 @@ summary: "上一篇 API从0-1 讲了理论，这一篇是实践复盘。我们�
 tags:
   - "zero-to-tech"
   - "HTTP"
-status: published
+status: archived
 lang: zh
 category: "技术/前端基础"
 englishSummary: "The previous post covered API theory; this one is a practice retrospective. We hand-built a 30-line Node.js API server and a waterfall dog image gallery using the Dog API — less than 300 lines total, but covering both sides of API development. This retrospective breaks down the reasoning behind each technical decision, connects both sides into a complete request-response chain, and extracts 4 core patterns that hold true regardless of framework."
+cover: /images/blog/2026-07-21-api-practice-review/cover.webp
+coverAlt: 一张带手工折痕的卡片与一张轮廓相同但平整锋利的卡片并排
 ---
 
 # 从手搓API到调用API：一次完整的实践复盘
@@ -337,5 +339,5 @@ Dog API 的约定：        GET /breeds/image/random/:count  →  返回 { messa
 - **zero-to-tech / 进程、线程、内存：你的电脑同时在跑多少事**
 - **zero-to-tech / TypeScript 是什么：为什么新项目应该用 TypeScript**
 
-上一篇：[API从0-1：从看懂接口到自己设计接口](/blog/api-basics)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[API从0-1：从看懂接口到自己设计接口](/blog/2026-07-09-api-basics)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

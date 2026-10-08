@@ -5,9 +5,11 @@ summary: "从 Midjourney 的公开机制出发，拆解 AI 生图的底层原理
 tags:
   - "AI 生图"
   - "Prompt 工程"
-status: published
+status: archived
 lang: zh
 englishSummary: "How Midjourney actually generates images: not searching a gallery, but sampling from a visual probability space through iterative denoising. Once you see prompts as a way to shrink that space, composition rules, seeds, and stylize all snap into one framework."
+cover: /images/blog/2026-08-23-ai-image-generation-mindset/cover.webp
+coverAlt: 密布细小颗粒的浅色表面渐渐聚成一个柔和图像
 ---
 
 # AI 生图心法从 0 到 1：画面是「采样」出来的，不是「画」出来的

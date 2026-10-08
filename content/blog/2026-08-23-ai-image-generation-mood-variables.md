@@ -5,9 +5,11 @@ summary: "第三章测了「光线」这个单一变量。这一章往上走一�
 tags:
   - "AI 生图"
   - "Prompt 工程"
-status: published
+status: archived
 lang: zh
 englishSummary: "Chapter 4 of the AI image-generation methodology. Lighting (Chapter 3) is a single variable; mood is a compound one — it is not an isolated parameter but the joint effect of lighting, color, and spatial composition rhythm. Breaks down soft / calm / intense / mysterious / relaxed moods into three underlying variables each."
+cover: /images/blog/2026-08-23-ai-image-generation-mood-variables/cover.webp
+coverAlt: 三张卡片以三个角度立着，投下三种形状的柔影
 ---
 
 第三章讲的是「光线」这个**单一变量**——锁死其他所有维度，只换光。

@@ -792,6 +792,24 @@ main {
   box-shadow: var(--shadow-border);
 }
 
+/* ── Article Cover — 详情页封面 ─────────────────────────────────────── */
+
+/* 宽度跟随正文列（≤820px），固定 16:9 + object-fit: cover：无论源图是
+   1:1 还是 3:4，都不会撑破列宽或把首屏顶开。内联 width/height 与
+   aspect-ratio 双保险，避免加载前的高度塌陷（CLS）。无 cover 时该节点
+   根本不渲染，不影响既有排版。 */
+.article-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  margin: var(--space-6) 0 0;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-border);
+  background: var(--surface-soft);
+}
+
 /* ── Markdown Body — article content ────────────────────────────────── */
 
 .markdown-body {
@@ -1794,6 +1812,25 @@ main {
   margin: 0;
 }
 
+/* 列表卡片缩略图：与详情页封面同为 16:9，跟随卡片栅格宽度自适应。
+   只有传了 cover 才渲染这个节点 —— 没有封面的卡片仍是纯文字布局，
+   DOM 里不会多出任何空容器。 */
+.entry-card-blog-cover {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-border);
+  background: var(--surface-soft);
+}
+
+.entry-card-blog-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
 /* ── Weekly Timeline ────────────────────────────────────────────────── */
 
 /* 时间轴的竖脊线。原为 `border-left: 1px solid rgba(0,0,0,0.08)` ——
@@ -2271,18 +2308,18 @@ main {
 
 /* ── Learning Tree ──────────────────────────────────────────────────── */
 
-.entry-card-learning-tree {
+.entry-card-note-fold-tree {
   display: grid;
   gap: 0;
   box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
 }
 
-.entry-card-learning {
+.entry-card-note-fold {
   border-bottom: 1px solid rgba(0,0,0,0.06);
   padding: var(--space-5) 0;
 }
 
-.entry-card-learning-summary {
+.entry-card-note-fold-summary {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -2293,16 +2330,16 @@ main {
   outline: none;
 }
 
-.entry-card-learning-summary::-webkit-details-marker {
+.entry-card-note-fold-summary::-webkit-details-marker {
   display: none;
 }
 
-.entry-card-learning-summary:focus-visible {
+.entry-card-note-fold-summary:focus-visible {
   box-shadow: var(--focus-ring);
   border-radius: var(--radius);
 }
 
-.entry-card-learning-topic {
+.entry-card-note-fold-topic {
   font-size: clamp(20px, 2.4vw, 24px);
   font-weight: 600;
   line-height: 1.25;
@@ -2311,12 +2348,12 @@ main {
   transition: color var(--transition-fast);
 }
 
-.entry-card-learning-summary:hover .entry-card-learning-topic,
-.entry-card-learning-summary:focus-visible .entry-card-learning-topic {
+.entry-card-note-fold-summary:hover .entry-card-note-fold-topic,
+.entry-card-note-fold-summary:focus-visible .entry-card-note-fold-topic {
   color: var(--accent);
 }
 
-.entry-card-learning-count {
+.entry-card-note-fold-count {
   color: var(--muted);
   font-family: "SF Mono", "Fira Code", monospace;
   font-size: 12px;
@@ -2326,7 +2363,7 @@ main {
   text-transform: uppercase;
 }
 
-.entry-card-learning-description {
+.entry-card-note-fold-description {
   margin: var(--space-3) 0 0;
   max-width: 680px;
   color: var(--text-secondary);
@@ -2335,20 +2372,20 @@ main {
   line-height: 1.65;
 }
 
-.entry-card-learning-posts {
+.entry-card-note-fold-posts {
   margin: var(--space-3) 0 0;
   padding-left: var(--space-5);
   display: grid;
   gap: var(--space-2);
 }
 
-.entry-card-learning-post {
+.entry-card-note-fold-post {
   margin: 0;
   display: grid;
   gap: var(--space-1);
 }
 
-.entry-card-learning-post-link {
+.entry-card-note-fold-post-link {
   color: var(--text);
   text-decoration: none;
   font-size: 17px;
@@ -2358,17 +2395,17 @@ main {
   outline: none;
 }
 
-.entry-card-learning-post-link:hover,
-.entry-card-learning-post-link:focus-visible {
+.entry-card-note-fold-post-link:hover,
+.entry-card-note-fold-post-link:focus-visible {
   color: var(--accent);
 }
 
-.entry-card-learning-post-link:focus-visible {
+.entry-card-note-fold-post-link:focus-visible {
   box-shadow: var(--focus-ring);
   border-radius: var(--radius);
 }
 
-.entry-card-learning-post-summary {
+.entry-card-note-fold-post-summary {
   margin: 0;
   color: var(--text-secondary);
   font-size: 14px;
@@ -2376,8 +2413,8 @@ main {
   line-height: 1.6;
 }
 
-/* Per-topic flat article list */
-.entry-card-learning-list {
+/* 集合详情页的笔记列表（原 learning 的 per-topic 平铺列表，三合一后共用） */
+.entry-card-note-list {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -2385,15 +2422,15 @@ main {
   gap: 0;
 }
 
-.entry-card-learning-list-item-wrap {
+.entry-card-note-list-item-wrap {
   border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 
-.entry-card-learning-list-item-wrap:last-child {
+.entry-card-note-list-item-wrap:last-child {
   border-bottom: 0;
 }
 
-.entry-card-learning-list-item {
+.entry-card-note-list-item {
   display: grid;
   gap: var(--space-2);
   padding: var(--space-5) 0;
@@ -2402,12 +2439,12 @@ main {
   outline: none;
 }
 
-.entry-card-learning-list-item:focus-visible {
+.entry-card-note-list-item:focus-visible {
   box-shadow: var(--focus-ring);
   border-radius: var(--radius);
 }
 
-.entry-card-learning-list-title {
+.entry-card-note-list-title {
   margin: 0;
   font-size: clamp(22px, 2.8vw, 28px);
   font-weight: 600;
@@ -2417,18 +2454,26 @@ main {
   transition: color var(--transition-fast);
 }
 
-.entry-card-learning-list-item:hover .entry-card-learning-list-title,
-.entry-card-learning-list-item:focus-visible .entry-card-learning-list-title {
+.entry-card-note-list-item:hover .entry-card-note-list-title,
+.entry-card-note-list-item:focus-visible .entry-card-note-list-title {
   color: var(--accent);
 }
 
-.entry-card-learning-list-summary {
+.entry-card-note-list-summary {
   margin: 0;
   max-width: 720px;
   color: var(--text-secondary);
   font-size: 16px;
   font-weight: 400;
   line-height: 1.65;
+}
+
+.entry-card-note-list-date {
+  color: var(--muted);
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Tags Index & Cloud ─────────────────────────────────────────────── */
@@ -2641,15 +2686,15 @@ main {
   margin: 0;
 }
 
-/* ── Book List ──────────────────────────────────────────────────────── */
+/* ── Notes（内容模块：topic / book / course 三合一） ─────────────────── */
 
-.book-topic-grid {
+.entry-card-note-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--space-5);
 }
 
-.book-card {
+.entry-card-note {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -2660,11 +2705,11 @@ main {
   transition: box-shadow var(--transition-fast);
 }
 
-.book-card:hover {
+.entry-card-note:hover {
   box-shadow: var(--shadow-card);
 }
 
-.book-card-link {
+.entry-card-note-link {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -2672,13 +2717,15 @@ main {
   color: inherit;
 }
 
-.book-card-meta {
+.entry-card-note-meta {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
-  align-items: center;
+  align-items: baseline;
 }
 
-.book-card-genre {
+/* kind 标记：Topic / Book / Course —— 三合一后卡片外观一致，靠它区分来源 */
+.entry-card-note-kind {
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -2686,213 +2733,56 @@ main {
   font-weight: 500;
 }
 
-.book-card-count {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.book-card-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0;
-  color: var(--text);
-}
-
-.book-card-author {
+/* genre（book）/ platform（course）；topic 没有这一行 */
+.entry-card-note-meta-text {
   color: var(--text-secondary);
-  font-size: 14px;
-  margin: 0;
-}
-
-.book-card-summary {
-  font-size: 15px;
-  color: var(--text);
-  margin: var(--space-1) 0 0;
-}
-
-/* book meta block (on book index page) */
-.book-meta-block {
-  color: var(--text-secondary);
-  font-size: 14px;
-  margin-bottom: var(--space-5);
-}
-
-/* ── Book Note List ──────────────────────────────────────────────────── */
-
-.entry-card-book-note-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.entry-card-book-note-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-0);
-  padding: var(--space-3) var(--space-4);
-  text-decoration: none;
-  color: inherit;
-  border-radius: var(--radius);
-  transition: background var(--transition-fast);
-}
-
-.entry-card-book-note-item:hover {
-  background: var(--surface-hover);
-}
-
-.entry-card-book-note-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-  color: var(--text);
-}
-
-.entry-card-book-note-summary {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin: var(--space-0) 0 0;
-}
-
-.entry-card-book-note-date {
-  font-size: 13px;
-  color: var(--muted);
-  margin-top: var(--space-1);
-}
-
-/* ── Course List ──────────────────────────────────────────────────────── */
-
-.course-topic-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--space-5);
-}
-
-.course-card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-5);
-  background: var(--surface);
-  box-shadow: var(--shadow-border);
-  border-radius: var(--radius-card);
-  transition: box-shadow var(--transition-fast);
-}
-
-.course-card:hover {
-  box-shadow: var(--shadow-card);
-}
-
-.course-card-link {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  text-decoration: none;
-  color: inherit;
-}
-
-.course-card-meta {
-  display: flex;
-  gap: var(--space-2);
-  align-items: center;
-}
-
-.course-card-platform {
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   font-size: 12px;
-  font-weight: 500;
 }
 
-.course-card-count {
+.entry-card-note-count {
   color: var(--muted);
   font-size: 13px;
+  margin-left: auto;
 }
 
-.course-card-title {
+.entry-card-note-title {
   font-size: 20px;
   font-weight: 600;
   margin: 0;
   color: var(--text);
 }
 
-.course-card-instructor {
+/* by author（book）/ by instructor（course）；topic 没有这一行 */
+.entry-card-note-byline {
   color: var(--text-secondary);
   font-size: 14px;
   margin: 0;
 }
 
-.course-card-summary {
+.entry-card-note-summary {
   font-size: 15px;
   color: var(--text);
   margin: var(--space-1) 0 0;
 }
 
-/* course meta block (on course index page) */
-.course-meta-block {
+/* 集合详情页的元信息行（作者/流派、平台/讲师、课程链接） */
+.note-meta-block {
   color: var(--text-secondary);
   font-size: 14px;
   margin-bottom: var(--space-5);
 }
 
-.course-meta-block a {
+.note-meta-block a {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-/* course index body - _index.md 正文（课程介绍 + 课时清单） */
-.course-index-body {
+/* 集合 `_index.md` 正文（集合介绍 + 课时/章节清单） */
+.note-index-body {
   margin-bottom: var(--space-6);
 }
 
-/* ── Course Note List ──────────────────────────────────────────────────── */
-
-.entry-card-course-note-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.entry-card-course-note-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-0);
-  padding: var(--space-3) var(--space-4);
-  text-decoration: none;
-  color: inherit;
-  border-radius: var(--radius);
-  transition: background var(--transition-fast);
-}
-
-.entry-card-course-note-item:hover {
-  background: var(--surface-hover);
-}
-
-.entry-card-course-note-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-  color: var(--text);
-}
-
-.entry-card-course-note-summary {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin: var(--space-0) 0 0;
-}
-
-.entry-card-course-note-date {
-  font-size: 13px;
-  color: var(--muted);
-  margin-top: var(--space-1);
-}
 
 /* ── About Page ─────────────────────────────────────────────────────── */
 
@@ -3181,8 +3071,8 @@ main {
     font-size: 22px;
   }
 
-  .entry-card-learning-topic,
-  .entry-card-learning-list-title {
+  .entry-card-note-fold-topic,
+  .entry-card-note-list-title {
     font-size: 20px;
   }
 
@@ -5443,11 +5333,11 @@ body:has(.music-np) .site-footer {
 /* ═══════════════════════════════════════════════════════════════════════
    <details> 折叠展开过渡
 
-   站上有两处原生 <details>（/about 的「经历与求职材料」、/learning 的
-   topic 卡），展开时内容是"跳"出来的。design.md 的 Don'ts 点名了这类场景：
+   站上有两处原生 <details>（/about 的「经历与求职材料」、/notes 里
+   topic 集合的折叠卡），展开时内容是"跳"出来的。design.md 的 Don'ts 点名了这类场景：
    「不要 transition width/height/padding/margin —— 改用 transform: scaleX()
    或 grid-template-rows」，但 <details> 的展开走不通 grid 那条路
-   （entry-card-learning 里是多个直接子元素，得加包裹层改 markup）。
+   （entry-card-note-fold 里是多个直接子元素，得加包裹层改 markup）。
    这里用 ::details-content 这一路：两处都零 markup 改动。
 
    ⚠️ 守卫必须同时罩住两个能力：
@@ -5483,4 +5373,100 @@ body:has(.music-np) .site-footer {
       block-size: auto;
     }
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Projects — work-project 改造（stage / 实现细节）
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.entry-card-project-meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.entry-card-project-stage {
+  color: var(--accent);
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.entry-card-project-details {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ── Project Details（项目页正文下方的「实现细节」文章列表） ────────── */
+
+.project-details {
+  margin-top: var(--space-7);
+}
+
+.project-details h2 {
+  margin: 0 0 var(--space-2);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.project-details-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 序号占第一列、卡片占第二列。entry-card-blog 自带的内边距与分隔线
+   挂在 :first-child / :last-child 上，而这里每张卡都是 <li> 的独子，
+   两个伪类会同时命中（顶距被压小、分隔线被抹掉）—— 因此在本作用域内
+   显式把内边距和分隔线接回来，而不是去改 entry-card-blog 自己那条规则。 */
+.project-details-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.project-details-index {
+  padding-top: calc(var(--space-5) + 2px);
+  color: var(--muted);
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.project-details-item .entry-card-blog {
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.project-details-item:last-child .entry-card-blog {
+  border-bottom: 0;
+}
+
+.project-details-item .entry-card-blog-title {
+  font-size: clamp(18px, 2.2vw, 22px);
+}
+
+/* ── Blog → Project backlink（博客页提示「本项目所属」） ───────────── */
+
+.blog-project-backlink {
+  margin: var(--space-4) 0 0;
+  padding: var(--space-2) var(--space-3);
+  color: var(--text-secondary);
+  background: var(--surface-soft);
+  font-size: 14px;
+  line-height: 1.7;
+  border-radius: var(--radius);
+}
+
+.blog-project-backlink a {
+  color: var(--accent);
+  font-weight: 500;
 }

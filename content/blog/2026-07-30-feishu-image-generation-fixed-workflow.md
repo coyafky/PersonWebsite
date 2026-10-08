@@ -3,12 +3,14 @@ title: "飞书生图固定工作流：接入中转站后的 Hermes 图片生成�
 date: "2026-07-30"
 summary: >-
   在 Hermes Agent 中接入图片中转站后，飞书生图不再是一个"每次让模型临场发挥"的不可靠动作。本文记录了我们将生图流程固化为"消息入口 → 固定 Skill → 中转站 → 校验落盘 → 单一 MEDIA 出口"的完整架构方案，包含模块划分、状态机设计和交付规则。
-status: published
+status: archived
 tags:
   - "Hermes"
   - "飞书"
 lang: zh
 englishSummary: ""
+cover: /images/blog/2026-07-30-feishu-image-generation-fixed-workflow/cover.webp
+coverAlt: 几个小纸块等距排布在一条笔直的蓝线上
 ---
 
 ## 背景：生图不是"调一次 API"那么简单

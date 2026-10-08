@@ -3,12 +3,14 @@ title: "Hermes 多 Profile 复刻：一套跑稳再复制的飞书 Agent 部署�
 date: "2026-07-29"
 summary: >-
   当企业需要在同一台机器上为多个业务线部署独立飞书机器人时，如何在"不串线、不丢事件、不抢端口"的前提下完成快速复制？本文基于 Hermes 多 Profile 实践的完整手册，拆解从飞书应用创建到健康检查验收的全链路架构与关键设计决策。
-status: published
+status: archived
 tags:
   - "Hermes"
   - "飞书"
 lang: zh
 englishSummary: ""
+cover: /images/blog/2026-07-29-hermes-multi-profile-replication/cover.webp
+coverAlt: 一小块纸与右侧三个完全相同的复制块
 ---
 
 ## 问题：一台机器，多个 Agent，如何不打架？

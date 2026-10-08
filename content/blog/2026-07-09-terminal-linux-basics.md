@@ -5,10 +5,12 @@ summary: "那个黑窗口到底是什么？为什么 AI 工具（Claude Code / C
 tags:
   - "zero-to-tech"
   - "AI Agent"
-status: published
+status: archived
 lang: zh
 category: "技术/计算机基础"
 englishSummary: "What is that black window really? Why do AI tools like Claude Code / Codex / Hermes mostly drive the computer through the terminal? This piece explains the terminal, Shell, home directory, 20 most-used commands, VSCode integrated terminal, and Claude Code's most common command-line usage in one go. After reading, you'll understand what AI Agents are actually running, and you can run the basic commands yourself."
+cover: /images/blog/2026-07-09-terminal-linux-basics/cover.webp
+coverAlt: 一排长短不一的哑光纸条等距铺开，其中一张被蓝线贯穿
 ---
 
 # 终端和 Linux 直觉：AI 工具最常用的 20 个指令
@@ -498,5 +500,5 @@ nohup python server.py &    # 退出终端也不停
 - **zero-to-tech / 进程、线程、内存：你的电脑同时在跑多少事**
 - **zero-to-tech / VSCode 进阶：调试器、断点、launch.json**
 
-上一篇：[认识你的电脑：文件、路径、和那个叫 VSCode 的编辑器](/blog/know-your-computer)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[认识你的电脑：文件、路径、和那个叫 VSCode 的编辑器](/blog/2026-07-09-know-your-computer)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

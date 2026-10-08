@@ -5,10 +5,12 @@ summary: "上一篇讲了 ES Modules 和模块化。源码能 import 了，但�
 tags:
   - "zero-to-tech"
   - "工具链"
-status: published
+status: archived
 lang: zh
 category: "技术/前端基础"
 englishSummary: "The previous piece covered ES Modules and modularization. Source can now import — but browsers still can't directly run .ts / .vue / .jsx / Sass. This piece covers the frontend toolchain: why we need build tools, what npm is, the core structure of package.json, using npm install to add dependencies, the essence of npm run scripts, build tool evolution (Grunt → Gulp → webpack → Vite), getting started with Vite, source code vs dist build artifacts, and using Git to manage modern frontend projects."
+cover: /images/blog/2026-07-09-npm-and-vite/cover.webp
+coverAlt: 左侧一堆零碎纸屑被压实成右侧一块致密纸块
 ---
 
 # 现代前端的工具链：npm + Vite + 构建产物（从 npm install 到 dist 目录）
@@ -739,5 +741,5 @@ npm install react@19
 - **zero-to-tech / TypeScript 是什么：为什么新项目 100% 应该用 TypeScript**
 - **zero-to-tech / Docker 是什么：为什么「在我电脑上能跑」会变成「在我容器里能跑」**
 
-上一篇：[现代前端的第一步：模块化与 ES Modules](/blog/js-modules-history)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[现代前端的第一步：模块化与 ES Modules](/blog/2026-07-09-js-modules-history)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

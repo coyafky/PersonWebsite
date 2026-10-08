@@ -1,0 +1,112 @@
+---
+title: "GEOFlow 自动化内容生产线"
+date: "2026-09-24"
+period: "2026-08"
+summary: "把内容生产从「一篇篇手写」改造成一条可复用的流水线：11 张「100 问」选题库当原料、GEOFlow 批量产母版、5 个平台写手 agent 改写、飞书归档闭环。管线的技术部分是成立的；但真实瓶颈不在产能，在原料——公司知识库当时还没建成，产出的内容偏空偏假，不能作为实际参考使用。"
+stage: "管线已跑通 · 等公司知识库工程就位"
+role: "选题库体系设计、管线搭建与踩坑处理、5 个平台改写指南与写手 agent 配置、飞书命名与状态闭环、证据纪律落地"
+stack:
+  - "GEOFlow"
+  - "Hermes 写手 agent"
+  - "飞书多维表格"
+  - "dsh 插件"
+links: {}
+impact:
+  - "把「这个产品能写什么」变成可排序、可筛选、可编程的原料：11 个产品各 100 问，共 1100 个问题，每条带板块、内容分型、主承接平台、优先级与漏斗阶段等元数据"
+  - "搭建原料 → 批量产母版 → 平台改写 → 归档闭环的五步管线，每篇改写稿登记 CT 编号并回写母版状态，任何一篇在哪个环节一眼看得见"
+  - "把「不编造」变成硬约束而非提醒：未核验参数一律标 [待确认]，对比表数字必须来自核对过的母版，绝对化用词进合规自查清单"
+  - "定位并处理四个真实故障：并发撞号（编号 100-105 重叠后从源头重建）、API 请求不能带中文、后台任务被 2 分钟超时杀掉、CT 编号为系统自动分配不可指定"
+resumeBullets:
+  - "Designed a topic-bank system turning product knowledge into programmatically consumable material: 11 topic banks of 100 questions each, with metadata for content type, target platform, priority and funnel stage."
+  - "Built a five-stage content pipeline (topic bank, master-article generation, platform rewrite, naming validation, Feishu archival) with issue-level traceability via content IDs and per-item status write-back."
+  - "Encoded an evidence discipline into every writer agent and rewrite guide: unverified parameters must be tagged as pending, comparison-table numbers must trace to a reviewed master, and absolute phrasing is on a self-check list."
+  - "Diagnosed and resolved four production failures including concurrent ID collisions, non-ASCII API rejection, background-task timeouts, and a system-assigned content ID that made the original logging logic wrong."
+status: published
+featured: true
+englishSummary: "Rebuilding content production as an assembly line: 11 topic banks of 100 questions as raw material, GEOFlow to generate master articles, five platform-specific writer agents for rewriting, and a Feishu archival loop. The transferable part is the method — topic-bank systematisation, pipeline automation and evidence discipline — not the tools. Note that the generated masters are drafts for rewriting, not publishable articles."
+details:
+  - "2026-08-23-geoflow-content-production-pipeline"
+  - "2026-08-23-xiaohongshu-graphic-pipeline"
+  - "2026-08-23-doubao-video-pipeline"
+  - "2026-08-23-douyin-cover-skill"
+---
+
+# GEOFlow 自动化内容生产线
+
+一个人要覆盖知乎、小红书、公众号、什么值得买、汽车之家五个平台，手写的话一周产出三到五篇高质量内容就顶天了。**产量永远卡在写的人手上。**
+
+所以换了个打法：不是多雇几个写手，而是把内容生产本身做成流水线。
+
+## 三件东西同时到位，缺一不可
+
+**选题库系统化 + 自动化管线 + 证据纪律**
+
+前两样决定能产多快，第三样决定产出来的东西能不能用。**证据纪律最容易被忽视，也最致命。**
+
+## 业务问题
+
+- **选题是散的**：今天想到一个写一篇，明天又一个，没有一张「这个产品到底能写什么」的总图，覆盖不了用户真正在搜的问题
+- **品质靠人肉**：一个人写，质量取决于当天状态；一旦上量，编造数据、绝对化用词（最 / 第一 / 百分百）、前后矛盾就会冒出来，因为这些全靠「人记得检查」
+
+## 流水线四层
+
+| 层 | 做什么 | 关键数字 |
+|---|---|---|
+| 原料 | 「100 问」选题库，每问带元数据 | 11 个产品 × 100 问 = 1100 个问题 |
+| 引擎 | GEOFlow 批量产母版（对比表 / FAQ / 一句话结论） | 单篇母版约 3500 字 |
+| 分发 | 5 个平台写手 agent 改写 + 命名校验 | MMDD-平台-主题-V1 |
+| 闭环 | 上传飞书、登记 CT 编号、回写母版状态 | 待改写 → 已改写 |
+
+## 我的角色
+
+- **我做的**：选题库体系与元数据设计、管线搭建、四个故障的定位与处理、5 个平台改写指南、飞书命名与状态闭环、证据纪律落地
+- **现成工具**：GEOFlow 是外部内容生成平台，不是我写的
+- **需要补写**：这套东西的分工（哪些环节由 AI 完成、有没有同事参与）目前没有交代
+
+## 关键设计决策
+
+### 1. 选题库的价值不在「列了 100 个问题」，在「每个问题都带可被程序消费的元数据」
+
+每条问题配六到七列标签：板块、内容分型（视频 / 图文 / 文章）、主承接平台、优先级、漏斗阶段（TOFU / MOFU / BOFU）、理由玩法。
+
+没有元数据的选题库只是换个格式的记录；**有了元数据，它就是整条流水线的工艺图纸**——后面的工序全在消费这张表。
+
+### 2. 板块先试点再批量
+
+每个新产品都先跑板块 01 的 10 篇验证通顺，再放心批量跑剩下 90 篇。这条经验省了很多次返工。
+
+### 3. 把「不编造」写成硬约束，而不是提醒
+
+内容一上量，最大风险是编数据——而且恰恰出现在对比表、FAQ 这些**最容易被 AI 搜索引擎引用**的位置，等于在入口上自毁权威。所以这条纪律写进每个写手 agent 和每份改写指南：
+
+- 已核验的才写，未核验的参数标 `[待确认]`，宁缺毋假
+- 不编造价格、参数、榜单，对比表数字必须来自核对过的母版
+- 合规自查是动作不是口号：绝对化用词不出现、平台内部标记不外带
+
+⚠️ **但这套纪律目前靠「写进指南」执行，还没有「违规会被自动拦下」的机制**——这是下一步要补的。
+
+## 已知局限与未验证
+
+这一节直接决定这个项目现在经不经得起追问。
+
+### 🔴 最根本的一条：原料不成立，内容不能当参考用
+
+**公司知识库工程目前仍在建设中**（就是前面那个更大的工程，不只是 1188 篇产品目录），母版的素材来源是零散、不完整的。所以这批内容**偏空、偏假，不能作为实际参考使用**——用站主的话说：**在知识库搭建起来之前，这条线不会有准确、良好的效果。**
+
+⚠️ 这也意味着：**GEOFlow 的瓶颈和「知识库接进助理」那个项目是同一个。** 两个项目的正确下一步都不是各自继续调优，而是等（或参与）知识库工程就位。
+
+这个项目的真实状态因此要重新表述：**验证的是「管线能不能跑通」，不是「内容能不能用」。管线是通的，内容不是。**
+
+而且这正是它最有价值的部分——我一开始以为瓶颈在「写」，把自动化做完才发现瓶颈在「知道」。**没有可信的原料，再快的流水线也只是在生产不可信的东西。** 所以正确的下一步不是继续堆产量，而是先把知识库建起来。
+
+### 其余未验证项
+
+- 🔴 **母版不是成品**：流水线自己定义的母版是给改写用的**半成品，不能直接当成品发**。所以口径必须是「700+ 篇母版草稿」，不是「700 篇文章」（原博客标题相关表述已修正）
+- 🔴 **三个量被混成一个**：生成量、人工审核通过量、实际发布量没有分开统计。飞书母版库的状态列本来就在追踪，查一下就能拆开
+- ❌ **「高质量」没有判据**：合规自查清单有了，但**自查通过率没有数据**；结合原料问题，这个说法已从原文移除
+- ❌ **人工审核工时完全没记**：所以「省了多少时间」目前无法回答
+- ❌ 原文结尾「AI 就能替你干 90% 的重复活」中的 **90% 没有测量支撑**，已改掉
+
+## 实现细节
+
+下面四篇分别是：母版生产线的完整搭建与四个故障的排查过程、小红书图文管线的改写规格、视频脚本到分镜的管线、以及封面交付技能的设计约束。

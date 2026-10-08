@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
-import { getBlogPosts, getWeeklyPosts } from "@/lib/content";
-import type { BlogPost, WeeklyPost } from "@/lib/content/schemas";
+import { getBlogPosts } from "@/lib/content";
 import { buildUrl } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
@@ -52,10 +51,8 @@ function buildItem(item: FeedItem): string {
 }
 
 async function getFeedItems(baseUrl: string): Promise<{ items: FeedItem[]; latestPub: string }> {
-  const [blog, weekly] = await Promise.all([
-    getBlogPosts(),
-    getWeeklyPosts(),
-  ]);
+  // Diary 与 Weekly 已下架（内容归档），feed 只发 blog。
+  const blog = await getBlogPosts();
 
   const feedItems: FeedItem[] = [];
   let latestPub: string | null = null;
@@ -66,18 +63,6 @@ async function getFeedItems(baseUrl: string): Promise<{ items: FeedItem[]; lates
     feedItems.push({
       title: post.title,
       link: buildUrl(`/blog/${post.slug}`),
-      pubDate,
-      description: post.summary,
-      categories: post.tags,
-    });
-  }
-
-  for (const post of weekly) {
-    const pubDate = toRfc822(post.date);
-    if (latestPub === null || pubDate > latestPub) latestPub = pubDate;
-    feedItems.push({
-      title: `[Weekly] ${post.title}`,
-      link: buildUrl(`/weekly/${post.slug}`),
       pubDate,
       description: post.summary,
       categories: post.tags,
@@ -108,7 +93,7 @@ export async function GET() {
     `    <title>${escapeXml("Coya's Site")}</title>\n` +
     `    <link>${baseUrl}</link>\n` +
     `    <atom:link href="${feedUrl}" rel="self" type="application/rss+xml" />\n` +
-    `    <description>Writing, weekly notes, projects, and career material.</description>\n` +
+    `    <description>Writing on engineering, AI, and craft.</description>\n` +
     `    <language>zh-CN</language>\n` +
     `    <lastBuildDate>${latestPub}</lastBuildDate>\n` +
     items.map(buildItem).join("\n") +

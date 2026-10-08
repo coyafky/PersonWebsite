@@ -32,6 +32,8 @@ export default async function BlogPage({
             summary={post.summary}
             date={post.date}
             tags={post.tags}
+            cover={post.cover}
+            coverAlt={post.coverAlt}
           />
         ))}
       </CollectionList>

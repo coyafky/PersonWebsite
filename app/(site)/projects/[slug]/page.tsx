@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MdxContent } from "@/components/mdx-content";
 import { ArticleLayout } from "@/components/article-layout";
-import { getContentBySlug, getProjectPosts } from "@/lib/content";
+import { ProjectDetails } from "@/components/project-details";
+import {
+  getContentBySlug,
+  getProjectDetailPosts,
+  getProjectPosts,
+} from "@/lib/content";
 import { extractHeadings } from "@/lib/content/headings";
 import { articleMetadata, buildUrl } from "@/lib/metadata";
 import { readingTimeLabel } from "@/lib/reading-time";
@@ -44,6 +49,7 @@ export default async function ProjectDetailPage({ params }: SlugPageProps) {
 
   const headings = extractHeadings(project.body);
   const url = buildUrl(`/projects/${project.slug}`);
+  const detailPosts = await getProjectDetailPosts(project);
 
   let seriesPrev = null;
   let seriesNext = null;
@@ -69,7 +75,7 @@ export default async function ProjectDetailPage({ params }: SlugPageProps) {
       />
       <article className="article-shell">
         <header className="article-header">
-          <span>{project.stack.join(" / ")} · <span className="reading-time">{readingTimeLabel(project.body)}</span></span>
+          <span>{project.stack.join(" / ")} · <span className="reading-time">{readingTimeLabel(project.body)}</span>{project.stage ? ` · ${project.stage}` : null}</span>
           <h1>{project.title}</h1>
           <p>{project.summary}</p>
           {project.englishSummary ? <p className="english-summary">{project.englishSummary}</p> : null}
@@ -89,6 +95,7 @@ export default async function ProjectDetailPage({ params }: SlugPageProps) {
           </div>
         </section>
         <MdxContent source={project.body} />
+        <ProjectDetails posts={detailPosts} />
         <SeriesNav series={project.series ?? ""} prev={seriesPrev} next={seriesNext} />
         <section className="resume-block">
           <h2>Resume Bullets</h2>

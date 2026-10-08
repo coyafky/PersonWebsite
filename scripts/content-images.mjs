@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import { constants as fsConstants } from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { pathToFileURL } from "node:url";
 import matter from "gray-matter";
 
 const IMAGE_EXTENSIONS = new Set([
@@ -135,6 +136,81 @@ function normalizePublicUrl(src) {
   return path.posix.normalize(decodeURIComponent(withoutQuery));
 }
 
+/**
+ * 校验 frontmatter 里的封面引用（`cover` / `coverAlt`）。
+ *
+ * **纯函数**：只做字符串判定，不碰文件系统 —— 因此可以直接被
+ * lib/content 下的单元测试调用（见 lib/content/cover.test.ts）。
+ * 「文件是否真实存在」「是否超过 3 MB」由调用方在拿到 publicUrl 后补验，
+ * 与正文图片走同一条路径（这里给不出，因为那两步需要磁盘）。
+ *
+ * 规则与正文图片一致：
+ *   · 必须是根相对路径（拒绝 http(s) / data: / blob: 等远程或内嵌地址）；
+ *   · 必须落在文章自己的托管目录 `/images/blog/<slug>/`（封面是新字段，一律要求托管）；
+ *   · 扩展名必须在白名单内；
+ *   · 有 cover 就必须有非空 coverAlt。
+ *
+ * @param {object} input
+ * @param {unknown} input.cover           frontmatter.cover 原值
+ * @param {unknown} input.coverAlt        frontmatter.coverAlt 原值
+ * @param {string}  input.expectedPrefix  该文章的托管目录，形如 `/images/blog/<slug>/`
+ * @param {string}  input.location        报错前缀，形如 `content/blog/foo.md`
+ * @returns {{ publicUrl: string | null, errors: string[], warnings: string[] }}
+ */
+export function validateCoverReference({ cover, coverAlt, expectedPrefix, location }) {
+  const errors = [];
+  const warnings = [];
+  const hasCoverAlt = typeof coverAlt === "string" && coverAlt.trim() !== "";
+
+  // 没写 cover：什么都没有就静默通过；只写了 coverAlt 多半是笔误，给 warning。
+  if (cover === undefined || cover === null || cover === "") {
+    if (hasCoverAlt) {
+      warnings.push(`${location} declares coverAlt without a cover; it will be ignored`);
+    }
+    return { publicUrl: null, errors, warnings };
+  }
+
+  if (typeof cover !== "string") {
+    errors.push(`${location} cover must be a string path (got ${typeof cover})`);
+    return { publicUrl: null, errors, warnings };
+  }
+
+  const src = cover.trim();
+
+  if (!hasCoverAlt) {
+    errors.push(`${location} cover is missing useful coverAlt text (${src})`);
+  }
+
+  if (isRemoteOrEmbedded(src)) {
+    errors.push(`${location} cover must be a managed local asset, not a remote or embedded URL (${src})`);
+    return { publicUrl: null, errors, warnings };
+  }
+
+  let publicUrl;
+  try {
+    publicUrl = normalizePublicUrl(src);
+  } catch {
+    errors.push(`${location} contains an invalid URL-encoded cover path (${src})`);
+    return { publicUrl: null, errors, warnings };
+  }
+
+  if (!publicUrl) {
+    errors.push(`${location} cover must use a root-relative ${expectedPrefix}... path (${src})`);
+    return { publicUrl: null, errors, warnings };
+  }
+
+  if (!publicUrl.startsWith(expectedPrefix)) {
+    errors.push(`${location} cover must keep this post's image under ${expectedPrefix} (${src})`);
+  }
+
+  const extension = path.posix.extname(publicUrl).toLowerCase();
+  if (!IMAGE_EXTENSIONS.has(extension)) {
+    errors.push(`${location} cover uses an unsupported image extension (${src})`);
+  }
+
+  return { publicUrl, errors, warnings };
+}
+
 async function readBlogPosts(projectRoot) {
   const contentRoot = path.join(projectRoot, "content", "blog");
   const entries = await fs.readdir(contentRoot, { withFileTypes: true });
@@ -153,6 +229,9 @@ async function readBlogPosts(projectRoot) {
       : raw.slice(0, bodyStart).split("\n").length - 1;
     posts.push({
       body: parsed.content,
+      // frontmatter 封面：原样传出（可能是非字符串），交给 validateCoverReference 判定
+      cover: parsed.data?.cover,
+      coverAlt: parsed.data?.coverAlt,
       filePath,
       lineOffset,
       relativePath: path.relative(projectRoot, filePath),
@@ -193,10 +272,38 @@ async function checkImages(projectRoot) {
   const errors = [];
   const warnings = [];
   let referenceCount = 0;
+  let coverCount = 0;
 
   for (const post of posts) {
     const references = extractImageReferences(post.body);
     referenceCount += references.length;
+
+    // frontmatter 封面：与正文图片共用同一套「受管理引用」登记 —— 不登记的话
+    // public/images/blog/<slug>/cover.webp 会被下面的 unused managed image 误报。
+    if (post.cover !== undefined || post.coverAlt !== undefined) {
+      const expectedPrefix = `/images/blog/${post.slug}/`;
+      const location = `${post.relativePath} (frontmatter cover)`;
+      const coverResult = validateCoverReference({
+        cover: post.cover,
+        coverAlt: post.coverAlt,
+        expectedPrefix,
+        location,
+      });
+
+      errors.push(...coverResult.errors);
+      warnings.push(...coverResult.warnings);
+
+      if (coverResult.publicUrl) {
+        coverCount += 1;
+        const assetPath = path.resolve(publicRoot, `.${coverResult.publicUrl}`);
+        const insidePublicRoot = assetPath.startsWith(`${publicRoot}${path.sep}`);
+        if (!insidePublicRoot || !(await isFile(assetPath))) {
+          errors.push(`${location} references a missing public asset (${coverResult.publicUrl})`);
+        } else {
+          referencedManagedAssets.add(assetPath);
+        }
+      }
+    }
 
     for (const reference of references) {
       const location = `${post.relativePath}:${reference.line + post.lineOffset}`;
@@ -265,7 +372,7 @@ async function checkImages(projectRoot) {
   for (const warning of warnings) console.warn(`WARN  ${warning}`);
 
   console.log(
-    `Checked ${posts.length} blog posts, ${referenceCount} image references, and ${managedAssets.length} managed assets: ${errors.length} error(s), ${warnings.length} warning(s).`,
+    `Checked ${posts.length} blog posts, ${referenceCount} body image references, ${coverCount} covers, and ${managedAssets.length} managed assets: ${errors.length} error(s), ${warnings.length} warning(s).`,
   );
 
   return errors.length === 0;
@@ -354,7 +461,17 @@ async function main() {
   if (command && command !== "help" && command !== "--help") process.exitCode = 1;
 }
 
-main().catch((error) => {
-  console.error(`ERROR ${error instanceof Error ? error.message : String(error)}`);
-  process.exitCode = 1;
-});
+// 仅在被当作 CLI 直接执行时跑 main()。这样 lib/content 的单元测试可以
+// `import { validateCoverReference } from "../../scripts/content-images.mjs"`
+// 而不触发一次真实的检查（否则测试进程会被塞进 process.argv 的杂项参数、
+// 打印 usage 并把 exitCode 置 1）。
+const isEntryPoint =
+  typeof process.argv[1] === "string" &&
+  import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
+
+if (isEntryPoint) {
+  main().catch((error) => {
+    console.error(`ERROR ${error instanceof Error ? error.message : String(error)}`);
+    process.exitCode = 1;
+  });
+}

@@ -6,6 +6,10 @@ type EntryCardBlogProps = {
   summary: string;
   date: string;
   tags?: string[];
+  /** 可选封面图（根相对路径）。不传时卡片保持纯文字布局，不多渲染任何节点。 */
+  cover?: string;
+  /** 封面替代文本。有 cover 时检查器要求非空。 */
+  coverAlt?: string;
 };
 
 /**
@@ -19,10 +23,26 @@ export function EntryCardBlog({
   summary,
   date,
   tags = [],
+  cover,
+  coverAlt,
 }: EntryCardBlogProps) {
   return (
     <article className="entry-card-blog">
       <Link href={href} className="entry-card-blog-link">
+        {cover ? (
+          <div className="entry-card-blog-cover">
+            {/* 缩略图 lazy 加载；16:9 比例由 CSS aspect-ratio 固定 */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={cover}
+              alt={coverAlt ?? ""}
+              width={640}
+              height={360}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        ) : null}
         <header className="entry-card-blog-header">
           <time className="entry-card-blog-date" dateTime={date}>
             {date}

@@ -5,9 +5,11 @@ summary: "景别管远近、机位管高低，而镜头管的是「空间如何�
 tags:
   - "AI 生图"
   - "Prompt 工程"
-status: published
+status: archived
 lang: zh
 englishSummary: "Chapter 10 of the AI image-generation methodology. Shot type controls distance, camera angle controls height, and lens controls how space is rendered — whether the frame distorts, the background stretches or compresses, or details are magnified. Breaks down normal, wide-angle, telephoto, and macro lenses, with full reusable prompt templates."
+cover: /images/blog/2026-08-23-ai-image-generation-lens/cover.webp
+coverAlt: 印着细网格的纸面被弯折拉伸成柔和的弧形
 ---
 
 前面三章讲了画幅比例、景别、机位，这一章是构图变量的第四个模块——**镜头（Lens / Lens Feel）**。

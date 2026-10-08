@@ -19,6 +19,19 @@ npm run typecheck
 
 TODO: Describe data flow and service ownership.
 
+## Content Standards
+
+All Chinese content under `content/` must follow `docs/agent/content-style-guide.md`.
+It is the single authoritative writing spec for this project, based on
+[ruanyf/document-style-guide](https://github.com/ruanyf/document-style-guide) (public domain).
+
+- Read it before writing blog / weekly / projects / course-list / book-list / learning / diary / career content.
+- It also defines the figure policy: when to insert a diagram, and which tier to use
+  (mermaid / HTML-to-PNG / AI image generation).
+- Gates before publishing: `npm run typecheck`, `npm run lint`, `npm run test`,
+  `npm run content:audit`. Adding images also requires `npm run images:check`
+  (already wired into `prebuild`).
+
 ## Security Baseline
 
 - Validate all input server-side

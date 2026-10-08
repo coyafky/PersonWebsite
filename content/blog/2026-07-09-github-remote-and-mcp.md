@@ -5,10 +5,12 @@ summary: "上一篇讲了 Git 本地操作和 Worktree。这一篇把视线移�
 tags:
   - "zero-to-tech"
   - "AI Agent"
-status: published
+status: archived
 lang: zh
 category: "技术/计算机基础"
 englishSummary: "The previous piece covered Git locally and Worktree. This one moves beyond Git to GitHub — the world's largest code hosting platform. Covers: what open source is, how to create a GitHub repo, how to set up SSH keys, how to push a local repo to GitHub, how to use GitHub CLI (gh) to replace the web UI in the terminal, and how the GitHub MCP service lets Claude Code read issues and create PRs directly."
+cover: /images/blog/2026-07-09-github-remote-and-mcp/cover.webp
+coverAlt: 左右两摞一模一样的纸堆，被一条细蓝线连接
 ---
 
 # GitHub 和远程同步：从本地仓库到开源世界，以及 AI Agent 怎么直接操作 GitHub
@@ -573,5 +575,5 @@ GitHub MCP 拿到了你的 PAT，理论上能**做你 GitHub 账号能做的一�
 - **zero-to-tech / VSCode 进阶：调试器、断点、launch.json**
 - **zero-to-tech / Docker 是什么：为什么「在我电脑上能跑」会变成「在我容器里能跑」**
 
-上一篇：[Git 和版本管理：你的代码时光机，以及它和 Claude Code 的联动](/blog/git-version-control)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[Git 和版本管理：你的代码时光机，以及它和 Claude Code 的联动](/blog/2026-07-09-git-version-control)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

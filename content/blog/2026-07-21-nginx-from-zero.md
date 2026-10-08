@@ -5,10 +5,12 @@ summary: "Nginx 是全球 top 百万网站里超过 30% 在用的 Web 服务器�
 tags:
   - "zero-to-tech"
   - "部署"
-status: published
+status: archived
 lang: zh
 category: "技术/计算机基础"
 englishSummary: "Nginx powers over 30% of the world's top million websites as a web server and reverse proxy. But its config files look cryptic to newcomers. This piece builds a mental model using a 'mailroom' analogy, then progresses through 3 minimal configs (static files / reverse proxy / SPA fallback), dives deep into location matching rules, and covers production patterns like load balancing, rate limiting, Gzip, and log debugging. After reading, you'll be able to write a complete Nginx config yourself."
+cover: /images/blog/2026-07-21-nginx-from-zero/cover.webp
+coverAlt: 左侧是布满杂乱折痕的纸，与右侧平整的纸形成对照
 ---
 
 # Nginx从0-1：从看懂配置到自己写配置
@@ -656,5 +658,5 @@ curl -v http://localhost/api/users     # 看完整请求-响应过程
 - **zero-to-tech / Docker 是什么：为什么「在我电脑上能跑」会变成「在我容器里能跑」**
 - **zero-to-tech / Git 进阶：rebase / stash / cherry-pick 什么时候用**
 
-上一篇：[Next.js 个人网站从0到1部署：7个真实踩坑全记录](/blog/nextjs-deploy-pitfalls)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[Next.js 个人网站从0到1部署：7个真实踩坑全记录](/blog/2026-07-21-nextjs-deploy-pitfalls)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

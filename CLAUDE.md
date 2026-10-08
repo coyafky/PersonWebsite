@@ -35,10 +35,10 @@ PersonalWebsite/
 │   └── (site)/                 # 主站点路由组
 │       ├── page.tsx            # 首页
 │       ├── blog/               # 博客列表 + 详情
-│       ├── weekly/             # 周记列表 + 详情
-│       ├── learning/           # 学习笔记（按主题分组）
-│       │   ├── page.tsx        # 栏目首页（所有主题）
-│       │   └── [topic]/        # 主题首页 + 文章详情
+│       ├── notes/              # 统一笔记（主题/读书/课程）
+│       │   ├── page.tsx        # 集合总览（15 个集合）
+│       │   └── [collection]/   # 集合首页 + 笔记详情
+│       ├── diary/ weekly/      # ⚠️ 已下架：仅剩 308 → /blog 的重定向桩
 │       ├── projects/           # 项目列表 + 详情
 │       ├── career/             # 求职材料
 │       └── about/              # 关于页
@@ -55,16 +55,16 @@ PersonalWebsite/
 │
 ├── content/                    # 内容层（Markdown/MDX 源文件）
 │   ├── blog/                   # 博客文章（.md）
-│   ├── weekly/                 # 周记（.md + .mdx）
-│   ├── learning/               # 学习笔记（按主题分组）
-│   │   └── <topic>/            # 每个主题一个子目录
-│   │       ├── _index.md       # 主题介绍（status: published 才会被列出）
-│   │       └── *.md            # 主题文章
+│   ├── notes/                  # 统一笔记：topic（主题）/ book（读书）/ course（课程）
+│   │   └── <kind>/<collection>/  # 每个集合一个子目录
+│   │       ├── _index.md       # 集合介绍（status: published 才会被列出）
+│   │       └── *.md            # 笔记
+│   ├── diary/ weekly/          # ⚠️ 已下架（内容归档，路由 308 → /blog）
 │   ├── projects/               # 项目档案（.mdx）← 需要嵌入组件时用 MDX
 │   ├── career/                 # 求职材料（.md）
 │   └── inbox/                  # 素材入口（碎片丢这里 → Hermes 整理）
 │       ├── ideas/              # 灵感 → blog
-│       ├── logs/               # 每日记录 → weekly
+│       ├── logs/               # 每日记录（原 → weekly，该模块已下架）
 │       ├── project-notes/      # 项目笔记 → projects
 │       └── career-notes/       # 求职素材 → career
 │
@@ -77,7 +77,7 @@ PersonalWebsite/
 ├── docs/agent/                 # Hermes 协作文档
 │   ├── hermes-content-workflow.md     # Hermes 内容工作流契约
 │   ├── inbox-to-content-workflow.md   # 四条转化链路
-│   ├── content-style-guide.md         # 写作风格规范
+│   ├── content-style-guide.md         # 内容写作规范（权威：阮一峰规范 + 图例判断逻辑）
 │   ├── weekly-template.md             # 周记模板
 │   ├── project-template.md            # 项目模板
 │   └── hermes-usage-guide.md          # Coya 使用指南
@@ -109,6 +109,7 @@ PersonalWebsite/
 - **样式**：全局 CSS + 语义 className，不引入 Tailwind 或 CSS-in-JS（除非讨论决定）
 - **MDX 组件**：新增的 MDX 可用组件必须在 `components/mdx-content.tsx` 的 `components` 对象中注册
 - **内容格式**：所有内容文件 frontmatter 必须包含 `title` `date` `summary` `tags` `status` `englishSummary`
+- **中文内容写作规范**：写任何面向站点的中文内容（blog/notes/projects/gallery/career）前，先读 [`docs/agent/content-style-guide.md`](docs/agent/content-style-guide.md)。它以阮一峰《中文技术文档的写作规范》为上游标准，并规定图表使用（mermaid / HTML 转 PNG / AI 生图的选档与判断逻辑）。该文件是**唯一权威**
 
 ---
 
@@ -128,16 +129,19 @@ PersonalWebsite/
 
 ---
 
-## Learning 栏目
+## Notes 栏目
 
-按主题（topic）组织的学习笔记，与 blog 区分：blog 写观点，learning 记结构化学习。
+统一笔记模块（与 blog 区分：blog 写观点，notes 记结构化学习）。三种来源共用一个实现：
 
-- 路由：`/learning/<topic>/<slug>` 扩展到任意主题无代码改动
-- 内容目录：`content/learning/<topic>/`，每个主题下有 `_index.md`（主题介绍）+ `*.md`（文章）
+- `kind` = `topic`（主题学习）/ `book`（读书笔记）/ `course`（课程笔记）
+- 路由：`/notes/<collection>` + `/notes/<collection>/<slug>`（扁平 URL，不带 kind）
+- 内容目录：`content/notes/<kind>/<collection>/`，每个集合下有 `_index.md`（集合介绍）+ `*.md`（笔记）
 - 文件名约定：以 `_` 开头的文件被识别为索引页，不出现在文章列表
+- 索引页正文也会作为 MDX 渲染 → **正文里不能再出现 `#` 一级标题**（页面已渲染 `<h1>{title}</h1>`），也不要用 HTML 注释（MDX 只认 `{/* */}`）
 - 文章 frontmatter 默认 `status: draft`，owner 改 `published` 后才会公开
-- reader 函数：`getLearningTopics` / `getLearningTopicIndex` / `getLearningPosts` / `getLearningPostBySlug`
-- 加新主题只需：建子目录 + 写 `_index.md` + 写文章，无需改代码
+- reader 函数：`getNoteCollections` / `findNoteCollection` / `getNoteCollectionIndex` / `getNoteCollectionNotes` / `getNoteBySlug`
+- 加新集合只需：建子目录 + 写 `_index.md` + 写笔记，无需改代码
+- 旧路由 `/learning`、`/book-list`、`/course-list` 已 308 永久重定向到 `/notes`
 
 ---
 

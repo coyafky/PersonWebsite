@@ -5,10 +5,12 @@ summary: "打开浏览器、输入网址、回车，页面就出现了——但�
 tags:
   - "zero-to-tech"
   - "HTTP"
-status: published
+status: archived
 lang: zh
 category: "技术/网络基础"
 englishSummary: "You type a URL and a page appears. But what actually happens? This piece breaks down the 6 key stages of a web request — DNS resolution, TCP three-way handshake, TLS handshake, HTTP request/response, browser rendering — into a complete mental model for beginners."
+cover: /images/blog/2026-07-09-how-network-work/cover.webp
+coverAlt: 一排小纸块像珠子一样串在一条细线上
 ---
 
 # 网络是怎么工作的：从浏览器输入网址，到页面出现在你眼前

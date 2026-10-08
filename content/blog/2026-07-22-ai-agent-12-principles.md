@@ -5,10 +5,12 @@ summary: "AI Agent 的 12 个核心原理，自下而上逐层拆解：从最底
 tags:
   - "zero-to-tech"
   - "AI Agent"
-status: published
+status: archived
 lang: zh
 category: "技术/AI"
 englishSummary: "The 12 core principles of AI agents, organized bottom-up: from the foundational messages array (the LLM's working memory), context window (scarce resource management), and system prompt (role definition), through mid-level techniques like Chain of Thought, few-shot prompting, prefilling, stop sequences, Tool Use, RAG, and ReAct, to high-level concerns like hallucination mitigation and multi-agent orchestration. Each principle answers: what it is, why you need it, and how to use it correctly."
+cover: /images/blog/2026-07-22-ai-agent-12-principles/cover.webp
+coverAlt: 十二枚相同的空白纸片排成一个等距圆环
 ---
 
 # AI Agent的12个核心原理：从消息数组到多Agent编排
@@ -687,5 +689,5 @@ Agent  Agent Agent    Agent
 - **zero-to-tech / Docker 是什么：为什么"在我电脑上能跑"会变成"在我容器里能跑"**
 - **zero-to-tech / Git 进阶：rebase / stash / cherry-pick 什么时候用**
 
-上一篇：[Nginx从0-1：从看懂配置到自己写配置](/blog/nginx-from-zero)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[Nginx从0-1：从看懂配置到自己写配置](/blog/2026-07-21-nginx-from-zero)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

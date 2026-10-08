@@ -30,3 +30,9 @@ bun.lockb
 
 # playwright-cli 浏览器会话产物（console 日志 + yml 快照），非交付内容
 .playwright-cli/
+
+# 私人素材工作区（勿入库）：Obsidian 同步落点 + Hermes 每日写日志的地方。
+# 它是内容管线的**输入侧**，不是站点内容 —— 零 frontmatter、零路由、reader.ts 不扫它。
+# 日志里含公司实体名、第三方项目名、内部决策，不该进公共仓库。
+# 目录与内容保留在磁盘上，Hermes / cron 照常读写；只是不进版本控制。
+content/inbox/

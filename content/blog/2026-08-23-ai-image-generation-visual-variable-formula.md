@@ -5,9 +5,11 @@ summary: "第一章讲了 Midjourney 的底层原理——生图是在「视觉�
 tags:
   - "AI 生图"
   - "Prompt 工程"
-status: published
+status: archived
 lang: zh
 englishSummary: "Chapter 2 of the AI image-generation methodology. Chapter 1 explained why generation is sampling from a visual probability space. This chapter answers what to do about it: Google's visual-variable formula — Subject, Action, Scene, Style, Composition — the exact axes along which you shrink that space."
+cover: /images/blog/2026-08-23-ai-image-generation-visual-variable-formula/cover.webp
+coverAlt: 一张带利落折线的空白规格纸平铺，旁边放着单个小物件
 ---
 
 第一章讲了一个底层原理：**AI 生图不是「画」出来的，是在「视觉概率空间」里采样出来的**，而 Prompt 的本质，是不断收缩这个空间。

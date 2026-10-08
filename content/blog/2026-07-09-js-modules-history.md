@@ -5,10 +5,12 @@ summary: "为什么 JavaScript 一开始没有模块系统？为什么一段 `<s
 tags:
   - "zero-to-tech"
   - "JavaScript"
-status: published
+status: archived
 lang: zh
 category: "技术/前端基础"
 englishSummary: "Why did JavaScript originally have no module system? Why did renaming a variable in one `<script>` break the whole site? This piece traces the evolution from IIFE, CommonJS, AMD/UMD to ES Modules (import / export) — explaining the full ES Modules syntax, the essential differences from CommonJS, why tree shaking is the biggest win ESM brings, and how module resolution actually works."
+cover: /images/blog/2026-07-09-js-modules-history/cover.webp
+coverAlt: 一大张纸被裁成若干尺寸相同的矩形，切口干净
 ---
 
 # 现代前端的第一步：模块化与 ES Modules（从 IIFE 到 import / export）
@@ -677,5 +679,5 @@ import * as UserAPI from '@/api/user';
 - **zero-to-tech / 进程、线程、内存：你的电脑同时在跑多少事**
 - **zero-to-tech / Docker 是什么：为什么「在我电脑上能跑」会变成「在我容器里能跑」**
 
-上一篇：[服务器部署和 Nginx 配置：从本地代码到线上服务](/blog/server-deploy-and-nginx)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[服务器部署和 Nginx 配置：从本地代码到线上服务](/blog/2026-07-09-server-deploy-and-nginx)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

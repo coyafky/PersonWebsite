@@ -5,9 +5,11 @@ summary: "深入解析 ymyy-sales-agent profile 中 ark-seedream-car-preview ski
 tags:
   - "车膜"
   - "Hermes"
-status: published
+status: archived
 lang: zh
 englishSummary: "Technical deep-dive into the ark-seedream-car-preview skill: color asset library, multi-provider chain failover, strict aspect ratio validation, and modular Python architecture. Documents current known issues and resolution directions."
+cover: /images/blog/2026-06-12-color-rendering-ark-seedream/cover.webp
+coverAlt: 不同色调的空白色卡呈扇形展开，其中一张带蓝条
 ---
 
 # 怎么让车辆渲染到我们合适的色卡中？

@@ -1,5 +1,5 @@
 ---
-title: "从零到发布：我用 OpenClaw 做了一个 YouTube 阅读理解生成器"
+title: "我用 OpenClaw 做了一个 YouTube 阅读理解生成器"
 date: "2026-03-21"
 updated: "2026-03-21"
 summary: "朋友是初中英语老师，每周花 2-3 小时出阅读理解题，最痛苦的是出题环节——一个合理的干扰项能卡半小时。本文记录一个 OpenClaw 技能从需求分析（500-600 词 / CEFR A2-B1 / 5 道中国考试风格题）→ 技术选型（OpenClaw Skill vs Python vs Web）→ 7 张 Mermaid 流程图架构 → 3 个难点（词数控制、题目质量、难度控制）→ 小红书发布计划的完整开发故事。效率提升 24 倍。"
@@ -8,10 +8,9 @@ tags:
 status: published
 lang: zh
 englishSummary: "Full development story of a YouTube-to-reading-comprehension OpenClaw skill: from a middle school English teacher's weekly pain (2-3 hours to design questions), through architecture (7 Mermaid diagrams), three hard problems (word count control, question quality, difficulty calibration), to a 24x efficiency win and Xiaohongshu launch plan."
+cover: /images/blog/2026-03-21-openclaw-youtube-reading-comprehension/cover.webp
+coverAlt: 左侧一卷竖立的纸卷，右侧同一张纸摊平铺开
 ---
-
-# 从零到发布：我用 OpenClaw 做了一个 YouTube 阅读理解生成器
-
 > 来源：Obsidian 笔记 · 2026-03-21
 
 ## 缘起：一个实际的需求
@@ -27,7 +26,7 @@ englishSummary: "Full development story of a YouTube-to-reading-comprehension Op
 
 **全程耗时：2-3 小时**
 
-她说最痛苦的是出题环节——要确保每道题都有依据，选项要有干扰性但不能有歧义，答案要均匀分布（不能全是 C）。有时候为了想一个合理的干扰项，能卡住半小时。
+她说最痛苦的是出题环节：要确保每道题都有依据，选项要有干扰性但不能有歧义，答案要均匀分布（不能全是 C）。有时候为了想一个合理的干扰项，能卡住半小时。
 
 我就想：这个过程，能不能自动化？
 
@@ -235,7 +234,7 @@ D. How comfortable your bed is
 [解析：主旨大意题。由第三段"it's not about how long you sleep..."可知]
 ```
 
-这个改动很关键——格式对了，用户用起来才顺手。
+这个改动很关键。格式对了，用户用起来才顺手。
 
 ## 效率对比
 
@@ -250,7 +249,7 @@ xychart-beta
 
 **效率提升：24 倍**
 
-最明显的优化是听写环节——AI 直接提取 transcript，这个 60 分钟的环节直接归零。
+最明显的优化是听写环节：AI 直接提取 transcript，这个 60 分钟的环节直接归零。
 
 ## 难点与解决
 
@@ -366,9 +365,9 @@ flowchart LR
 
 这个项目从需求分析到技能发布，全程用了不到一周。最核心的经验是：
 
-**好的 AI 工具不是炫技，而是解决真实问题。**
+**好的 AI 工具是用来解决真实问题的。**
 
-我朋友现在每周用这个技能出阅读题，她说省下来的时间可以用来研究教学方法和关注学生个体——这才是技术该有的价值。
+我朋友现在每周用这个技能出阅读题，她说省下来的时间可以用来研究教学方法和关注学生个体。这才是技术该有的价值。
 
 ---
 

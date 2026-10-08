@@ -3,7 +3,7 @@ import { EntryCardProject } from "@/components/entry-card-project";
 import { getProjectPosts } from "@/lib/content";
 
 export const metadata = {
-  title: "Projects",
+  title: "Work",
   description: "Things I built. Each entry is a verifiable record.",
 };
 
@@ -28,6 +28,8 @@ export default async function ProjectsPage() {
               featured={project.featured}
               period={project.period}
               cover={project.cover}
+              stage={project.stage}
+              detailsCount={project.details.length}
             />
           ))}
         </div>

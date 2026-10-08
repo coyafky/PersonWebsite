@@ -21,6 +21,7 @@ import {
   contentStatusSchema,
   courseIndexSchema,
   courseNoteSchema,
+  learningSchema,
   schemaByKind,
 } from "./schemas.ts";
 
@@ -31,6 +32,14 @@ const statusProbeSchema = z.object({
   status: contentStatusSchema.default("draft"),
 });
 
+/**
+ * kind → Post 的映射，供 `getContentBySlug` 使用。
+ *
+ * 内容模块合并到 `/notes` 之后**这张表不用改**：合并动的是「URL 与函数形态」，
+ * 底层的 `ContentKind` 没动（learning / book-index / book-note / course-index /
+ * course-note 都还在 schemaByKind 里），所以这里仍然是一对一的。
+ * 内容模块那一侧的新类型映射见下面的 NoteIndexPost / NotePost。
+ */
 type CollectionMap = {
   blog: BlogPost;
   diary: DiaryPost;
@@ -240,22 +249,152 @@ export async function getCareerPosts(includeDrafts = false): Promise<CareerPost[
   return items.filter((item): item is CareerPost => item.kind === "career");
 }
 
-export async function getFeaturedProjects() {
+/**
+ * 精选项目，按 `date` 倒序确定性排序后取前 `limit` 个。
+ *
+ * 曾经是 `filter(featured).slice(0, 3)` —— 而目前 flag 了 `featured: true`
+ * 的有 4 个，等于**每个构建随机丢掉一个**（顺序由 readdir 的返回决定，
+ * 没有排序保证）。改成显式排序 + 参数化 limit，让「轮播/精选」这类位置
+ * 在多次构建、多个调用点之间稳定可复现。
+ */
+export async function getFeaturedProjects(limit = 3) {
   const projects = await getProjectPosts();
-  return projects.filter((project) => project.featured).slice(0, 3);
+  return projects
+    .filter((project) => project.featured)
+    .toSorted((a, b) => b.date.localeCompare(a.date))
+    .slice(0, limit);
 }
 
-export type BookTopicSummary = {
-  book: string;
-  title: string;
-  author: string;
-  genre: string;
-  summary: string;
-  noteCount: number;
+/**
+ * 把 project.details 里列出的博客 slug 解析成真实文章，**保持 details 的书写顺序**
+ * （= 阅读顺序，不是日期顺序）。
+ *
+ * 解析不到的 slug 只 `console.warn` 并跳过，绝不抛错：一篇博客改名/下线
+ * 不应该让整站构建失败（对照 readCollection 里 published 内容才 throw 的策略，
+ * 引用缺失是内容问题，不是 schema 事故）。
+ */
+export async function getProjectDetailPosts(project: ProjectPost): Promise<BlogPost[]> {
+  if (project.details.length === 0) {
+    return [];
+  }
+
+  const posts = await getBlogPosts();
+  const bySlug = new Map(posts.map((post) => [post.slug, post]));
+
+  const resolved: BlogPost[] = [];
+  for (const slug of project.details) {
+    const post = bySlug.get(slug);
+    if (!post) {
+      console.warn(
+        `Project "${project.slug}" references unknown detail post "${slug}" (skipped).`,
+      );
+      continue;
+    }
+    resolved.push(post);
+  }
+
+  return resolved;
+}
+
+/**
+ * 反向索引：哪些项目的 details 里包含这个博客 slug。
+ *
+ * slug 走 decodeSlug —— 动态段传来的可能是未解码形态（与 getContentBySlug 同坑，
+ * 见那里的注释），不解码会让 /blog/<未解码 slug> 的「本项目所属」提示 0 命中。
+ */
+export async function getProjectsForBlog(slug: string): Promise<ProjectPost[]> {
+  const decoded = decodeSlug(slug);
+  const projects = await getProjectPosts();
+  return projects.filter((project) => project.details.includes(decoded));
+}
+
+/** 内容模块（`/notes`）下的三种集合形态。URL 是扁平的 `/notes/<collection>`，不带 kind。 */
+export type NoteKind = "topic" | "book" | "course";
+
+export const NOTE_KINDS = ["topic", "book", "course"] as const satisfies readonly NoteKind[];
+
+/**
+ * 集合简介页（`_index.md`）/ 集合内笔记的联合类型。
+ *
+ * topic（原 learning）的 index 与文章共用 `learningSchema`，所以两边都是 LearningPost。
+ */
+export type NoteIndexPost = LearningPost | BookIndexPost | CourseIndexPost;
+export type NotePost = LearningPost | BookNotePost | CourseNotePost;
+
+type NoteKindConfig = {
+  /** 集合根目录：content/notes/<directory>/<collection>/ */
+  directory: string;
+  indexSchema: z.ZodType;
+  noteSchema: z.ZodType;
+  indexKind: ContentKind;
+  noteKind: ContentKind;
+  /**
+   * 集合归属字段名。book/course 的 frontmatter 不带 `book:`/`course:`
+   * （老实现由 reader 注入）；topic（原 learning）的 frontmatter 自带 `topic:`，
+   * 老实现不注入 —— 这里保持不注入，语义与迁移前一致。
+   */
+  collectionField?: "book" | "course";
 };
 
-async function readBookTopic(book: string, includeDrafts = false): Promise<(BookIndexPost | BookNotePost)[]> {
-  const directory = path.join(CONTENT_ROOT, "book-list", book);
+/**
+ * 一张配置表取代原来 12 个平行函数（3 套 × 4 个）。
+ *
+ * ⚠️ `topic` 那一行的 schema / kind 是照 `getLearningTopicIndex` + `readLearningTopic`
+ * 的原样抄的：原 learning 的 `_index.md` 与文章都走
+ * `readCollection("learning", topic)` → `schemaByKind.learning`，
+ * index 与 note 的 kind 都是 `learning`（learningSchema 自带 `topic` 字段）。
+ */
+const NOTE_KIND_CONFIG: Record<NoteKind, NoteKindConfig> = {
+  topic: {
+    directory: "topic",
+    indexSchema: learningSchema,
+    noteSchema: learningSchema,
+    indexKind: "learning",
+    noteKind: "learning",
+  },
+  book: {
+    directory: "book",
+    indexSchema: bookIndexSchema,
+    noteSchema: bookNoteSchema,
+    indexKind: "book-index",
+    noteKind: "book-note",
+    collectionField: "book",
+  },
+  course: {
+    directory: "course",
+    indexSchema: courseIndexSchema,
+    noteSchema: courseNoteSchema,
+    indexKind: "course-index",
+    noteKind: "course-note",
+    collectionField: "course",
+  },
+};
+
+const NOTE_ROOT = path.join(CONTENT_ROOT, "notes");
+
+export type NoteCollectionSummary = {
+  kind: NoteKind;
+  /** 集合 id —— 也是 URL 里那一段。 */
+  collection: string;
+  title: string;
+  summary: string;
+  noteCount: number;
+  /** book 特有 */
+  author?: string;
+  genre?: string;
+  /** course 特有 */
+  platform?: string;
+  instructor?: string;
+};
+
+/**
+ * 读一个集合目录下的全部条目（含 `_index.md`），**不按 status 过滤** ——
+ * 老 `readBookTopic` / `readCourseTopic` 把 `publishedOnly` 放在函数内部，
+ * 这里统一提到各 getter 里，省得 index 与 note 想要不同过滤时又得复制一遍。
+ */
+async function readNoteCollection(kind: NoteKind, collection: string): Promise<NotePost[]> {
+  const config = NOTE_KIND_CONFIG[kind];
+  const directory = path.join(NOTE_ROOT, config.directory, collection);
 
   if (!(await fileExists(directory))) {
     return [];
@@ -277,13 +416,13 @@ async function readBookTopic(book: string, includeDrafts = false): Promise<(Book
         const status = statusProbe.success ? statusProbe.data.status : "draft";
 
         const isIndex = slug === "_index";
-        const schema = isIndex ? bookIndexSchema : bookNoteSchema;
-        const kind = isIndex ? "book-index" : "book-note";
+        const schema = isIndex ? config.indexSchema : config.noteSchema;
+        const contentKind = isIndex ? config.indexKind : config.noteKind;
 
         const result = schema.safeParse({
           ...parsed.data,
-          kind,
-          book,
+          kind: contentKind,
+          ...(config.collectionField ? { [config.collectionField]: collection } : {}),
           slug,
           filePath,
           extension,
@@ -292,191 +431,206 @@ async function readBookTopic(book: string, includeDrafts = false): Promise<(Book
 
         if (!result.success) {
           if (status === "published") {
-            throw new Error(formatValidationError(kind as ContentKind, slug, result.error));
+            throw new Error(formatValidationError(contentKind, slug, result.error));
           }
-          console.warn(formatValidationError(kind as ContentKind, slug, result.error));
+          console.warn(formatValidationError(contentKind, slug, result.error));
           return null;
         }
 
-        return result.data as BookIndexPost | BookNotePost;
+        return result.data as NotePost;
       }),
   );
 
-  const allItems = items.filter((item): item is BookIndexPost | BookNotePost => item !== null);
+  const allItems = items.filter((item): item is NotePost => item !== null);
+  assertUniqueSlugs(allItems, config.noteKind);
 
-  return includeDrafts ? allItems : publishedOnly(allItems);
+  return allItems;
 }
 
-export async function getBookTopics(): Promise<BookTopicSummary[]> {
-  const root = path.join(CONTENT_ROOT, "book-list");
+/**
+ * 集合简介页（`_index.md`）。
+ *
+ * ⚠️ 与老实现有意不同：这里**不按 published 过滤 index**。
+ * 理由：`/notes` 要列出全部 15 个集合（含整集归档的 skeptics-guide），
+ * 而「这个集合存在」由目录 + `_index.md` 决定，不由 index 的 status 决定 ——
+ * 过滤 published 会让归档过 index 的集合从列表里消失、详情页 404，
+ * 等于列表里挂一条死链。笔记本身仍只出 published（见 getNoteCollectionNotes）。
+ */
+export async function getNoteCollectionIndex(
+  kind: NoteKind,
+  collection: string,
+): Promise<NoteIndexPost | null> {
+  const config = NOTE_KIND_CONFIG[kind];
+  const items = await readNoteCollection(kind, collection);
+  return (
+    (items.find(
+      (item) => item.kind === config.indexKind && item.slug === "_index",
+    ) as NoteIndexPost | undefined) ?? null
+  );
+}
+
+export async function getNoteCollectionNotes(
+  kind: NoteKind,
+  collection: string,
+  includeDrafts = false,
+): Promise<NotePost[]> {
+  const config = NOTE_KIND_CONFIG[kind];
+  const items = await readNoteCollection(kind, collection);
+  const notes = items.filter(
+    (item): item is NotePost => item.kind === config.noteKind && isArticleSlug(item.slug),
+  );
+  const visible = includeDrafts ? notes : publishedOnly(notes);
+  return byNewestDate(visible);
+}
+
+export async function getNoteBySlug(
+  kind: NoteKind,
+  collection: string,
+  slug: string,
+): Promise<NotePost | null> {
+  const config = NOTE_KIND_CONFIG[kind];
+  // 与老 getBookNoteBySlug / getLearningPostBySlug 一致：单篇只出 published。
+  const items = publishedOnly(await readNoteCollection(kind, collection));
+  const decoded = decodeSlug(slug);
+  return (
+    (items.find(
+      (item) => item.kind === config.noteKind && item.slug === decoded,
+    ) as NotePost | undefined) ?? null
+  );
+}
+
+async function listNoteCollections(kind: NoteKind): Promise<NoteCollectionSummary[]> {
+  const config = NOTE_KIND_CONFIG[kind];
+  const root = path.join(NOTE_ROOT, config.directory);
+
   if (!(await fileExists(root))) {
     return [];
   }
 
   const entries = await fs.readdir(root, { withFileTypes: true });
-  const bookDirs = entries.filter((entry) => entry.isDirectory());
+  const collectionDirs = entries.filter((entry) => entry.isDirectory());
 
-  const topics = await Promise.all(
-    bookDirs.map(async (entry) => {
-      const book = entry.name;
+  const summaries = await Promise.all(
+    collectionDirs.map(async (entry) => {
+      const collection = entry.name;
       const [indexPost, notes] = await Promise.all([
-        getBookTopicIndex(book),
-        getBookNotes(book),
+        getNoteCollectionIndex(kind, collection),
+        getNoteCollectionNotes(kind, collection),
       ]);
 
       if (!indexPost) {
         return null;
       }
 
-      return {
-        book,
+      const base = {
+        kind,
+        collection,
         title: indexPost.title,
-        author: indexPost.author,
-        genre: indexPost.genre,
         summary: indexPost.summary,
         noteCount: notes.length,
-      } satisfies BookTopicSummary;
-    }),
-  );
+      };
 
-  return topics
-    .filter((topic): topic is BookTopicSummary => topic !== null)
-    .toSorted((a, b) => a.title.localeCompare(b.title));
-}
-
-export async function getBookTopicIndex(book: string): Promise<BookIndexPost | null> {
-  const items = await readBookTopic(book, false);
-  return (items.find((item) => item.kind === "book-index" && item.slug === "_index") as BookIndexPost) ?? null;
-}
-
-export async function getBookNotes(book: string, includeDrafts = false): Promise<BookNotePost[]> {
-  const items = await readBookTopic(book, includeDrafts);
-  return byNewestDate(
-    items.filter((item): item is BookNotePost => item.kind === "book-note" && isArticleSlug(item.slug)),
-  );
-}
-
-export async function getBookNoteBySlug(book: string, slug: string): Promise<BookNotePost | null> {
-  const items = await readBookTopic(book, false);
-  const decoded = decodeSlug(slug);
-  return (items.find((item) => item.kind === "book-note" && item.slug === decoded) as BookNotePost) ?? null;
-}
-
-export type CourseTopicSummary = {
-  course: string;
-  title: string;
-  platform: string;
-  instructor: string;
-  summary: string;
-  noteCount: number;
-};
-
-async function readCourseTopic(course: string, includeDrafts = false): Promise<(CourseIndexPost | CourseNotePost)[]> {
-  const directory = path.join(CONTENT_ROOT, "course-list", course);
-
-  if (!(await fileExists(directory))) {
-    return [];
-  }
-
-  const entries = await fs.readdir(directory, { withFileTypes: true });
-
-  const items = await Promise.all(
-    entries
-      .filter((entry) => entry.isFile())
-      .filter((entry) => SUPPORTED_EXTENSIONS.has(path.extname(entry.name)))
-      .map(async (entry) => {
-        const filePath = path.join(directory, entry.name);
-        const raw = await fs.readFile(filePath, "utf8");
-        const parsed = matter(raw);
-        const slug = toSlug(entry.name);
-        const extension = path.extname(entry.name) as ".md" | ".mdx";
-        const statusProbe = statusProbeSchema.safeParse(parsed.data);
-        const status = statusProbe.success ? statusProbe.data.status : "draft";
-
-        const isIndex = slug === "_index";
-        const schema = isIndex ? courseIndexSchema : courseNoteSchema;
-        const kind = isIndex ? "course-index" : "course-note";
-
-        const result = schema.safeParse({
-          ...parsed.data,
-          kind,
-          course,
-          slug,
-          filePath,
-          extension,
-          body: parsed.content.trim(),
-        });
-
-        if (!result.success) {
-          if (status === "published") {
-            throw new Error(formatValidationError(kind as ContentKind, slug, result.error));
-          }
-          console.warn(formatValidationError(kind as ContentKind, slug, result.error));
-          return null;
-        }
-
-        return result.data as CourseIndexPost | CourseNotePost;
-      }),
-  );
-
-  const allItems = items.filter((item): item is CourseIndexPost | CourseNotePost => item !== null);
-
-  return includeDrafts ? allItems : publishedOnly(allItems);
-}
-
-export async function getCourseTopics(): Promise<CourseTopicSummary[]> {
-  const root = path.join(CONTENT_ROOT, "course-list");
-  if (!(await fileExists(root))) {
-    return [];
-  }
-
-  const entries = await fs.readdir(root, { withFileTypes: true });
-  const courseDirs = entries.filter((entry) => entry.isDirectory());
-
-  const topics = await Promise.all(
-    courseDirs.map(async (entry) => {
-      const course = entry.name;
-      const [indexPost, notes] = await Promise.all([
-        getCourseTopicIndex(course),
-        getCourseNotes(course),
-      ]);
-
-      if (!indexPost) {
-        return null;
+      if (kind === "book") {
+        const post = indexPost as BookIndexPost;
+        return { ...base, author: post.author, genre: post.genre } satisfies NoteCollectionSummary;
       }
 
-      return {
-        course,
-        title: indexPost.title,
-        platform: indexPost.platform,
-        instructor: indexPost.instructor,
-        summary: indexPost.summary,
-        noteCount: notes.length,
-      } satisfies CourseTopicSummary;
+      if (kind === "course") {
+        const post = indexPost as CourseIndexPost;
+        return {
+          ...base,
+          platform: post.platform,
+          instructor: post.instructor,
+        } satisfies NoteCollectionSummary;
+      }
+
+      return base satisfies NoteCollectionSummary;
     }),
   );
 
-  return topics
-    .filter((topic): topic is CourseTopicSummary => topic !== null)
-    .toSorted((a, b) => a.title.localeCompare(b.title));
+  return summaries.filter((item): item is NoteCollectionSummary => item !== null);
 }
 
-export async function getCourseTopicIndex(course: string): Promise<CourseIndexPost | null> {
-  const items = await readCourseTopic(course, false);
-  return (items.find((item) => item.kind === "course-index" && item.slug === "_index") as CourseIndexPost) ?? null;
+/**
+ * 列出集合（可限定 kind）。排序语义与迁移前一致：按 title 升序
+ * （原来三个集合列表函数——learning / book / course 各一个——都是 title 排序）。
+ * 额外的 kind / collection 只是 tie-breaker —— 原来并列时的顺序由 readdir
+ * 决定（不稳定），这里钉死成确定性顺序。
+ */
+export async function getNoteCollections(kind?: NoteKind): Promise<NoteCollectionSummary[]> {
+  const kinds: readonly NoteKind[] = kind ? [kind] : NOTE_KINDS;
+  const groups = await Promise.all(kinds.map((k) => listNoteCollections(k)));
+
+  return groups
+    .flat()
+    .toSorted(
+      (a, b) =>
+        a.title.localeCompare(b.title) ||
+        a.kind.localeCompare(b.kind) ||
+        a.collection.localeCompare(b.collection),
+    );
 }
 
-export async function getCourseNotes(course: string, includeDrafts = false): Promise<CourseNotePost[]> {
-  const items = await readCourseTopic(course, includeDrafts);
-  return byNewestDate(
-    items.filter((item): item is CourseNotePost => item.kind === "course-note" && isArticleSlug(item.slug)),
-  );
+/**
+ * 按集合 id 反查（扁平 URL `/notes/<collection>` 不带 kind，需要反查）。
+ *
+ * ⚠️ 同一个 id 同时出现在多个 kind 的目录下时**抛错**，而不是静默取第一个 ——
+ * 静默会让 URL 指向哪个集合取决于遍历顺序，是查不出来的沉默错误。
+ * （当前数据没有这种冲突，这是给未来上的闸。）
+ */
+export async function findNoteCollection(
+  collection: string,
+): Promise<NoteCollectionSummary | null> {
+  const found: NoteKind[] = [];
+
+  for (const kind of NOTE_KINDS) {
+    const dir = path.join(NOTE_ROOT, NOTE_KIND_CONFIG[kind].directory, collection);
+    if (await fileExists(dir)) {
+      found.push(kind);
+    }
+  }
+
+  if (found.length > 1) {
+    throw new Error(
+      `Ambiguous note collection "${collection}": found under kinds ${found.join(", ")}. ` +
+        "Collection ids must be unique across topic/book/course.",
+    );
+  }
+
+  if (found.length === 0) {
+    return null;
+  }
+
+  const summaries = await listNoteCollections(found[0]);
+  return summaries.find((item) => item.collection === collection) ?? null;
 }
 
-export async function getCourseNoteBySlug(course: string, slug: string): Promise<CourseNotePost | null> {
-  const items = await readCourseTopic(course, false);
-  const decoded = decodeSlug(slug);
-  return (items.find((item) => item.kind === "course-note" && item.slug === decoded) as CourseNotePost) ?? null;
+/**
+ * 把 `/notes` 下所有集合的 index / note 全量拉一遍，按**老函数的口径**分组：
+ *   - learning —— 只算文章（老的文章 getter 会过滤 isArticleSlug，index 不算），
+ *   - bookIndex / bookNote / courseIndex / courseNote —— index 与文章都算。
+ *
+ * 这个不对称是迁移前就有的，这里照搬而不是顺手统一 —— `getContentByTag` /
+ * `getAllTags` 的统计口径属于「既有行为」，改它会让 /tags 上冒出新标签页。
+ * 两处共用，省得再各写一遍。
+ */
+async function readAllNotePosts() {
+  const collections = await getNoteCollections();
+  const [indexPosts, notePosts] = await Promise.all([
+    Promise.all(collections.map((c) => getNoteCollectionIndex(c.kind, c.collection))),
+    Promise.all(collections.map((c) => getNoteCollectionNotes(c.kind, c.collection))),
+  ]);
+
+  const indexes = indexPosts.filter((p): p is NoteIndexPost => p !== null);
+  const notes = notePosts.flat();
+
+  return {
+    learning: notes.filter((p): p is LearningPost => p.kind === "learning"),
+    bookIndex: indexes.filter((p): p is BookIndexPost => p.kind === "book-index"),
+    bookNote: notes.filter((p): p is BookNotePost => p.kind === "book-note"),
+    courseIndex: indexes.filter((p): p is CourseIndexPost => p.kind === "course-index"),
+    courseNote: notes.filter((p): p is CourseNotePost => p.kind === "course-note"),
+  };
 }
 
 export async function getGalleryPosts(includeDrafts = false): Promise<GalleryPost[]> {
@@ -488,82 +642,8 @@ export async function getGalleryPostBySlug(slug: string): Promise<GalleryPost | 
   return getContentBySlug("gallery", slug);
 }
 
-export type TopicSummary = {
-  topic: string;
-  title: string;
-  summary: string;
-  articleCount: number;
-};
-
 function isArticleSlug(slug: string) {
   return !slug.startsWith("_");
-}
-
-async function readLearningTopic(topic: string, includeDrafts = false): Promise<LearningPost[]> {
-  const items = await readCollection("learning", topic);
-  assertUniqueSlugs(items, "learning");
-  return items
-    .filter((item): item is LearningPost => item.kind === "learning")
-    .filter((item) => (includeDrafts ? true : item.status === "published"));
-}
-
-export async function getLearningPosts(
-  topic: string,
-  includeDrafts = false,
-): Promise<LearningPost[]> {
-  const items = await readLearningTopic(topic, includeDrafts);
-  return byNewestDate(items.filter((item) => isArticleSlug(item.slug)));
-}
-
-export async function getLearningTopicIndex(
-  topic: string,
-): Promise<LearningPost | null> {
-  const items = await readLearningTopic(topic, false);
-  return items.find((item) => item.slug === "_index") ?? null;
-}
-
-export async function getLearningPostBySlug(
-  topic: string,
-  slug: string,
-): Promise<LearningPost | null> {
-  const items = await readLearningTopic(topic, false);
-  const decoded = decodeSlug(slug);
-  return items.find((item) => item.slug === decoded) ?? null;
-}
-
-export async function getLearningTopics(includeDrafts = false): Promise<TopicSummary[]> {
-  const root = path.join(CONTENT_ROOT, "learning");
-  if (!(await fileExists(root))) {
-    return [];
-  }
-
-  const entries = await fs.readdir(root, { withFileTypes: true });
-  const topicDirs = entries.filter((entry) => entry.isDirectory());
-
-  const topics = await Promise.all(
-    topicDirs.map(async (entry) => {
-      const topic = entry.name;
-      const [indexPost, articles] = await Promise.all([
-        getLearningTopicIndex(topic),
-        getLearningPosts(topic, includeDrafts),
-      ]);
-
-      if (!indexPost) {
-        return null;
-      }
-
-      return {
-        topic,
-        title: indexPost.title,
-        summary: indexPost.summary,
-        articleCount: articles.length,
-      } satisfies TopicSummary;
-    }),
-  );
-
-  return topics
-    .filter((topic): topic is TopicSummary => topic !== null)
-    .toSorted((a, b) => a.title.localeCompare(b.title));
 }
 
 export async function getContentBySlug<K extends ContentKind>(kind: K, slug: string) {
@@ -580,14 +660,14 @@ export type GetContentByTagOptions = {
 export type TaggedContentByKind = {
   blog: BlogPost[];
   /**
-   * ⚠️ 这一项曾经缺失。getAllTags() 一直扫 diary，但 getContentByTag 不扫 ——
-   * 于是"只在日记里出现"的标签会被 /tags 列出来、点进去却 404
-   * （例：全站第 1 高频的「工作日记」68 篇、以及 官网/素材/门店/Codex 等）。
-   * 2026-09-20 补齐。类型是契约：这里没有 diary 字段，
-   * 后面 items / totalByKind 就一定会漏，编译器也拦不住。
+   * diary / weekly 两个字段曾在此（2026-09-20 为修「只在日记里出现的标签
+   * 点进去 404」而补齐）。2026-10-07 两个模块整体下架、内容归档，
+   * 于是连同 tags 页的渲染段一起移除 —— 留着会渲染出指向 308 桩的链接。
+   *
+   * ⚠️ 若日后恢复日记/周记，要同时补回三处：本类型、getContentByTag 的扫描、
+   * 以及 app/(site)/tags/[tag]/page.tsx 的渲染段。漏掉任一处就会出现
+   * 「标签列得出来但点进去没有」的老问题。
    */
-  diary: DiaryPost[];
-  weekly: WeeklyPost[];
   projects: ProjectPost[];
   career: CareerPost[];
   learning: LearningPost[];
@@ -615,42 +695,23 @@ export async function getContentByTag(
   const needle = decodeSlug(tag).toLowerCase();
   const matchesTag = (t: string | undefined) => t?.toLowerCase() === needle;
 
-  const [blog, diary, weekly, projects, career, topics, bookTopicList, courseTopicList] =
-    await Promise.all([
-      getBlogPosts(),
-      getDiaryPosts(),
-      getWeeklyPosts(),
-      getProjectPosts(),
-      getCareerPosts(),
-      getLearningTopics(),
-      getBookTopics(),
-      getCourseTopics(),
-    ]);
+  // diary / weekly 已下架，不再参与标签聚合（见 TaggedContentByKind 注释）。
+  const [blog, projects, career, notePosts] = await Promise.all([
+    getBlogPosts(),
+    getProjectPosts(),
+    getCareerPosts(),
+    readAllNotePosts(),
+  ]);
 
-  const learningPosts = (
-    await Promise.all(topics.map((topic) => getLearningPosts(topic.topic)))
-  ).flat();
-
-  // Collect bookIndex and bookNote posts from all book topics
-  const bookIndexPosts = (
-    await Promise.all(bookTopicList.map((bt) => getBookTopicIndex(bt.book)))
-  ).filter((p): p is BookIndexPost => p !== null);
-
-  const bookNotePosts = (
-    await Promise.all(bookTopicList.map((bt) => getBookNotes(bt.book)))
-  ).flat();
-
-  const courseIndexPosts = (
-    await Promise.all(courseTopicList.map((ct) => getCourseTopicIndex(ct.course)))
-  ).filter((p): p is CourseIndexPost => p !== null);
-
-  const courseNotePosts = (
-    await Promise.all(courseTopicList.map((ct) => getCourseNotes(ct.course)))
-  ).flat();
+  const {
+    learning: learningPosts,
+    bookIndex: bookIndexPosts,
+    bookNote: bookNotePosts,
+    courseIndex: courseIndexPosts,
+    courseNote: courseNotePosts,
+  } = notePosts;
 
   const blogMatches = blog.filter((p) => p.tags.some(matchesTag));
-  const diaryMatches = diary.filter((p) => p.tags.some(matchesTag));
-  const weeklyMatches = weekly.filter((p) => p.tags.some(matchesTag));
   // The project schema does not currently carry a `tags` field, so projects
   // contribute zero matches for any tag. We still read them in parallel to
   // keep the cross-collection contract stable for future schema additions.
@@ -666,8 +727,6 @@ export async function getContentByTag(
 
   const items: TaggedContentByKind = {
     blog: blogMatches,
-    diary: diaryMatches,
-    weekly: weeklyMatches,
     projects: [],
     career: careerMatches,
     learning: learningMatches,
@@ -679,8 +738,6 @@ export async function getContentByTag(
 
   const totalByKind: Record<keyof TaggedContentByKind, number> = {
     blog: blogMatches.length,
-    diary: diaryMatches.length,
-    weekly: weeklyMatches.length,
     projects: 0,
     career: careerMatches.length,
     learning: learningMatches.length,
@@ -695,7 +752,7 @@ export async function getContentByTag(
 
 export type RelatedRef = {
   blog?: string[];
-  weekly?: string[];
+  // weekly 已下架（2026-10-07）：内容归档、路由 308 → /blog，相关阅读不再解析它。
   projects?: string[];
   career?: string[];
 };
@@ -723,30 +780,18 @@ function emptyKindCounts(): Record<ContentKind, number> {
 }
 
 export async function getAllTags(): Promise<TagCount[]> {
-  const [blog, diary, weekly, career, topics, bookTopicList, courseTopicList] = await Promise.all([
+  const [blog, career, notePosts] = await Promise.all([
     getBlogPosts(),
-    getDiaryPosts(),
-    getWeeklyPosts(),
     getCareerPosts(),
-    getLearningTopics(),
-    getBookTopics(),
-    getCourseTopics(),
+    readAllNotePosts(),
   ]);
-  const learningPosts = (
-    await Promise.all(topics.map((topic) => getLearningPosts(topic.topic)))
-  ).flat();
-  const bookIndexPosts = (
-    await Promise.all(bookTopicList.map((bt) => getBookTopicIndex(bt.book)))
-  ).filter((p): p is BookIndexPost => p !== null);
-  const bookNotePosts = (
-    await Promise.all(bookTopicList.map((bt) => getBookNotes(bt.book)))
-  ).flat();
-  const courseIndexPosts = (
-    await Promise.all(courseTopicList.map((ct) => getCourseTopicIndex(ct.course)))
-  ).filter((p): p is CourseIndexPost => p !== null);
-  const courseNotePosts = (
-    await Promise.all(courseTopicList.map((ct) => getCourseNotes(ct.course)))
-  ).flat();
+  const {
+    learning: learningPosts,
+    bookIndex: bookIndexPosts,
+    bookNote: bookNotePosts,
+    courseIndex: courseIndexPosts,
+    courseNote: courseNotePosts,
+  } = notePosts;
 
   const counts = new Map<string, TagCount>();
 
@@ -761,8 +806,6 @@ export async function getAllTags(): Promise<TagCount[]> {
   }
 
   for (const post of blog) for (const tag of post.tags) bump(tag, "blog");
-  for (const post of diary) for (const tag of post.tags) bump(tag, "diary");
-  for (const post of weekly) for (const tag of post.tags) bump(tag, "weekly");
   for (const post of career) for (const tag of post.tags ?? []) bump(tag, "career");
   for (const post of bookIndexPosts) for (const tag of post.tags) bump(tag, "book-index");
   for (const post of bookNotePosts) for (const tag of post.tags) bump(tag, "book-note");
@@ -818,7 +861,7 @@ export async function getBlogArchive(): Promise<BlogArchiveMonth[]> {
 }
 
 export type ResolvedRelated = {
-  kind: "blog" | "weekly" | "projects" | "career";
+  kind: "blog" | "projects" | "career";
   slug: string;
   title: string;
 };
@@ -836,18 +879,16 @@ export async function getRelatedTitles(
     return [];
   }
 
-  const kinds: RelatedCollectionKind[] = ["blog", "weekly", "projects", "career"];
+  const kinds: RelatedCollectionKind[] = ["blog", "projects", "career"];
 
-  const [blogItems, weeklyItems, projectItems, careerItems] = await Promise.all([
+  const [blogItems, projectItems, careerItems] = await Promise.all([
     getBlogPosts(),
-    getWeeklyPosts(),
     getProjectPosts(),
     getCareerPosts(),
   ]);
 
   const titleMaps: Record<RelatedCollectionKind, Map<string, string>> = {
     blog: buildTitleMap(blogItems),
-    weekly: buildTitleMap(weeklyItems),
     projects: buildTitleMap(projectItems),
     career: buildTitleMap(careerItems),
   };

@@ -1,5 +1,5 @@
 ---
-title: "Next.js 个人网站从0到1部署：7个真实踩坑全记录"
+title: "部署这个网站时我踩的 7 个坑"
 date: "2026-07-21"
 summary: "用 Next.js 16 App Router + MDX 搭个人网站，从本地能跑到公网能访问，中间踩了 TypeScript 严格模式的 build 报错、中文文件名跨平台编码错乱、MDX 配置遗漏、路由组布局继承、draft/published 内容过滤、以及 Vercel 自动部署的「push即上线」风险。这篇把 7 个坑的完整因果链——从第一个报错到最终修复——全部记录下来，每个坑都附了错误信息、根因和修复方案。"
 tags:
@@ -9,21 +9,20 @@ status: published
 lang: zh
 category: "技术/前端部署"
 englishSummary: "Deploying a personal site with Next.js 16 App Router + MDX from localhost to production. Seven real pitfalls documented with error messages, root causes, and fixes: TypeScript strict-mode build failures that dev mode hides, CJK filename encoding issues across platforms, MDX pageExtensions configuration, route group layout inheritance, draft/published content filtering, CSS approach decisions, and the risks of Vercel auto-deploy on main push."
+cover: /images/blog/2026-07-21-nextjs-deploy-pitfalls/cover.webp
+coverAlt: 平整白纸上有一个柔和的小凹陷，一条斜向蓝线划过
 ---
+> 这是 **zero-to-tech** 系列的第十三篇。前面讲了 API 的理论和实践，这一篇换个角度，把一个 Next.js 网站从本地 `localhost:3000` 推到公网，中间会经历什么。
 
-# Next.js 个人网站从0到1部署：7个真实踩坑全记录
+这个个人网站的技术栈是 **Next.js 16 App Router + TypeScript strict + MDX + Vercel 部署**。从 2026 年 6 月 8 日第一行代码，到 6 月 20 日第一次 Vercel 部署失败，再到后续多次踩坑修复。每一个坑都留在了 git history 里。
 
-> 这是 **zero-to-tech** 系列的第十三篇。前面讲了 API 的理论和实践，这一篇换个角度——把一个 Next.js 网站从本地 `localhost:3000` 推到公网，中间会经历什么。
-
-这个个人网站的技术栈是 **Next.js 16 App Router + TypeScript strict + MDX + Vercel 部署**。从 2026 年 6 月 8 日第一行代码，到 6 月 20 日第一次 Vercel 部署失败，再到后续多次踩坑修复——每一个坑都留在了 git history 里。
-
-这篇不写原理，写**踩坑**——真实的报错信息、查错过程、根因分析和修复方案。
+这篇不写原理，写**踩坑**：真实的报错信息、查错过程、根因分析和修复方案。
 
 ---
 
 ## 一句话总结
 
-> **Next.js 部署到 Vercel 并不难，但 `next dev` 能跑不代表 `next build` 能过**。TypeScript strict 模式在 build 阶段的检查比 dev 更严、中文文件名在不同操作系统间编码不一致、MDX 的 `pageExtensions` 配置很容易漏、路由组的布局继承规则容易忽略。**每个坑的修复成本都在 15 分钟以内——但前提是你知道报错信息在说什么。这篇就是帮你翻译这些报错信息的。**
+> **Next.js 部署到 Vercel 并不难，但 `next dev` 能跑不代表 `next build` 能过**。TypeScript strict 模式在 build 阶段的检查比 dev 更严、中文文件名在不同操作系统间编码不一致、MDX 的 `pageExtensions` 配置很容易漏、路由组的布局继承规则容易忽略。**每个坑的修复成本都在 15 分钟以内，但前提是你知道报错信息在说什么。这篇就是帮你翻译这些报错信息的。**
 
 ---
 
@@ -79,7 +78,7 @@ Type error: Type 'RefObject<HTMLDivElement>' is not assignable to
 
 Next.js 的 dev 模式为了启动速度，用的是 **SWC（Speedy Web Compiler）做快速转译，不跑完整的 TypeScript 类型检查**。`next build` 才会跑 `tsc` 的全量类型检查。
 
-**本质原因**：`framer-motion` 的 `motion.div` / `motion.section` / `motion.li` 等组件的 `ref` 类型是一个联合类型——每个变体的 `ref` 类型不同。当一个组件可能返回不同 HTML 标签时，TypeScript strict 模式拒绝接受 `RefObject<HTMLDivElement>` 赋值给联合类型。
+**根因**：`framer-motion` 的 `motion.div` / `motion.section` / `motion.li` 等组件的 `ref` 类型是一个联合类型，每个变体的 `ref` 类型不同。当一个组件可能返回不同 HTML 标签时，TypeScript strict 模式拒绝接受 `RefObject<HTMLDivElement>` 赋值给联合类型。
 
 ### 修复
 
@@ -134,7 +133,7 @@ git mv content/blog/2026-06-25-为什么写具体项目前要先写清楚prd和s
 
 ### 教训
 
-Next.js 的文件系统路由（`[slug]`）会把文件名映射为 URL。如果文件名有中文，URL 里就会出现百分号编码——既不美观，SEO 也吃亏。**在项目一开始就用英文 slug**，省掉后面批量改名的麻烦。
+Next.js 的文件系统路由（`[slug]`）会把文件名映射为 URL。如果文件名有中文，URL 里就会出现百分号编码，既不美观，SEO 也吃亏。**在项目一开始就用英文 slug**，省掉后面批量改名的麻烦。
 
 ---
 
@@ -174,7 +173,7 @@ export default withMDX(nextConfig)
 
 ### 教训
 
-MDX 的配置有两个独立入口。漏了任何一个，表现都是 404——不会报错，只会静默失败。排查时很容易怀疑是文件路径问题，而不是配置遗漏。
+MDX 的配置有两个独立入口。漏了任何一个，表现都是 404：不会报错，只会静默失败。排查时很容易怀疑是文件路径问题，而不是配置遗漏。
 
 ---
 
@@ -208,7 +207,7 @@ app/
 
 ### 教训
 
-路由组是「无声的布局隔离」。利用好它可以避免全局加载不必要的组件，但需要刻意维护这个边界——每次在 layout 里加东西，都想一下：「sitemap.xml 需要这个吗？」
+路由组是「无声的布局隔离」。利用好它可以避免全局加载不必要的组件，但需要刻意维护这个边界：每次在 layout 里加东西，都想一下：「sitemap.xml 需要这个吗？」
 
 ---
 
@@ -334,13 +333,13 @@ git push origin main
 
 **最大的风险：一次失败的 push 直接让线上挂掉**。
 
-这就是为什么「踩坑1」里那个 TypeScript 报错如此严重——它不是在本地报的，是在 Vercel build 阶段报的。`main` 分支 `git push` 后，旧的线上版本被新的失败构建替代，**站点直接不可访问**。
+这就是为什么「踩坑1」里那个 TypeScript 报错如此严重：它是在 Vercel build 阶段报的，本地 `next dev` 看不见。`main` 分支 `git push` 后，旧的线上版本被新的失败构建替代，**站点直接不可访问**。
 
 ### 应对策略
 
-1. **本地 `npm run build` 是最后一道防线**——push 前必须跑
-2. **大改动走分支 + PR**——用 Vercel 的 preview deployment 在合并前验证
-3. **熟悉 Vercel 的回滚操作**——出问题了能在 30 秒内恢复
+1. **本地 `npm run build` 是最后一道防线**，push 前必须跑
+2. **大改动走分支 + PR**，用 Vercel 的 preview deployment 在合并前验证
+3. **熟悉 Vercel 的回滚操作**，出问题了能在 30 秒内恢复
 
 ### 教训
 
@@ -366,7 +365,7 @@ git push origin main
 
 ## 十、一句话总结
 
-> **Next.js 部署到 Vercel 的门槛很低——连接 GitHub 仓库就完了。但「能部署」和「部署不出事」之间隔了 7 个坑**：`next dev` 不跑完整类型检查、中文文件名跨平台编码不一致、MDX 需要两处配置、路由组布局继承需要刻意维护边界、draft/published 过滤应该在数据层不在 UI 层、CSS 方案没有银弹、以及 `push = deploy` 意味着每次推送都是在做生产发布。**每个坑都不大，但每个都能让站点挂掉。push 前 `npm run build` + 过一遍检查清单，是最便宜的保险。**
+> **Next.js 部署到 Vercel 的门槛很低，连接 GitHub 仓库就完了。但「能部署」和「部署不出事」之间隔了 7 个坑**：`next dev` 不跑完整类型检查、中文文件名跨平台编码不一致、MDX 需要两处配置、路由组布局继承需要刻意维护边界、draft/published 过滤应该在数据层不在 UI 层、CSS 方案没有银弹、以及 `push = deploy` 意味着每次推送都是在做生产发布。**每个坑都不大，但每个都能让站点挂掉。push 前 `npm run build` + 过一遍检查清单，是最便宜的保险。**
 
 ---
 
@@ -376,5 +375,5 @@ git push origin main
 - **zero-to-tech / Docker 是什么：为什么「在我电脑上能跑」还不够**
 - **zero-to-tech / Git 进阶：rebase / stash / cherry-pick 什么时候用**
 
-上一篇：[从手搓API到调用API：一次完整的实践复盘](/blog/api-practice-review)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[从手搓API到调用API：一次完整的实践复盘](/blog/2026-07-21-api-practice-review)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

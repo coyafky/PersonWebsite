@@ -1,14 +1,9 @@
 import { NextResponse } from "next/server";
 import {
   getBlogPosts,
-  getBookNotes,
-  getBookTopics,
-  getCourseNotes,
-  getCourseTopics,
-  getWeeklyPosts,
+  getNoteCollections,
+  getNoteCollectionNotes,
   getProjectPosts,
-  getLearningTopics,
-  getLearningPosts,
   getGalleryPosts,
 } from "@/lib/content";
 
@@ -38,9 +33,9 @@ export async function GET(request: Request) {
     return NextResponse.json({ results: [] });
   }
 
-  const [blog, weekly, projects, gallery] = await Promise.all([
+  // Diary 与 Weekly 已下架（内容归档），搜索不再收录。
+  const [blog, projects, gallery] = await Promise.all([
     getBlogPosts(),
-    getWeeklyPosts(),
     getProjectPosts(),
     getGalleryPosts(),
   ]);
@@ -50,11 +45,6 @@ export async function GET(request: Request) {
   for (const post of blog) {
     const score = matchScore(post, q);
     if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/blog/${post.slug}`, date: post.date });
-  }
-
-  for (const post of weekly) {
-    const score = matchScore(post, q);
-    if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/weekly/${post.slug}`, date: post.date });
   }
 
   for (const post of projects) {
@@ -67,52 +57,18 @@ export async function GET(request: Request) {
     if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/gallery#${encodeURIComponent(post.slug)}`, date: post.date });
   }
 
-  // Book notes
-  const bookTopics = await getBookTopics();
-  for (const book of bookTopics) {
-    const notes = await getBookNotes(book.book);
+  // Notes：学习主题 / 书 / 课程三合一，URL 扁平 `/notes/<collection>/<slug>`
+  const noteCollections = await getNoteCollections();
+  for (const collection of noteCollections) {
+    const notes = await getNoteCollectionNotes(collection.kind, collection.collection);
     for (const note of notes) {
       const score = matchScore(note, q);
       if (score > 0) {
         hits.push({
           title: note.title,
           summary: note.summary,
-          url: `/book-list/${book.book}/${note.slug}`,
+          url: `/notes/${collection.collection}/${note.slug}`,
           date: note.date,
-        });
-      }
-    }
-  }
-
-  // Course notes
-  const courseTopics = await getCourseTopics();
-  for (const course of courseTopics) {
-    const notes = await getCourseNotes(course.course);
-    for (const note of notes) {
-      const score = matchScore(note, q);
-      if (score > 0) {
-        hits.push({
-          title: note.title,
-          summary: note.summary,
-          url: `/course-list/${course.course}/${note.slug}`,
-          date: note.date,
-        });
-      }
-    }
-  }
-
-  // Learning
-  const topics = await getLearningTopics();
-  for (const topic of topics) {
-    const articles = await getLearningPosts(topic.topic);
-    for (const article of articles) {
-      const score = matchScore(article, q);
-      if (score > 0) {
-        hits.push({
-          title: article.title,
-          summary: article.summary,
-          url: `/learning/${topic.topic}/${article.slug}`,
-          date: article.date,
         });
       }
     }

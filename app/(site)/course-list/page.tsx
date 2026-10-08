@@ -1,39 +1,9 @@
-import { CollectionList } from "@/components/collection-list";
-import { EntryCardCourseTopic } from "@/components/entry-card-course-topic";
-import { getCourseTopics } from "@/lib/content";
+import { permanentRedirect } from "next/navigation";
 
-export const metadata = {
-  title: "Course List",
-  description: "Video course notes organized by module and lesson.",
-};
-
-export default async function CourseListPage() {
-  const courses = await getCourseTopics();
-
-  return (
-    <div className="page-shell">
-      <CollectionList
-        title="Course List"
-        description="Video course notes organized by module and lesson."
-      >
-        {courses.length === 0 ? (
-          <p className="empty-state">尚无课程。开始记录第一门 →</p>
-        ) : (
-          <div className="course-topic-grid">
-            {courses.map((course) => (
-              <EntryCardCourseTopic
-                key={course.course}
-                href={`/course-list/${course.course}`}
-                title={course.title}
-                platform={course.platform}
-                instructor={course.instructor}
-                summary={course.summary}
-                noteCount={course.noteCount}
-              />
-            ))}
-          </div>
-        )}
-      </CollectionList>
-    </div>
-  );
+/**
+ * 内容模块已合并到 /notes（DEC-059：永久退场用 308，把权重传下去）。
+ * 这个桩只是为了让旧链接不 404。
+ */
+export default function CourseListRedirect() {
+  permanentRedirect("/notes");
 }

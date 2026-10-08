@@ -1,5 +1,5 @@
 ---
-title: "cwebp 批量转 WebP：为什么「没有内置批量模式」其实是件好事"
+title: "cwebp 没有内置批量模式，这反而是件好事"
 date: "2026-09-17"
 updated: "2026-09-17"
 summary: "Google 的 cwebp 是个 单文件转化器：cwebp input.png -o output.webp。它没有 --glob 也没有文件夹模式 —— 这不是设计缺陷，而是 Unix 哲学：保持一个目标单一，让 find/for/xargs 去编排。本文整理 5 个真实场景下的批量写法，以及 quality/preset/lossless 怎么选。"
@@ -8,10 +8,9 @@ tags:
 lang: zh
 englishSummary: "Google's cwebp is a single-file encoder with no built-in batch mode — and that is fine. This post walks through five real batch patterns (find -exec, bash for, find -exec ... {}, xargs), how to pick quality vs lossless vs preset, and why composability beats a --glob flag."
 status: published
+cover: /images/blog/2026-09-17-cwebp-batch-image-conversion/cover.webp
+coverAlt: 两张图案相同的纸并排，一张厚重、一张轻薄
 ---
-
-# cwebp 批量转 WebP：为什么「没有内置批量模式」其实是件好事
-
 > **TL;DR**：`cwebp` 每次处理一张图片，`for` / `find` / `xargs` 去编排。实测一张 2.3 MB 的 PNG，`q=80` → **191 KB（12.6×）**，`q=75` → **153 KB（15.8×）**。
 
 ## 0 起因：为什么我在这里
@@ -33,9 +32,9 @@ $ cwebp image.png -o image.webp
 
 **单文件一个一个跑？** 还真就是这么回事。
 
-> 但这其实不是缺陷。**cwebp 没有批量模式是故意的** —— 它只做一件事：把**一张**图片编码成 WebP。让 `find` / `for` / `xargs` 负责编排，这才是 Unix 的设计。
+> 但这其实不是缺陷。**cwebp 没有批量模式是故意的**，它只做一件事：把**一张**图片编码成 WebP。让 `find` / `for` / `xargs` 负责编排，这才是 Unix 的设计。
 
-我把 5 个真实场景的写法都测试了一次，结果真的能用 —— 下面全是经过 `cwebp 1.5.0` 实测的命令。
+我把 5 个真实场景的写法都测试了一次，结果真的能用。下面全是经过 `cwebp 1.5.0` 实测的命令。
 
 ## 1 基础语法回顾
 
@@ -59,11 +58,11 @@ cwebp [options] input -o output
 | 纯色 / 图形 | **100 + lossless** |
 | 缩略图 | **60-70** |
 
-> ⚠️ **lossless 不是万能**：测了同一个 PNG，lossless → 1.88 MB（几乎等于原图），q80 → 191 KB。**照片/生图不要用 lossless** —— 反而浪费。lossless 适合图标这种少色彩、有透明区域的。
+> ⚠️ **lossless 不是万能**：测了同一个 PNG，lossless → 1.88 MB（几乎等于原图），q80 → 191 KB。**照片/生图不要用 lossless**，反而浪费。lossless 适合图标这种少色彩、有透明区域的。
 
 ## 2 五个批量写法（都是实测）
 
-起手式 —— 先准备几张真实的图片：
+起手式，先准备几张真实的图片：
 
 ```bash
 mkdir test && cp *.png test/ && cd test
@@ -76,7 +75,7 @@ find . -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) \
   -exec sh -c 'for f; do cwebp -q 80 "$f" -o "${f%.*}.webp"; done' _ {} +
 ```
 
-**优点**：递归 + 过滤扩展名 + 一次处理多个文件（`,+` 批处理）。**缺点**：`${f%.*}` 对双扩展名（`a.test.png`）只命中一次 —— 输出 `a.test.webp`，一般还好。
+**优点**：递归 + 过滤扩展名 + 一次处理多个文件（`,+` 批处理）。**缺点**：`${f%.*}` 对双扩展名（`a.test.png`）只命中一次，输出 `a.test.webp`，一般还好。
 
 ### 写法 2：bash `for` 循环（最简单）
 
@@ -95,7 +94,7 @@ for f in *.png *.jpg *.jpeg; do
 done
 ```
 
-> `shopt -s nullglob` 很关键——不设置的话没匹配到 `*.jpg` 就带着星号原样传给 cwebp，然后报错。
+> `shopt -s nullglob` 很关键，不设置的话没匹配到 `*.jpg` 就带着星号原样传给 cwebp，然后报错。
 
 ### 写法 4：`find` + `xargs`（最快）
 
@@ -116,7 +115,7 @@ find . -type f -iname "*.png" -exec sh -c '
 ' _ {} +
 ```
 
-> **为什么要这花样**：生产环境里图片通常分布在 `src/assets/products/`, `src/assets/ui/` 之类的子目录。写法 2 的 `for f in *.png` 只能拿到当前层 —— 只有 `find` 才能递归。
+> **为什么要这花样**：生产环境里图片通常分布在 `src/assets/products/`, `src/assets/ui/` 之类的子目录。写法 2 的 `for f in *.png` 只能拿到当前层，只有 `find` 才能递归。
 
 ## 3 保留原图 vs 替换原图
 
@@ -131,7 +130,7 @@ cwebp -q 80 image.png -o image.webp
 cwebp -q 80 image.png -o image.webp && rm image.png
 ```
 
-**我的判断**：博客这种静态站，**用 A（保留）更安全** —— Next.js Image 组件自己会在请求时生成 webp 下发，手动批量更多是给**上传到 CMS / 飞书**的场景。
+**我的判断**：博客这种静态站，**用 A（保留）更安全**，Next.js Image 组件自己会在请求时生成 webp 下发，手动批量更多是给**上传到 CMS / 飞书**的场景。
 
 > 实际上，官网的很多图片我都没手动转，靠 Vercel 的 `@vercel/og` + `next/image` 在运行时自动做的。**手动 cwebp 更多的是在「别的地方需要静态 Webp 文件」的时候掰出来的**。
 
@@ -144,9 +143,9 @@ cwebp -q 80 image.png -o image.webp && rm image.png
 | **squoosh-cli** | Google 出的，支持 cwebp/squoosh/gui 三种 | Node 依赖 | 本地想点点就转 |
 | **cjxl** (libjxl) | 新格式，同等质量更小 | 浏览器兼容差 | 仅对 Chrome 110+ 项目勇搭 |
 
-> ⚠️ **cwebp 1.5.0 已移除对「伪造/损坏输入」的容错** —— 早版本碰到坏 PNG 还会生成 0 字节垃圾文件，1.5 直接 `Error! Cannot read input picture`。**这算好事**：早失败早知道。
+> ⚠️ **cwebp 1.5.0 已移除对「伪造/损坏输入」的容错**，早版本碰到坏 PNG 还会生成 0 字节垃圾文件，1.5 直接 `Error! Cannot read input picture`。**这算好事**：早失败早知道。
 
-补一个意外收获：`brew install webp` 还给你带了 `img2webp` —— 专门拼**动态/多张**图片成动画 WebP 的工具。静态转用不到。
+补一个意外收获：`brew install webp` 还给你带了 `img2webp`，专门拼**动态/多张**图片成动画 WebP 的工具。静态转用不到。
 
 ## 5 真实项目的写法（怎么丢进 CI）
 
@@ -176,7 +175,7 @@ chmod +x scripts/optimize-images.sh
 ```
 
 - `-print0` + `read -d ''`：**正确处理文件名含空格**（不然 `find -exec` 也可能断）
-- `if [ ! -f "$out" ]`：**增量** —— 转过的不重转，CI 幂等
+- `if [ ! -f "$out" ]`：**增量**，转过的不重转，CI 幂等
 - `set -euo pipefail`：任一环节出错立即停
 
 挂 CI：
@@ -202,25 +201,25 @@ chmod +x scripts/optimize-images.sh
 | lossless | 1,880,574 B | 1.28× | — |
 | lossless + `-z 9` | (略有下降) | — | — |
 
-> `q=75` 看上去损失了 2 dB PSNR，但**对人眼几乎不可区分**（40 dB 以上就饱和了）。照片优先 `q=75` —— 能省七成。
+> `q=75` 看上去损失了 2 dB PSNR，但**对人眼几乎不可区分**（40 dB 以上就饱和了）。照片优先 `q=75`，能省七成。
 
 ## 7 坑
 
 - ✅ **`find ... {} +` vs `{} \;`**：前者把多个文件一次丢给 `sh -c`（快），后者每次一个（慢）。选 `+`。
 - ✅ **`${f%.*}` 会在最后一个点截断**：`my.photo.png` → `my.photo.webp`（正确），`archive.tar.gz` → `archive.tar.webp`（可能不是你想要）。
-- ❌ **不要对 `a.b.c.png` 期望 `a.webp`** —— 用 `sed 's/\.[^.]*$//'` 才能拿到纯主干。
-- ❌ **`.gif` 会被 cwebp 当静态图处理** —— 想转动画 GIF 去用 `img2webp`，或者 `gifsicle` 切帧。
-- ❌ **`cwebp` 不能读 `.heic`** —— 需要 `libheif` + `heif-convert` 先转 PNG/JPEG。
+- ❌ **不要对 `a.b.c.png` 期望 `a.webp`**，用 `sed 's/\.[^.]*$//'` 才能拿到纯主干。
+- ❌ **`.gif` 会被 cwebp 当静态图处理**，想转动画 GIF 去用 `img2webp`，或者 `gifsicle` 切帧。
+- ❌ **`cwebp` 不能读 `.heic`**，需要 `libheif` + `heif-convert` 先转 PNG/JPEG。
 
 ## 8 结论：为什么「没批量模式」是优点
 
 `cwebp` 没有 `--glob`。
 
-一开始我还以为这是落后 —— 直到用 `dsh`（那个 agent 框架）和 `diagram-design` 学到的一件事：
+一开始我还以为这是落后，直到用 `dsh`（那个 agent 框架）和 `diagram-design` 学到的一件事：
 
 > **「只活在散文里的规则会发版坏例子。」而「没实现的特性」 =「不会被误用」。**
 
-cwebp 只管「把一张图编成 WebP」。编排交给你 —— `find`/`for`/`xargs` 在什么时候进、处理哪些文件、输出到哪里，**都是由你的脚本决定**。
+cwebp 只管「把一张图编成 WebP」。编排交给你：`find`/`for`/`xargs` 在什么时候进、处理哪些文件、输出到哪里，**都是由你的脚本决定**。
 
 这意味着：
 
@@ -233,8 +232,8 @@ cwebp 只管「把一张图编成 WebP」。编排交给你 —— `find`/`for`/
 
 > 我的判断：cwebp 就是那种**设计得看起来不够智能，实际用起来比你想象的方便**的工具。在 macOS 上 `brew install webp` 三秒就能用，结合一行 `find` 就能搞定成百上千张图片。
 
-**五个写法里挑一个就行** —— `find -exec` 用于生产 / 递归；`for` 用于临时 / 当前目录。
+**五个写法里挑一个就行**：`find -exec` 用于生产 / 递归；`for` 用于临时 / 当前目录。
 
 ---
 
-> 📌 **方法论脚注**：这篇文章本身就是在一个 2.3 MB 的生图 PNG 上实测出来的 —— `cwebp -q 80` 立刻把它压到 191 KB，官网加载从「嗖一下卡住」变成「秒开」。**实践永远比推理可信**，所以我每次介绍「怎么做」，都会先跑一次。
+> 📌 **方法论脚注**：这篇文章本身就是在一个 2.3 MB 的生图 PNG 上实测出来的，`cwebp -q 80` 立刻把它压到 191 KB，官网加载从「嗖一下卡住」变成「秒开」。**实践永远比推理可信**，所以我每次介绍「怎么做」，都会先跑一次。

@@ -23,7 +23,8 @@
     "knowledge:confirm-publish": "node scripts/knowledge-field.mjs confirm-publish",
     "knowledge:deploy-production": "node scripts/knowledge-field.mjs deploy-production",
     "knowledge:report": "node scripts/knowledge-field.mjs report",
-    "knowledge:cron": "bash scripts/knowledge-field-cron.sh"
+    "knowledge:cron": "bash scripts/knowledge-field-cron.sh",
+    "content:audit": "node scripts/audit-content.mjs"
   },
   "dependencies": {
     "@next/mdx": "16.2.7",

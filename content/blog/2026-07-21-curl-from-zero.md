@@ -5,10 +5,12 @@ summary: "AI Agent（Claude Code / Codex / Hermes）在终端里跑得最多的�
 tags:
   - "zero-to-tech"
   - "AI Agent"
-status: published
+status: archived
 lang: zh
 category: "技术/计算机基础"
 englishSummary: "curl is one of the most frequently run commands by AI Agents (Claude Code / Codex / Hermes). It's not a browser — there's no 'press enter → see page' convenience — but it lets agents precisely control every byte of an HTTP request and read every byte of the response. This piece covers curl from an agent's perspective: why agents choose curl over Postman, 13 core flags and how to use them, 8 high-frequency agent patterns, and the HTTP protocol details hidden in curl's output. After reading, you'll explore any API as efficiently as an agent does."
+cover: /images/blog/2026-07-21-curl-from-zero/cover.webp
+coverAlt: 一根细长的纸探针插进两张纸之间的窄缝
 ---
 
 # curl从0-1：Agent最常用的HTTP探针
@@ -422,5 +424,5 @@ curl -s -o /dev/null -w "总耗时: %{time_total}s" https://dog.ceo/api/breeds/i
 - **zero-to-tech / Docker 是什么：为什么「在我电脑上能跑」还不够**
 - **zero-to-tech / 进程、线程、内存：你的电脑同时在跑多少事**
 
-上一篇：[Nginx从0-1：从看懂配置到自己写配置](/blog/nginx-from-zero)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[Nginx从0-1：从看懂配置到自己写配置](/blog/2026-07-21-nginx-from-zero)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)

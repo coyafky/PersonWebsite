@@ -5,9 +5,11 @@ summary: "画幅比例决定「画布形状」，景别决定「镜头远近」�
 tags:
   - "AI 生图"
   - "Prompt 工程"
-status: published
+status: archived
 lang: zh
 englishSummary: "Chapter 9 of the AI image-generation methodology. Aspect ratio decides the canvas shape, shot type the distance, and camera angle the height and perspective from which the subject is seen. High, eye-level, and low angles each carry distinct psychological weight — small and quiet, natural and real, or powerful and commanding."
+cover: /images/blog/2026-08-23-ai-image-generation-camera-angle/cover.webp
+coverAlt: 同一张卡片的两个姿态：平躺与竖立
 ---
 
 构图变量已经讲了两个模块：**画幅比例**（画布是什么形状）、**景别**（镜头离主体多远）。这一章是第三个——**机位**。

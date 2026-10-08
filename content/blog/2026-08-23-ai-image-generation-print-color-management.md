@@ -4,9 +4,11 @@ date: "2026-08-23"
 summary: "用 Midjourney、Stable Diffusion 生成的图，屏幕上看很惊艳，一上印刷机却满是噪点和色偏。这篇观察拆解了「生图 → 印刷」这条链路里的三个关键点：RGB 与 CMYK 的色域鸿沟、分辨率与网线数的匹配、以及 ICC 色彩管理闭环——核心是一句话：生成和交付是两个标准。"
 tags:
   - "AI 生图"
-status: published
+status: archived
 lang: zh
 englishSummary: "Why do AI-generated images look stunning on screen but print with noise and color shifts? This note unpacks the RGB-to-CMYK gamut gap, resolution vs. line-screen matching, and the ICC color-management loop. The core takeaway: generating an image and delivering it to print are two different standards."
+cover: /images/blog/2026-08-23-ai-image-generation-print-color-management/cover.webp
+coverAlt: 上层纸在中途截断，下层纸延续同样的纹理，一条蓝线对齐
 ---
 
 # AI 生图再惊艳，为什么一印刷就翻车：从像素到印刷的色彩鸿沟

@@ -705,7 +705,7 @@ async function report(config, options) {
   }
 
   const contentRows = [];
-  for (const collection of ["blog", "weekly", "projects", "career", "book-list"]) {
+  for (const collection of ["blog", "weekly", "projects", "career", "notes"]) {
     const target = path.join(repoRoot, "content", collection);
     const files = (await pathExists(target, "dir")) ? await findMarkdownFiles(target) : [];
     const statusCounts = await countStatuses(files);

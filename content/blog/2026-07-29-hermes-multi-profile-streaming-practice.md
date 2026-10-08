@@ -3,12 +3,14 @@ title: "Hermes 多 Profile 流式卡片实践：从能跑到稳定可运营"
 date: "2026-07-29"
 summary: >-
   当两个飞书机器人在同一台机器上共用流式卡片时，第一个"突然消失"、图片重复发送、群里有人能用有人不能用——这些问题不是配置写错了，是隔离边界没划对。本文记录了将销售助手与内容助手同时接入飞书流式卡片的完整实践，包含四层隔离模型、故障决策树、运维检查清单和七个真实踩坑记录。
-status: published
+status: archived
 tags:
   - "Hermes"
   - "飞书"
 lang: zh
 englishSummary: ""
+cover: /images/blog/2026-07-29-hermes-multi-profile-streaming-practice/cover.webp
+coverAlt: 原本倾斜摇晃的纸堆被整理成稳定的垂直叠放
 ---
 
 ## 先说结论：多 Profile 的核心不是"多开两个进程"

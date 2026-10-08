@@ -69,6 +69,11 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "height": 800,
     "blurDataURL": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAADQAwCdASoYABAAPt1cpkyopSOiMAgBEBuJZwAAXlvuo9rCZ+V/sxgA/u/jDL/xN01wdtvvO78YP1MyQUuOjHL6JUu8sHicH5/U4Ysagwdb/4tVZgrz2rD2HKKN3w+fBDyALajWAAA="
   },
+  "/diagrams/glue-coding-metaphor.webp": {
+    "width": 1264,
+    "height": 848,
+    "blurDataURL": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAACQBACdASoYABEAPt1kqE2opiOiMBgIARAbiWcAy6WMHG+cwpmA1I7cUsGMHoAA/vNvdJLQxM1jQIUQbiVomGHqdH/tgJEb/qDhbmWlIN3Rb1R7IuBfMBS3dR//g8qNV+jmIJjmxP3hL+jioVx69ZiAAAA="
+  },
   "/diagrams/how-the-internet-works.png": {
     "width": 1200,
     "height": 860,
@@ -93,6 +98,16 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "width": 1200,
     "height": 800,
     "blurDataURL": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACQAwCdASoYABAAPt1apkyopSOiMAgBEBuJZwDImCHgVzT0rdQAAP7wOcal5m7zTJMSGjaG1Tao7tQUm8/8W5kIAAA="
+  },
+  "/diagrams/p03-cli-setup-info.webp": {
+    "width": 1264,
+    "height": 848,
+    "blurDataURL": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAABwBACdASoYABEAPt1iq08opSQiKAqpEBuJZQDPoYwwcSx/e3yJ//ovTz2owAD+8i6Ymlnu5bDmMLx1ipx+4qzs9WywUuFgX/gYgprQKdkWjEAzbaAFtFwPKkEYcDp6q4zplfJu3caVDdOmuZnSstM+19PqNWo32/3smF3EUS0QD4dVF8yZk0+Gla/2gAAA"
+  },
+  "/diagrams/p06-first-project-info.webp": {
+    "width": 1264,
+    "height": 848,
+    "blurDataURL": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAADwBACdASoYABEAPt1kqE+opaOmqAqpEBuJaQDPoywTlH+3DCPJxRzreS8FzP28mAAA/usci+uLYdrQeYfbf+Mb9vDdRjRPVrc8LSrdNoBPxX0Rrx7IWIx5ukOXQghNvkEcPD2XScR5yN6E/Ft8zeUX83stbKaXqij3GyzvH4yW4EBBN/Ipllc4Cz4W/ygM7UuoFILaAAA="
   },
   "/diagrams/path-absolute-vs-relative.png": {
     "width": 1200,
@@ -174,6 +189,171 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "height": 1376,
     "blurDataURL": "data:image/webp;base64,UklGRhQBAABXRUJQVlA4IAgBAAAQBwCdASoYACsAPt1mqk+opaOiKqgBEBuJYwDGQBYhubwaTEKfSel+1yTozrOVUmB2Or0yXg0sLPqmZ7TYP8TQAAD+8ZMn/WHrG+3c4yeM2G2SnR9BtCBsqZL1VP2Zq0avVnrncd5iklDu1N67CvTI8dr4+OMs8791lgIAq3P2QoulXXgMbvW+D/JdmK02Yrc2oPVYaMYfCWdb1d+fA83cv2kQF+k8L3OAXMXaMwJ9OtPhdUUnSRstZHneKxnsCT9W+nzlqe8BMebbyX1BidmR16NzsZlBSg/+Gp1VEt9/4GtPcLMBzUpwiNpRaQsOdsCavvQVhC46rgX6MgdSA7+WZYka0LkWAAA="
   },
+  "/images/blog/2026-03-21-openclaw-youtube-reading-comprehension/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAACwAwCdASoYAA4APt1apkyopSOiMAgBEBuJZwC7ABugORpMGayoAAD+1eulJ+vJHpx4n2j0r3oEQ+4RrTx4nOMB1iVfQ/f7SfHAAA=="
+  },
+  "/images/blog/2026-04-20-ai-fable-prompt/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAAAwAwCdASoYAA4APt1epkyopSOiMAgBEBuJZwAAetDvp7oAAP7vaCurEUMBe4/rD+9p7snKhXVw7fNzGnViuOsYXPxjG5yY39SdWHzuEco2xQAA"
+  },
+  "/images/blog/2026-05-10-agentic-workflow/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAACwAwCdASoYAA4APt1cpkyopSOiMAgBEBuJZwAAW+z4OAxTrp0UAAD+0xo1Etwxr2gzjfC/vDSbOp80/jr4kfPixuxpLTDepRUdP3ANCvcBN3QBTIF7PZBEfYSDt3HAAAA="
+  },
+  "/images/blog/2026-05-20-ai-enterprise-efficiency/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAACwAwCdASoYAA4APt1apkyopSOiMAgBEBuJZwAAW9u/zIZ+XjEMAAD+5yfKtjf3KXJlQZ0aKtfJ7OmarOJH4zZshrL6J+ydQgAAAA=="
+  },
+  "/images/blog/2026-05-25-computational-thinking-guide/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAABwAwCdASoYAA4APt1apkyopSOiMAgBEBuJZwAAW/BUBdR/t3AA/u1YCq4IzETYRITCK+zTMCZJUW9c6zPsg6jGfZaqbHOzDvFwAA=="
+  },
+  "/images/blog/2026-06-08-first-note/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAQBACdASoYAA4APt1cpkyopSOiMAgBEBuJZwCo9CB0JP8pFq19wPB4AAD8xl/Qvj4QAjwk9ekpBsksQKPaNsI2Pqh6H5Wfa6JaCZ6EfgooUBv4+xaOgAAA"
+  },
+  "/images/blog/2026-06-12-color-rendering-ark-seedream/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAwBACdASoYAA4APt1cp0yopSOiMAgBEBuJZQC7ACHiGCKadzNXNZKgsAAA/tMqeJg1jUmW8fEj4ulW9dR+qe+MpNLyIDrromdXkx34SdxkbnC6SPpMC4kUg5vIzRmga9Vi1Wb4brQs7H2O7AA="
+  },
+  "/images/blog/2026-06-12-hermes-feishu-bot-config/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAwCdASoYAA4APt1cpkyopSOiMAgBEBuJaQC+SCHcf5PJj7X+ye5AAP7vu/FZm/t0ZNJ4vzQh9KlHe4xlc1OF/lKBdKWaIFQM/e+EbLcOqGaAAAA="
+  },
+  "/images/blog/2026-06-25-why-write-prd-spec-before-project/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAABQBACdASoYAA4APt1epkyopSOiMAgBEBuJaQDImYuG36064LnFtFFEsrmYAP7x2pl/SPpuAOH/7jdKW6NcelPSCwoALb82a1vii4OjJmsvKFRN7jPz96b3YPNkTmfkDqd38Qa2D33iY8YIZqBgAA=="
+  },
+  "/images/blog/2026-07-09-api-basics/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAACwAwCdASoYAA4APt1cpkyopSOiMAgBEBuJaQC7ACHe96tYQpIVIAD+7Xo6Vko+KteBDRfbNbcI6Y3K85uac1OPCENxmkyAAAA="
+  },
+  "/images/blog/2026-07-09-git-version-control/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACQAwCdASoYAA4APt0+s1SooiWjmAEQG4lnAABchV2yEvNIC3KgAP7tRPc3eorL4T5Qr2XcbNn6AasXInLrDY30ygx/VkcqEh6BLjWfN+gAAA=="
+  },
+  "/images/blog/2026-07-09-github-remote-and-mcp/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAACQAwCdASoYAA4ALqVut1ujKKioiICkSzgF8kId6x2ktpGgB0cgAP75cgCmT8DJF1rWYveqi8W2KhWiV3/TQExM1oW/GpGaIj1fTMuMNQju+2xGu20ulVvvTufbHv7LHUAAAA=="
+  },
+  "/images/blog/2026-07-09-how-network-work/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADQAwCdASoYAA4APt1apkyopSOiMAgBEBuJZwC+SCHes4dN9oRj3AAA/uqBtefoxKolXqRDrFENtCRL7rMBRw4KXblrKsOVLG2Ji7V1JpjXZBTCBRMuufits2n2+FoD8AA="
+  },
+  "/images/blog/2026-07-09-js-modules-history/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADQAwCdASoYAA4APt1cp0yopSOiMAgBEBuJaQDCgB49UnU+uLn8+AAA/sP9s4IcymVoqE9D+qMmOGc3GvMf7/0hzaT/tb739YaiTvcdEGyDaa4vEAA="
+  },
+  "/images/blog/2026-07-09-know-your-computer/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAAAwBACdASoYAA4APt1cpkyopSOiMAgBEBuJZwDG9CHetpQNGQv+BnszkAAA/u/SrrX4YtX4OzPaVNbeviJETgThharedC6Kp0lVPz/DpEGIIfQwhv0YUEQdDduzt50cg9L/JErny/BAasLa32M02qHKT3A1ggAA"
+  },
+  "/images/blog/2026-07-09-npm-and-vite/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAACwAwCdASoYAA4APt1apkyopSOiMAgBEBuJZwDImCHQSpbC8zcE+AD+6ncVpA4D16+lVsWWTOegqJjuTxCbj1Mfr89axeUJJ+WQRK8IVlAfvAGHHzPj9NVY+bxhkrSS7PqsEV9hSAA="
+  },
+  "/images/blog/2026-07-09-react-data-driven-ui/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADwAwCdASoYAA4APt1cqE0opSQiMAgBEBuJZwCsACHhnAdM1hGuEgyIAP7TUpQkXGPzpoSQfkfFQV6CO3d9wrnrFiq24wQSbCrU5x9wipEGXyL1QSuangAA"
+  },
+  "/images/blog/2026-07-09-react-frontend-rules/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAACQAwCdASoYAA4APt1cp0yopSOiMAgBEBuJZwDA3CHhmUa/7d0AAP7DhjZAMPjpa3GMi1Ddffa4argznEEBaQ1MYTaEftNT3nTfHjHtovYzu/owAAA="
+  },
+  "/images/blog/2026-07-09-server-deploy-and-nginx/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQAwCdASoYAA4APt1cpkyopSOiMAgBEBuJZwC7ACHgCyXUuPYp7lAA/ow6uTsTusXqJ86JrnU+gzCikUWBGX62JoVEYsiQb9pvsS1A1GCSVXTPcTkQAA=="
+  },
+  "/images/blog/2026-07-09-terminal-linux-basics/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADwAwCdASoYAA4APt1cp0yopSOiMAgBEBuJZwC+SCHhgTwVGf5jrIAAAP7zfaIBZ1A7SXvrJpgy3lBT1Oi4rV8sjR2VMEYi4r3a/ymaHkiNEf68xhhmQ0wA"
+  },
+  "/images/blog/2026-07-21-api-practice-review/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAABQAwCdASoYAA4APt1cpkyopSOiMAgBEBuJZwDE2CHfh/ToMAD+79ATA8U9f7n15G1Gfp0hL7alG3ZKjwxMA1sJ6zvBej42DsXUzDKyWkCEUi4lpOV7X6S2WAAAAA=="
+  },
+  "/images/blog/2026-07-21-curl-from-zero/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAACQAwCdASoYAA4APt1apkyopSOiMAgBEBuJaQAAW+Hq8fsGDjMAAP7vvkyRu4Ii3zVAUQuBhkP7cxR7orKblK6a+orrAc7cOBOM6takIiy9OEPOn/D+Uj3CIXbs8Zz8cyUszXAmvQTrzTvpCPpMjtewAAA="
+  },
+  "/images/blog/2026-07-21-nextjs-deploy-pitfalls/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAACQAwCdASoYAA4APt1apkyopSOiMAgBEBuJaWVuADc14dJHe0igAP7vSpSzVP7kESZW4pkB5/lVRMt6d+H6AAAA"
+  },
+  "/images/blog/2026-07-21-nginx-from-zero/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAAAQBACdASoYAA4APt1cpkyopSOiMAgBEBuJZwDA3CG/f125VlDrkA16wAD+1C67/nz6beRpJrgViaUI3sUhrG0HZ+DjCqOadh7okZAbMk6oVoe4l7QAAA=="
+  },
+  "/images/blog/2026-07-22-ai-agent-12-principles/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAwAwCdASoYAA4APt1cpkyopSOiMAgBEBuJaQDImC0B5mIAAP7uzYgaRvl9589WB1MgZ7SZRGEpdyKnW+dWnqwonG0WEDrbPr1mq8BwSRDRuotO9Uig/AAA"
+  },
+  "/images/blog/2026-07-27-vibe-coding-terminology/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACQAwCdASoYAA4APt1cpkyopSOiMAgBEBuJZ12AV5kTjb5hogfyAP7txuJuaefYhAFhVwoz1tTUL1j5UCijgCVZRZpe/WMEdGAXtxUO5bAAAA=="
+  },
+  "/images/blog/2026-07-29-hermes-multi-profile-replication/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAQBACdASoYAA4APt1cp0yopSOiMAgBEBuJZwC+SCKUgr5Xi7O+NM+WAAD+54W5jOwjWE/a03AgxWoVHZxTga2rMPTtjjj1uRfcdRq4Gj1az1Hnwaw8tIAA"
+  },
+  "/images/blog/2026-07-29-hermes-multi-profile-streaming-practice/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAACwAwCdASoYAA4APt1cpkyopSOiMAgBEBuJZwDImCHf5bYDE/UBAAD+5xqMDnjAmkhWePFPl/e6kDTj4AfaorN+eAFXQAAA"
+  },
+  "/images/blog/2026-07-30-feishu-image-generation-fixed-workflow/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACwAwCdASoYAA4APt1cpkyopSOiMAgBEBuJaQDG9CHfpP2bK71RYAD+5yghPNuF8oHMdHAXWJcJUHDIuqxV1FU+tnAKSK1HS+xG2iWBdrCAAA=="
+  },
+  "/images/blog/2026-08-13-ai-era-seo-survival-guide/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAQBACdASoYAA4APt1cpkyopSOiMAgBEBuJaQDImBKgP/SSl4N9n8UUgAD9D+UDaFhkCon+jLGUMcCu4uBS2V6BwZEZ4fvcwESMEpr57chjhr7R8VYBrfb19iYblZeDZkAnMb4cc0wAAA=="
+  },
+  "/images/blog/2026-08-22-ai-teaching-system-design/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADwAwCdASoYAA4APt1cpkyopSOiMAgBEBuJaQDLLCICg5Y5xrTa4aiAAP7tVk10UA9AOtz8l6vp3y8Q4CCQkeImR6ljIdVxiur/EkWC4DCxdDAQYlSCAgAA"
+  },
+  "/images/blog/2026-08-23-ai-image-generation-aspect-ratio/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwAwCdASoYAA4APt1ep00opSOiMAgBEBuJZwAAXKOqdBp11XRDcvLwAP7x3lpvAslFG63Kp2+Dle3y4lV2Q5YR/0t/S88q7rRShFbLL/NjUBE2f1gAAA=="
+  },
+  "/images/blog/2026-08-23-ai-image-generation-camera-angle/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQAwCdASoYAA4APt1qqU4opqQiMAgBEBuJaQAUYAI4P2LGj0ApFgAA/sU8qcV1kPOPyECr3a5I/ST432inXxlr04zxHWDA/lA/1IP6InFIcuc1pvQAAA=="
+  },
   "/images/blog/2026-08-23-ai-image-generation-camera-angle/eye-level-neon-rain.png": {
     "width": 1448,
     "height": 1086,
@@ -189,10 +369,45 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "height": 1086,
     "blurDataURL": "data:image/webp;base64,UklGRvwAAABXRUJQVlA4IPAAAACQBQCdASoYABIAPt1mq1EopSOiqAgBEBuJQBOmZknMFUAmIBtpvwcaQzJjq6e5k/hoySQ+cAD+703E3Bheb6pQTHThXcqZZMuLPsYoXhVXq4Z/RvTHxnc71Yf5lpaOXla/mnbBB4APEDAD5e5D8xyq/O6EuQnbQjaFXFtOWLBEpd4dBhrA10lf0grPEV7sIOdNTNCVvSsFUWae0t1LXpFD44oify0N9IGAxcHLtkyQ5SnANP1BXS9r0HEIyC4b/xBL3phLmcSeYijRB7QyTE8KCNL/lnrrOobWKlX7Dr+zwgfCDWt9ueoSlkEtKTEAAAA="
   },
+  "/images/blog/2026-08-23-ai-image-generation-lens/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAACQAwCdASoYAA4APt1cpkyopSOiMAgBEBuJaQC+SB2IpHwihokAAP7f9We2TBYUnIoxfQPvlbKlVjsnNgQyxsfg+j8jQsSxOg83523rd5tsNgAA"
+  },
+  "/images/blog/2026-08-23-ai-image-generation-lighting-variables/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAABQBACdASoYAA4APt1eqU2opSQiMAgBEBuJZwC+SCHfj8h+VtCjrbUMPWCAAP7tWCpa5Bebzue1Az6MT13zSra8jr0sUEqlPi2+Tw1eSGbhpp0xEEXVEaG8biLbo4msPjOr4N0rJTVnAAAA"
+  },
+  "/images/blog/2026-08-23-ai-image-generation-material-variables/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwAwCdASoYAA4APt1ep00opSOiMAgBEBuJZwDCgCHhFb4KujHV6WQwAP7vvoq1tWEYY/QpXWNK6oY2b84mF0vK/IzVUb98FlnArrGqDrOgMiCOFQEKDEkSGIXWdT5JGnmXOqMMjSGvW5D0DCVU0AQA"
+  },
+  "/images/blog/2026-08-23-ai-image-generation-mindset/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAABQBACdASoYAA4APt1cpkyopSOiMAgBEBuJZwC2yBut//gGeWx26yzHvvagAOAzwoqlvJ5g9Q+qE7Ayx/6bS1i1dYkn1OJoAb9Rwxq77/wMyhB3fh+G19ObDBNMC9eQgEnADasAAAA="
+  },
+  "/images/blog/2026-08-23-ai-image-generation-mood-variables/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAACwAwCdASoYAA4APt1gp00opaOiMAgBEBuJaQAAW+pgg6XHviHUQAD+774ib0vmKovRkTBY1m/tdy48R27Hg5xboUjX5P7wgY4AAA=="
+  },
+  "/images/blog/2026-08-23-ai-image-generation-print-color-management/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAACQAwCdASoYAA4APt1epkyopSOiMAgBEBuJZwABHuovUsKmnECAAP77LF3C8fTT/11W/9Xn79RQyBjftEfFDo3Ntb3udPpwjJbdqLz5yTWut08uTw4dOrVgbpjZK4/xAAA="
+  },
   "/images/blog/2026-08-23-ai-image-generation-shot-type/close-up-neon-rain.png": {
     "width": 1023,
     "height": 1537,
     "blurDataURL": "data:image/webp;base64,UklGRoQBAABXRUJQVlA4IHgBAACwBwCdASoYACUAPt1WpEyopCOiNVgIARAbiWYAnTMWffED+gCWclABFHBAKqaExmT9IfbrG3kQjIzDMiyh2tQTsX2f1rUAAP7pc/dqj0fOrN1wu4y1oZ2K5AShH78iKLO5ZWDfSF+JUiSSIvl9l0IPV5mcpkFdNUXUUdwvrD6fgFNA+2mflI4f3BGpb4gKtZfGo5087/Pimg8MSSuX8+gRlQMO74LUfYORXN5QZ2W074XPYTTb8wsVU5kEq+fh1oGfE1vZ/BKLmkOobrEBCEsUnQMPX2J4ot+dgo0dsu4lLfE0ef2DlutoqtVXtrkdPJgL2knywJUcWa90V8/Gnn151nKaoIuIXMUy6iEE1QROo6ZvyJYMzCR9SzD732BgBl4+GLXVy0g87o7koQlJqi5BK5fQJOnDL+7QheKcP9eLd4BCwxeR3DEv9e7Z5gi8WDkHd1H1lqR1JcOAThVooW+Xh8V+botLZjxyd2KVtztJRCPfz4NaQAAA"
+  },
+  "/images/blog/2026-08-23-ai-image-generation-shot-type/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAACwAwCdASoYAA4ALqVut1ujKKioiICkSzgF2AIcd7r92Mkqj05gAAD+9PUrN3W4yPBwZpQVIdNhFGgjv7sqXtoxX68tWn6ZHzCUmXt/MbqPcWd7paE7pnjTLVapb/3SfP2jry2AAAA="
   },
   "/images/blog/2026-08-23-ai-image-generation-shot-type/extreme-close-up-neon-rain.png": {
     "width": 1086,
@@ -219,10 +434,100 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "height": 1086,
     "blurDataURL": "data:image/webp;base64,UklGRuYAAABXRUJQVlA4INoAAAAwBgCdASoYABIAPt1kp1AopaMiqAqpEBuJQBbfXpHmOLK0YzeqZCb9GVm4s/wMWrE8jdP8Dkkqv4RgAP7yp2rbCsmC/JI+eN0TrjOLfWA0vCSnlmBnGXWe2hpp9s3ZG6SZREKZn/wWXRvMG6Q0P/zRBXApolUI3ASCPu4XwVvhxjZb7gTM2kNKax/5JsSP9ePZ4AJFkpetCcNNh0JhcUYsvJ325N597XoxMRJaKmGj+UcykGUhcdDTU0fxWpT1jsO+uN6pSmBEc4t7wenR731cgYEn1zzN2oAAAA=="
   },
+  "/images/blog/2026-08-23-ai-image-generation-style-variables/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAAAQBACdASoYAA4APt1qqU4opqQiMAgBEBuJZwAWIAMRDgld3YYUejywQAD+sjRJHHWMmUJiD2Sjs9YszPHX+768muqgWDfY2Z1M4WYcUVAYDdnmG99zO/154kZIIbnaJdNjzVhUYDMkhgAA"
+  },
+  "/images/blog/2026-08-23-ai-image-generation-visual-variable-formula/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAAAwAwCdASoYAA4APt1cpkyopSOiMAgBEBuJZwAAW++XpYUAAP7vzqIXi1CY66FmvjHSnn67JV2P+ucwPKiSwTWsq1wrAAAA"
+  },
+  "/images/blog/2026-08-23-crm-sales-assistant-feishu/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAAAwBACdASoYAA4APt1cpkyopSOiMAgBEBuJZwC/OCIj/AMUo5TvhbrbRwAA/u2NgRw0vJGrYVriLY4u3O+X8yZbOgifuW4vfT24xLnh/TcoZVZEeoiHZF01XMmf2sxrz0LifkLP5is5Jmnz9834AhvEzTAAAA=="
+  },
+  "/images/blog/2026-08-23-doubao-video-pipeline/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAAAQBACdASoYAA4APt1gqU2opaQiMAgBEBuJZwDG9GlpSim1AtRk2e47QAD++yyc99IpK39HmUevuVBsZpfN/91RUDJSJSFmYH/7vJV+1q/Wx25W5iDW9FJ/xfWFJK0N2iaL5IGcFOR52YtC6kAAAA=="
+  },
+  "/images/blog/2026-08-23-douyin-cover-skill/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAABQBACdASoYAA4APt1cp0yopSOiMAgBEBuJZwDE2CHgVor/6BPF+g2bxaWAAP7zdPnw4PE0ezCex9fWZVmjwTyNhD1Flu6imtpWK6CIxBWnuCeaK4irwoSGNTJjyHTq3+j7GNDHAwtC/HAAAAA="
+  },
+  "/images/blog/2026-08-23-geoflow-content-production-pipeline/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAwCdASoYAA4APt1qqU4opqQiMAgBEBuJZwDE2CHpRHlvYSQoZQwIAP7qjL4Gotjmu/hpvYMRQmnSUvKETW8sh8PdymdZGtkqmR7NJ0RGSAAA"
+  },
+  "/images/blog/2026-08-23-hermes-streaming-cards-feishu/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAACwAwCdASoYAA4APt1ep00opSOiMAgBEBuJZwDCgCHhh2e2BYiqgAD+79AM/M8JPMZU9Tr6ZCUVNEdQFXUIqQOMBrEWAZ1n9nxqL01Z4jH24sN1HL5ZAaXQ5rWXvkdivOAAAA=="
+  },
+  "/images/blog/2026-08-23-xiaohongshu-graphic-pipeline/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADQAwCdASoYAA4APt1apkyopSOiMAgBEBuJZwDImCHfiUDe3sBAsyAA/u/CUayg/57+1LuWFGu/MGslDEtzDb8RPeQQAA=="
+  },
+  "/images/blog/2026-08-24-page-by-page-reading/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAAAQBACdASoYAA4APt1cp0yopSOiMAgBEBuJaQC+SCFU6gVK7/9kCPRVXAD+6nw7mBeK78gmfpMuj8ECBkqW3aLggTnPPm/zHd/kr1PVJNs4+DbuWvLWCkGMVRPVRqPBOcrZMhRfH6uGZ32lxvLokCT2C8tIAA=="
+  },
+  "/images/blog/2026-09-10-ai-knowledge-base-matching/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAABQAwCdASoYAA4APt1apkyopSOiMAgBEBuJZw3EoAIwCeXqYAD+79eN/kELh4//VcWr8zjMUG2XCgv3zeDpiXRbKu3qm126RZMeaT1vFbhPaYy9tZVxWaOcVZv9nwuK9ER+VyIq/PTEA2gAAAA="
+  },
+  "/images/blog/2026-09-15-diagram-design-skill-engineering/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAwCdASoYAA4APt1ep00opSOiMAgBEBuJaQDMHCHgZwr5UUZgQAD+78JMWmHHNALTs3dFBy91ZRS4OVb9UNbE0FeAAA=="
+  },
+  "/images/blog/2026-09-15-hypit-video-compiler-agent-skill/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRpQAAABXRUJQVlA4IIgAAAAwBACdASoYAA4APt1iqUyopiQiMAgBEBuJZwCw7GZHKoobOjOPQikLgAAA/vQIgCkgEX4faab8yQYqEUdv9mZUL3pSyJnpZTe3qcjdWsrxWVqH4s128uU8wmGJhap7BiDS3QKXdcllPZIg505f3rTKFaikO2XmdKO7SAfxuMoFFosYUl7o9YAA"
+  },
+  "/images/blog/2026-09-15-xialingguo-ip-cover-skill/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAABQAwCdASoYAA4APt1cpkyopSOiMAgBEBuJaQDLLC0H1ZNYAAD+77eMPenr8nUu9WdfuJkvapCHLsie+It+rx9bfAkszs/YlgNRjesr5ZiwAA=="
+  },
+  "/images/blog/2026-09-16-agent-skills-catalog-evals/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADwAwCdASoYAA4APt1cp0yopSOiMAgBEBuJaQAAW+uXhruYtMu3Bi0AAP7TSDF+2DGFRTWoECN+Fy59ichVFhPf6x7uMrcgiN9r+g6OMsxqwAAA"
+  },
+  "/images/blog/2026-09-16-strix-pentest-closure-discipline/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAABQAwCdASoYAA4APt1apkyopSOiMAgBEBuJZwAAidpsPw6MYAD+7gKoJPyp5A+K6bckBphjlozi38PIAAA="
+  },
+  "/images/blog/2026-09-17-cwebp-batch-image-conversion/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAADwAwCdASoYAA4APt1ep00opSOiMAgBEBuJaQAAW2M+CFl/yzIf8/YAAP7fTH/Q9M5KtAPizsN47suFYiTpyea4d9x5XDuY86mjEpBQEZA5Kuad/zuH/FbVrkmuIMojLrJiUoSwQLQ4gjBltgAAAA=="
+  },
+  "/images/blog/2026-09-17-yichen-skills-source-available/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAAAwBACdASoYAA4APt1apkyopSOiMAgBEBuJZwAOcEzjkcHyzxf5WJUmSzwA/usl6sbDI5dBD/Ddv/eAYbz9VO+MPBMmlOXm6FsaOgcQp59NJfbnSdwBUjfwlUnu1vVNnD3gzx0oLBxehujGU/wAjRF00mvulF8LVcoVnvFYAAA="
+  },
   "/images/blog/2026-09-21-json-render-generative-ui-architecture/architecture-infographic.webp": {
     "width": 1264,
     "height": 848,
     "blurDataURL": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAAAQBQCdASoYABEAPt1aqU8opKOiMBgIARAbiWMAzCGvk7fBXauaip+SmrK2r27KB74AAP7zgTc/RXqYz7967BJfYNsTOnNR+BODRQOfFDnR5iI0dVg79JhjUqJsDyuDInyt/PIoqyeZuOkD82lSM9ooBc9IjcHzPsNzP8V/Kruw3lEa2QKWdg6/jInwKqAA"
+  },
+  "/images/blog/2026-09-21-json-render-generative-ui-architecture/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAACQAwCdASoYAA4APt1apkyopSOiMAgBEBuJaQDE2CG7wrTYozHAAP7qddnvUoUKRKw9v0SLrCRxeJTTvPYN0fj8p79OsWp7em/0EXJA/rJaquf3biQcHoX2AAA="
   }
 };
 

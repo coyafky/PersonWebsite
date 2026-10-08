@@ -1,5 +1,5 @@
 ---
-title: "拆 yichen-skills：41.5% 的 fork 率，和一本中国内容创作者的私人工具箱"
+title: "41.5% 的 fork 率背后，是一本中国内容创作者的私人工具箱"
 date: "2026-09-17"
 updated: "2026-09-17"
 summary: "这是我拆的第六个技能仓库，也是唯一一个「私人工作流」型——微信解密、剪映无头生成、火山 ASR、X 切片、公众号批量导出，19 个技能。但最让我意外的是它的 fork 率：41.5%，是前五个仓库的 4 到 6 倍。原因不复杂——这些技能必须被改才能用（你自己的微信、你的 Obsidian 路径、你的账号），而每个 fork 出去的人第一件事就是改路径和配置。它的许可证也因此不是开源的，是「源可用 + 商用需授权」。另外有一个细节我觉得前五个仓库都该学：它的 CI 里装着一个隐私扫描器，会拦截私人路径、私钥和六种凭据形态——把「别提交敏感信息」从 README 里的一句请求，变成了会挂红的门禁。"
@@ -9,15 +9,14 @@ tags:
 status: published
 lang: zh
 englishSummary: "A teardown of mcncarl/yichen-skills — the sixth skill repo I have taken apart, and the first 'personal workflow' one: WeChat DB decryption, headless Jianying draft generation, Volcengine ASR, X thread slicing, batch WeChat MP export. What surprised me most is its fork rate: 41.5%, four to six times higher than the previous five repos. The reason is simple — these skills must be edited before they work (your WeChat, your Obsidian path, your accounts). Its license follows from that: not open source but source-available, with commercial use requiring authorization. One detail I think the other five repos should copy: its CI runs a privacy scanner that rejects personal paths, private keys, and six credential shapes."
+cover: /images/blog/2026-09-17-yichen-skills-source-available/cover.webp
+coverAlt: 浅托盘里整齐排着一列尺寸各异的哑光纸条
 ---
-
-# 拆 yichen-skills：41.5% 的 fork 率，和一本中国内容创作者的私人工具箱
-
 这是第六个。前五个分别是[封面 Skill](/blog/2026-09-15-xialingguo-ip-cover-skill/)、[diagram-design](/blog/2026-09-15-diagram-design-skill-engineering/)、[hypit](/blog/2026-09-15-hypit-video-compiler-agent-skill/)、[agent-skills](/blog/2026-09-16-agent-skills-catalog-evals/)、[Strix](/blog/2026-09-16-strix-pentest-closure-discipline/)。
 
 而这一个，是我拆到现在**唯一一个"私人工作流"型**的仓库。
 
-前五个都在做"给别人用的工具"：封面模板、图表引擎、视频编译器、生命周期技能包、渗透测试。**这一个更像某个人把自己每天在用的东西整理出来公开了**——19 个技能，全部围绕一件具体的事：**把中文内容创作者的日常工作流打通**。
+前五个都在做"给别人用的工具"：封面模板、图表引擎、视频编译器、生命周期技能包、渗透测试。**这一个更像某个人把自己每天在用的东西整理出来公开了**，19 个技能，全部围绕一件具体的事：**把中文内容创作者的日常工作流打通**。
 
 作者是**逸尘**，仓库里没有真名，只有微信 `yichen365ai`。
 
@@ -51,7 +50,7 @@ englishSummary: "A teardown of mcncarl/yichen-skills — the sixth skill repo I 
 
 规模：**3,058 star / 1,268 fork**，2026-02-11 建仓（7 个月），199 个文件、约 2.66 MB，主语言 Python。
 
-**这个仓库该被写的原因，不是它有多少技能——是它的 fork 率。**
+**这个仓库该被写的原因，是它的 fork 率。**
 
 ## 41.5%：一个比 star 数更能说明问题的数字
 
@@ -68,7 +67,7 @@ englishSummary: "A teardown of mcncarl/yichen-skills — the sixth skill repo I 
 
 **41.5%。是图表引擎的 6.5 倍，是生命周期技能包的 4 倍。**
 
-这个数字的含义很清楚：**star 是"我想要这个"，fork 是"我必须动它"。** 前面几个仓库的 fork 大多是"收藏/备份"性质的——装上就能用，没必要改。而这一个，**每一个想用它的人，第一件事都得改文件。**
+这个数字的含义很清楚：**star 是"我想要这个"，fork 是"我必须动它"。** 前面几个仓库的 fork 大多是"收藏/备份"性质的，装上就能用，没必要改。而这一个，**每一个想用它的人，第一件事都得改文件。**
 
 原因就写在它的安装说明里：
 
@@ -80,9 +79,9 @@ englishSummary: "A teardown of mcncarl/yichen-skills — the sixth skill repo I 
 
 ### 而这个数字，正好解释了它的许可证
 
-它的许可证叫 **Personal Learning and Non-Commercial Use License**——不是标准的开源协议（GitHub 把它标成 `NOASSERTION`）。核心三条：
+它的许可证叫 **Personal Learning and Non-Commercial Use License**，不是标准的开源协议（GitHub 把它标成 `NOASSERTION`）。核心三条：
 
-1. **禁止商用**：不得出售、出租、再许可、提供付费访问、放进付费产品或服务、用于客户交付，或任何以盈利/商业运营为目的用途——除非事先取得书面许可
+1. **禁止商用**：不得出售、出租、再许可、提供付费访问、放进付费产品或服务、用于客户交付，或任何以盈利/商业运营为目的用途，除非事先取得书面许可
 2. **禁止作为竞争性或打包产品再分发**：可以 fork 来个人学习，但不得重新发布、镜像、打包、做成公开技能合集/模板包/市场上架物/SaaS 组件/代理交付物/课程资产/公司内部工具包
 3. **保留署名 + 尊重第三方许可**
 
@@ -92,15 +91,15 @@ englishSummary: "A teardown of mcncarl/yichen-skills — the sixth skill repo I 
 
 **我一开始觉得这有点矛盾**：一个 fork 率 41.5% 的仓库，几乎每个使用者都在改它，而许可证说"不许再分发"。但想清楚之后发现它**恰好是这个形态的合理解**：
 
-- 这些技能**必须依赖私有数据才有价值**（你的微信、你的账号）。所以"代码被拿走"本身不致命——**没有那套数据，代码是空壳**。
+- 这些技能**必须依赖私有数据才有价值**（你的微信、你的账号）。所以"代码被拿走"本身不致命，**没有那套数据，代码是空壳**。
 - 而真正会被拿走的是**方法**（怎么解密微信、怎么无头驱动剪映、怎么把公众号历史拉全）。这些是知识，不是代码。
-- 所以它的策略是：**代码给你改，方法收授权费。** 而 CI 那个隐私扫描器（下面会讲）保证了"代码里不含任何私人东西"——**所以它可以安心公开。**
+- 所以它的策略是：**代码给你改，方法收授权费。** 而 CI 那个隐私扫描器（下面会讲）保证了"代码里不含任何私人东西"，**所以它可以安心公开。**
 
-**这是我在前五个仓库里没见过的模式。** 前五个都是 MIT/Apache 直接送（agent-skills 明确写"MIT——在你的项目、团队和工具里随便用"），因为它们的价值在于通用能力，商用不损失什么。而这个仓库的价值在于**一个人的具体经验**，所以它在"公开以获客"和"收费以变现"之间选了这条线。
+**这是我在前五个仓库里没见过的模式。** 前五个都是 MIT/Apache 直接送（agent-skills 明确写"MIT，在你的项目、团队和工具里随便用"），因为它们的价值在于通用能力，商用不损失什么。而这个仓库的价值在于**一个人的具体经验**，所以它在"公开以获客"和"收费以变现"之间选了这条线。
 
 ## 它的技能不是"提示词"，是有验收清单的工程
 
-我原本以为"私人工具箱"意味着质量参差。挑了一个细看——`yichen-x-slicer`（把一条 X 帖子做成 3:4 图片组和成片），然后改观了。
+我原本以为"私人工具箱"意味着质量参差。挑了一个细看，`yichen-x-slicer`（把一条 X 帖子做成 3:4 图片组和成片），然后改观了。
 
 它的 SKILL.md 里有 **12 条硬验收条件**，摘几条：
 
@@ -111,7 +110,7 @@ englishSummary: "A teardown of mcncarl/yichen-skills — the sixth skill repo I 
 > 8. 每个 MP4 有一条 1080×1440、H.264、30fps 的视频流。**它有且仅当至少一个选中的非引用贴原生视频含有效源音轨时才有一条音频流；否则音频流数为零。**
 > 12. 对每个原生视频页，QA 证明下载的 MP4 可完整解码……**对源音轨页面，QA 对照一条独立重建的源音轨时间轴，证明完整的无转场源区间以及每一个四帧转场；并核验允许的源音轨范围之外、sample-accurate 的完整补集。对源静音页面，QA 证明对应区间是静音的。**
 
-**第 12 条我读了三遍。** 它说的是：这个工具会验算"该有声的地方有声、该静音的地方静音"，而且是**逐采样点（sample-accurate）**核验的——不是"听起来差不多"。
+**第 12 条我读了三遍。** 它说的是：这个工具会验算"该有声的地方有声、该静音的地方静音"，而且是**逐采样点（sample-accurate）**核验的，不是"听起来差不多"。
 
 它对边界也写得很硬：
 
@@ -124,10 +123,10 @@ englishSummary: "A teardown of mcncarl/yichen-skills — the sixth skill repo I 
 
 工程化也不止于此。它有**真测试**和**真 CI**：
 
-- `yichen-x-article-draft-uploader/tests/test_local_contracts.py` —— **111 KB**
-- `yichen-x-slicer/scripts/test.mjs` —— 43 KB
-- `yichen-unified-search/tests/` —— 12 个测试文件，`test_route_search.py` 一个就 43 KB
-- `yichen-web-research/tests/test_hengzong_evidence.py` —— 41 KB
+- `yichen-x-article-draft-uploader/tests/test_local_contracts.py`：**111 KB**
+- `yichen-x-slicer/scripts/test.mjs`：43 KB
+- `yichen-unified-search/tests/`：12 个测试文件，`test_route_search.py` 一个就 43 KB
+- `yichen-web-research/tests/test_hengzong_evidence.py`：41 KB
 - **3 个 GitHub Actions workflow**（research-skills / x-article-draft-uploader / wechat-windows-reader）
 - `licenses/` 下 5 个第三方许可证原文，`THIRD_PARTY_NOTICES.md` 13 KB
 
@@ -167,13 +166,13 @@ credential_patterns = {
 
 **为什么我觉得这条特别重要？**
 
-因为 README 里那些"请勿上传真实凭据、真实聊天记录、客户数据、API key、本机路径"的叮嘱——**在别的项目里就是一句叮嘱，靠人自觉。** 而这个仓库把它变成了**机器检查**。
+因为 README 里那些"请勿上传真实凭据、真实聊天记录、客户数据、API key、本机路径"的叮嘱，**在别的项目里就是一句叮嘱，靠人自觉。** 而这个仓库把它变成了**机器检查**。
 
 我这两天拆的仓库里，这个主题出现过好几次：[diagram-design](/blog/2026-09-15-diagram-design-skill-engineering/) 说过**"一条只活在散文里的规则，就是一条会发版坏例子的规则"**；[Strix](/blog/2026-09-16-strix-pentest-closure-discipline/) 把"结案纪律"做成**无条件注入每个 Agent 的系统提示**。
 
 **yichen-skills 是同一个道理在隐私维度上的实现**：不许泄露隐私 → 写一条正则 → 让 CI 拦住。
 
-而且这个检查对**这个仓库格外必要**——一个要处理微信数据库、企业微信快照、公众号凭据、Chrome Cookie 的仓库，作者本地一定存在这些文件。**一个手滑的 `cp` 或者一次 `git add .`，就能把真实密钥推上公开仓库。** 有这道门禁，那种事故在 push 前就被拦住了。
+而且这个检查对**这个仓库格外必要**：一个要处理微信数据库、企业微信快照、公众号凭据、Chrome Cookie 的仓库，作者本地一定存在这些文件。**一个手滑的 `cp` 或者一次 `git add .`，就能把真实密钥推上公开仓库。** 有这道门禁，那种事故在 push 前就被拦住了。
 
 **这是"私人工具箱公开化"必须付的成本，也是它敢公开的底气。**
 
@@ -194,11 +193,11 @@ credential_patterns = {
 
 **这一批规则在防同一件事：Agent 顺着"看起来合理"的下一步自己走下去。**
 
-我前面拆 agent-skills 时提过一个概念——它的技能里有"Red Flags"章节，用来标记"出问题的迹象"。**而 yichen-skills 的做法不同：它不检查迹象，它设置闸门。** 每一次跨越"公开数据 → 私人数据"、"读到 → 下载"、"生成 → 发布"的边界，都必须有当前这一次的明确授权。
+我前面拆 agent-skills 时提过一个概念：它的技能里有"Red Flags"章节，用来标记"出问题的迹象"。**而 yichen-skills 的做法不同：它不检查迹象，它设置闸门。** 每一次跨越"公开数据 → 私人数据"、"读到 → 下载"、"生成 → 发布"的边界，都必须有当前这一次的明确授权。
 
 注意那个修饰语：**"当前任务"**。不是"用户以前授权过"、不是"上次问过他同意了"。**授权是单次有效的、跟具体任务绑定的。** 这对一个会处理微信和私人收藏的工具来说，是唯一站得住的默认值。
 
-还有个我喜欢的细节——它给"数据去哪了"做了一张**表**。`unified-search` 的 README 里逐条列：
+还有个我喜欢的细节：它给"数据去哪了"做了一张**表**。`unified-search` 的 README 里逐条列：
 
 | 路线 | 离开本机进程的数据 | 接收方与边界 |
 | --- | --- | --- |
@@ -207,7 +206,7 @@ credential_patterns = {
 | 微博 | 公开关键词查询 | 先发给 `m.weibo.cn` 并使用**仅驻留内存**的临时匿名访客会话……**Cookie 值不进入适配器命令、结果或日志** |
 | X Quick / Research | 为当前有界搜索生成的每个查询 | 通过官方 Grok CLI 发给 xAI；**只有明确额度耗尽时才允许匿名 FxTwitter** |
 
-**"数据出本机"的清单，逐条写清接收方和不承诺什么。** 尤其是"不承诺零数据保留"那句——一个营销文案会写"我们不存储你的数据"，它写的是"**这两条路线都不承诺零数据保留，不得被解读为零数据保留承诺**"。这种诚实反过来建立了信任。
+**"数据出本机"的清单，逐条写清接收方和不承诺什么。** 尤其是"不承诺零数据保留"那句：一个营销文案会写"我们不存储你的数据"，它写的是"**这两条路线都不承诺零数据保留，不得被解读为零数据保留承诺**"。这种诚实反过来建立了信任。
 
 ## 还有一件小事，但很说明问题
 
@@ -228,7 +227,7 @@ README 对此的解释是：
 
 **这是个很成熟的维护决策。** 同一个抓取逻辑如果存在两份，早晚会出现"改了一份忘了一份"。把它合并掉，虽然是"减少功能面"，但换来了唯一事实源。
 
-同样的思路还出现在 `yichen-asr` 上——它是 `volc-asr` 和 Step 之上的**路由层**，而且带一条约束：
+同样的思路还出现在 `yichen-asr` 上：它是 `volc-asr` 和 Step 之上的**路由层**，而且带一条约束：
 
 > 已提交到某服务商的任务**不会静默改投另一家**。
 
@@ -242,15 +241,15 @@ README 对此的解释是：
 
 > 凡涉及**客户交付、付费产品或服务、公司内部部署、市场打包、课程打包**及其他商业用途，均须事先取得作者明确的书面授权。
 
-**所以如果你想把其中某个技能用进门店的内容运营、或者给客户做东西——那属于需要授权的范围。** 免费的是"个人学习和非商业个人工作流"。
+**所以如果你想把其中某个技能用进门店的内容运营、或者给客户做东西，那属于需要授权的范围。** 免费的是"个人学习和非商业个人工作流"。
 
 我不是在替它的许可证说话，也不是在吓你。**是这个仓库的技能太贴近你的活儿了，而"贴近"恰恰意味着"容易在商业场景里用上"。** 真要用的话，路径很清楚：它的商用口子就是付费社群 TradeWinds，微信 `yichen365ai`（作者说验证信息里要备注"商业授权"）。
 
 **另外它的技能本身也有一层现实约束**，值得知道：
 
-- `jianying-edit`（剪映无头生成）**不包含核心项目**——它只是公开的 Skill 入口，需要另外拿到 [mcncarl/jianying-headless](https://github.com/mcncarl/jianying-headless) 的访问权限，而且要求**匹配版本的剪映**和固定的源码/运行库哈希
+- `jianying-edit`（剪映无头生成）**不包含核心项目**，它只是公开的 Skill 入口，需要另外拿到 [mcncarl/jianying-headless](https://github.com/mcncarl/jianying-headless) 的访问权限，而且要求**匹配版本的剪映**和固定的源码/运行库哈希
 - `wechat-local-vault` 是 **macOS 专属**，依赖 frida 引导密钥提取，微信更新后可能失效
-- `wechat-windows-reader` 自己标着**实验性**——"尚未证明全面兼容真实微信 4.x 数据库"
+- `wechat-windows-reader` 自己标着**实验性**："尚未证明全面兼容真实微信 4.x 数据库"
 - `mac-wechat-dual-open` 是**微信更新后需要重新运行 `repair`**，且推送通知可能不稳定
 - `wecom-operations` 的本地图片上传需要**你另行提供一个 helper**，仓库不分发
 
@@ -271,11 +270,11 @@ README 对此的解释是：
 
 前五个是**产品**：装上、触发、得到结果，你和作者的关系是"用户 vs 作者"。
 
-**第六个是工具箱。** 它的正确用法不是"用"，是**"搬进自己家、改成自己的尺寸、然后当成自己的东西"**——这也正是 41.5% 那个数字在说的事。
+**第六个是工具箱。** 它的正确用法是**"搬进自己家、改成自己的尺寸、然后当成自己的东西"**，这也正是 41.5% 那个数字在说的事。
 
 我觉得它给整个"技能仓库"这个形态补上了一块前五个都没覆盖的东西：**有些知识长在具体的人身上，长在他的路径、他的账号、他的工作习惯里。** 这类东西没法做成一个通用的产品，只能公开成"源头"，让每个人 fork 出去改。
 
-**而只要公开，就必须面对它带来的问题——所以它才有了那道隐私扫描的门禁，和那一整套授权闸门。**
+**而只要公开，就必须面对它带来的问题，所以它才有了那道隐私扫描的门禁，和那一整套授权闸门。**
 
 ## 怎么装
 
@@ -305,7 +304,7 @@ codex plugin add yichen-grok-consult@yichen-skills
 
 **环境依赖按需装**（都是小件）：Python 3.9+、Playwright（X 草稿/抖音）、`pycryptodome` + `zstandard`（微信解析）、`Pillow`（双开图标）、`ffmpeg`/`ffprobe`（ASR 粗剪、切片），以及 Node 18+（Grok 咨询、X 切片）。
 
-**Web Research 家族必须五个目录一起装**——`validate_family.py` 会检查这一点。
+**Web Research 家族必须五个目录一起装**：`validate_family.py` 会检查这一点。
 
 仓库地址：[github.com/mcncarl/yichen-skills](https://github.com/mcncarl/yichen-skills) · 中文说明 [README.zh.md](https://github.com/mcncarl/yichen-skills/blob/main/README.zh.md)
 
@@ -313,12 +312,12 @@ codex plugin add yichen-grok-consult@yichen-skills
 
 最后说一个我在拆的过程中冒出来的念头。
 
-前两天拆那五个仓库时，我的感受一直是"**这些东西做得真讲究**"——讲究的评测、讲究的验证、讲究的边界。
+前两天拆那五个仓库时，我的感受一直是"**这些东西做得真讲究**"：讲究的评测、讲究的验证、讲究的边界。
 
 拆完这一个，我的感受变成了另一种：**讲究是可以在很私人的尺度上长出来的。**
 
-19 个技能、111 KB 的契约测试、CI 里那段隐私扫描、几十处"当前任务明确授权"——这些不是一家公司在做产品，**是一个人把自己的工作流整理了一遍，顺手把该防的地方都防上了。**
+19 个技能、111 KB 的契约测试、CI 里那段隐私扫描、几十处"当前任务明确授权"，这些不是一家公司在做产品，**是一个人把自己的工作流整理了一遍，顺手把该防的地方都防上了。**
 
 它公开的与其说是一堆工具，不如说**是"一个人怎么干这种活"的完整记录**。而这恰好是它能被 fork 一千多次的原因：你想学的往往不是"那个工具"，是**"那个人是怎么做的"**。
 
-如果里面有哪个技能对你手上的活儿正好有用——微信解析、剪映、ASR、还是公众号批量导出——跟我说一声，我可以先帮你把它的实现和边界完整过一遍，再决定要不要接进来。
+如果里面有哪个技能对你手上的活儿正好有用，比如微信解析、剪映、ASR 或公众号批量导出，跟我说一声，我可以先帮你把它的实现和边界完整过一遍，再决定要不要接进来。

@@ -5,9 +5,11 @@ summary: "第六章预告了「构图变量」，这一章从它的第一个模�
 tags:
   - "AI 生图"
   - "Prompt 工程"
-status: published
+status: archived
 lang: zh
 englishSummary: "Chapter 7 of the AI image-generation methodology: the first module of composition variables — aspect ratio. The most overlooked yet earliest-decided variable: once the ratio is set, spatial direction, subject size, negative space and information layout all follow. Breaks down six common ratios plus a use-case-first decision method."
+cover: /images/blog/2026-08-23-ai-image-generation-aspect-ratio/cover.webp
+coverAlt: 三张白色卡纸并排，各自开着一个比例不同的窗口
 ---
 
 写 Prompt 的人，大多会先写「商品是什么、光是什么、风格是什么、情绪是什么」——但很少先想一个问题：

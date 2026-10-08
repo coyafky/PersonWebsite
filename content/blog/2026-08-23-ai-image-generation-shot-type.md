@@ -5,9 +5,11 @@ summary: "第七章的画幅比例决定「画布是什么形状」，这一章�
 tags:
   - "AI 生图"
   - "Prompt 工程"
-status: published
+status: archived
 lang: zh
 englishSummary: "Chapter 8 of the AI image-generation methodology. Where aspect ratio decides the canvas shape, shot type decides how far the camera is from the subject. Five image-backed examples distinguish extreme wide, full, medium, close-up, and extreme close-up shots, each with a reusable prompt."
+cover: /images/blog/2026-08-23-ai-image-generation-shot-type/cover.webp
+coverAlt: 同一个物件在三种比例下的呈现：远小、中、近大
 ---
 
 第七章的画幅比例回答「画布是什么形状」，这一章的景别回答另一个问题：

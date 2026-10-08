@@ -3,7 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { learningSchema } from "../lib/content/schemas.ts";
 
-const target = process.argv[2] ?? "content/learning/nextjs";
+const target = process.argv[2] ?? "content/notes/topic/nextjs";
 const abs = path.resolve(target);
 
 async function walk(dir) {

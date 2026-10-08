@@ -16,7 +16,7 @@
 
 > "记录想法、项目和成长，把经历沉淀为求职证据。"
 
-这句话就是整个项目的北极星。所有栏目（Blog / Weekly / Projects / Learning / Book List / Course List / About）最终都在为这一件事服务：**让经历可追溯、可展示、可证明**。
+这句话就是整个项目的北极星。所有栏目（Blog / Notes / Projects / Gallery / Tools / About）最终都在为这一件事服务：**让经历可追溯、可展示、可证明**。
 
 ---
 
@@ -54,10 +54,11 @@ PersonalWebsite/
 ├── app/                  # Next.js 路由（(site) 主站 + api + rss/feed/sitemap/robots）
 ├── components/           # UI 组件：mdx-content.tsx(注册中心) + entry-card-* + 通用组件
 ├── content/              # 内容源（唯一的内容真源）
-│   ├── blog/ weekly/ projects/ career/
-│   ├── learning/<topic>/     # 主题目录 + _index.md
-│   ├── book-list/<book>/     # 书目录 + _index.md + 多笔记
-│   ├── course-list/<course>/ # 课程目录 + _index.md + 多笔记
+│   ├── blog/ projects/ career/
+│   ├── notes/topic/<topic>/    # 主题笔记 + _index.md
+│   ├── notes/book/<book>/      # 读书笔记 + _index.md
+│   ├── notes/course/<course>/  # 课程笔记 + _index.md
+│   ├── diary/ weekly/          # ⚠️ 已下架，内容归档（status: archived）
 │   └── inbox/<类别>/         # 素材入口（Obsidian → 这里的过渡区）
 ├── lib/content/          # reader.ts(读取层) + schemas.ts(Zod 冻结) + 测试
 ├── docs/agent/           # Hermes 协作契约 + 各栏目模板 + knowledge-field 文档
@@ -78,25 +79,22 @@ PersonalWebsite/
 | kind | 集合 | 说明 |
 |------|------|------|
 | blog | content/blog/ | 长文博客（杂志式列表 + 归档） |
-| weekly | content/weekly/ | 周记（垂直时间线，`week: YYYY-Wxx`） |
+| diary / weekly | content/diary/ · content/weekly/ | ⚠️ **已下架**（2026-10-07）：内容归档、路由 308 → /blog，不进导航/首页/sitemap/搜索/RSS |
 | projects | content/projects/ | 项目档案（.mdx，可嵌组件，带 resumeBullets） |
 | career | content/career/ | 求职材料（→ /about#career） |
-| learning | content/learning/ | 学习笔记（按 topic 子目录，`_index.md` 为主题介绍） |
-| book-index / book-note | content/book-list/<book>/ | 书目录 `_index.md` + 多篇读书笔记 |
-| course-index / course-note | content/course-list/<course>/ | 课程目录 `_index.md` + 多篇课程笔记 |
+| learning / book-index / book-note / course-index / course-note | content/notes/<kind>/<collection>/ | **统一笔记模块**。`kind` ∈ `topic`（主题学习）/ `book`（读书）/ `course`（课程）；每个集合一个子目录，内含 `_index.md`（集合介绍）+ 若干笔记 |
 
 所有内容统一 frontmatter 基座：`slug`（由文件名推导）+ `title` + `date` + `summary` + `status` + 各 kind 专属字段（tags / lang / englishSummary / series…）。
 
 ### 路由全景
 
 ```
-/                   首页门户（7 栏目入口）
+/                   首页门户（6 栏目入口）
 /blog               博客列表 + /blog/archive 月度归档 + /blog/[slug]
-/weekly             周记时间线 + /weekly/[slug]
+                    （旧 /diary、/weekly 已下架，二者 308 永久重定向到 /blog）
 /projects           项目卡片网格 + /projects/[slug]
-/learning           主题树 + /learning/[topic] + /learning/[topic]/[slug]
-/book-list          书网格 + /book-list/[book] + /book-list/[book]/[slug]
-/course-list        课程网格 + /course-list/[course] + /course-list/[course]/[slug]
+/notes              笔记总览（15 个集合）+ /notes/[collection] + /notes/[collection]/[slug]
+                    （旧 /learning、/book-list、/course-list 已 308 永久重定向到 /notes）
 /about              关于 + Career 子区
 /tags               跨集合 Tag 索引 + /tags/[tag] + /tags/cloud 词云
 /timeline           时间线页

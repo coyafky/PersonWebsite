@@ -5,9 +5,11 @@ summary: "完整记录 Hermes Agent 连接飞书 Bot 的配置过程：Gateway �
 tags:
   - "Hermes"
   - "Profile"
-status: published
+status: archived
 lang: zh
 englishSummary: "A step-by-step guide to connecting Hermes Agent with Feishu Bot, covering Gateway connection, bot authorization, multi-profile isolation, streaming card plugins, and real troubleshooting from 3 weeks of production experience."
+cover: /images/blog/2026-06-12-hermes-feishu-bot-config/cover.webp
+coverAlt: 两条分离的纸带被缝合成一条完整纸带
 ---
 
 # 从零配置 Hermes 连接飞书 Bot — 含多 Profile 实战

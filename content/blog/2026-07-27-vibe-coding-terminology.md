@@ -3,12 +3,14 @@ title: "Vibe Coding 术语大全"
 date: "2026-07-27"
 summary: >-
   Vibe Coding 生态的核心术语、工作流模式、工具链和最佳实践的系统整理。从 Karpathy 的定义出发，覆盖 AI 编程时代的每一个关键概念。
-status: published
+status: archived
 tags:
   - "Vibe Coding"
   - "Claude Code"
 lang: zh
 englishSummary: ""
+cover: /images/blog/2026-07-27-vibe-coding-terminology/cover.webp
+coverAlt: 散落的零碎纸片归位成一排整齐的纸片
 ---
 
 ## 一、什么是 Vibe Coding

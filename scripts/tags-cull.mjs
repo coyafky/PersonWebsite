@@ -30,7 +30,8 @@ import matter from "gray-matter";
 import { normalizeTags } from "../lib/content/tag-aliases.ts";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
-const KINDS = ["blog","diary","weekly","learning","projects","career","book-list","course-list","gallery"];
+// 内容模块三合一：原 learning / book-list / course-list → content/notes/（topic|book|course）
+const KINDS = ["blog","diary","weekly","notes","projects","career","gallery"];
 const COLLECTION = new Set(["工作日记", "博客", "weekly"]);
 const MIN_CORE_FREQ = 3;
 const APPLY = process.argv.includes("--apply");

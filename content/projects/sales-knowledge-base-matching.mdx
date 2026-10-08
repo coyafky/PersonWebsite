@@ -1,0 +1,106 @@
+---
+title: "把 1188 篇产品目录接进销售助理"
+date: "2026-09-24"
+period: "2026-09"
+summary: "把门店按车型整理的 1188 篇《适配产品目录》接进销售助理，让销售不必再被客户问住。难点从来不是「接通接口」——那是半小时的事，难的是四个匹配：资料形态匹配调用链、能力接入匹配行为约束、模型能力匹配封装程度、库内容匹配说话边界。"
+stage: "接入链路已跑通 · 公司知识库工程在建"
+role: "库地形勘察、三段式调用链设计、弱模型单命令封装、行为边界规则设计、两层接入验证"
+stack:
+  - "腾讯 ima 知识库开放接口"
+  - "Hermes 助理 profile"
+  - "Node.js 封装脚本"
+links: {}
+impact:
+  - "先枚举库地形再设计调用链：发现 162 个品牌文件夹实际是空的、真正有内容的是 1188 篇平铺笔记，避免了按浏览式结构写调用逻辑会死在半路且报错含糊"
+  - "设计检索→取资料出口→读正文的三段式读取链，并把三步压成一条命令，把弱指令遵循模型的失败面从三步降为一步"
+  - "在助理行为规则里写死四条边界：先查再答不许凭记忆、价格与库存一律推给门店、查不到该车型必须如实说、不得拿相近车型顶替"
+  - "用两层验证替代自我感觉：端到端实测多品牌车型确认返回可对单，并直接调用框架的技能索引构建函数与读取进程环境变量，确认接口通且助理真的会用"
+resumeBullets:
+  - "Integrated a 1,188-document vehicle fitment knowledge base into a sales assistant, starting with a full enumeration of the library to discover that 162 brand folders were empty and all real content was flat at the root."
+  - "Designed a three-step retrieval chain (search / resolve pointer / read body) and wrapped it into a single command, reducing the failure surface for a small self-hosted model from three tool calls to one."
+  - "Encoded behavioral guardrails so the assistant must search before answering, must defer pricing and stock questions to the store, and must never substitute a similar vehicle model for a missing one."
+  - "Verified integration in two layers — end-to-end output against real vehicle models, plus confirming the skill actually appears in the assistant's rendered skill index and its process environment — because a working API does not mean the assistant will use it."
+status: published
+featured: true
+englishSummary: "Wiring a 1,188-document product fitment library into a sales assistant. The hard part was never the API — it was four kinds of matching: document shape to call chain, capability access to behavioral guardrails, model weakness to a single wrapped command, and library content to what the assistant is allowed to say. Includes the empty-folder trap, the three-step read chain, and two-layer verification evidence."
+details:
+  - "2026-09-10-ai-knowledge-base-matching"
+---
+
+# 把 1188 篇产品目录接进销售助理
+
+门店里最常出现的场景：客户在群里问「我这台理想 L9 能装什么脚垫」，销售要么翻群文件、要么去问师傅、要么**凭印象答**。前两个慢，第三个危险。
+
+而这个库其实就在手上——按车型整理的 1188 篇《适配产品目录》。问题是它躺在那边，**销售不会去翻**。
+
+这个项目做的事很简单：把知识库接进销售助理，让销售直接问，助理去库里捞。
+
+## 我给自己定的验收标准
+
+动手前先定了一条判断标准，它决定了后面所有设计：
+
+> **接口通不通是半小时的事，那不叫接上了。**
+> 接上的标准是：销售问一个车型，助理能给出一份**可对单的明细**；客户问价格，助理**知道必须闭嘴**。
+
+## 四个「匹配」——难点全在这里
+
+| 匹配 | 说的是什么 |
+|---|---|
+| 资料形态 ↔ 调用链 | 你的库是笔记型还是文件型，直接决定 AI 要调几次接口 |
+| 能力接入 ↔ 行为接入 | 技能让助理「能做」；行为规则让助理「该做什么、不该做什么」。只装技能等于只装了一半 |
+| 模型能力 ↔ 封装程度 | 多步调用链对弱模型是灾难，把三步压成一条命令比写十页文档有用 |
+| 内容边界 ↔ 说话边界 | 库里没有的东西，恰恰是接进 AI 之后最需要防的东西 |
+
+## 我的角色
+
+- **我做的**：库地形勘察、三段式调用链设计、单命令封装、行为规则四条、两层接入验证
+- **现成工具**：知识库开放接口与官方技能包来自腾讯 ima，不是我写的
+- **需要补写**：官方技能包的边界要划清——哪部分是我的实现、哪部分是平台自带
+
+## 三个关键判断
+
+### 1. 接库的第一个动作不是打开 IDE，是摸地形
+
+第一次搜索关键词「隐形车衣 价格」「改色膜 施工流程」返回全是空。当时第一反应是「接口有问题」——好在没急着改代码，而是先把整个库**从头到尾枚举了一遍**。
+
+枚举完就清楚了：**关键词根本不在库里**（这个库存的是车型适配明细，压根没有价格内容），而且**资料组织形态和预想完全不同**——162 个品牌文件夹抽查下来是空的，真正有内容的是 1188 篇平铺在根目录的笔记。
+
+**如果没先枚举、直接按浏览式结构写调用逻辑，这个接入会死在半路上，而且报错会非常含糊**（「文件夹是空的」看起来像权限问题、像同步延迟，唯独不像设计问题）。
+
+### 2. 文档教不会模型的事，脚本可以
+
+三段式调用链对上强模型不算事，但这里用的是本地部署的小模型，多步指令遵循本来就一般——让它连续正确调三次接口、还要自己解析中间那次返回的指针，**这是注定要翻车的设计**。
+
+处理方式很直接：写一个脚本把三步压成一条命令。助理要做的事从「理解三步调用」降级成「知道有这么一条命令、把车型填进去」。
+
+**对能力稳定的强模型，写文档更灵活；对「要省钱、要自部署、还要稳定输出」的场景，降低自由度比提供能力更重要。**
+
+### 3. 最有价值的匹配是**边界**匹配，不是能力匹配
+
+这个库之所以敢接进 AI，恰恰因为它被清洗过：**不含供应商信息、不含价格**。
+
+听起来像缺点，但从「能不能安全接进 AI」看是极大的优势——那些最容易出事的内容（报价、折扣、库存、活动政策）压根不在数据源里。于是选型思路也反过来：**优先挑内容已经清洗过、边界清晰的库，而不是内容最全的库。**
+
+## 这个项目和公司知识库工程的关系
+
+这里要交代清楚一件事：**下面讲的 1188 篇产品目录，只是公司知识库工程的一小片。**
+
+公司层面正在建设一个**更大的知识库工程**。而这个项目的价值恰恰在于——**我先把「知识库接进 AI 助理」这条链路完整跑通了一遍**（地形勘察 → 三段式读取 → 单命令封装 → 行为边界 → 两层验证）。
+
+这件事的意义不在那 1188 篇本身，而在于：**链路一旦验证过，知识库内容规模化之后就只是「再灌一遍」的问题，不用重新设计。**
+
+所以对这个项目的正确预期是：
+- ✅ **已经拿到的**：一条被验证过的接入方法论 + 一个可用于对单可用性的评估框架
+- ⏳ **还等着的**：公司知识库工程就位后，把同一套链路套到更大、更规范的语料上
+- 🔴 **不该声称的**：现在就说「门店已经有可靠的知识库问答能力」——原料规模不够，样本也只覆盖了几个车型
+
+## 已知局限与未验证
+
+- **准确性只做到「看起来对」**：多品牌车型实测都返回了完整明细，但**没有把返回结果与原始目录逐项比对**，因此不能声称「准确率高」
+- **负例场景没测**：车型不存在时是否如实说、客户反复追问价格时是否松口，文中只有规则设计，**没有测试记录**
+- ✅ **已修正**：原文「因为它手上真的只有适配信息，编不出价格来」这句推断不成立——数据源里没有价格，不能证明模型不会生成价格。现已改为「机制保证 ≠ 能力保证」，并明确写出「缺少依据时会不会松口」这一项**尚未测试**
+- 有一个已知悬案：知识库列表接口自报 5253 条内容，但逐页列举只能拿到 1350 项，两个数对不上，原作者已自行标注为**待确认**
+
+## 实现细节
+
+下面这篇是完整过程：三段式调用链的时序、行为规则四条的原文、空文件夹陷阱、两层验证的具体做法，以及五条可复用的判断。

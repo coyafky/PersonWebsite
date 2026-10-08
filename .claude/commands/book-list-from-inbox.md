@@ -14,7 +14,7 @@ user-invocable: true
 每本书是一个子目录，含 `_index.md`（书籍介绍）+ N 篇笔记 `.md`：
 
 ```
-content/book-list/<book-name>/
+content/notes/book/<book-name>/
 ├── _index.md          # 书籍索引页（kind: book-index）
 └── <date>-<slug>.md   # 章节/主题笔记（kind: book-note）
 ```
@@ -34,7 +34,7 @@ content/book-list/<book-name>/
 
 - book-name 用英文小写连字符（如 `designing-data-intensive-applications`）
 - 中文书名用拼音（如 `shen-ru-li-jie-ji-suan-ji-xi-tong`）
-- 检查 `content/book-list/<book-name>/` 是否已存在：
+- 检查 `content/notes/book/<book-name>/` 是否已存在：
   - 已存在：追加新笔记到该目录下
   - 不存在：创建目录 + `_index.md`
 
@@ -80,9 +80,9 @@ content/book-list/<book-name>/
 
 ### 11. 生成文件
 
-- **索引页**：`content/book-list/<book-name>/_index.md`
+- **索引页**：`content/notes/book/<book-name>/_index.md`
   - `status: draft` 永远默认
-- **笔记**（如有拆分）：`content/book-list/<book-name>/<YYYY-MM-DD-slug>.md`
+- **笔记**（如有拆分）：`content/notes/book/<book-name>/<YYYY-MM-DD-slug>.md`
   - 文件名 `<slug>` 建议：英文小写连字符
 
 ### 12. 输出

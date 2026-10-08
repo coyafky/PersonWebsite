@@ -1,5 +1,5 @@
 ---
-title: "让 AI 用寓言故事帮你理解复杂概念——一个 Prompt 技巧"
+title: "让 AI 用寓言故事讲清一个抽象概念"
 date: "2026-04-20"
 summary: "遇到难啃的抽象概念怎么都记不住？别硬背——试试这个 Prompt 技巧：让 AI 用寓言故事的方式讲给你听。大脑天生喜欢故事。"
 tags:
@@ -8,10 +8,9 @@ status: published
 lang: zh
 category: "AI/Prompt库"
 englishSummary: "A practical prompt technique: ask AI to explain complex concepts through fables and stories. The human brain is wired for narrative — stories activate multiple brain regions and make abstract ideas stick."
+cover: /images/blog/2026-04-20-ai-fable-prompt/cover.webp
+coverAlt: 一团缠乱的细线被一条纸条收束出规整走向
 ---
-
-# 让 AI 用寓言故事帮你理解复杂概念——一个 Prompt 技巧
-
 > 来源：`CoyaPersonal/04-Resources/AI/Prompt库/` · 原创 Prompt · 首发 2026-04-20
 
 ---
@@ -20,7 +19,7 @@ englishSummary: "A practical prompt technique: ask AI to explain complex concept
 
 最近学到一个超实用的 Prompt（提示词）技巧，分享给你：当你在某个领域碰到特别陌生、难啃的概念，怎么都记不住时，别硬背，试试让 AI 用故事或者寓言给你讲。
 
-说实话，一看到满屏公式和术语，谁的大脑不"死机"呢？当然，这不是我们笨，而是**大脑天生就对干巴巴的抽象符号有抵触**。
+说实话，一看到满屏公式和术语，谁的大脑不"死机"呢？当然，这不怪我们，**大脑天生就对干巴巴的抽象符号有抵触**。
 
 可以这样说，我们的大脑天生是追八卦的料，特别喜欢那种带有戏剧性冲突的故事。故事有人物、冲突、情绪，能同时激活脑子里好几个区域，比抽象的术语好记多了。
 
@@ -46,4 +45,4 @@ englishSummary: "A practical prompt technique: ask AI to explain complex concept
 
 ---
 
-> 💡 **适用场景**：任何难以理解的抽象概念——数学公式、技术术语、哲学思想、科学原理——都可以用这套 Prompt 转化为易记的故事。
+> 💡 **适用场景**：任何难以理解的抽象概念（数学公式、技术术语、哲学思想、科学原理）都可以用这套 Prompt 转化为易记的故事。

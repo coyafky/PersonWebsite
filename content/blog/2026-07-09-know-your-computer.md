@@ -5,10 +5,12 @@ summary: "电脑里那些东西到底是怎么组织的？为什么有时路径�
 tags:
   - "zero-to-tech"
   - "终端"
-status: published
+status: archived
 lang: zh
 category: "技术/计算机基础"
 englishSummary: "How is your computer actually organized? Why do paths sometimes start with C: and sometimes with /? What do ./ and ../ mean in relative paths? What are code files? Why is VSCode every programmer's favorite editor? This piece demystifies the file system, paths, extensions, and code editors in one go."
+cover: /images/blog/2026-07-09-know-your-computer/cover.webp
+coverAlt: 左侧散落的单页纸收拢成右侧三叠整齐的纸
 ---
 
 # 认识你的电脑：文件、路径、和那个叫 VSCode 的编辑器
@@ -313,5 +315,5 @@ Ctrl + `  （macOS 是 Cmd + `）
 - **zero-to-tech / 进程、线程、内存：你的电脑同时在跑多少事**
 - **zero-to-tech / Git 是什么：版本控制的最小心智模型**
 
-上一篇：[网络是怎么工作的](/blog/how-network-work)（[英文摘要版](#)）
+上一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)（[英文摘要版](#)）
 

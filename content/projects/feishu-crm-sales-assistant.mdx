@@ -1,0 +1,114 @@
+---
+title: "飞书多维表格 + AI 销售助理"
+date: "2026-09-24"
+period: "2026-08"
+summary: "一套已经在门店日常使用约 2 个月的轻量 CRM：飞书多维表格当后台、飞书 CLI 当数据接口、AI 助理当前端，实际承担线索录入、跟进记录与销售表格核对三件事。核心不是功能多，而是把写入链路拆成「解析 → 确认 → 写入」三层闸；同时它揭示了工具的边界——客户大多在微信，销售仍需手动把客户转过来。"
+stage: "日常使用中 · 约 2 个月"
+role: "业务规则与字段口径设计、AI 行为约束设计、写库链路故障定位与修复"
+stack:
+  - "飞书多维表格"
+  - "lark-cli"
+  - "Hermes AI 助理"
+  - "execute_code 沙箱"
+links: {}
+impact:
+  - "把录入入口从「逐格开表」改为自然语言：销售一条消息完成客资录入，缺字段由助理追问补全，而不是猜"
+  - "写入链路拆成解析→确认→写入三层闸：AI 只负责起草，销售点头确认后才落库，从机制上阻断 AI 编造字段"
+  - "转化率改为对线索 / 报价 / 工单三张表聚合查询得出，不再让销售额外填统计表，同一份数据只有一处口径"
+  - "定位并修复「AI 查完数据后卡片里表格立刻消失」的根因（输出后调用工具清理临时脚本触发了流式卡片归档），用沙箱 + 命令黑名单做硬约束"
+resumeBullets:
+  - "Designed and built a natural-language CRM front end: salespeople log leads, follow-ups and vehicle profiles by chat message instead of filling spreadsheet cells, with the assistant asking follow-up questions for missing fields rather than guessing."
+  - "Split the write path into parse / confirm / commit gates so the LLM only drafts and a human confirms before any record is persisted, structurally preventing fabricated field values."
+  - "Replaced manual conversion-rate sheets with aggregated queries over three linked tables, keeping a single source of truth for lead, quote and work-order data."
+  - "Root-caused a streaming-card failure where result tables disappeared after tool cleanup calls, and fixed it with an execution sandbox plus a command deny-list instead of prompt-level instructions."
+status: published
+featured: true
+englishSummary: "A lightweight CRM for a car-detailing store: a Feishu multi-dimensional table as the backend, the Feishu CLI as the data interface, and a Hermes AI assistant as a natural-language frontend. The design thesis is that a CRM is adopted not because of features but because front-line staff know where to type within ten seconds — so writes go through parse / confirm / commit gates and conversion rates are queried, never re-typed."
+details:
+  - "2026-08-23-crm-sales-assistant-feishu"
+  - "2026-08-23-hermes-streaming-cards-feishu"
+---
+
+# 飞书多维表格 + AI 销售助理
+
+一句话：让一线销售**用一句自然语言完成客资录入**，把 CRM 从「没人填的 Excel 报表」变成「每天自然发生的过程」。
+
+## 这是什么
+
+一套轻量 CRM 体系，三层组成：
+
+| 层 | 用什么 | 负责什么 |
+|---|---|---|
+| 前端 | Hermes AI 助理（在飞书里） | 听懂销售的话，转成结构化字段，生成可读的确认摘要 |
+| 数据接口 | 飞书 CLI `lark-cli`，以 `--as bot` 身份写入 | 受控写入与聚合查询 |
+| 后台 | 飞书多维表格 | 线索表 / 报价表 / 客户车辆档案 / 工单表 / 售后表 |
+
+## 业务问题
+
+- 上重系统（SAP / 纷享销客这类）→ 每个客户要开一堆页面、关联一堆字段，**销售根本不会填满**
+- 退回 Excel → 录了也没人看，要看转化率还得靠人肉统计
+- 真实约束：销售平时就在飞书生态里（老板、店长、施工队都在），任何方案的学习成本都必须接近零
+
+## 我的角色
+
+- **我做的**：业务规则与字段口径、表结构设计、AI 行为约束、写库链路的故障定位与修复
+- **现成工具**：飞书多维表格与飞书 CLI 是平台能力，不是我写的
+- **需要补写**：这套东西里哪些环节由 AI 生成、有没有同事参与，目前文中没有交代清楚
+
+## 关键设计决策
+
+### 1. 不让 AI 直接写表：先解析、再确认、后写入
+
+让 AI 直接写多维表格是危险的——它爱自由发挥，缺了手机号会编一个、金额拿不准会乱填。所以写入被拆成三个受控动作：
+
+1. **解析**：只把自然语言转成结构化字段，缺字段就追问，**不猜**
+2. **确认**：把解析结果生成一段人能读的摘要，**销售点头了才继续**——把「AI 写表」变成「人审 AI 起草」
+3. **写入**：确认通过才用 `lark-cli record-batch-create` 落库，身份和格式都有明确约定
+
+### 2. 线索字段改「微信优先」
+
+销售反馈：很多客户是先加微信、后面才知道电话。如果设计成「电话必填」，录入就永远拦在半路。所以线索表改成微信优先——有电话填电话，没有先用微信身份占位，后面补。
+
+**和真实工作动线对齐，比和理想数据模型对齐重要。**
+
+### 3. 转化率是「查」出来的，不是「录」出来的
+
+老板要的当天转化率、每个销售的成果，不是让销售额外填一张统计表，而是助理直接聚合线索 / 报价 / 工单三张表。同一份数据只在一处真实存在，口径才不会打架。
+
+### 4. 与其劝 AI，不如用机制让它只能走对的路
+
+最深的一个坑：AI 查完数据想在卡片里展示，表格却「生成完立刻消失」。根因是 AI 输出结果后又调工具清理临时脚本，触发了流式卡片的归档机制，把表格挪进了思考区。
+
+修法不是写提示词，而是硬机制：查询走 `execute_code` 沙箱（不产生临时文件就不会触发归档）+ 用 `approvals.deny` 拦掉 `rm`。**让 AI 想走错路都走不了。**
+
+## 已经在用的三件事（真实状态）
+
+**这套东西不是原型，已经在门店日常使用约 2 个月。** 实际承担的是三件事：
+
+1. **录线索**：销售用自然语言录入客资，不用逐格开表
+2. **跟进记录**：客户跟进过程记在同一条线索上，而不是散在聊天记录里
+3. **销售表格核对**：助理查表做聚合，用来核对销售的录入与成交情况
+
+## 真实的摩擦：客户大多在微信，销售还得手动转
+
+这是整套方案**目前最大的限制**，也是这个项目最值得讲的部分：
+
+门店客户**绝大部分在微信上**，而 CRM 的后台是飞书。两个平台之间不通，所以**销售需要手动把客户「转」过来**（转两道）。
+
+也就是说，这套方案把录入从「填一堆格子」降到了「说一句话」，**但并没有降到零**——因为它解决不了跨平台的数据流转。产品边界在这里，不在 AI 能力上。
+
+> 换个角度看：**这恰恰是「先摸真实工作动线、再选工具」这条原则的延伸。** 微信优先的字段口径是从这条动线里长出来的；而微信与飞书不互通这件事，是这条动线上海拔最高的那道坎，靠 prompt 和字段设计翻不过去。
+
+## 已知局限与未验证
+
+这一节决定这个项目现在经不经得起追问：
+
+- ✅ **已确认**：日常使用约 2 个月，承担录入 / 跟进 / 核对三件事
+- 🔴 **但并不精确知道「降了多少成本」**：录入一单实际耗时、录入错误率、销售人均日录入条数，**没有任何一项被测量过**。所以「效率提升」这个说法目前不能给数字
+- 🔴 **微信→飞书的手动转换成本没有被量化**，而它很可能是整个流程里最贵的一步
+- **异常路径只设计了、没测过**：信息缺失、客户重复、写入失败这三种情况，文中只有设计描述，**没有一份实际测试记录**
+- 「一线 10 秒内知不知道往哪填」是**设计假设**，不是测出来的阈值
+- 原文里「把多维表格 + AI 把这块**彻底解掉**」这类表述**没有测量支撑**，已从原博客修正
+## 实现细节
+
+下面几篇记录了完整的实现过程、真实踩坑与决策依据 —— 包括销售反馈如何改变了字段口径、卡片表格消失的根因排查全过程。

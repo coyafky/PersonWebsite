@@ -37,6 +37,15 @@ export const blogSchema = baseContentSchema.extend({
   lang: z.string(),
   updated: z.string().optional(),
   canonical: z.string().optional(),
+  /**
+   * 封面图根相对路径，约定落在文章自己的目录：
+   * `/images/blog/<slug>/cover.webp`。
+   *
+   * 可选 —— 缺省时不渲染封面节点，照旧通过校验（新文章可以先不配图）。
+   */
+  cover: z.string().optional(),
+  /** 封面替代文本。有 cover 时检查器要求非空（与正文图片 alt 规则一致）。 */
+  coverAlt: z.string().optional(),
 });
 
 export const diarySchema = baseContentSchema.extend({
@@ -67,6 +76,13 @@ export const projectSchema = baseContentSchema.extend({
   cover: z.string().optional(),
   featured: z.boolean().default(false),
   period: z.string().optional(),
+  /** 项目真实阶段，自由文本（例如 原型 / 试用中 / 日常在用）。没有就留空。 */
+  stage: z.string().optional(),
+  /**
+   * 该项目「实现细节」博客的 slug 列表。**顺序即阅读顺序** ——
+   * 这不是"最新文章"列表，而是作者安排的一条从总览读进实现的路径。
+   */
+  details: z.array(z.string()).default([]),
 });
 
 export const careerSchema = baseContentSchema.extend({

@@ -5,9 +5,11 @@ summary: "第二章把 Prompt 拆成了五维/十层，其中「Lighting 光线�
 tags:
   - "AI 生图"
   - "Prompt 工程"
-status: published
+status: archived
 lang: zh
 englishSummary: "Chapter 3 of the AI image-generation methodology. To test which lighting suits a product, lock the subject, composition, background and style, and vary only the light — a controlled-variable method. Breaks down natural / side / back / neon lighting, plus a reusable master template and lighting variable library."
+cover: /images/blog/2026-08-23-ai-image-generation-lighting-variables/cover.webp
+coverAlt: 一张卡片分成四格，每格从不同方向受光
 ---
 
 第二章把 Prompt 拆成了五维公式，其中有一维特别容易被当成「随便写写」——**Lighting（光线）**。

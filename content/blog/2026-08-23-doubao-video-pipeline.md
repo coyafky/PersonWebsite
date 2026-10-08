@@ -5,9 +5,11 @@ summary: "我把自己做 AI 视频的整套方法沉淀成了一个可复用的
 tags:
   - "AI 视频"
   - "Skill"
-status: published
+status: archived
 lang: zh
 englishSummary: "Documentation for my doubao-video-pipeline skill: a 6-step pipeline that turns a one-line topic into a complete video document ready to paste into Doubao (Seedance). Includes a dual-track design (ChatGPT 6-shot fast preview vs full production), beat-based keyframe JSON to save generation credits, a free-mode that splits videos into 10-second segments, lip-sync line-length QC, and dual-IP proportion locking. This post documents exactly how the pipeline works."
+cover: /images/blog/2026-08-23-doubao-video-pipeline/cover.webp
+coverAlt: 一根细线从左端进入，向右展开成一大张纸
 ---
 
 # 豆包 Video Pipeline：一句话选题 → 可直接喂豆包的视频文档，这条流水线怎么工作

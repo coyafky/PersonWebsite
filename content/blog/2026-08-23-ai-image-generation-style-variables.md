@@ -5,9 +5,11 @@ summary: "这是五维公式里「Style 怎么表现」那一维的深入。同�
 tags:
   - "AI 生图"
   - "Prompt 工程"
-status: published
+status: archived
 lang: zh
 englishSummary: "Chapter 6 of the AI image-generation methodology. The deep-dive on the Style dimension: keeping subject, composition, angle and background complexity fixed while varying only the visual medium — commercial photography, minimal sketch, line art, magazine illustration, watercolor. Closes the series by consolidating product-image variables into six categories."
+cover: /images/blog/2026-08-23-ai-image-generation-style-variables/cover.webp
+coverAlt: 五个尺寸相同但材质不同的方块并排
 ---
 
 前面几章测了光线、情绪、材质，都是「商品长什么样」的不同侧面。这一章测的是另一个维度——**表现形式**：同一个商品，用「摄影」还是「线稿」还是「水彩」来呈现。

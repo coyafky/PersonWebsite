@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MdxContent } from "@/components/mdx-content";
 import { ArticleLayout } from "@/components/article-layout";
-import { getBlogPosts, getContentBySlug } from "@/lib/content";
+import {
+  getBlogPosts,
+  getContentBySlug,
+  getProjectsForBlog,
+} from "@/lib/content";
 import { extractHeadings } from "@/lib/content/headings";
 import { articleMetadata, buildUrl } from "@/lib/metadata";
 import { readingTimeLabel } from "@/lib/reading-time";
@@ -35,9 +40,10 @@ export async function generateMetadata({ params }: SlugPageProps): Promise<Metad
 
 export default async function BlogDetailPage({ params }: SlugPageProps) {
   const { slug } = await params;
-  const [post, allPosts] = await Promise.all([
+  const [post, allPosts, projectBacklinks] = await Promise.all([
     getContentBySlug("blog", slug),
     getBlogPosts(),
+    getProjectsForBlog(slug),
   ]);
 
   if (!post) {
@@ -80,7 +86,32 @@ export default async function BlogDetailPage({ params }: SlugPageProps) {
           <h1>{post.title}</h1>
           <p>{post.summary}</p>
           {post.englishSummary ? <p className="english-summary">{post.englishSummary}</p> : null}
+          {post.cover ? (
+            // 原生 <img>：封面是首屏 LCP 元素，需要显式 eager；尺寸由 CSS
+            // aspect-ratio 固定，用不上 next/image 的响应式优化。
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              className="article-cover"
+              src={post.cover}
+              alt={post.coverAlt}
+              width={1600}
+              height={900}
+              loading="eager"
+              decoding="async"
+            />
+          ) : null}
         </header>
+        {projectBacklinks.length > 0 ? (
+          <p className="blog-project-backlink">
+            本项目所属：
+            {projectBacklinks.map((project, index) => (
+              <span key={project.slug}>
+                {index > 0 ? "、" : null}
+                <Link href={`/projects/${project.slug}`}>{project.title}</Link>
+              </span>
+            ))}
+          </p>
+        ) : null}
         <MdxContent source={post.body} />
         <SeriesNav series={post.series ?? ""} prev={seriesPrev} next={seriesNext} />
         <ShareButtons title={post.title} url={url} />

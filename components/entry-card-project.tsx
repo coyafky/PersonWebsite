@@ -10,6 +10,10 @@ type EntryCardProjectProps = {
   featured: boolean;
   period?: string;
   cover?: string;
+  /** 项目真实阶段（原型 / 试用中 / 日常在用…）。可选，不传/为空则不显示。 */
+  stage?: string;
+  /** 「实现细节」文章数。可选，不传或 ≤0 则不显示。 */
+  detailsCount?: number;
 };
 
 /**
@@ -25,10 +29,13 @@ export function EntryCardProject({
   featured,
   period,
   cover,
+  stage,
+  detailsCount,
 }: EntryCardProjectProps) {
   const articleClassName = featured
     ? "entry-card-project entry-card-project-featured"
     : "entry-card-project";
+  const hasMeta = Boolean(stage || period);
 
   return (
     <article className={articleClassName}>
@@ -46,8 +53,15 @@ export function EntryCardProject({
       <Link href={href} className="entry-card-project-link">
         <header className="entry-card-project-header">
           <h2 className="entry-card-project-title">{title}</h2>
-          {period ? (
-            <time className="entry-card-project-period">{period}</time>
+          {hasMeta ? (
+            <div className="entry-card-project-meta">
+              {stage ? (
+                <span className="entry-card-project-stage">{stage}</span>
+              ) : null}
+              {period ? (
+                <time className="entry-card-project-period">{period}</time>
+              ) : null}
+            </div>
           ) : null}
         </header>
         <p className="entry-card-project-summary">{summary}</p>
@@ -57,6 +71,9 @@ export function EntryCardProject({
               <li key={index}>{point}</li>
             ))}
           </ul>
+        ) : null}
+        {detailsCount !== undefined && detailsCount > 0 ? (
+          <p className="entry-card-project-details">{detailsCount} 篇实现细节</p>
         ) : null}
       </Link>
       {stack.length > 0 ? (

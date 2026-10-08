@@ -1,5 +1,5 @@
 ---
-title: "Agentic AI 工作流：不是一口气写完，而是分阶段完成"
+title: "让 AI 一口气写完一个功能，它每一段都在猜"
 date: "2026-05-10"
 summary: "Agentic AI workflow 的本质：把复杂任务拆成多个步骤，让 LLM 分阶段完成。从普通用法 vs Agentic 对比、研究代理案例、到自主性连续光谱——DeepLearning.AI 课程核心笔记。"
 tags:
@@ -10,10 +10,9 @@ lang: zh
 category: "AI/LLM与Agent框架"
 source: "DeepLearning.AI · Andrew Ng"
 englishSummary: "Core notes from DeepLearning.AI's Agentic AI course: Agentic workflow breaks complex tasks into multi-step processes, contrasting with one-shot LLM usage. Covers research agent case study and the autonomy spectrum from low to high."
+cover: /images/blog/2026-05-10-agentic-workflow/cover.webp
+coverAlt: 一条长纸条折成四道均匀的风琴褶
 ---
-
-# Agentic AI 工作流：不是一口气写完，而是分阶段完成
-
 > 来源：DeepLearning.AI · Andrew Ng · Agentic AI 课程笔记
 
 ---
@@ -57,7 +56,7 @@ flowchart LR
 
 今天很多人使用 LLM 的方式是直接说：「请帮我写一篇关于 X 的文章。」
 
-这就像要求一个人从第一句话写到最后一句，中间不能停下来、不能回头修改、不能按退格键。即便如此，大语言模型居然还能写得相当不错——这本身已经很厉害了。
+这就像要求一个人从第一句话写到最后一句，中间不能停下来、不能回头修改、不能按退格键。即便如此，大语言模型居然还能写得相当不错。这本身已经很厉害了。
 
 ### Agentic Workflow：分阶段完成
 
@@ -74,13 +73,13 @@ flowchart LR
 
 这个过程更像是真正写作者的工作方式：先想 → 再查 → 再写 → 再改 → 再想 → 再完善。
 
-> **所谓 Agentic AI workflow，本质上就是把复杂任务拆成多个步骤来完成。**
+> **所谓 Agentic AI workflow，就是把复杂任务拆成多个步骤来完成。**
 
 ---
 
 ## 核心能力：学会拆任务
 
-真正的难点不在于「会不会谈概念」，而在于：
+真正的难点在于：
 
 - 你怎么拆步骤？
 - 每一步该怎么设计？
@@ -126,7 +125,7 @@ flowchart LR
 
 ## Agentic AI 的自主性连续光谱
 
-Agent 的自主性不是非黑即白，而是一个**连续光谱**。
+Agent 的自主性是一个**连续光谱**。
 
 ```mermaid
 flowchart LR

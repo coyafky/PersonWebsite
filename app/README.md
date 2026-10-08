@@ -8,8 +8,9 @@ Planned public routes:
 /          Home
 /blog      Blog list
 /blog/[slug]
-/weekly    Weekly list
-/weekly/[slug]
+/notes     Notes index (topic / book / course collections)
+/notes/[collection]
+/notes/[collection]/[slug]
 /projects
 /projects/[slug]
 /career

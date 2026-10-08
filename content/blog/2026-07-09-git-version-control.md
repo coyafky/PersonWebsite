@@ -5,10 +5,12 @@ summary: "为什么每个项目都有一个 .git 文件夹？为什么 Git 成�
 tags:
   - "zero-to-tech"
   - "Claude Code"
-status: published
+status: archived
 lang: zh
 category: "技术/计算机基础"
 englishSummary: "Why does every project have a .git folder? Why did Git become the standard? This piece explains Git's core concepts (repo, staging area, commit, branch), daily commands, .gitignore, version time travel, and workspace switching — and finishes with a real-world scenario linking Git Worktree with Claude Code Subagents: multiple AI Agents working in parallel on the same repo without stepping on each other."
+cover: /images/blog/2026-07-09-git-version-control/cover.webp
+coverAlt: 纸页像阶梯一样错开堆叠，露出层层侧边
 ---
 
 # Git 和版本管理：你的代码时光机，以及它和 Claude Code 的联动
@@ -686,5 +688,5 @@ git worktree remove ~/wt-utils
 - **zero-to-tech / VSCode 进阶：调试器、断点、launch.json**
 - **zero-to-tech / Docker 是什么：为什么「在我电脑上能跑」会变成「在我容器里能跑」**
 
-上一篇：[终端和 Linux 直觉：AI 工具最常用的 20 个指令](/blog/terminal-linux-basics)
-第一篇：[网络是怎么工作的](/blog/how-network-work)
+上一篇：[终端和 Linux 直觉：AI 工具最常用的 20 个指令](/blog/2026-07-09-terminal-linux-basics)
+第一篇：[网络是怎么工作的](/blog/2026-07-09-how-network-work)
