@@ -1764,6 +1764,19 @@ main {
   outline: none;
 }
 
+/* 有封面时把博客条目压成横向信息条：左侧只保留一个方形视觉锚点，
+   右侧给标题和摘要留出连续的阅读宽度。没有封面的卡片继续沿用上面的
+   单列文字布局。 */
+.entry-card-blog-link--with-cover {
+  grid-template-columns: clamp(144px, 18vw, 190px) minmax(0, 1fr);
+  grid-template-areas:
+    "cover header"
+    "cover summary";
+  column-gap: var(--space-5);
+  row-gap: var(--space-2);
+  align-items: start;
+}
+
 .entry-card-blog-link:hover .entry-card-blog-title,
 .entry-card-blog-link:focus-visible .entry-card-blog-title {
   color: var(--accent);
@@ -1816,8 +1829,10 @@ main {
    只有传了 cover 才渲染这个节点 —— 没有封面的卡片仍是纯文字布局，
    DOM 里不会多出任何空容器。 */
 .entry-card-blog-cover {
+  grid-area: cover;
   margin: 0;
   overflow: hidden;
+  aspect-ratio: 1;
   border-radius: var(--radius);
   box-shadow: var(--shadow-border);
   background: var(--surface-soft);
@@ -1826,9 +1841,16 @@ main {
 .entry-card-blog-cover img {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   object-fit: cover;
+}
+
+.entry-card-blog-link--with-cover .entry-card-blog-header {
+  grid-area: header;
+}
+
+.entry-card-blog-link--with-cover .entry-card-blog-summary {
+  grid-area: summary;
 }
 
 /* ── Weekly Timeline ────────────────────────────────────────────────── */
@@ -3045,6 +3067,11 @@ main {
 
   .entry-card-blog {
     padding: var(--space-5) 0;
+  }
+
+  .entry-card-blog-link--with-cover {
+    grid-template-columns: clamp(104px, 28vw, 160px) minmax(0, 1fr);
+    column-gap: var(--space-4);
   }
 
   .entry-card-blog-title {

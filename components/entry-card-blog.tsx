@@ -28,16 +28,19 @@ export function EntryCardBlog({
 }: EntryCardBlogProps) {
   return (
     <article className="entry-card-blog">
-      <Link href={href} className="entry-card-blog-link">
+      <Link
+        href={href}
+        className={`entry-card-blog-link${cover ? " entry-card-blog-link--with-cover" : ""}`}
+      >
         {cover ? (
           <div className="entry-card-blog-cover">
-            {/* 缩略图 lazy 加载；16:9 比例由 CSS aspect-ratio 固定 */}
+            {/* 缩略图 lazy 加载；列表封面固定为 1:1 方形并用 object-fit 裁切 */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={cover}
               alt={coverAlt ?? ""}
               width={640}
-              height={360}
+              height={640}
               loading="lazy"
               decoding="async"
             />
