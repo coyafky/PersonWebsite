@@ -142,6 +142,15 @@ export const gallerySchema = baseContentSchema.extend({
   image: z.string(),
   /** 用于生成成品图的原生参考图，可传一张或多张。 */
   referenceImages: z.array(z.string()).default([]),
+  /** 同一提示词生成的多张成品图，按顺序在 Gallery 卡片中轮播。 */
+  carouselImages: z
+    .array(
+      z.object({
+        src: z.string(),
+        label: z.string(),
+      }),
+    )
+    .default([]),
   model: z.string(),
   /** 原始关键词（作者当初记下的概念，很短，例如「明朝 汉服 复古胶片」） */
   prompt: z.string(),

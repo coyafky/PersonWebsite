@@ -995,14 +995,32 @@ main {
   justify-content: center;
   background: rgba(0,0,0,0.85);
   backdrop-filter: blur(8px);
-  padding: var(--space-7);
+  box-sizing: border-box;
+  padding: 24px;
+  overflow: auto;
 }
 
 .lightbox-image {
-  max-width: 90vw;
-  max-height: 85vh;
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(88vw, 960px);
+  max-height: min(88dvh, 900px);
+  min-width: 0;
+  min-height: 0;
   object-fit: contain;
   border-radius: var(--radius-card);
+}
+
+@media (max-width: 600px) {
+  .lightbox-overlay {
+    padding: 16px;
+  }
+
+  .lightbox-image {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 32px);
+  }
 }
 
 /* ── Markdown Images ──────────────────────────────────────────────── */
@@ -2252,15 +2270,154 @@ main {
   box-shadow: inset 0 1px 0 rgba(17, 19, 15, 0.08);
 }
 
+/* ── Gallery multi-output carousel ────────────────────────────────── */
+
+.entry-card-gallery-carousel {
+  background: var(--surface);
+}
+
+.entry-card-gallery-carousel-stage {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.entry-card-gallery-carousel-stage:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.entry-card-gallery-carousel-stage > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform var(--transition-smooth);
+}
+
+.entry-card-gallery-carousel-stage:hover > img,
+.entry-card-gallery-carousel-stage:focus-visible > img {
+  transform: scale(1.025);
+}
+
+.entry-card-gallery-carousel-stage:hover .entry-card-gallery-header,
+.entry-card-gallery-carousel-stage:focus-visible .entry-card-gallery-header {
+  opacity: 1;
+  transform: none;
+}
+
+.entry-card-gallery-carousel-controls {
+  display: flex;
+  gap: 6px;
+  padding: 12px 12px 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(17, 19, 15, 0.22) transparent;
+}
+
+.entry-card-gallery-carousel-choice {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid rgba(17, 19, 15, 0.12);
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.entry-card-gallery-carousel-choice:hover {
+  border-color: rgba(17, 19, 15, 0.3);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.entry-card-gallery-carousel-choice:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.entry-card-gallery-carousel-choice-active {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--surface);
+}
+
+.entry-card-gallery-carousel-choice-active:hover {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--surface);
+}
+
+.entry-card-gallery-carousel-index {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  opacity: 0.68;
+}
+
+.entry-card-gallery-carousel-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 10px 14px 14px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.entry-card-gallery-carousel-status span:first-child {
+  color: var(--text);
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .entry-card-gallery-carousel-controls {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .entry-card-gallery-carousel-status {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .entry-card-gallery-cover img,
   .entry-card-gallery-header,
-  .entry-card-gallery-reference img {
+  .entry-card-gallery-reference img,
+  .entry-card-gallery-carousel-stage > img,
+  .entry-card-gallery-carousel-choice {
     transition: none;
   }
 
   .entry-card-gallery-trigger:hover .entry-card-gallery-cover img,
   .entry-card-gallery-trigger:focus-visible .entry-card-gallery-cover img {
+    transform: none;
+  }
+
+  .entry-card-gallery-carousel-stage:hover > img,
+  .entry-card-gallery-carousel-stage:focus-visible > img {
     transform: none;
   }
 }

@@ -55,7 +55,15 @@ function imageFieldOf(file) {
         (item) => item[1],
       )
     : [];
-  return { text, image: match ? match[1] : null, referenceImages };
+  const carouselBlock = text.match(
+    /^carouselImages:\s*\n((?:^[ \t]+.*(?:\r?\n|$))*)/m,
+  );
+  const carouselImages = carouselBlock
+    ? [...carouselBlock[1].matchAll(/^[ \t]+-[ \t]+src:\s*"([^"]+)"/gm)].map(
+        (item) => item[1],
+      )
+    : [];
+  return { text, image: match ? match[1] : null, referenceImages, carouselImages };
 }
 
 function requireCwebp() {
@@ -106,7 +114,7 @@ function check() {
   const warnings = [];
 
   for (const entry of entries) {
-    const { image } = imageFieldOf(entry.file);
+    const { image, referenceImages, carouselImages } = imageFieldOf(entry.file);
     if (!image) {
       errors.push(`${entry.slug}: frontmatter 缺 image 字段`);
       continue;
@@ -124,6 +132,19 @@ function check() {
     }
     const kb = statSync(onDisk).size / 1024;
     if (kb > 600) warnings.push(`${entry.slug}: ${kb.toFixed(0)}KB 偏大，考虑降质量`);
+
+    for (const extraImage of [...referenceImages, ...carouselImages]) {
+      if (!extraImage.startsWith("/gallery/")) {
+        warnings.push(`${entry.slug}: 额外图片不在 /gallery/ 下（${extraImage}）`);
+        continue;
+      }
+      const extraOnDisk = join(ROOT, "public", extraImage.replace(/^\//, ""));
+      if (!existsSync(extraOnDisk)) {
+        errors.push(`${entry.slug}: 找不到额外图片 public${extraImage}`);
+      } else if (carouselImages.includes(extraImage) && !/\.webp$/.test(extraImage)) {
+        errors.push(`${entry.slug}: 额外图片必须是 webp（当前 ${extraImage}）`);
+      }
+    }
   }
 
   // 反向：public/gallery 里有图但没有任何内容引用（孤儿文件）
@@ -131,7 +152,11 @@ function check() {
     const referenced = new Set(
       entries.flatMap((e) => {
         const fields = imageFieldOf(e.file);
-        return [fields.image, ...fields.referenceImages].filter(Boolean);
+        return [
+          fields.image,
+          ...fields.referenceImages,
+          ...fields.carouselImages,
+        ].filter(Boolean);
       }),
     );
     for (const name of readdirSync(GALLERY_PUBLIC)) {

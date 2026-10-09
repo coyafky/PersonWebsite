@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import type { GalleryPost } from "@/lib/content";
 import { ImageLightbox } from "@/components/image-lightbox";
+import { GalleryCarousel } from "@/components/gallery-carousel";
 
 type GalleryCardProps = {
   post: GalleryPost;
@@ -19,6 +20,7 @@ export function GalleryCard({ post }: GalleryCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
   const referenceImages = post.referenceImages ?? [];
+  const carouselImages = post.carouselImages ?? [];
 
   // 复制「完整提示词」—— 短关键词粘出去复现不出这张图，复制它没有意义
   const copyText = post.fullPrompt ?? post.prompt;
@@ -45,40 +47,53 @@ export function GalleryCard({ post }: GalleryCardProps) {
 
   return (
     <article id={post.slug} className={cardClassName}>
-      <button
-        type="button"
-        className="entry-card-gallery-trigger"
-        onClick={() => setExpanded((value) => !value)}
-        aria-expanded={expanded}
-        aria-controls={`gallery-details-${post.slug}`}
-      >
-        <div className="entry-card-gallery-cover">
-          <Image
-            src={post.image}
-            alt={post.title}
-            width={IMG_W}
-            height={IMG_H}
-            sizes="(max-width: 768px) 100vw, 320px"
-          />
-          {/*
-            标题与模型徽章叠在图上、默认隐去。
-            /gallery 是 DESIGN.md 里的 Experience 模式：作品从第一屏就主导，
-            界面后退 —— 常亮的标题栏属于「界面在主导」。
-            hover / focus / 展开时才浮出；无悬停能力的触屏由 CSS 常驻（见 globals.css）。
-          */}
-          <header className="entry-card-gallery-header">
-            <h2 className="entry-card-gallery-title">{post.title}</h2>
-            <div className="entry-card-gallery-badges">
-              <span className="entry-card-gallery-model">{post.model}</span>
-              {referenceImages.length > 0 ? (
-                <span className="entry-card-gallery-reference-count">
-                  {referenceImages.length} reference{referenceImages.length > 1 ? "s" : ""}
-                </span>
-              ) : null}
-            </div>
-          </header>
-        </div>
-      </button>
+      {carouselImages.length > 0 ? (
+        <GalleryCarousel
+          title={post.title}
+          model={post.model}
+          referenceCount={referenceImages.length}
+          images={carouselImages}
+          imageWidth={IMG_W}
+          imageHeight={IMG_H}
+          expanded={expanded}
+          onToggleDetails={() => setExpanded((value) => !value)}
+        />
+      ) : (
+        <button
+          type="button"
+          className="entry-card-gallery-trigger"
+          onClick={() => setExpanded((value) => !value)}
+          aria-expanded={expanded}
+          aria-controls={`gallery-details-${post.slug}`}
+        >
+          <div className="entry-card-gallery-cover">
+            <Image
+              src={post.image}
+              alt={post.title}
+              width={IMG_W}
+              height={IMG_H}
+              sizes="(max-width: 768px) 100vw, 320px"
+            />
+            {/*
+              标题与模型徽章叠在图上、默认隐去。
+              /gallery 是 DESIGN.md 里的 Experience 模式：作品从第一屏就主导，
+              界面后退 —— 常亮的标题栏属于「界面在主导」。
+              hover / focus / 展开时才浮出；无悬停能力的触屏由 CSS 常驻（见 globals.css）。
+            */}
+            <header className="entry-card-gallery-header">
+              <h2 className="entry-card-gallery-title">{post.title}</h2>
+              <div className="entry-card-gallery-badges">
+                <span className="entry-card-gallery-model">{post.model}</span>
+                {referenceImages.length > 0 ? (
+                  <span className="entry-card-gallery-reference-count">
+                    {referenceImages.length} reference{referenceImages.length > 1 ? "s" : ""}
+                  </span>
+                ) : null}
+              </div>
+            </header>
+          </div>
+        </button>
+      )}
 
       {expanded ? (
         <div

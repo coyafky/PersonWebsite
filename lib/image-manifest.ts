@@ -189,6 +189,16 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "height": 1376,
     "blurDataURL": "data:image/webp;base64,UklGRhQBAABXRUJQVlA4IAgBAAAQBwCdASoYACsAPt1mqk+opaOiKqgBEBuJYwDGQBYhubwaTEKfSel+1yTozrOVUmB2Or0yXg0sLPqmZ7TYP8TQAAD+8ZMn/WHrG+3c4yeM2G2SnR9BtCBsqZL1VP2Zq0avVnrncd5iklDu1N67CvTI8dr4+OMs8791lgIAq3P2QoulXXgMbvW+D/JdmK02Yrc2oPVYaMYfCWdb1d+fA83cv2kQF+k8L3OAXMXaMwJ9OtPhdUUnSRstZHneKxnsCT9W+nzlqe8BMebbyX1BidmR16NzsZlBSg/+Gp1VEt9/4GtPcLMBzUpwiNpRaQsOdsCavvQVhC46rgX6MgdSA7+WZYka0LkWAAA="
   },
+  "/gallery/2026-10-09-automotive-film-infographic-style-reference-vehicle-coating.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRlgBAABXRUJQVlA4IEwBAAAwBwCdASoYACAAPt1apUyopSOiMAgBEBuJYgDA/BmJ/ngDLKYAaVxnoYKzL5Fa6nLIGySyouURH8kQ88vsI1sxtoAA/f8rvWQX2tqfEjeQxu8V2RfZ6fyphYz+OQ4IyzQd2v5WIJRiVvk6P0oR9N5AMn77L0Ngt01Tiqy58gWDzlP2n7KLxGUntdl4k9pZhYIbOgs4llp7jIubVrMv6JxR7xH/GnYYqfPnsaOlM1KHXWAmxE8+jg6idsVP0rdXL/KQ+1Ja0NmpR1tFiIv9R+mNU/1xtpgdil8c0FcHks22XhPEOyCpKVO5J5B2f6cUuU9qxXsgEFPe+v4q2yLPONn1xtTRsNt8bvCjiuIef3WGmEW4RiDYnKbU4Gvp7Cy7kWI5O+ERoDrsnEDLw2p/r7RxyGG3ghthrSyl2U4oHtlrJi4CyjKlsQsodCQAAA=="
+  },
+  "/gallery/2026-10-09-automotive-film-infographic-style.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRmQBAABXRUJQVlA4IFgBAAAQBwCdASoYACAAPt1apUyopSOiMAgBEBuJQBOmUGauIWtsA8ATQEqB7mUHD285UqUEP+XEcrGDppXB/Un2kS8qAAD+auoENmlveiB2iFN+1j8mEX1a23N3FTYechVxj69Ku9FzbiRuJluRWIQUN1MFQPEjQh/SrJ0+9YO5ma90Em3aSE5AIB3E0U36CUv9NCmfKJe6QtX+JZJgud5+dfCKbNUMQ3B+Oe7DHFUeXtHNezhJU3/rJC3iE6qNkcMDEZavX4HWePSPuL5qh5j3fKAHJutee85ds6LX1e02JbOhtS0qdBT883gqUtDyld07Dw3kEHqmHFBiEbpzBooz0E/kaoXYnRt6+XeWtsJf2h7dM3/0Sn/kBQIbBbY7Db7unTRs1AH9fwG6RNMLbQNWUa1Qu06R/HXxWm5VhuS8o8tZMzDD1jPAw9zPfuhKwHb43d5tzpYExpAAAA=="
+  },
   "/gallery/2026-10-09-blue-haired-maid-closeup.webp": {
     "width": 1086,
     "height": 1448,
@@ -210,14 +220,14 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "blurDataURL": "data:image/webp;base64,UklGRqQAAABXRUJQVlA4IJgAAACwBACdASoYABIAPt1iq08opaQiKAqpEBuJZwC2yBEkXWdAdXov52BS08HiIjfoAP3jWvOiMtHGqLbiNP5pdwn+gxowqtVlqqkwcdm2t1T8GF/YGtcy2vPOJs7J+gPj2svjwL8w6k2nhplIhw++nKRdHzihJCin8Y/nN3YWnJZ6eeE6ovritkFPgwaUpGEZYxGuEBJZCwAAAA=="
   },
   "/gallery/2026-10-09-ev-suv-wheel-replacement-wheel-reference.webp": {
-    "width": 1320,
-    "height": 1147,
-    "blurDataURL": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAADwBACdASoYABUAPt1ip06opaMiKA1REBuJZADGfBENSpZLFzJlk7ob1whRQmv3cAAA/uleoDprj/utSFEE+dw3DmkPSf4EuChszXmQAA5XoOfYWB1QNgvD7LSFcSwW4CDomj/qYQcDKQlCmNOnOlkWLkGm51tnw4X/lAhShL8Ie+bHE/NkndGcgUA4J0McveNGcIMAAAA="
+    "width": 1440,
+    "height": 1080,
+    "blurDataURL": "data:image/webp;base64,UklGRrYAAABXRUJQVlA4IKoAAABQBQCdASoYABIAPt1mq1EopSOiqAgBEBuJZwAFEz7wB/s0Qrp5cpn1Y0DvsqJZdnp5Y8AA/vV4/vVP8+f0+3TBcg/7lM8XBUjAgmaiz0POHPre2sgi3JyyuBvFAKMdjq568RZqzxEGBX9A3bQ7yhopP1U+uW2/P++AjIuBo5rzih3Lc2Vyv1Ho6yndkrvCCPAkFmm8Do4Wbqlm+GcnQRTUyd0+/dKRWAAAAA=="
   },
   "/gallery/2026-10-09-ev-suv-wheel-replacement.webp": {
     "width": 1448,
     "height": 1086,
-    "blurDataURL": "data:image/webp;base64,UklGRqYAAABXRUJQVlA4IJoAAACwBACdASoYABIAPt1kq08opaQiKAqpEBuJZwCnFBEIXJ30KHqrucvu/8XT+x2AAPhi6mHERgsMbq0Bo67dVNFhvoQY1HzuNuBGQjfugLs3/x+tp61+wUn2UsDGBkU+XYqcQGv/VsVF1aVMLHF8zFuWoZIhUa1FVaRIdKnQE1IvGV5+jSsrpRA/RON8jRL1zt3SZ9MNdTIGOYAA"
+    "blurDataURL": "data:image/webp;base64,UklGRrAAAABXRUJQVlA4IKQAAADwBACdASoYABIAPt1iq08opaOiKAqpEBuJZQCuHYyAZDhp8gnPhygqz2hUqR9uO6AA4DQWvcTcGml5+j2rQ42AvTPesaVjmQDkCUvveLVmaGZxDz1OhKPDapjSW3fBeUDirNOmaPi383gX3JTVq/UlomZOWDUwRBBsh8mv1qEmkymiHtsnBWFfVlMqwiptmov5VBvaxTav/YbtOldtOTqsgDAAAA=="
   },
   "/gallery/2026-10-09-korean-indoor-natural-light-portrait.webp": {
     "width": 941,
@@ -249,6 +259,31 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "height": 1147,
     "blurDataURL": "data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAADwBACdASoYABUAPt1ip06opaMiKA1REBuJZADGfBENSpZLFzJlk7ob1whRQmv3cAAA/uleoDprj/utSFEE+dw3DmkPSf4EuChszXmQAA5XoOfYWB1QNgvD7LSFcSwW4CDomj/qYQcDKQlCmNOnOlkWLkGm51tnw4X/lAhShL8Ie+bHE/NkndGcgUA4J0McveNGcIMAAAA="
   },
+  "/gallery/2026-10-09-tengwang-pavilion-morning-poster-brand.webp": {
+    "width": 2048,
+    "height": 359,
+    "blurDataURL": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAACQAwCdASoYAAUAPt1cpkyopSOiMAgBEBuJYwC7ACHnn/vm3QroAP7s4NhhYp4+JnUEz8F7+j8WlEMdV/fUuKdwbJEDa9E9ZBksBROi3taAEWHG4AA="
+  },
+  "/gallery/2026-10-09-tengwang-pavilion-morning-poster-qr-1.webp": {
+    "width": 174,
+    "height": 126,
+    "blurDataURL": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAADQAwCdASoYABIAPt1mq1EopSOiqAgBEBuJZwC/7Yr6cLUtfE+gHmgA/u/RUd3yN7bD+RRbjLekWrSzEMGXb21c5Fuicd4opr7syW+wVNonwW9aTkburVo2dYFKPIottS9ssRgG/U/9oosBL0dk70nUPwTV6ACrOC0LAAAA"
+  },
+  "/gallery/2026-10-09-tengwang-pavilion-morning-poster-qr-2.webp": {
+    "width": 258,
+    "height": 258,
+    "blurDataURL": "data:image/webp;base64,UklGRlIBAABXRUJQVlA4IEYBAADwBgCdASoYABgAPt1mqlEopSOiqAgBEBuJaQDPp3gLabYrcgQyPxL/THsABWs1TuhnXQIK3/NVxify9EH+XuWAAP7YZ+1Tdrk7Yeh4gsXB7ZxiDvaHXJ9pCDCbmVicfiOtjrKAJXq+S/BXeW64E3xwXR9WBrDZtHzm2gWBPFe5Fx1PeURWVwwXJfIGXlWOt/Aqyr/rbvWwdjpn67SUYbPR/SQAC+qTgASB48mtvyELKmzKu6OlLA2uGznYNJzpN3wi7iBiLYvSHHQaN8S97GQD2tR/P/JHBwRWePw2DlO+ZiGAjQvurxJ4R+syD8xe0N/P6xZCw7ElT6/r1AUfACWn4/V3tDRPY73nYngdiW4LprtZ+zZ6efJYpdjA5G5U4MaxSPTFVn+v52VqNMfkoB2xmzg75ZPMa4Ufdgq7HvuAn3q/oAAAAA=="
+  },
+  "/gallery/2026-10-09-tengwang-pavilion-morning-poster-vehicle.webp": {
+    "width": 259,
+    "height": 194,
+    "blurDataURL": "data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAABwBACdASoYABIAPt1eqU4opKOiMBgIARAbiWkAA+RRBv/MGOSpyNNtILX3AAD+9MuRg9Dh80jhh5P8rcR5TDe/d6riF0nZ9vXvk92Xo6AeHoZpCALq92bY96tYFcnytZNzR9246TZnIvjniltepW/cWDFUl7/n6E+NyI8FA6X0Lh5Y4rWVIZIv+W40GAAA"
+  },
+  "/gallery/2026-10-09-tengwang-pavilion-morning-poster.webp": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRnQBAABXRUJQVlA4IGgBAABQBwCdASoYACsAPt1orVEopaQipWmZEBuJagCdM0KEetZ/vm6BjL5DwCbMSTdRmFDNz4h7yDkVoYyt00Eh+KB1uLtEAOGkL1JLByUA/gREabmyjOSIG3ukTcu+ZJHSvuq00EzHiJrXK9QbSFheC6NNI8drxbW5N9imY6etFrMnqnNDUD4icl6r09vcAHVbEd9ga6Kp1GJGa0mCSNMiR6j/Jhg4mLR6exM0tR3Nd1O6zZ0vK65FrneAfRjsmOjqa/yNcb5fpCBGmxZOtCGINAiAXkX2+uKRlvc330CESxQ450yFj3jy9bUqv488NR8JmI8kL4V6ivlYdirdsDeUgCOI0QsVJM9mvkAHuFEEbQr2iyZioJDxwaq5+0rwAoYwRC+Kuc4ewveLZCRGugFiA/nJnOF/cOZoxpZwlK6VtmEz6+1EcXv7oQzANKmD0hgtIWwyvQx9HfwvD4JZnwfQ1EOjdg2/iXAAAAA="
+  },
   "/gallery/2026-10-09-underbody-protection-white-background-original.webp": {
     "width": 1920,
     "height": 1080,
@@ -259,15 +294,20 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "height": 1086,
     "blurDataURL": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAAAwBACdASoYABIAPt1aqE6opKOiMBgIARAbiWkAA+YxAxnc/0me0Qo6wAAA/vOanAt/p3dRXsFr7fxNKI3Y/N343h0jCEoWfhClqhiFbM9TS+ePYawncnKbJxGNZEcmCOl529P8xka80G1P6ofsfGmdgFlJ/lyCGStSaqfqdQbHjM2dUsJQOgjRAcxr3Bz80gAAAA=="
   },
-  "/gallery/2026-10-09-xiaomi-su7-laser-sea-blue-wrap-preview-swatch.webp": {
-    "width": 864,
-    "height": 1536,
-    "blurDataURL": "data:image/webp;base64,UklGRqoAAABXRUJQVlA4IJ4AAADwBQCdASoYACsAPt1gq0+opSOiKrgKARAbiWMAyJgISUaNCQ+AsZ+K3F1JuE6r6m4kubEbSpSk1AD+QgakJt0mlJDZJbNb6ePKfUcov0hMilm2EbJXKGmw2cQ7o0U44WUIDLgVPGg74D0jfr3iU1cplBOgcWuOwIh5p/SvyQtTif1d9ODhZTxCy51vTq47OPAfc6J3BcATIQoO4swAAA=="
-  },
-  "/gallery/2026-10-09-xiaomi-su7-laser-sea-blue-wrap-preview.webp": {
+  "/gallery/2026-10-09-xiaomi-su7-laser-sea-blue-wrap-preview-original-vehicle.webp": {
     "width": 547,
     "height": 365,
     "blurDataURL": "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAABwBACdASoYABEAPt1irE8opaQjKAqpEBuJZwCsAAui3+J/p4yiePTkexDrwAD9h3X7KYKPNQKrUgLqMYAyVjLVzUuJztnPrkYh+fgP+Prw3DfH2dg+XxnCF3k3A8t3uWV5+XfUhVUxhD9MiHp5pHlIV/T3wl5avQTlvBTQ8J2+FP3DVZzmFRrM1JD4IU8TXJKMTV+qkjQ1QFsIAAA="
+  },
+  "/gallery/2026-10-09-xiaomi-su7-laser-sea-blue-wrap-preview-swatch.webp": {
+    "width": 864,
+    "height": 1536,
+    "blurDataURL": "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAADwBQCdASoYACsAPt1ep06opKMiKrgMARAbiWMAyJgISUbbohNsQrAu5jpHhaCUjpLvUV9dH3XgAAD+QgakJt0mlJDZJbNb6ePJ3zEhMilm2EbDYngFt9Iyaf+8NaSUDqhte9JuUgKdi/IhfWstARJExQf2U3dgRn7RAmsVSOyiCLJhhRU4sFDzqVpb2yc4BVE+4BigV4TSYu8OAAA="
+  },
+  "/gallery/2026-10-09-xiaomi-su7-laser-sea-blue-wrap-preview.webp": {
+    "width": 1536,
+    "height": 1024,
+    "blurDataURL": "data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAABQBACdASoYABAAPt1apkyopSOiMAgBEBuJYwC7MjcAkxzfwuc685EJyceAAP2S45y1vuM8xfgLkjG8bIoZhvLZE/px1OW9IBDwGqvU0Y7TcTMNp8zG+APOiGmAq6GrF/3mTIbkB4KZnv8BQqOQRTfpEHOMBN9qN146bMsm5CQiEN6MfDiYlqNPZqXQYqkMSrKUZpxBdTBX8BFQAAA="
   },
   "/gallery/2026-10-09-xiaopeng-m03-underbody-protection-car.webp": {
     "width": 299,
@@ -288,6 +328,81 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "width": 1254,
     "height": 1254,
     "blurDataURL": "data:image/webp;base64,UklGRjQBAABXRUJQVlA4ICgBAADwBQCdASoYABgAPt1mq1EopSOiqAgBEBuJYwCsAywTkwX8eMW18g8XvnBflpYc2Nn+jqnzWQKfIAD+4leaBBe/KH4UQmsXuGikcl3npsPd/ADPc+yl/k81mZCCGZ/BBAXFlp2M/NvipFWQZKN1ZNDW6QSSeIPQqs+hkOoBXdih7CB5mC7m0oObL+t7lNx1qDG6c9McuEG0jmgHrDMR5YoOZNfFobXyU8to6eli4kMByb68jCU/vQQauymUEhwwaImaihDzthUJNNZ/nvkjyo6H/Q/kvc19TUw1XShAD+7CswM0Qj1R7W2Jv5wdNO8cKiPyTU/of1jEkFLIK3irM7U3/DXEcm5d2HTOdPnNtKazh+y00iChPj6CD7ICRim8eqHG6rmsIwAAAA=="
+  },
+  "/gallery/2026-10-10-lanhui-v1-au01-inner-brow-raised.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRv4AAABXRUJQVlA4IPIAAADQBQCdASoYACAAPt1iq08opaQiKAqpEBuJZAC4PiAByimbf491DXOGzLomBQRnGrxeRDZrpAoAAP7zeVZd7xnhlPqRY4ff1+6yrPqdE6/Yqjg44EqQU8D3dOkbvr6ZalJqpDHiR1ugzPg1AsxnaGXMjdnm36LiBOaYNDa//lR9hEseMJH5gEvf3jvR8spxIyXjnfQdK8vnL7UAOYAIG5i266fkzfaR5XLhPJo1BUkmXwHaK64/4mvMu+8MxjZ4uqsp9L0szqsOEspZmjVRu8G8byYP5i+bL6dzEC78RQpY6lb+S1DtjbJ6fVXWOz6ZZAAAAA=="
+  },
+  "/gallery/2026-10-10-lanhui-v1-technician-headlamp-base.webp": {
+    "width": 1122,
+    "height": 1402,
+    "blurDataURL": "data:image/webp;base64,UklGRu4AAABXRUJQVlA4IOIAAABwBQCdASoYAB4APt1eqU6opSOiMBgIARAbiWQAxNmLBVm2JvE+DqjiwqcbCqHvJ60IwPAAAP7xxOx04N4wxRHg4LHpH6z19oWal69OBFTFG186dx5Rs+3lu2cdz2OEpcdEM3UM7mCaj8upj59HL9kgMTFyjVNvKd6VNR/RauoavOTB+fqqqiIA+ZaXgO3G6z8I08ROrHVK3TcaGQOoV0+br8h/ru5JUUXgSSkPYDFCXkTaOA3Cmgrbu0c+8pwggXu48FPslhzAAzYtCWZgfgwQcW9iMzvKbbi2zEkIQdgSAAAA"
+  },
+  "/gallery/2026-10-10-ppf-xiaohui-character-reference.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRv4AAABXRUJQVlA4IPIAAADQBQCdASoYACAAPt1iq08opaQiKAqpEBuJZAC4PiAByimbf491DXOGzLomBQRnGrxeRDZrpAoAAP7zeVZd7xnhlPqRY4ff1+6yrPqdE6/Yqjg44EqQU8D3dOkbvr6ZalJqpDHiR1ugzPg1AsxnaGXMjdnm36LiBOaYNDa//lR9hEseMJH5gEvf3jvR8spxIyXjnfQdK8vnL7UAOYAIG5i266fkzfaR5XLhPJo1BUkmXwHaK64/4mvMu+8MxjZ4uqsp9L0szqsOEspZmjVRu8G8byYP5i+bL6dzEC78RQpY6lb+S1DtjbJ6fVXWOz6ZZAAAAA=="
+  },
+  "/gallery/2026-10-10-ppf-xiaohui-img2-history-origin.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRjwBAABXRUJQVlA4IDABAABwBgCdASoYACAAPt1cpUyopSOiMAgBEBuJYwAIFfYA9gYxtoJu1s87nyfqgXujbXBYTDuZHk6VGqOfM8AA/f0+spOcS1VOwlIUxsDxkKFNC1mNZ9DEYfTCpwXUSBKwCW77Y3e71c+xGpiNwiQw2ZLvaqoWA0r9yhRiGFr3M2JgX4IT6L5BMegCtTXtVhunqBlv7MhAO1VqrMn3JDJnlubRElBLnUaLlJOlrOPVymbmtXy9iysn4AwmHT6xA0CkQmYb3QOqaeM9uRrhn4deuRjL1hvDNQkzb32W8w1oz9Id2sPIFvvsYBqLbWJEOI8Mn1iDCtc+s840m4giWyruRnPP6lx3+CNfr6iH70Q8qK7jYWCvzaEjL6dson4B4cj1V1VqL8mWoR8MNbRDwsxdsAAA"
+  },
+  "/gallery/2026-10-10-ppf-xiaohui-img3-structure-principle.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRlIBAABXRUJQVlA4IEYBAAAwBwCdASoYACAAPt1cpkyopSOiMAgBEBuJQBdmUGXYEv5+PTAFACOzmnSDv1iTGhY6RLz3RDvNoXvOaeHuCoavg/gA/slSUjpf+bg1wz195/rve5pbQlSovWktsm5hmtBuqYZOTMJmAdterJl8kDFwbc/Y1lKKi+EUEGRo6Ysm/fah9iDU5sKXk0TcTthAf/cnL4xgxAQZjqD9V7+LCV/7ulqiC1nxtEvAN2jB+Rk5JSrBPA2VW8n6+Cjgqju339S+3ImRCSK4GfmvkExfbwxndWyXbld5Wv51DqL89EjLq3HaCDLDF0BxZdhWPz3iO2WdiAtziscUSxE7VWlxaCpoLK0vWDYGfjF9O9bwCnI6OTXdJl6QBNa9opYIzujC4Ah0zzmj5cs+QMohuRnx3kNLtnZdbhChYtQpsix4MNm73SE/MIAAAA=="
+  },
+  "/gallery/2026-10-10-ppf-xiaohui-img4-comparison-decision.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRnQBAABXRUJQVlA4IGgBAACQBwCdASoYACAAPt1apkyopSOiMAgBEBuJaACdMoM6LItz4umAby2vwVy3uSezDt4GdRGBrH8ctDEp6BAAqQMXiFPaWgAA/uHeLsegNzF0NCKG7ufpFSQ+hIVlSAxlPJRCZ/S+gnT+bdKaIddeoMdKwLnXs98wINZuV4Be3C8ry+wsFYc/LbQQ34pPD1wEYmNxAt8rTh6dqRmyquJ75dzPugFoqArMBCWW3XSwzD6fe8uF7sEZX/Fyn6/pg3/UXkqvykwRdlIEv8e6MXhaUdnb0/gw/z0clA9JuDj2b+X/ZgsEXUJwY8g/ZZLZlRe6VDkJcWbGrUZ6ro4ELgt2sMraE1nBQLy07z9TPxYMeaDHU48WZehzS0aBi/tmHwVL0G1zE08RqqB52KSeEldWsayOBXAAePaD2GH7VarWL6fdJURGS9kv7zalV7RgRqJMj+LhUP9+1sRU0NpXnXr6pTz9qgNq+rQAAAA="
+  },
+  "/gallery/2026-10-10-ppf-xiaohui-img5-faq-pitfalls.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRlYBAABXRUJQVlA4IEoBAADwBgCdASoYACAAPtVYpEyoJSOiMAwBABqJQBOmYc5Rof7b/boDdmuYDLj7dTf425JUhNeBMlTCQ7OAWxQ8Sq7AAP63nhr72Tgz2a6yNMPS1rUldvqJ+lbWwBkUMB+JycoaNa+nF84tS737GmoPajhYrI/EPdk3+er2QOvdpMehyoTxsJSl4HXesuzijLQ4M0iuP5uTXjmqNiB9rIPunEIQ+ik/BbsKVNbut8hGOoxXH/lpR3hfZd7RZX+s5y7JYLYbXaYAlrKqdu4Cc4bx7UTG1O4jDsJuJGhZN2bbu/Sd7k258AaSGRjTR+078NM9AFszwpNFb3usKa45cHzBxx4sKXkFuIIG924rytZJsY6bEYVpi/5YNPA+2MnwbS6sne1k/ybRPGh5fONu3KYHCLbgVEZR+e2oo40N0r9JQv63XPW8R/boJMOuAAA="
+  },
+  "/gallery/2026-10-10-ppf-xiaohui-mg1-cover-hook.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRpABAABXRUJQVlA4IIQBAABQCACdASoYACAAPt1apUyopSOiMAgBEBuJbACdOUFUvinSAZirkgG8er8FaDLA0mrNIy/Wb/cOwDNvemkHdq6rE+5KzpY5RCaxnAAA/vOJxIOZLIh5n3L5jaOhjLAii5VhhF7FdyGB7hbu2l4VlkQiBtsUcXAC/En7vclqQod9eegucNhwkMsBj/sWxPURB3HsrUiqxLumzyLuy3qwpe4Jy+k1tC+ojFwY8xLF1nT8Y4rwhzBalgpEEFyRf0w0MyAU5v782ZHZd4R+lWLjSN1v2tyEvnESvum7UJWuXScUPawSLVUWnvmM94gKUQqbTKOxSfNS8ClJNMF1aR+Bhnr/4U9Nh+XGUWrCnjxp7kc+fyTSN+74d/BcPeTy3zWVKTvXpqPpojIFKmXpTQ9THcl1k6a266+YtWXiTH8utBbZn3+eMTdQ+9xbZlDyfLikVqfWzG9hQtRQDjRiFxeROr6Qjh9x4o8vjhuxDgC+vdfrY4OTKUReq+mlTQ+G1ssS+HIyiAAA"
+  },
+  "/gallery/2026-10-10-s03-six-gears-beat-a-wheel-upgrade.webp": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRrgBAABXRUJQVlA4IKwBAABQCACdASoYACsAPt1gpE4opaMiKqwBEBuJagCdMv64KsccANNmzWIarfbIgrFhgo0U6IvZnJ4J+SscyyJuJ82DNQDJkzTaNxBbGEAA/uoxKJVpfVow7+n8odNfu8r0Yrj0jgdHQmte59Eqcc77BZU/CffBYytV422HOVYDkZQjUoO50H7F6mfAKsAnfKrMfxSoDrW3/J8QckHjgn1ldFYVvp8SdFX/hWCQd7/iDGmi4FI/HOIvLnlU7x75nywonuzMYewW8zI49DyYngUW2n7ISGfkXRPCSqMwQ1tIhgPO7nipF7VVNC6oQyUj7EojsOsc3aIffA+ktV5ixnSvHumnffnZ4FovzN7ZC0Vr8/EioGpMBdCagJOyEoUO2bXwwgWYKJuJlKSd9sFqMXLxLidrklmlwZTfXOkky+47LhvMPpaFg0+Azj97hEOaDYapw6Kk9HIwVfEGmwPI6eOcTpodFTezr8WtAvcWuCC36/rjn5WnhDDPj7s0Jq73N7PO8tvYTaOBFc0DPB9UdPLGLLZZ8lpNEOhJPIRKkIiEfIDbpjA/dTbrZG5ziAwAAA=="
+  },
+  "/gallery/2026-10-10-s03-six-gears-beat-b-underbody-protection.webp": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRvQBAABXRUJQVlA4IOgBAABQCQCdASoYACsAPt1ip06opaMiKqoBEBuJZACdM2PIqCYqTz3lj/17QdhrMMCdJ2ziEYfigwxzKiGqIjogGImC6VpfaoyA4phHaSxJsvpz2sCGAAD+3dVusMjoA1+fk3/GRmZKNc/30oysdkDCl9V8ylobMvja4xZDgHJHdgNviNtY9HxfiSMyTNJEV710lx2S68nOF/Ddr1DyXkeS+dU1W+1Dr/W11zf3piElO0wfoj9Gju+bW/4B0ZBUqhjJLX1qL+g9O+rBfltI48pZzGJwTzmYUTrfuYW5Rd3LMtfz2kwY/7n4wQmptxEe/p5fG7y9yvd8qLXJUL2HWU5bMasDcTsHevudrps4f9C98soRt6q98IU+EOyX2uwN4vGN739/LkTfvy/dtZEwFt3nZQBK/q170V8ViQV9Ct7QdGCnwZhduYKZs1bIFUzNf9Otx+AE7uO6sl+9MGNMNLYfQsR/rOdzHar2xS5U9fRsh+AAI48cmQMmeDPt7pv+31+bqAhrPYxCNyxXmfJs5pOP6CX2aOCI7gdjHMyFJr82RXHjJXFKGmMoKNaYcJbsqgBFIbaAd/WYJ2nn59WpyC6vYJvS8y/nKn9P7CfGVGSjJ1mIpgFRIGyxDu3LWu0yIqZbchgQqbwPcRQAAA=="
+  },
+  "/gallery/2026-10-10-s03-six-gears-beat-c-power-step.webp": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRpgBAABXRUJQVlA4IIwBAAAwCACdASoYACsAPt1epk6opKMiKqoBEBuJQBfPbq3YFa54DTYDtyzAdckVeM4zFwPl1eP79uubXltVzRu+E32FBFY77JFW/SmwQAD+8y/P3HM15JTE4oLVFns1HqlZlnsy3+TkPBONfHIiEsn6uANHUnqLcsLD9p0k+HlSF77jPbm86jzWNfR5Cu/NhzW98tpU8AzCRT65Luu5slbLwwWhEsIa+6QdKKJo8SZp+DIMFQHo9G5+Z9aVZwdbLFDuMMwpFDauzMsQdzixBOkSxLBNW7W6hh02IvI5ISFgj4i3xaLpGLkCPJYc2O8dcMn25SIIlpYQ8Jj9mE2wHnbPvVyRAi+RN98Jm6nGtTeyNMmK83STZ5VsMHfIvnWZa3RRdxb9jYqEG3yfolaQtKcceAtQgmj6MUDF0P/YeJGDUjn6EMgh1szdVYJw6s6qa1E+oat45flm9vHzIxgLOLdTJZeTD+gak6jSpC3QCuwSZSbbm5nalobHajMcioO+1RvmxBUzH92PM4Nqm2LL6AA="
+  },
+  "/gallery/2026-10-10-s03-six-gears-beat-d-window-film.webp": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRmgBAABXRUJQVlA4IFwBAADQBwCdASoYACsAPt1Yqk4opKQiMBVaqRAbiWQAsSVA39aCAKEIDGVfFDFYkUJOtPGmEZUkvIF/7AmjFcjE38VJNnN/8RIoAAD+wHWy2HKiMdXrkdqvPCweG73s0iOYtWMC2K+gHnYD3mMkByMPWgRNRKl3B3uw/q6KRwOOQ1NRgG6vstEoG3ozbhC+fkj2owv5+KXxTn/RUy3W3BqfF+taUsM17txgM/KejCetLb2yCbRH5ZHDyFntjdef39Wq7A1hWsZBTWK6vD4vPfA75pnJ7r3iCWZjxryrsnCeeqRJ/aUcEiuqFjt7UG9UqmzMbV5yDvA0Ti7AIUJqJq6SwsiJkBZeVTOSUtUmyxj3sRzbX9GFZJX3bA+AgHW8fugvcbIx2LMeYZbNaRZsDc0xkSMZ1fkEy/MBWcl7eGXX/sRxcsk2sVkk9PIsblce6i1gDXISnueosQJ75u8AAAA="
+  },
+  "/gallery/2026-10-10-s03-six-gears-beat-e-color-wrap.webp": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRjQBAABXRUJQVlA4ICgBAABQBgCdASoYACsAPt1epU2opSMiKqwBEBuJQBTisYsNmrAxcq3W/+rA24/PAg/eFj9MIzZETJXmYJpgIAD+7EyvvYvdJfHJ0mZo17Gjz1Zea2hELu4AM7PBqCYwWrN08FwwZl1R8UJAlkeB87k+5W04iyb+i3PwzeJaV6+9ecpabFFB77E6myyQMaiS4aICMN4VtucIQINEMaA14w8z1IFENVFg+B9X+d8J7FvNZNeAqDOGKWLDBHDnKsdm86adKVgh9DJwtMYnYs5PRaLoonKqKsXSaL3pkNX3jA6TLo1NsCt5gXqDUoFW1HnkbKYuTzqfENBRCh9eha0oO6vJs5bZvp3Pue+egX0sGzH00xqDhkhG0uuioPtU1favyUH/QAUCVaaMCwAAAA=="
+  },
+  "/gallery/2026-10-10-s03-six-gears-beat-f-ppf.webp": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRp4BAABXRUJQVlA4IJIBAAAwCACdASoYACsAPt1iqU+opSOiKqgBEBuJQBOmdNzlgAErl7wy0xzidsUPOdou3ObFOS8GLrfX6CX+aXYILaK0FzqjBKDziiFkeAD5E/1U7JT2lm+L7QdQu93EdM9zWrzLdWEofNisa+Y5CYyduPVeeEZUNL+VIY7Df8iYMo+d/M7EGu7ILHfJfnoRchUXPSLJr6t37sZ8NLPdfmOMB0F7ZfNhnpIX1/5aZxrN18wMeM5hyQFuweMdAXc6qP8R8rupLAVo8QUH6scUeQ0EDNYygk4OieatCqmrBVveLJvObxWnL8UgSTUEqYUyyJWu3fW84Wuqx0TzwW+z2uqJqwtIZKUqcf56dYcAAztaABTZfMVZ1uQJieqlqE7zlybkR/xjTDcUHIYw9PucZXMa4gRkvrqP5CgAUoSAGHb5Aluk10WpzfgtnzRhg8LSTMfDtXB4p/9vdBno00R6KfzEXMYJXI2CNb8Gq29KxmGc7pgWYyGf9wgkZJyn5BMwvwL2XdRgouDrd/tY1/85FW8y5rYAAAA="
+  },
+  "/gallery/2026-10-10-s03-six-gears-character-reference.webp": {
+    "width": 1122,
+    "height": 1402,
+    "blurDataURL": "data:image/webp;base64,UklGRtYAAABXRUJQVlA4IMoAAABwBQCdASoYAB4APtVao0yoJSMiMAwBABqJYwDKAYxE32aZ1eFRoswmeiwJZGmGl4vbzK+AAP7qgex9dCVnwUbmkhAmnsV0n8lzkWrTx/oBgusgT8CJa2+eO3wZfRDnGXrOq+Z+p45wScGsgBBmGpqsT+F4lasoFxLh0wN8ZX7SfViAOLIEXXNK4rJIZPABA/t/cSaE8O9LsHdfoAna6voRPAiOXZWrWghbK9exW0yn9nrVPzWmiX7B8QqFm853MawC0UiExzmaAAAA"
   },
   "/images/blog/2026-03-21-openclaw-youtube-reading-comprehension/cover.webp": {
     "width": 1600,
