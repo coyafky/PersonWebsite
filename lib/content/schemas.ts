@@ -140,6 +140,8 @@ export const courseNoteSchema = baseContentSchema.extend({
 export const gallerySchema = baseContentSchema.extend({
   kind: z.literal("gallery"),
   image: z.string(),
+  /** 用于生成成品图的原生参考图，可传一张或多张。 */
+  referenceImages: z.array(z.string()).default([]),
   model: z.string(),
   /** 原始关键词（作者当初记下的概念，很短，例如「明朝 汉服 复古胶片」） */
   prompt: z.string(),

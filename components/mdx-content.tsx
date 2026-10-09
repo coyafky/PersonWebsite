@@ -15,6 +15,11 @@ import { Tweet } from "@/components/tweet-embed";
 import { YouTube } from "@/components/youtube-embed";
 import { getImageMeta } from "@/lib/image-manifest";
 import { ImageLightbox } from "@/components/image-lightbox";
+import { VisualDnaBuilder } from "@/components/visual-dna-builder";
+import { VisualStorytellingFramework } from "@/components/visual-storytelling-framework";
+import { ImageCaptionGrid, ImageCaptionItem } from "@/components/image-caption-grid";
+import { ImageTextList, ImageTextItem } from "@/components/image-text-list";
+import { LightingDirectionCarousel } from "@/components/lighting-direction-carousel";
 
 const prettyCodeOptions = {
   theme: "github-light",
@@ -49,6 +54,14 @@ function MdxImage(props: ComponentPropsWithoutRef<"img">) {
 
   if (!src) {
     return null;
+  }
+
+  // Course source material may contain externally hosted examples, inline SVGs,
+  // or conversation-scoped blob URLs. Keep those references intact instead of
+  // sending them through the local Next image manifest.
+  if (/^(https?:\/\/|data:image\/|blob:)/i.test(src)) {
+    // eslint-disable-next-line @next/next/no-img-element -- source lessons intentionally preserve external image references.
+    return <img src={src} alt={alt} className="markdown-image" />;
   }
 
   /*
@@ -91,6 +104,13 @@ const components = {
   Mermaid,
   Tweet,
   YouTube,
+  VisualDnaBuilder,
+  VisualStorytellingFramework,
+  ImageCaptionGrid,
+  ImageCaptionItem,
+  ImageTextList,
+  ImageTextItem,
+  LightingDirectionCarousel,
   img: MdxImage,
   pre: CodeBlock,
 };

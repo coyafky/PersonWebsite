@@ -47,7 +47,15 @@ function galleryEntries() {
 function imageFieldOf(file) {
   const text = readFileSync(file, "utf8");
   const match = text.match(/^image:\s*"([^"]+)"/m);
-  return { text, image: match ? match[1] : null };
+  const referenceBlock = text.match(
+    /^referenceImages:\s*\n((?:^[ \t]+-[ \t]+"[^"]+"[ \t]*(?:\r?\n|$))*)/m,
+  );
+  const referenceImages = referenceBlock
+    ? [...referenceBlock[1].matchAll(/^[ \t]+-[ \t]+"([^"]+)"/gm)].map(
+        (item) => item[1],
+      )
+    : [];
+  return { text, image: match ? match[1] : null, referenceImages };
 }
 
 function requireCwebp() {
@@ -121,7 +129,10 @@ function check() {
   // 反向：public/gallery 里有图但没有任何内容引用（孤儿文件）
   if (existsSync(GALLERY_PUBLIC)) {
     const referenced = new Set(
-      entries.map((e) => imageFieldOf(e.file).image).filter(Boolean),
+      entries.flatMap((e) => {
+        const fields = imageFieldOf(e.file);
+        return [fields.image, ...fields.referenceImages].filter(Boolean);
+      }),
     );
     for (const name of readdirSync(GALLERY_PUBLIC)) {
       if (!referenced.has(`/gallery/${name}`)) {

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import type { GalleryPost } from "@/lib/content";
+import { ImageLightbox } from "@/components/image-lightbox";
 
 type GalleryCardProps = {
   post: GalleryPost;
@@ -17,6 +18,7 @@ type GalleryCardProps = {
 export function GalleryCard({ post }: GalleryCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
+  const referenceImages = post.referenceImages ?? [];
 
   // 复制「完整提示词」—— 短关键词粘出去复现不出这张图，复制它没有意义
   const copyText = post.fullPrompt ?? post.prompt;
@@ -66,7 +68,14 @@ export function GalleryCard({ post }: GalleryCardProps) {
           */}
           <header className="entry-card-gallery-header">
             <h2 className="entry-card-gallery-title">{post.title}</h2>
-            <span className="entry-card-gallery-model">{post.model}</span>
+            <div className="entry-card-gallery-badges">
+              <span className="entry-card-gallery-model">{post.model}</span>
+              {referenceImages.length > 0 ? (
+                <span className="entry-card-gallery-reference-count">
+                  {referenceImages.length} reference{referenceImages.length > 1 ? "s" : ""}
+                </span>
+              ) : null}
+            </div>
           </header>
         </div>
       </button>
@@ -76,6 +85,32 @@ export function GalleryCard({ post }: GalleryCardProps) {
           id={`gallery-details-${post.slug}`}
           className="entry-card-gallery-details"
         >
+          {referenceImages.length > 0 ? (
+            <section className="entry-card-gallery-detail-block">
+              <div className="entry-card-gallery-detail-header">
+                <h3>参考图 · {referenceImages.length}</h3>
+                <span className="entry-card-gallery-detail-meta">点击图片放大</span>
+              </div>
+              <div className="entry-card-gallery-references">
+                {referenceImages.map((src, index) => (
+                  <span className="entry-card-gallery-reference" key={src}>
+                    <ImageLightbox
+                      src={src}
+                      alt={`${post.title} 参考图 ${index + 1}`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element -- reference assets may be local or externally hosted. */}
+                      <img
+                        src={src}
+                        alt={`${post.title} 参考图 ${index + 1}`}
+                        loading="lazy"
+                      />
+                    </ImageLightbox>
+                  </span>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
           {post.fullPrompt ? (
             <section className="entry-card-gallery-detail-block">
               <div className="entry-card-gallery-detail-header">
