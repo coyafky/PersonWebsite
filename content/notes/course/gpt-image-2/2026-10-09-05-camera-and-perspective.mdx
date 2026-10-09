@@ -1,0 +1,506 @@
+---
+title: "第五节：镜头与视角（Camera & Perspective）——从正面肖像到电影级镜头语言"
+date: "2026-10-09"
+summary: >-
+  完整迁移第 5 节原文，系统梳理相机角度、观察方位、景别、镜头焦段和电影级镜头语言。
+status: published
+course: "gpt-image-2"
+tags:
+  - "AI生图"
+  - "镜头语言"
+  - "摄影"
+lang: zh
+chapter: "第 5 节：镜头与视角"
+---
+## 第五节：镜头与视角（Camera & Perspective）——从正面肖像到电影级镜头语言
+
+GPT 生图从 0 到 1 · 第 05 课 · 镜头、透视与景深控制
+
+在前面的课程中，我们已经掌握了图片比例、提示词基础结构、构图方式与视觉风格。
+
+现在进入第五节：如何像摄影师一样控制 AI 的虚拟相机？
+
+同一位少女，采用不同镜头语言，可以表现出完全不同的视觉效果：
+
+- 正面平视：自然、直接、亲近。
+- 侧面视角：突出轮廓与人物情绪。
+- 俯视：展现环境、姿态和空间关系。
+- 仰视：突出人物气场、身高与视觉冲击力。
+- 广角：强调空间感和近大远小的透视。
+- 长焦：压缩空间关系，突出人物面部。
+- 浅景深：人物清晰，背景虚化。
+
+本节继续使用之前的蓝发少女女仆角色作为统一教学主体，尽量保持蓝色长发、白色头饰、蓝白女仆服装等核心特征。
+
+### 5.1 首先理解：镜头控制不是一个概念
+
+在 AI 生图提示词中，我们可以将镜头语言分为五个不同的控制维度。
+
+Camera Control System · 五大控制维度
+
+01 · Camera Angle
+
+相机角度
+
+平视、俯视、仰视
+
+02 · Viewpoint
+
+观察方位
+
+正面、侧面、背面、四分之三视角
+
+03 · Shot Size
+
+景别
+
+特写、近景、中景、全景
+
+04 · Focal Length
+
+焦距与透视
+
+广角、标准、长焦
+
+05 · Depth of Field
+
+景深控制
+
+背景虚化、焦点位置、清晰范围
+
+一个完整的镜头描述可以是：
+
+> 正面三分之四视角 + 平视角度 + 半身近景 + 85mm 人像镜头效果 + 浅景深。
+
+这五个维度相互关联，但不应该混为一谈。
+
+例如，俯视是相机角度，广角是焦距类别，特写是景别，背景虚化属于景深效果。
+
+### 5.2 第一部分：相机角度（Camera Angle）
+
+相机角度主要描述镜头相对于人物所在水平面的高度与倾斜方向。
+
+![Close-up of a person in a dress with blue hair, Anime illustration by Kamagurka - SeaArt AI](https://images.openai.com/static-rsc-4/KMo0Mt1XWRcev1M_t1q6PbTPJwvcY3lzBsBguqQXVHReLmaB9kMj8BwECCzUqZHBD6j-8S3AMSatcXxJfbUg2IHGIa1VaaUXCM28EvBYDdFIm_lXRUdiKsJXYtG_lS7KfWFJBAk8TVYFIH2cyi29Za6r4Jn9Uu9nnjmey0zZKx8?purpose=inline)
+
+1. 平视（Eye-level Shot）
+
+镜头大致与人物眼睛处在同一高度，观察关系自然、平等，适合头像、人物介绍与日常写真。
+
+关键词：eye-level camera, straight-on angle
+
+![Cheryl Iridescence | Kinsou no Vermeil | Tensor.Art](https://images.openai.com/static-rsc-4/JVkbIeoD3-10Fr_HplvZlEWnzzg8P4V9WdZdLNm9wpsl8IHhzLR_xIGYfttzk-PLuDNLt3PJimpkT0WVn990FEX4rF0b2nN-QEwmRF9JqmB-LlCjWP_D_R8TmlAYWFXl4sjjILtBpyQGWvOEAf6aYMPFLi1mPot2Zvn-LHrPLL0?purpose=inline)
+
+2. 俯视（High-angle Shot）
+
+镜头高于人物，向下拍摄。可以突出人物周围的空间，或表现角色向上望向镜头的姿态。
+
+关键词：high-angle view, camera looking down
+
+![無料のAI画像・動画生成と投稿コミュニティ | SeaArt AI](https://images.openai.com/static-rsc-4/JXVksbhcfOCbJ0n6rP5_OUe0mUgq_iHoLsN6OjzaDHZ0KMhiBbPxB9Z9lqLYg0ogaW_Tq0_LjSUHy_zEY43OOC11Sjfcr0uaDxg-dg_szsyGlq35lziJJer3Zat0-m8ZTKiLwbZZ5JkKfwWqnqld6qR8l1ReRXa1r_eFpKcTN5s?purpose=inline)
+
+3. 仰视（Low-angle Shot）
+
+相机位于人物下方，向上拍摄，容易突出人物的力量感与气场。
+
+关键词：low-angle view, camera looking upward
+
+![【構図別】AIイラストの魅力を引き出す構図・アングルタグ徹底解説｜5種比較検証 - 美少女AIイラスト研究所「NEKOKAWA」](https://images.openai.com/static-rsc-4/DlG38UZBv7vcQQAC5dSZdlNVLTe8X4sfBDo36xQ0rGMfEyJ-gk8Lcjm1JuLbGiVPUnI8IX4K0f5_yWaTS5L01m-WkrJNUvriausyDyLTHqqqKNvVovAsXWqdwrWEOmbOhBgwMknAayTIKHXfHJye-Wocb2_oukAxW3lTKkTmPmc?purpose=inline)
+
+4. 顶视（Bird's-eye View）
+
+镜头从近乎垂直的上方向下拍摄，适合展示人物与周围物品的布局。
+
+关键词：bird's-eye view, overhead shot, top-down
+
+#### 教学重点：俯视与顶视不一样
+
+俯视只需要相机高于人物并向下倾斜，不要求垂直。
+
+而顶视通常强调相机沿近乎垂直方向向下拍摄。
+
+因此，如果希望 AI 生成真正的顶视镜头，仅仅写 `high-angle` 可能还不够，需要增加 `directly overhead` 或 `camera pointing straight down`。
+
+### 5.3 第二部分：观察方位（Viewpoint）
+
+观察方位决定相机绕人物水平方向旋转后看到的内容。
+
+![蒼瀬 澪（あおせ みお）｜陽浜研究所エージェント設定資料 ｜学習書房格物堂](https://images.openai.com/static-rsc-4/D-sJ9CH3SyMcXo6076qGgG-nrcxwSbH4UjT71h6W-a2QNEWqoN1y8vt20Wfq-xDLEm_moXSAEqT-oF3AVgvoa0BuvcWedpM1yVnXgrYSvluRrpLN_vGAQzVewTWcCEpehDQEqUqkeMr4CiDi3NmXf-C0Y7XwlhCANu_FS3eERQs?purpose=inline)
+
+正视（Front View）
+
+直接展示正面五官与服装
+
+![maidのTwitterイラスト検索結果。](https://images.openai.com/static-rsc-4/X-PbRz4JAHdRrXifhuc6ppxeysYH_BiR96ET-dnITenPp8lBDaSPzo8GZLL5cv-rgx6PEXao5PUtDYZyL5e30tCmRyVQOi1UHvvSxiajMEivp1I5LAZvi0bv5ITd6lDNdrY1eW1YJp-Y6z-dS5ClyNJj-hSyRkNEHkEPSI7gpGA?purpose=inline)
+
+侧视（Side Profile）
+
+突出鼻梁、下巴与脸部轮廓
+
+![Blue ponytail maid - 9GAG](https://images.openai.com/static-rsc-4/yWeP6eE47T8R2VET1J-7dCptspEly974f0MV-9dgjkHPIc1rwMfnWM9wEUuUXoqjQGMzVGNkyN1Rc7rjciXDmhTI6QlSFvacB36sCNiMyCgOUIp8mlPXjIV-fBb3bz9a9IU8wM9QpMWSyaSGEUqs3PMv1OcnUig3Xioi3BQcis4?purpose=inline)
+
+四分之三视角（3/4 View）
+
+同时展现正面与侧面信息
+
+![生真面目で甘え下手な淑女 : エンパイアクラブ・TRiP](https://images.openai.com/static-rsc-4/tiWGF33A0HhfLecXSJpl_rHrGuVYxNtv8bgEPtxqeWVd0aRmgr9TzzRnP3uhXUkoY_Dcn1E3FWRq14P08zoTgulW5sZbojClBToWylhYBfc7Aqj5_42dEePVWwwQXQcqLefe83QcVLHg9fY9wgGc8X2ZoFa3igos2r73KfQwcWA?purpose=inline)
+
+背面（Back View）
+
+突出发型、服装背部与姿态
+
+#### 常见错误：四分之三视角不是“三分法构图”
+
+| 概念         | 作用                       |
+| ------------ | -------------------------- |
+| 三分法构图   | 控制主体在画面中的位置     |
+| 四分之三视角 | 控制相机观察人物的水平角度 |
+
+在提示词中，最好分别说明这两个概念。
+
+例如：
+
+> 人物位于画面左侧三分线附近，镜头采用四分之三侧前视角。
+
+前半句控制构图，后半句控制相机方位。
+
+### 5.4 第三部分：景别控制（Shot Size）
+
+景别回答的问题是：
+
+画面中究竟应该展示人物的多少部分？
+
+![Hatsune Miku  - VOCALOID - Image by YuRa (Mangaka) #3933636 - Zerochan Anime Image Board](https://images.openai.com/static-rsc-4/wKem6Yy7k44kYACzbhmKhY8TlLsOmQEDGzWYIZ3GGPEWVDx419cm2v5VnFI7zzgbsJVnQ9LEhWTSCHANaDiTCS9ik0wiJhSmk2Y_feyQqeRmlKTSc94kmDYsdD-I7qWMvKkjPIE0LoPqTgxXenYllPRy2AHpiNAGAZeHNg6SErc?purpose=inline)
+
+大特写（Extreme Close-up）
+
+单只眼睛、嘴唇、局部细节
+
+![青メイド | chichi-pui（ちちぷい）AIイラスト専用の投稿＆生成サイト](https://images.openai.com/static-rsc-4/SBGniYYb2fj1UQC2jisgVhAaP_wq8vzXTNZL8oGHdv3aatOFKVFAsT_qSsBWzddEbIbiia_3GtURKw20EXQ1ZODxllEBGGHjPHf2Ps80MwkvQXqYZcUFdI2-JXVCoakQ3CQozyoioZPXJzOoujkqNu06pskjGO6VPbT4YsH32Ns?purpose=inline)
+
+特写（Close-up）
+
+人物面部为主要内容
+
+![おはよっ | chichi-pui（ちちぷい）AIイラスト専用の投稿＆生成サイト](https://images.openai.com/static-rsc-4/ktJqgBYmLe5LnEPh4YKvk42hVTc73B2bzufarwhYlU6a5sn-IPMxrvat15IamXYe5drhdpGlHefuhoyMQ9tK8n2PAmPhp7XAJG0OS2YxqVd8vDV9glC_MgKQecrzKvB-9VIMPCZpZo385s5h3CvOoCqubAX1J-YqPP3T_KrYB3s?purpose=inline)
+
+中景（Medium Shot）
+
+通常展示头部至腰部附近
+
+![(Full Body Shot:1.5), (Standing),  (Masterpiece 1.3), (Highest quality - SeaArt AI](https://images.openai.com/static-rsc-4/9JGnYFqiNtjN5uThPCiiZt0jURfGyA6IvFZNm6U4xzmZLsmFIfWPqbWjattOHox0yTKllf6cGcd2t7l49995pi1mYfV-Vs56CZZKP21edM8ywd4imqMDQkYfO2ZEVThM93e2PxQ2tSF6eQH_SXh9PtWGjgaviWrTOjiacJFpnXA?purpose=inline)
+
+全身镜头（Full Shot）
+
+从头到脚完整展示角色
+
+景别与焦距不一样。
+
+例如，使用广角镜头也能拍摄特写，使用长焦镜头也能拍摄全身照。只是摄影师通常需要调整相机与人物之间的距离。
+
+### 5.5 第四部分：焦距与透视（Focal Length & Perspective）
+
+焦距是理解镜头语言的关键知识点。
+
+### 三种观察方式如何选择？
+
+同一个主体可以通过不同的观察方式获得不同的信息。下面的组件把图片、标题和解释放在同一个可复用的对比网格中。
+
+<ImageCaptionGrid
+  title="CAMERA VIEWPOINTS · 观察方式对比"
+  columns={3}
+  >
+  <ImageCaptionItem
+    src="/images/course/gpt-image-2/lessonThree/03.png"
+    alt="角色正面全身视图"
+    title="正面观察"
+    description="直接展示主体的整体形态与正面信息"
+  />
+  <ImageCaptionItem
+    src="/images/course/gpt-image-2/lessonThree/01.png"
+    alt="角色多角度视图"
+    title="多角度观察"
+    description="同时比较正面、侧面和局部细节"
+  />
+  <ImageCaptionItem
+    src="/images/course/gpt-image-2/lessonThree/04.png"
+    alt="角色九宫格视图"
+    title="连续观察"
+    description="在一组画面中检查姿态、表情与视觉一致性"
+  />
+</ImageCaptionGrid>
+
+图像网格适合承载“同一主题的横向比较”。如果重点是焦距本身，还需要同时固定主体大小与拍摄距离，避免把简单的缩放误认为透视变化。
+
+为了便于学习，我们使用全画幅相机的常见焦距作为参考。
+
+常见焦距与视觉特点
+
+## 24mm
+
+广角
+
+宽阔视野
+
+## 50mm
+
+标准
+
+自然视野
+
+## 135mm
+
+长焦
+
+狭窄视野
+
+焦距本身决定视角范围；常说的“长焦压缩感”主要来自为保持同样主体大小而改变拍摄距离所产生的透视差异，并非焦距直接改变空间透视。
+
+![青髪姉妹の陽光カフェ物語 - kyoの作品 - Aipictors - AI画像投稿サイト・生成サイト](https://images.openai.com/static-rsc-4/BdVtPeyEH7CepPXqocf-tnVy0IALXc9kHsx9JvGG4Lx2lYAgx5AmKjOEDTQ8KEsdh3xhpObIFcap3I5cZVGp71U0mIgqXU2wEq5Vt7Taf-OTa6aELvLjI2SQdwXaRANQZaPD38rG-dCkwrmvMWQyAgYmZ1UDo6PhFl4Q1jGO1xw?purpose=inline)
+
+广角（Wide Angle）
+
+适合突出环境、空间纵深与近距离透视。
+
+在近距离拍摄人像时，鼻子等靠近相机的部位可能显得更突出，脸部比例也容易发生夸张变化。
+
+![大好きホールドだいしゅきホールドlovel… AI LoRA Model | PixAI](https://images.openai.com/static-rsc-4/B72R5pHYOLgw6zFwicYO7w7uxmyCYGOIxHwj39eiV2y9a6f4y6wTqukJCZ5E90sVOEDAldnkleWlT1tf6jtmtebguV91DW1EC0GuWZ8y8ONDjm8jLN0UQLWhEC_xRL-H1sJ2We1_rCF56oaKuuKFw9fAM7uHaQtEBiU0ciKGAUU?purpose=inline)
+
+中长焦人像（Portrait Telephoto）
+
+常见参考焦距包括 85mm、105mm、135mm。
+
+适合人像特写、时尚摄影和需要柔和背景虚化的画面。
+
+#### 焦距如何写进提示词？
+
+普通写法：
+
+> 生成一张少女半身像。
+
+进阶写法：
+
+> 使用全画幅 85mm 人像镜头的视觉效果，采用自然的人脸透视，人物占画面中央，背景呈现柔和虚化。
+
+这里的 `85mm` 是引导模型模拟相机视觉特征，并不表示模型真正安装了物理镜头，也无法保证精确的光学参数。
+
+### 5.6 第五部分：景深控制（Depth of Field）
+
+景深是指在画面中看起来足够清晰的空间范围。
+
+需要区分两个概念：
+
+- 浅景深（Shallow Depth of Field）：焦点附近清晰，前景或背景容易虚化。
+- 深景深（Deep Depth of Field）：从近到远，有更大范围保持清晰。
+
+![rem (re:zero kara hajimeru isekai seikatsu) generated by otakumouse | AIBooru](https://images.openai.com/static-rsc-4/IZP6KpOZIGD-ZSjbT_ic32pFaffhT-hRWC9TAQ1TlnOUFvwbbLUS9aZ62BKxtrggGhyAWYZ1Oc9Ff-2P6atGYH78Tntx236bBl40IQ74AYDykKfF2e1DcsJErRNuVngNM1gamIrd20yeiZOCKr4xmK-YPYDJKhhmY3yTWJyL7gM?purpose=inline)
+
+浅景深
+
+人物清晰、背景大幅虚化
+
+![masterpiece, best quality - Free AI Art by | Tensor.Art | Tensor.Art](https://images.openai.com/static-rsc-4/DbAvTLgC6XJoyiaI_EHK9wDR1E4BidSffbErcJnBmBAh3unfblaUt2hbwNqCidAQAQtVbJzl0smkHdKGjfA76JeRIDt1hmPhJZK2wwwzOzBGcw6uZTc4qMSLiPJVAu03hrjTQTlyjb2hTp5pZFHnKpULVBI8QcLGF8oUcZBhqe4?purpose=inline)
+
+深景深
+
+人物与较大范围背景保持清晰
+
+#### 常见光圈与景深关系
+
+在其他条件相同的情况下：
+
+| 光圈  | 常见视觉表现                   |
+| ----- | ------------------------------ |
+| f/1.4 | 非常浅的景深，背景容易强烈虚化 |
+| f/2.8 | 明显背景虚化，主体突出         |
+| f/5.6 | 适中的清晰范围                 |
+| f/11  | 较深景深，较大空间范围清晰     |
+
+光圈并非唯一决定景深的因素。焦距、拍摄距离、传感器尺寸与背景距离都会影响虚化效果。
+
+在 AI 生图中，建议同时写出光圈参考值和期望的视觉结果，比只写 `f/1.8` 更明确。
+
+### 5.7 镜头组合：五种经典人物摄影方案
+
+你可以直接把这些镜头语言组合用于提示词中。
+
+| 方案       | 镜头组合                               | 视觉效果         |
+| ---------- | -------------------------------------- | ---------------- |
+| 自然头像   | 平视 + 正面 + 特写 + 85mm + 浅景深     | 亲近、自然       |
+| 时尚大片   | 略微仰视 + 3/4 视角 + 中景 + 50mm      | 有气场           |
+| 可爱自拍   | 略微俯视 + 正面 + 近景 + 24mm          | 活泼、亲近       |
+| 人物设定图 | 平视 + 正面 + 全身 + 标准焦段 + 深景深 | 展示完整造型     |
+| 电影叙事   | 侧面 + 中景 + 85mm + 浅景深            | 情绪化、突出人物 |
+
+需要注意，构图和镜头在组合时不应出现互相冲突的要求。例如，同时要求“极近距离眼睛特写”和“完整全身入镜”，通常就需要拆分为两个镜头，而非强行写在同一张画面中。
+
+### 5.7.1 姿态参考如何服务镜头设计
+
+姿态不是孤立的动作标签。它需要和角色身份、观察方向以及手部动作一起描述，模型才更容易理解画面中的身体关系。
+
+<ImageTextList
+  title="POSE REFERENCES · 姿态参考的三个层次"
+  intro="把参考图和文字约束放在同一行，适合讲解角色姿态、镜头方向和动作细节。"
+>
+  <ImageTextItem
+    src="/images/course/gpt-image-2/lesson12/01.png"
+    alt="角色图、姿态图与目标图的组合示意"
+    eyebrow="01 · Character + Pose"
+    title="角色图 + 姿态图"
+    description="角色参考负责保持身份特征，姿态参考负责提供身体动作。两者组合后，再补充镜头和构图要求，可以减少模型只复制角色外观、却忽略动作的情况。"
+    keywords="character reference, pose reference, target image"
+  />
+  <ImageTextItem
+    src="/images/course/gpt-image-2/lesson12/02.png"
+    alt="人物看向镜头、看向旁边、低头和抬头的视角示意"
+    eyebrow="02 · Head Direction"
+    title="头部朝向与观察关系"
+    description="身体朝向和头部朝向可以分开描述。人物身体保持侧身时，头部可以回看镜头，也可以继续看向环境，这会直接改变画面的叙事关系。"
+    keywords="direct gaze, looking aside, looking down, looking up"
+  />
+  <ImageTextItem
+    src="/images/course/gpt-image-2/lesson12/04.png"
+    alt="挥手、比心、托腮和指向四种手势示意"
+    eyebrow="03 · Gesture"
+    title="手势补充动作语义"
+    description="手部动作是姿态描述中容易被忽略的层次。挥手、比心、托腮和指向不仅改变身体形状，也会补充人物的情绪与交流意图。"
+    keywords="wave, heart gesture, hand on cheek, pointing"
+  />
+</ImageTextList>
+
+### 5.8 镜头提示词的标准模板
+
+## GPT Image 镜头与视角控制模板
+
+### 01. 主体
+
+使用参考图片中的蓝发少女作为主体。
+
+保持人物主要外貌特征、蓝色长发、女仆头饰、蓝白服装与配饰。
+
+### 02. 相机角度（Camera Angle）
+
+[平视 / 俯视 / 仰视 / 顶视]
+
+### 03. 观察方位（Viewpoint）
+
+[正面 / 侧面 / 四分之三 / 背面]
+
+### 04. 景别（Shot Size）
+
+[大特写 / 特写 / 中景 / 全身]
+
+### 05. 焦距（Focal Length）
+
+模拟全画幅 [24mm / 35mm / 50mm / 85mm / 135mm] 镜头的视觉效果。
+
+### 06. 景深（Depth of Field）
+
+[浅景深 / 中等景深 / 深景深]
+
+焦点位置：[人物眼睛 / 面部 / 全身]
+
+背景效果：[明显虚化 / 轻微虚化 / 保持清晰]
+
+### 07. 固定实验条件
+
+- 图片比例：3:4
+- 风格：统一写实角色摄影
+- 光线：柔和均匀
+- 背景：浅灰色
+- 人物：同一个角色
+
+### 08. 约束条件
+
+- 不改变人物身份与服装主要特征。
+- 不增加多余人物或肢体。
+- 保持镜头要求与景别一致。
+- 不主动改变整体美术风格。
+- 本次实验主要观察镜头语言带来的变化。
+
+### 5.9 互动实验：组装你的虚拟相机
+
+通过下面的参数选择器，可以自动组合一段可复制的镜头提示词。
+
+相机角度
+
+平视
+
+轻微俯视
+
+轻微仰视
+
+顶视
+
+观察方位
+
+正面
+
+侧面
+
+四分之三侧前
+
+背面
+
+景别
+
+面部特写
+
+半身中景
+
+全身镜头
+
+焦距模拟
+
+24mm
+
+35mm
+
+50mm
+
+85mm
+
+135mm
+
+景深
+
+浅景深
+
+中等景深
+
+深景深
+
+生成的镜头提示词
+
+使用参考图中的蓝发少女作为统一主体，保持蓝色长发、蓝色眼睛、白色女仆头饰、深蓝白色服装与核心角色特征。生成3:4竖版写实角色摄影。相机角度：平视；观察方位：正面；景别：半身中景；模拟全画幅85mm镜头的视觉效果；景深：浅景深。焦点准确落在人物眼睛或本次景别的主要展示部位，浅灰色背景，柔和均匀光线，尽量保持原始角色外貌与服装一致，不增加其他人物。
+
+ 复制提示词
+
+尽量选择协调的参数组合，例如顶视与面部特写通常需要额外描述人物的仰头姿势。
+
+### 5.10 本节博客教学配图规划
+
+为了保持与你之前课程一致的形式，我们继续使用蓝发少女角色生成对比素材。
+
+| 编号  | 教学图片                     | 建议布局   |
+| ----- | ---------------------------- | ---------- |
+| 05-01 | 平视、俯视、仰视、顶视       | 2×2 四宫格 |
+| 05-02 | 正面、侧面、3/4、背面        | 2×2 四宫格 |
+| 05-03 | 大特写、特写、中景、全身     | 2×2 四宫格 |
+| 05-04 | 24mm、50mm、85mm、135mm      | 横向四栏   |
+| 05-05 | 浅景深、中景深、深景深       | 横向三栏   |
+| 05-06 | 自然头像、时尚大片、电影叙事 | 横向三栏   |
+| 05-07 | 不合理镜头组合 vs 优化组合   | 左右双栏   |
+
+其中，05-04 的焦距教学图尤其需要严格控制：保持人物在画面中的大小接近，通过改变相机距离模拟不同焦距的透视差异，而不是只放大或缩小同一张图片。
+
+### 5.11 本节核心总结
+
+镜头语言不只是视觉装饰，而是有明确作用的画面控制系统。
+
+需要记住的公式是：
+
+镜头控制 = 相机角度 + 观察方位 + 景别 + 焦距与透视 + 景深。
+
+学习顺序建议先掌握相机角度，再学习方位和景别，然后研究焦距与景深。
+
+在正式制作对比教学图时，继续遵循上一节建立的原则

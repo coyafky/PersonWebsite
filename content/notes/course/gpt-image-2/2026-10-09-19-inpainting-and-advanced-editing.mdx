@@ -1,0 +1,621 @@
+---
+title: "第十九节：局部重绘与高级编辑（Inpainting & Advanced Editing）"
+date: "2026-10-09"
+summary: >-
+  完整迁移第 19 节原文，系统梳理遮罩、移除、换背景、扩图、局部换色与编辑漂移。
+status: published
+course: "gpt-image-2"
+tags:
+  - "AI生图"
+  - "局部重绘"
+  - "图像编辑"
+lang: zh
+chapter: "第 19 节：局部重绘与高级编辑"
+---
+## 第十九节：局部重绘与高级编辑（Inpainting & Advanced Editing）
+
+GPT 生图从 0 到 1 · 第 19 课 · 局部重绘、遮罩控制、扩图、对象移除、背景替换与多轮精修
+
+前十八节，我们已经掌握了如何从零开始生成一张图片，以及如何控制人物、产品、场景、光影和连续分镜。
+
+现在进入一个在实际工作中非常重要的领域：
+
+当一张图片已经有 90% 满意时，如何只修改剩下的 10%，而不是重新生成整张图片？
+
+例如：
+
+- 一张人物写真很满意，只想把背景从摄影棚换成内蒙古草原。
+- 一张汽车宣传图已经完成，只需要把车身从白色改成蓝色。
+- 一张产品海报布局正确，但其中一块文字需要替换。
+- 一张商品照片中有多余物体，需要去掉并自然补全背景。
+- 一张 1:1 电商图片，需要扩展成 16:9 网站 Banner。
+- 一张汽车照片需要替换轮毂，同时保持车型、车身和背景不变。
+
+本节的核心是从 Generation（生成）转向 Editing（编辑）。
+
+### 19.1 首先认识六种高级图像编辑技术
+
+![AI Image Inpainting for Design: Edit Only One Area](https://images.openai.com/static-rsc-4/MPf1Ep5UnYYW0xGIIVlG4MONdIQh54cfwI8PAW3znG0dW5W1f9HoRVZ0uIhBx3iWU620Zy-Yj7ZHbU4TouP5i6VDVXRyxTZ_kVLLqImSqA4yZiBLeBZ_pd7fzy7R-LEyW9sUmHN1sc7efMjVBzZTQTRvz_n-buy3wm1PUWJtR-w?purpose=inline)
+
+1. 局部重绘（Inpainting）
+
+修改指定区域，尽量保留其他部分
+
+![AI Uncrop Photo and Extend Image Online - Dearify](https://images.openai.com/static-rsc-4/cv_RnNzO8XPWgkVDKk0h5_c5hQLVDMC6XcR17AwuXhgCFVGMpPVOj_xG_G3rLxeox3jJ1KHOFKSUO6_4RusqomH6Gt199ojyIh--0UCDG0tN-TsGbtn-2FkrbIxzvYhnI-YYSiT2jQ1kefOZA_r1ArkTMV4Wl-kdDbzgLCFsdw4?purpose=inline)
+
+2. 画面扩展（Outpainting）
+
+向画布外延伸背景与环境内容
+
+![Empty desk](https://images.openai.com/static-rsc-4/s3UrfrztfibMn-JDuONV7F6t8MSE__RQds3oWB3I8XsyHnvRCxlCtWCzVy_pJ6Q8jsWpiYXHm2Vcwr2sDC7EZoXO7nJI4Tn_JRL3X9Tl7qzY2rb8-h50cXxrQxkJbZZi22L7oCy_41ygr9eUzFn0yGCbYGrA8gvQ6QN-kArNz2XqQ_7XG_2tQ-T5-w_ZjM8E?purpose=inline)
+
+3. 物体移除（Object Removal）
+
+移除指定物体并重建被遮挡的区域
+
+![Beautiful woman smiling outdoors in nature setting](https://images.openai.com/static-rsc-4/wZt2H41juBZnz7QfKg460I6UW71hRDSuqVSgsTcOwftY8yHhlU7XexZGkoMqUzXQ7HfPFlaCLvjKr2pAkqzvm-1LbicjTDY5X5FAdpmZ88QakafJiZkRqbF1WJhFU6btP9SXOJu6QApux-x-Y-c9fkHHFOnzpW_s3rxZ9ly1bYF5at7bdh0XAq-otC0ButJ0?purpose=inline)
+
+4. 背景替换（Background Replacement）
+
+保持主体，替换整个场景
+
+![一张腕表商品图怎么拆：表盘、表冠、表带和金属反光的 6 个检查点 - 图叮AI博客](https://images.openai.com/static-rsc-4/FAY5OKnGj3KQxslSHXGqLKHxL_12GXSUiSnhpMiQSKWUQUMNmSFXTCqmIIZJIoRLOborSEPMlpGiAqZqXd4QfDZlYDOaNwSJ4MpXDQfIML-H67liy9fVhcli3Z2PjTpKkqG7ltn2mx7WeXrSLOSWF8Qesq316yR0vTPR-AzKBJw?purpose=inline)
+
+5. 局部修复（Retouching）
+
+调整瑕疵、细节、局部光影与颜色
+
+![Car automotive photo edit,color change,recolor,background removal,photo retouch by Sujamia | Fiverr](https://images.openai.com/static-rsc-4/DnxH3Mk1jtb2slPuBU-vVz6EygPMCgZOQs4ybkq_cwhFlhFga8A1m2GLjX63X-fZ6kmZ_tXN1dsAJBV7fVETNv9HbGU2FXv6bL2BB_OH-g7zeqRCZybJ_qO5A2KnAHix4-sTtIL1gOHbG734eu8wzNTGph62o5ptD6DmLWsg5Sg?purpose=inline)
+
+6. 多轮编辑（Iterative Editing）
+
+逐步修改、检查与回退
+
+以上为编辑技术的视觉示意，并非同一源图的严格前后对照。真实编辑实验应使用相同原图。
+
+这六类操作可以组合，但最好先明确每次编辑的具体目标。
+
+### 19.2 局部编辑的核心：Editable 与 Protected
+
+这是本节最重要的基础概念。
+
+图像区域控制系统
+
+Editable Region
+
+允许被修改的区域，如背景、局部配件或指定颜色
+
+Protected Region
+
+希望保持的区域，如人物面部、产品本体、Logo
+
+例如，给马克杯更换背景：
+
+> 将杯子以外的背景修改为浅蓝色摄影棚背景，保留杯身、杯柄、杯口、材质与原始比例。
+
+这属于文字级区域控制。
+
+但需要注意，文字描述的保护区域不等于真正被锁定的像素。即便提示词强调不改变杯子，生成式编辑仍可能对杯柄或杯口产生微小变化。
+
+对于必须原样保留的内容，应该使用实际遮罩、透明图层或确定性图像合成。
+
+### 19.3 第一部分：遮罩编辑（Mask-based Editing）
+
+遮罩（Mask）是图像编辑中的一个核心工具。
+
+它用于指定哪些像素属于选中区域。
+
+遮罩的基本工作原理
+
+原始图片
+
+区域遮罩
+
+编辑结果
+
+黑白遮罩仅用于说明选区概念。不同软件与接口对黑白、透明区域的编辑含义可能不同，必须遵循具体工具的遮罩规则。
+
+#### 遮罩编辑的四个关键参数
+
+| 参数          | 含义                                 |
+| ------------- | ------------------------------------ |
+| Mask Region   | 实际需要编辑的区域                   |
+| Mask Boundary | 选区边缘                             |
+| Feathering    | 边缘羽化，降低接缝突兀程度           |
+| Context       | 遮罩之外的场景信息，用于保持视觉协调 |
+
+例如要替换汽车轮毂：
+
+应该精确选中需要修改的轮毂金属部分，而不是把整台车一起选中。
+
+但实际操作中，若新轮毂需要改变原有边缘遮挡和透视，选区还可能需要留出少量过渡空间。
+
+#### 高级技巧：边界羽化
+
+如果选区边缘过硬，修改后的区域可能出现明显接缝。
+
+如果羽化范围过大，又可能侵入本应保持不变的主体。
+
+所以不应该默认使用越大的羽化越好，而应该根据物体边缘情况设置。
+
+例如：
+
+- 车身金属边缘：要求边界清晰。
+- 头发与背景：需要处理大量半透明和细小发丝。
+- 柔和阴影：允许渐变过渡。
+- Logo：通常应保持原始清晰边缘，不依赖生成式羽化。
+
+### 19.4 第二部分：物体移除（Object Removal）
+
+物体移除不只是把某个对象涂掉。
+
+模型还需要补全它原本遮挡的背景。
+
+![Legal Document Preparation in Tracy, Ripon & Long Beach, CA | Legal Paper Co](https://images.openai.com/static-rsc-4/L5JldLSqHD0MMqQ2inYFto3S-v32rszxE1JLHCHIjmgfHeTT21IoUWqH9Iq1F5L4BtY4sek4tbabizkS2tlmn9EVoKOQVBdhgtcVr_E0oU8rxKt_zJaQ1VcCQLj7zxKbovxI1CobwaGvKGpuKRwwBgtrj_n4uy9JEeM5TSdofmM?purpose=inline)
+
+原图示意
+
+桌面存在需要移除的花瓶
+
+![Empty desk](https://images.openai.com/static-rsc-4/s3UrfrztfibMn-JDuONV7F6t8MSE__RQds3oWB3I8XsyHnvRCxlCtWCzVy_pJ6Q8jsWpiYXHm2Vcwr2sDC7EZoXO7nJI4Tn_JRL3X9Tl7qzY2rb8-h50cXxrQxkJbZZi22L7oCy_41ygr9eUzFn0yGCbYGrA8gvQ6QN-kArNz2XqQ_7XG_2tQ-T5-w_ZjM8E?purpose=inline)
+
+目标效果
+
+移除物体，补全桌面纹理
+
+#### 如何编写移除提示词？
+
+普通描述：
+
+> 去掉花瓶。
+
+精确描述：
+
+> 移除桌面中央的红色花瓶，包括花瓶本体和对应投影。根据周围区域自然补全木质桌面的纹理、颜色、透视与光照。保持桌子、墙面、摄影角度和其他物品不变。
+
+#### 移除物体的三个检查点
+
+1. 被移除物体是否完全消失，包括残留的影子或反射？
+2. 背景纹理是否连续，例如桌面木纹是否突然断裂？
+3. 是否误删与目标相邻的其他物体？
+
+对于涉及真实事件或证据用途的照片，还应谨慎处理移除行为，避免让编辑后的图片错误呈现实际发生过的情况。
+
+### 19.5 第三部分：背景替换（Background Replacement）
+
+背景替换是商业生图中非常高频的一类任务。
+
+例如，一张产品仓库照片，可以转换为白灰色商业摄影棚展示效果。
+
+![GPT Image 2 Prompts - High-Quality Prompt Examples](https://images.openai.com/static-rsc-4/B4b6ktP9Suk4SRnvRquqQq1nv_gGgnPpewWoE_uhJ0Y-rO4NePS9vyuufHqcYbtGC_e3jiBz0HDS2LHDLcJp7GAvo2Abfho1KCO2X1E35igUdSClLkyJrkuduFQuGP3IPo3fYV6kNQDBNvX14BBmrj9VqpwE9_1n5ay444_bVk8?purpose=inline)
+
+普通实拍背景
+
+环境较生活化
+
+![Download Minimalist White Mug Mockups Online - Creative Fabrica](https://images.openai.com/static-rsc-4/sI8-3DULoP_4QfilgNdFoWWaZcVh-TJJy_omqDp_7iZMQk3F0NmMZoQgj03MyZfn7v1LXkJRnWFyqTbk3ydqVadITNhaHakeV_IBBBJYozdo1mxh0Z-7sxYGD3O9U2T6tKtqSpoAHLAthH-rbijtVus6coki9ZiW-WsuxRZ71-0?purpose=inline)
+
+商业摄影棚背景
+
+干净、统一，适合商品展示
+
+#### 背景替换的三个难点
+
+主体边缘
+
+人物头发、透明玻璃、网状结构等边缘较复杂，容易出现残留背景或边缘发白。
+
+光线匹配
+
+如果原图中的人物受到强烈暖光照射，却直接换成冷色摄影棚，可能出现环境不协调。
+
+接触与投影
+
+替换背景后，地面接触阴影、反射和物体支撑关系可能需要重新处理。
+
+#### 背景替换 Prompt
+
+以图片 A 为唯一主体外观参考。
+
+本次任务：将原始背景替换为纯白至浅灰色无缝商业摄影棚。
+
+**保持不变：**
+主体的外观、颜色、比例、结构、材质和主要细节。
+
+**允许修改：**
+背景区域、与新环境匹配的接触阴影，以及必要的边缘过渡。
+
+**光影要求：**
+背景与主体的照明协调，保留真实材质反射。
+
+**禁止：**
+不改变产品结构、颜色、Logo、型号或主体拍摄角度。
+
+**验收：**
+检查主体完整性、边缘清洁程度、接触阴影与背景自然程度。
+
+如果产品本体必须像素级保持一致，应采用原图抠图与背景合成，而非重新生成主体。
+
+### 19.6 第四部分：画面扩展（Outpainting）
+
+扩图是指在原始图片的画布范围之外，生成新的环境内容。
+
+例如：
+
+- 将 1:1 商品图片扩展为 16:9 网站 Hero。
+- 把竖版人物写真扩展成横版电影画幅。
+- 给海报顶部增加标题留白。
+- 将汽车展示图向右扩展，为 CTA 按钮预留空间。
+
+从 1:1 扩展至 16:9 的布局示意
+
+新增左侧背景
+
+原始主体区域
+
+新增右侧背景
+
+示意只说明扩展区域。实际保持原始内容不裁切时，需要根据原图尺寸计算左右新增画布大小。
+
+#### 扩图与裁切有什么区别？
+
+| 操作             | 作用                     |
+| ---------------- | ------------------------ |
+| Crop 裁切        | 删除画布的一部分         |
+| Resize 缩放      | 改变图像尺寸             |
+| Outpaint 扩图    | 在原有边界之外补充新画面 |
+| Recompose 重构图 | 重新安排主体和视觉元素   |
+
+例如，原始图片主体位于中央，但你希望变成左侧汽车、右侧文案的 Hero。
+
+这可能不仅需要扩图，也需要改变主体在新画幅中的相对位置。
+
+#### 扩图提示词
+
+以参考图片为基础进行画面扩展。
+
+**原始主体：** 保持汽车本体及原始拍摄角度不变。
+
+**目标比例：** 16:9 横版。
+
+**扩展方向：** 优先向画面右侧增加背景空间，为网站标题与 CTA 按钮预留大面积干净留白。
+
+**环境延续：** 沿用原图的浅灰色汽车摄影棚背景、地面透视、主光方向与环境反射。
+
+**主体保护：** 不重新设计车辆前脸、灯组、轮毂、车身颜色和比例。
+
+**禁止：** 不在扩展区域添加其他车辆、人物、文字、Logo 或复杂装饰。
+
+**结果要求：** 原始画面与新增区域过渡自然，不出现接缝、重复建筑或不协调的地面透视。
+
+### 19.7 第五部分：局部颜色与材质编辑
+
+局部颜色编辑经常用于：
+
+- 汽车改色膜效果预览。
+- 家具换色。
+- 服装颜色调整。
+- 产品表面工艺展示。
+- 建筑墙面与室内材质更换。
+
+![EQS SUV | Mercedes-Benz](https://images.openai.com/static-rsc-4/vzNwHDRTMhPIE7PmG66bkMHdMttVyQzJkZoRqBXWFq5eX8_BKzcYZmTrFdlA1IaP-Cl4uCI-oIZ8-eNTGV7j_SbJ0BwHObi0NEh5Xjsv6BsJs7P6tSMoAJ1VKHHqFs71HfpkeL4LWLiaDcshjvTi1MGkLvgvsskdZMgaqjNJ4Ik?purpose=inline)
+
+原始白色车身
+
+![New Genesis GV60 for Sale in Egypt, AR | Edmunds](https://images.openai.com/static-rsc-4/QmHIq9OW3ZKRj3UsvyjPCcnN-q03OlVlf0btVF157bdjlVn3a8S7W1eee31HKnudtxQk2_kfvwG_fYuDQ4HV-jOQgl-z2pKoGn0mg5yYQb8Ynf9TUpEn2_u91Zl8ZxMw_psh4Z_bH6XT3r2R7jNdOww93a4_DzKY5rIedSOEojM?purpose=inline)
+
+目标蓝色车身
+
+颜色修改并不是简单地把区域填满某个 HEX 色值。
+
+真实车漆会受到：
+
+- 表面曲率。
+- 金属颗粒。
+- 光源颜色。
+- 高光反射。
+- 阴影。
+- 漆面光泽。
+
+这些因素影响。
+
+例如将白色车身变为金属宝石蓝，应保留车身原本的明暗层次、结构线条与反射关系。
+
+#### 改色膜效果 Prompt
+
+以图片 A 的汽车照片为唯一基础。
+
+本次任务：仅将车身指定的可覆盖漆面区域调整为高级金属宝石蓝效果。
+
+**允许修改：**
+车门、机盖、翼子板等指定车身漆面区域的颜色表现。
+
+**必须保留：**
+车型结构、前脸、灯组、玻璃、轮毂、轮胎、车牌位置、拍摄角度和背景。
+
+**材质要求：**
+保留原始车身曲面高光、阴影与真实环境反射。蓝色具有自然金属漆视觉质感。
+
+**禁止：**
+不把玻璃、轮胎、车灯或黑色饰条变成蓝色。
+不改变车身设计线条。
+不额外添加装饰或品牌标识。
+
+**输出：**
+真实汽车改色效果预览图。实际成膜效果可能受到材质、光照及施工条件影响。
+
+### 19.8 第六部分：多轮修复与编辑漂移（Iterative Editing）
+
+一个很常见的问题是：我们越改越不满意。
+
+例如：
+
+第一次：更换背景。
+
+第二次：修改灯光。
+
+第三次：调整产品颜色。
+
+第四次：修复产品边缘。
+
+到了第四次，原来的产品细节可能已经发生变化。
+
+这种问题可以称为编辑漂移（Editing Drift）。
+
+安全的多轮编辑流程
+
+1. V0 · 原始主图
+
+   保存不可覆盖的原始参考图。
+
+2. V1 · 背景修改
+
+   只更换背景，验收产品是否保持一致。
+
+3. V2 · 光影调整
+
+   从已经验收的版本出发，修改指定光影区域。
+
+4. V3 · 局部细节
+
+   单独修复边缘、材质或接触阴影。
+
+5. V4 · 排版合成
+
+   通过独立图层加入文字、Logo 和其他品牌信息。
+
+#### 为什么不能无限迭代？
+
+因为每一轮生成式编辑都可能重新解释画面中的某些内容。
+
+如果上一轮出现微小错误，下一轮又将该结果作为新的参考，就可能积累错误。
+
+建议遵循三个原则：
+
+保存原图、每轮限定修改范围、每轮验收后再继续。
+
+如果发现关键产品结构漂移，应该回到最近的合格版本，而不是不断叠加“不要改变结构”的提示词。
+
+### 19.9 第七部分：何时应该放弃生成式编辑？
+
+这是本节很重要的工程判断。
+
+不是所有图片修改都应该交给 AI 生成模型。
+
+| 任务                   | 更合适的方法               |
+| ---------------------- | -------------------------- |
+| 去除背景里的普通杂物   | 局部重绘或修复             |
+| 人物换成森林背景       | 抠图、合成或生成式背景替换 |
+| 为人物修改发型         | 参考图驱动局部编辑         |
+| 扩展草原风景           | Outpainting                |
+| 将海报标题改为指定中文 | 真实文字图层               |
+| Logo 必须完全正确      | 原始 Logo 叠加             |
+| 二维码需要保持可扫描   | 原始二维码无损合成         |
+| 商品形状不能改变       | 原图抠图或准确三维渲染     |
+| 汽车轮毂必须严格还原   | 基于真实产品图片的精准合成 |
+| 复杂产品结构拆解       | CAD 或经过核实的结构资料   |
+
+可以建立一个决策逻辑：
+
+本次编辑是否允许一定的生成误差？
+
+允许
+
+使用生成式编辑、局部重绘、扩图
+
+不允许
+
+使用遮罩、原图、图层及确定性处理
+
+生成模型是视觉创作工具，不是精确像素保真系统。
+
+### 19.10 实战：统一的高级编辑提示词框架
+
+前面每个编辑任务都有独立写法，但我们也可以建立一套通用的编辑模板。
+
+## GPT Image · Advanced Editing Prompt V1.0
+
+### 01. 原始素材（Source）
+
+图片 A：[待编辑原图]
+
+图片 B：[目标参考图，可选]
+
+图片 C：[品牌或风格参考，可选]
+
+### 02. 编辑目标（Edit Objective）
+
+本次唯一主要修改任务：
+
+[修改内容]
+
+### 03. 编辑范围（Editable Region）
+
+允许修改的区域：
+
+[具体位置或物体]
+
+允许调整的相关元素：
+
+[阴影、反射、边缘等]
+
+### 04. 保护范围（Protected Region）
+
+必须保持的区域：
+
+[人物、产品结构、文字、Logo、背景等]
+
+### 05. 几何与材质（Geometry & Materials）
+
+产品形状与结构：[要求]
+
+材质纹理：[要求]
+
+反射与光影：[要求]
+
+### 06. 画面连续性（Visual Continuity）
+
+构图、角度、比例、空间透视及未授权区域保持协调。
+
+### 07. 约束优先级（Constraints）
+
+P0：不可修改的主体身份、产品结构和准确品牌信息。
+
+P1：构图、空间、材质、光线与编辑边界。
+
+P2：允许微调的非关键环境细节。
+
+### 08. 禁止事项（Negative Constraints）
+
+不修改未授权区域。
+
+不添加无关元素。
+
+不重新设计产品。
+
+不重新绘制需要严格保持的文字、Logo 或二维码。
+
+### 09. 输出（Output）
+
+图片比例：[比例]
+
+用途：[网站 / 电商 / 海报 / 社交媒体]
+
+### 10. 验收（Validation）
+
+- 修改内容完成
+- 原始关键内容保持一致
+- 边缘过渡自然
+- 材质与光照协调
+- 没有新增错误
+- 输出尺寸正确
+
+对于必须完全不变的元素，使用原始图层或确定性合成完成。
+
+### 19.11 交互练习：高级图像编辑 Prompt 生成器
+
+选择编辑任务，系统会自动装配不同的修改范围与保护约束。
+
+编辑类型
+
+更换背景
+
+局部换色
+
+移除物体
+
+扩展画布
+
+替换局部产品
+
+具体修改任务
+
+将原来的背景替换为白色至浅灰色摄影棚背景
+
+画幅要求
+
+保持原图比例
+
+1:1 正方形
+
+3:4 竖版
+
+16:9 横版
+
+完整编辑提示词
+
+以用户提供的图片 A 为原始基础进行编辑。 【任务目标】将原来的背景替换为白色至浅灰色摄影棚背景。 【允许编辑】仅替换背景环境与必要的接触阴影。 【必须保持】主要主体形状、颜色、材质、比例、拍摄角度。 【视觉协调】新背景与原主体的光照、透视、边缘过渡协调。 【输出比例】保持原图比例。 【约束】不改变未授权区域，不添加多余主体或文字，不随意修改产品结构和品牌信息。 【验收】检查修改范围、边缘、光线、材质与原图关键元素。对于必须逐像素保持的部分，优先使用遮罩和确定性合成。
+
+ 复制提示词
+
+### 19.12 如何评价高级编辑的效果？
+
+对编辑任务，我建议使用两个不同的评价维度：
+
+Edit Success（修改成功度）：目标修改有没有完成？
+
+Preservation Fidelity（保持一致度）：原图中不需要修改的部分保留得怎么样？
+
+局部编辑质量评估
+
+编辑目标完成度
+
+4/5
+
+未修改区域保真度
+
+4/5
+
+### 4/5
+
+可进入进一步验收
+
+采用两个维度中的较低值作为保守参考；该评分不代表完成了自动像素差异检测。
+
+如果修改目标完成得很好，但原图被大幅改变，仍不能称为成功的局部编辑。
+
+特别是产品图片、人物身份与品牌标识等任务，保持一致度往往和修改成功度同样重要。
+
+### 19.13 第十九节博客教学配图规划
+
+为了延续前面统一的白底、深蓝标题、科技蓝线框和红色辅助标注，本节建议制作以下 8 张配图。
+
+| 编号  | 教学图片                   | 推荐布局           |
+| ----- | -------------------------- | ------------------ |
+| 19-01 | 六种高级图片编辑方式       | 3×2 六宫格         |
+| 19-02 | Editable 与 Protected 区域 | 原图＋遮罩标注     |
+| 19-03 | 遮罩边界与羽化效果         | 三栏对比           |
+| 19-04 | 物体移除前与后             | 左右对比           |
+| 19-05 | 1:1 扩展为 16:9            | 中央原图＋扩展区域 |
+| 19-06 | 汽车局部换色               | 白车 vs 蓝车       |
+| 19-07 | 编辑漂移与版本回退         | V0→V1→V2→V3        |
+| 19-08 | 生成式编辑与确定性编辑选择 | 决策流程信息图     |
+
+这一节的重点建议放在 19-02、19-03、19-05 和 19-07。
+
+因为它们分别解决了局部编辑的四个核心问题：如何定义修改范围、如何处理边缘、如何扩展画面，以及如何避免多轮编辑逐渐破坏原图。
+
+制作教学图时，尽量使用同一张原始素材进行前后对比，而不是分别独立生成两张相似图片。
+
+### 19.14 本节知识总结
+
+本节最重要的公式是：
+
+高级图片编辑 = 编辑目标 + 精确选区 + 保护区域 + 视觉融合 + 结果验收 + 版本管理。
+
+我们需要掌握四个关键原则：
+
+1. 明确编辑范围，比无限增加提示词长度更有价值。
+2. 局部编辑的成功取决于“改对了什么”和“保住了什么”。
+3. 生成式修改并不保证像素级保真。 对关键产品、Logo、二维码等元素，优先使用原图图层和确定性合成。
+4. 多轮编辑必须能够回退。 不要让每一轮的微小错误不断累积。
+
+至此，我们已经能够完成从初始生图到局部精修的主要操作。
+
+#### 下一节：第二十节——图像与文字的深度融合（Text–Image Integration）
+
+第九节研究的是基础文字排版，而第二十节将进一步探索文字如何真正参与画面构成，包括：
+
+文字绕排、前后遮挡、空间透视文字、标题与主体融合、电影海报的文字层次，以及复杂商业广告的视觉组织。
+
+重点是从“图片上加文字”升级为“文字本身也是画面设

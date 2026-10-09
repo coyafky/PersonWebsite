@@ -1,0 +1,666 @@
+---
+title: "第十四节：场景与环境构建（Environment Design）"
+date: "2026-10-09"
+summary: >-
+  完整迁移第 14 节原文，建立从地点、天气、时间到环境物件的场景构建方法。
+status: published
+course: "gpt-image-2"
+tags:
+  - "AI生图"
+  - "场景构建"
+  - "环境设计"
+lang: zh
+chapter: "第 14 节：场景与环境构建"
+---
+## 第十四节：场景与环境构建（Environment Design）
+
+GPT 生图从 0 到 1 · 第 14 课 · 自然环境、城市建筑、天气季节、环境物件与世界逻辑
+
+在第十三节，我们学习了空间透视，知道如何通过消失点、前中后景、物体尺度、遮挡关系与地面接触，让图片具有合理的空间结构。
+
+这一节，我们进一步研究：
+
+如何让 AI 不只是生成一个背景，而是构建一个完整、可信、有细节、有氛围的世界？
+
+例如，我们让 GPT Image 生成一位少女站在内蒙古草原上的照片。
+
+最简单的提示词可能只有：
+
+> 一个少女站在内蒙古草原上，画面真实、好看。
+
+这种描述能表达主题，但没有说明草原的地形、植被、季节、天气、光线及环境物件。
+
+更精细的场景控制应该让我们能够决定：
+
+- 草原是平坦的还是起伏的？
+- 处于夏季、秋季还是冬季？
+- 天气是晴朗、多云还是雨后？
+- 远处出现山丘、蒙古包还是牛羊？
+- 人物站在什么位置，与环境有什么关系？
+- 哪些环境特征必须符合真实世界？
+
+本节的核心目标是建立一套 场景生成八维控制模型（Environment Design Framework）。
+
+### 14.1 首先区分：背景与场景不是一回事
+
+| 概念     | 英文               | 核心含义                                           |
+| -------- | ------------------ | -------------------------------------------------- |
+| 背景     | Background         | 主体后方的视觉内容                                 |
+| 场景     | Environment        | 包含空间结构、环境元素、地面、空气与光照的完整环境 |
+| 场景设计 | Environment Design | 有目的地组织地形、建筑、植被、道具和环境氛围       |
+
+例如，一张汽车照片的背景可以是“现代城市”。
+
+但如果我们要精确控制整个场景，就需要进一步指定道路材质、建筑类型、车辆停放位置、路面干湿、天气、交通元素以及建筑之间的透视关系。
+
+### 14.2 场景构建的八大控制维度
+
+ENVIRONMENT DESIGN SYSTEM
+
+01 · Location
+
+地点与场景类型
+
+草原、森林、城市、海边、展厅
+
+02 · Terrain & Architecture
+
+地形与建筑
+
+山丘、坡度、道路、建筑形态
+
+03 · Vegetation & Materials
+
+植被与地表材质
+
+草、树木、沙地、石块、路面
+
+04 · Season & Time
+
+季节与时间
+
+春夏秋冬、清晨、正午、黄昏
+
+05 · Weather & Atmosphere
+
+天气与大气
+
+晴天、雨雾、云层、能见度
+
+06 · Environmental Props
+
+环境物件
+
+帐篷、路灯、座椅、标识
+
+07 · Spatial Relationships
+
+空间关系
+
+前中后景、距离、尺度、遮挡
+
+08 · World Consistency
+
+真实世界逻辑
+
+地域合理性、物理一致性、光影关系
+
+我们接下来用六类常见环境，逐一理解这些控制维度。
+
+### 14.3 第一部分：自然草原（Grassland Environment）
+
+内蒙古草原非常适合学习环境控制，因为地形、季节、植被、天气与人文元素都具有明显的视觉特征。
+
+![Summer prairie](https://images.openai.com/static-rsc-4/7q8uKYYC2H16Qp26C5FwdyuG9wvMie5jGkps6fmzIDKRsgvD-zBdP2o32IqGUir3rWC0kbRZcquGV1Aet0WB_ByEwVXChmd2iLLoKnRIAoy2WXG8fbvwq2O94PtZ3dFnVYEBLnOMHy4h3hP4s3VqanLNVo2mpgEOL2g2cJXOAtqSklxTlGB95eWvF4uz4Rru?purpose=inline)
+
+![Autumn grasslands  of Inner Mongolia](https://images.openai.com/static-rsc-4/95kfsNm46dJG9rdh9zQuQqc-H6KlRWhga3zwTxjCqI3N8wucRtpiz2Ahu2NkkJmH-1kwlVahl44CQfmC_AnazsQ4Hg_6kzUjJ9VTo21zEnTwnig_HqdLJGuEYtjjJ6ZoesCLrDJmB3-pAk7_XS7kJyX3-rftoKdnheuhaeCOhbKHJc22YFbWcuX9JDcNHRsw?purpose=inline)
+
+![Beautiful Winter Landscape with Snow Covered Hills at Sunset](https://images.openai.com/static-rsc-4/sTsPCKFStkb51D9hL8YITJLJkvSV3d1fg_Q8cEWmoA7bRIGDzkQnNG3N7_HLrPWmTpwAR3Zan7jBhah_FXiaGtOLtbZ3K-nUkU5dn-XN2WVB_QrDiNGCptTsBdA3d7fZpv3ZCuap4n4TCFoxFN-M75q2ggT1GfPYhJIAyTebYWklhPI7mxSafwdT7B9-w6Ys?purpose=inline)
+
+9
+
+#### 草原场景的结构拆解
+
+| 维度     | 具体内容                               |
+| -------- | -------------------------------------- |
+| 地点     | 内蒙古呼伦贝尔草原的典型夏季景观       |
+| 地形     | 开阔草地、缓坡、远处低矮山丘           |
+| 植被     | 自然草本植物、稀疏野花                 |
+| 地面     | 不规则草地、局部裸土                   |
+| 天气     | 晴朗或局部多云                         |
+| 时间     | 夏季下午                               |
+| 环境物件 | 远处少量牛羊、牧道，可按需添加         |
+| 真实约束 | 避免不合理热带植物、奇幻建筑与错误地形 |
+
+需要特别注意，内蒙古不同区域的草原景观存在明显差异。呼伦贝尔、锡林郭勒和乌兰布统并非完全相同的地貌。若目标是具备明确地域真实性的图片，应选定具体区域，并使用真实场景参考照片。
+
+#### 从简单到复杂的提示词升级
+
+Level 1 · 基础环境
+
+一个少女站在绿色草原上。
+
+Level 2 · 地形与植被
+
+一个少女站在开阔的夏季草原上，地面有自然起伏的草丘，近处生长细密草本植物，远处有连续的低矮山丘。
+
+Level 3 · 完整环境描述
+
+一位成年女性站在内蒙古呼伦贝尔夏季草原上，绿色草地延伸至远方，缓坡自然起伏，前景有少量野花与不同高度的草叶，中景为人物和牧道，远景是低矮山丘。夏季晴朗天气，天空有自然积云，下午阳光从画面左侧照射。地貌、植被和光影符合真实草原环境。
+
+#### 草原完整提示词
+
+生成一张 3:4 竖版真实户外人物摄影作品。
+
+**地点：** 内蒙古呼伦贝尔地区的夏季草原。
+
+**地形：** 开阔的绿色草地，地势自然起伏，远方是连续的低矮山丘。
+
+**植被：** 前景有细密草叶与少量自然野花，中景草地层次分明，不出现热带植物。
+
+**季节与天气：** 夏季，局部多云，空气清澈。
+
+**时间与光照：** 下午自然阳光，柔和侧光，人物和草地阴影方向一致。
+
+**主体：** 一位黑色长发、身穿米白色长裙的成年女性，站在中景区域。
+
+**空间关系：** 前景草叶局部虚化，人物清晰，远景山丘具有自然空气透视。
+
+**真实约束：** 草地、地形、天气与植被协调，不出现不合理建筑、奇幻元素或悬浮物体。
+
+**摄影要求：** 85mm 人像镜头视觉效果，平视，全身构图，真实自然摄影质感。
+
+### 14.4 第二部分：现代城市（Urban Environment）
+
+城市环境包含大量人工结构，因此比草原更需要精确控制建筑、道路、交通和空间透视。
+
+![NARPM Annual Convention & Trade Show](https://images.openai.com/static-rsc-4/ik4-GKvJsaLYXBXhYhY3amZNoZfJAJDKwGwxt14nAHS9ukcaEw6xYf1M86jR0iCpUZtLkaRNySCf7puRJfRgDUG0_oI-0QtSq8HI32wCo6z4i2PfTRyMGq2dTD62sOCJNpTsALPhn0Ozf3pfv6P9HYQRYWhaJkrJWforAwRQtpM?purpose=inline)
+
+现代城市白天
+
+建筑立面、道路、行人与自然日光
+
+![Cinematic Tokyo Street at Night - AI Prompt | CreateVision](https://images.openai.com/static-rsc-4/i707n9Tdbs3_y77xeP4gjKxGvWuDJ2coDlcSmMU19C0IA7DoiiUZGHb1ETAbfvYLxGTf0um1l8WJVJN8U5U5auDSSbGAyO6it8MCAS3Sdu5P2jHiouvV1C-3SVRMiMEvvoOuiOC8XZJtcuX5btsb9mLIMY0VavW0eBZQfCYFqDk?purpose=inline)
+
+现代城市夜景
+
+人工照明、湿地反射、夜间交通环境
+
+城市环境的核心控制项包括建筑形态、街道布局、道路材质、交通设施、城市密度与天气。
+
+例如，一张新能源汽车停在城市街道的宣传图：
+
+> 蓝色新能源 SUV 停在现代城市建筑前方，地面为干燥的浅灰色路面，背景有玻璃幕墙建筑、路边行道树与少量城市交通设施。车辆和建筑采用统一透视，建筑规模符合现实，日光阴影方向一致，不出现不合理的道路标志和车辆穿透。
+
+如果希望生成具有明确地域属性的城市，比如广州、上海或东京，就应该增加具备辨识度的建筑或街景参考，而不是只依赖城市名称。
+
+### 14.5 第三部分：森林环境（Forest Environment）
+
+森林是研究植被密度、自然遮挡和复杂光线的理想场景。
+
+![Alle puslespil - 400+ gratis online uden tilmelding](https://images.openai.com/static-rsc-4/RKhucdjQOVRBfYxPylCuy5ENKSNXReAfWBCR2PvKnc9s36AVsZamKZ8pDUK8Px7Aymq8VpuR7VGEXIbRFy5Do1iJsA7Pevsi0Jgt6nIqqhAestSy4xFQEXN1SoN1rtDU31oc-s1Bfwz-h1yQx8FHw6k2s41RM-9R5imN_KFlHGw?purpose=inline)
+
+温带阔叶林
+
+宽叶树冠、林下植被、斑驳阳光
+
+![Tall pine forest landscape-photography — Free 1536x1024 AI Image & Prompt (CC BY) | Pixexid](https://images.openai.com/static-rsc-4/U3WdvEOz4BWW86iPwNkoBhRMGMNT6v5z9GNRgBgmm4tJCy21qsHyRjq1mEfCkc1vrhcrY3pP_t1bvgnO6kwLmqyK0PZhnX72eMgXivYyNSZ6_McHbhxDQDQrQBrtMomwkMjXEgxM-sc1PsV5EdfJ_8urUqiBOHxmynlrsKcG6hI?purpose=inline)
+
+针叶林
+
+高大针叶树、林间雾气、冷色阴影
+
+森林场景常见的生成问题，是植物类型混杂、树干结构重复，以及光线穿过树冠时出现不合理的光束。
+
+可以采用这样的场景描述：
+
+> 温带阔叶林，树木高度具有自然差异，林间地面覆盖落叶与苔藓。阳光从树冠间隙进入，形成方向一致的斑驳光斑。前景树叶局部遮挡画面，中景为人物，背景树干逐渐降低对比度。避免机械重复排列的树木和不符合季节的植被。
+
+这里把第六节的光影、第十三节的遮挡与本节的环境构成结合起来。
+
+### 14.6 第四部分：海边环境（Coastal Environment）
+
+海边的场景控制重点是地形、水面、沙滩、潮湿状态以及风浪。
+
+![Sandy beach shoreline with gentle waves and clear blue water](https://images.openai.com/static-rsc-4/lkT5fsepDiGq4RkRtZkwTvCjZJSNJpwUuleUvQMOlD0J1qjNWVFqfT7WdqJwIxgR4QA-77s1oZtMsTN5G8SIqNitE9xOWAqY0gQXLn7Jt2jYAP5xh3bC2JgEgdykJElCycw6dqP0qXeVQUg4QZgsx4q-Ai_pcQyL5uZH-noT7yZ15xQcdipQQzA2SacQ7K9t?purpose=inline)
+
+平静沙滩
+
+平缓海浪、细沙、自然潮湿边界
+
+![Storm Kristin in Portugal: Outages, Travel Delays, High Surf](https://images.openai.com/static-rsc-4/MG1k6KvGAJR9zrm292eyAXKo6EIfAbOlduded_eiRaVTFxd1vtXRYSAnWdSEsBSXcfnFZyWbhaKYY6tl2Cf_jDf25gsjPAUsiFmkjA5F0UDRfjbYvvgpaACYnAJR78jna_iJ-qrF8Dm3ukeuuEQR8qEcWwuVspMrp4m28qD2K-o?purpose=inline)
+
+岩石海岸
+
+岩石、浪花、潮湿表面、复杂海岸地形
+
+生成海边图片时，需要检查以下物理关系：
+
+- 海面远方是否接近合理的水平线。
+- 浪花、湿沙和海水之间的接触是否自然。
+- 人物脚部是否正确接触沙滩。
+- 风向对人物发丝、衣服与部分环境元素的影响是否协调。
+- 岩石、浪花与潮湿区域是否符合场景状态。
+
+#### 海边提示词示例
+
+生成一张真实海边人物摄影作品。
+
+场景位于开阔的自然沙滩，海水呈自然蓝绿色，远方海天交界清晰。
+
+前景为略微潮湿的细沙，沙滩表面存在自然纹理；中景是一位穿米白色长裙的成年女性；背景为平缓海浪和开阔海面。
+
+人物双脚踩在湿沙上，接触位置自然，脚边可以有轻微脚印。
+
+微风从画面右侧吹来，人物头发和裙摆出现协调的轻微摆动。
+
+天气晴朗，光照方向一致，海浪、沙滩和人物阴影符合真实自然环境。
+
+禁止悬浮、错误海平线、夸张浪花或人物脚部与沙面穿透。
+
+### 14.7 第五部分：摄影棚（Studio Environment）
+
+摄影棚和自然环境不同。
+
+这里的场景不需要丰富的环境物件，而是需要精确控制背景、地面、光线与反射。
+
+![Empty White Studio Photography Stage Floor Architecture Images | Free Photos, PNG Stickers, Wallpapers & Backgrounds - rawpixel](https://images.openai.com/static-rsc-4/HITRnKvGEREMV293vm92xbftf5Z2ICP0IaTRrLXmEnrG3HEz3H9UoZ5WDGd4jZmeetbpIsxwS4JsPTcp0KxIEwVETBMNjTuAYLFIQCGqo_B6K49iyluDksNIh46W5yZY7_bfYMtq13-s5zP8MZjAGglozosTfvnaKjRylEpDxTM?purpose=inline)
+
+白色无缝摄影棚
+
+干净背景、统一柔光、无明显墙角
+
+![Archiwa Gdańsk - Bookinger](https://images.openai.com/static-rsc-4/o6c2sD455n_OwewN1NVJa0YEn1uEVHHEJYiSoLvkpCyqVN6f2t4L7KUqSY_Be3K-GaFfddsZfA7rDlNo6yXjSpaPiWE2GSBD11buzTMezJOihXa1dFWQCsEBIa7vesSwe_O2R15iiycuBC-dPULnzTMmcIcQRQgDZKlDLbCCNts?purpose=inline)
+
+深色商业摄影棚
+
+定向条形光源、深色环境、受控反射
+
+摄影棚场景建议特别关注：
+
+| 参数     | 说明                         |
+| -------- | ---------------------------- |
+| 背景类型 | 纯白、浅灰、渐变、无缝背景   |
+| 地面     | 哑光、半光泽、镜面           |
+| 光源     | 柔光箱、条形灯、顶部柔光     |
+| 反射     | 是否需要地面与产品反射       |
+| 环境物件 | 是否保留可见灯具、背景支架   |
+| 阴影     | 接触阴影、投射阴影和柔和程度 |
+
+对于电商主图，我们通常希望看起来像在摄影棚拍摄，但不一定要把摄影器材也生成出来。
+
+例如：
+
+> 极简白灰色无缝汽车摄影棚，背景墙与地面自然过渡，不出现明显墙角。柔和顶部商业照明，地面采用低反射哑光材质，车辆下方有自然接触阴影，不出现摄影灯、三脚架、工作人员或复杂背景道具。
+
+### 14.8 第六部分：汽车展厅（Automotive Showroom）
+
+汽车展厅与摄影棚有明显区别。
+
+摄影棚主要服务于灯光控制与产品拍摄，而汽车展厅通常具有明确的建筑结构、展示设施和空间规划。
+
+![HONG KONG & Bay Area Design Awards 2022](https://images.openai.com/static-rsc-4/ba-ahDy5hkj4lfQi87_6RbqLfZZYf1hydTFugwzQ05n6jLIqAteGn-qZ1F0U_xGlbyERHwpr7aHIr05bXuOLHxJxo6SIvZA2PHa49DQCzvgeS8gZDktueu26XLit8x3K6J9vygMVuEhWunz0MuH1xB63WlBOZ0oo-GD_10OBvSg?purpose=inline)
+
+![Tesla Center Katowice - Tesla Katowice - salon samochodowy](https://images.openai.com/static-rsc-4/hQ5_mY_M7_LWQaM9ygU17w4cIAK1UR9Yx2Jc7kBBDGV7EDthNDjU-TEiLLAPh4BgffEgQ82pPvc3I_FNrNvcgcJ5DRwbPsL3MRnr8_ThRONNVM09FNLRUlBX0xeMTcqdOuDtNno8WUfmILzgrOlVY01BTtc5AFZyEzhZFp278mw?purpose=inline)
+
+![Dealer Direct Advisory | Canadian Automotive Dealership M&A](https://images.openai.com/static-rsc-4/9YviAUISbuxBguXSrSIGeGpeE4rkFkVXeApa001GaVyNnvROYSFyJyjXcAnp148_JH2q7om9I2s7OQOhYWB72zK9ynb2qCLDbVzf7_ALmiu5T7Y4DlkJ4md6z7-ageud3-tANebwe9Mfmf-fa_bQOsrIIBfQuTohOB9VoGTM9dQ?purpose=inline)
+
+14
+
+#### 展厅场景的核心结构
+
+汽车展厅空间组成
+
+建筑层（Architecture）
+
+玻璃幕墙、立柱、天花板、墙面、地面
+
+展示层（Display）
+
+汽车展位、地台、产品说明牌、空间灯带
+
+环境层（Atmosphere）
+
+照明、玻璃反射、地面反光、空间明暗
+
+品牌层（Branding）
+
+标识、展示文案、品牌色、导视系统
+
+#### 汽车展厅完整提示词
+
+生成一张 16:9 横版高端新能源汽车展厅商业摄影图片。
+
+**建筑环境：** 现代极简建筑空间，宽阔的室内展厅，高挑天花板，大面积玻璃幕墙，规整的建筑立柱。
+
+**地面材质：** 浅灰色石材地板，细腻纹理，具有轻微自然反射。
+
+**展示区域：** 中央展示一台蓝色新能源 SUV，车辆采用三分之四侧前视角，完整展示车身。
+
+**光影：** 大面积顶部柔光与窗外自然光共同照亮车辆，车漆反射真实，轮胎与地面接触自然。
+
+**空间关系：** 展厅具有合理的建筑透视，车辆尺度与建筑空间协调。
+
+**环境物件：** 远处可有简洁展示台，不添加大量干扰元素。
+
+**品牌要求：** 不自行生成虚假的品牌 Logo、文字或产品标识。正式品牌元素在后期排版中叠加。
+
+**整体风格：** 高级、克制、真实的汽车商业摄影，避免不合理建筑结构与过度科幻装饰。
+
+### 14.9 第七部分：天气、季节与时间的关联
+
+这是环境构建中最容易产生矛盾的地方。
+
+例如：
+
+> 冬季草原，绿色茂盛草地，正午大雪，夏季暖阳。
+
+如果没有特别说明奇幻或异常天气，这些要素之间存在明显冲突。
+
+我们需要建立环境条件一致性（Environmental Consistency）。
+
+四季环境表现参考
+
+![Grassland in Early Spring](https://images.openai.com/static-rsc-4/-1EZu08FaTc9qabx2TwBWSI4uc_GQagpr2u-pA_ATb2jA7uLNzFmSPGfeT3dCisgjlWZiW4p7RTndXkBNLYRI-w6Td6IExqYAJRk--5gjEjoT5G5JnqKfUtytZ7hbm8ZO0bd0Vro9JKBgPyse4xU-qQfeOoTzA1o8lppYjKXjRGHisBUBgcXBCDPETfm9J8B?purpose=inline)
+
+春季
+
+新生草地，植被逐步恢复
+
+![Grassland](https://images.openai.com/static-rsc-4/UC5WR-GxAyZYmGQBsNyP6_A4jiPnIwhEBlJuoxlBf5s-xVT6bMzdgmY3LvBWV7qtUepqpfaTO0qGUtECztfqiTchm5dDqCRuKfLU1e1nfWZzNtkWbywomh6aTt8n0LVZRL29age71YuU5KOBKUtK-NTLHOko9XAxNpYwKK8fDIZTj8ot6ShKryfct2MFmQ3v?purpose=inline)
+
+夏季
+
+草地较茂盛，生长活跃
+
+![Autumn grasslands  of Inner Mongolia](https://images.openai.com/static-rsc-4/-yQ-zVJ7Wvy-V4mw3z_DCZgbIPc8akT-smoswhPr283OL0u3tOHwqEyOnKYpLcWksFWczduZy14eLBwLhTaDHJGHDBeaO41S693Rbbd9u18X_DptNNydZgZ7KFCaIt629fZdOXR2u5loGL4pU9i0s3RHW8h-taaK67r1hWl57x3dFIcLdwPWpWYiKnIMYW5r?purpose=inline)
+
+秋季
+
+金黄、枯草与较低饱和度
+
+![Winter landscapes of Ulan Butong grassland, Inner Mongolia, China](https://images.openai.com/static-rsc-4/Wwy2KJOC20Db5Ui7FVs7VyhyDkJcRQQm6r699ox0MkOpkheIrvMYYzoO5uTWHvwzPJ7p8Ubj2BsJSC8csmp5ZUYloNu5lz4Zq_vp-F7pPfE5yxz8gxkmnXqd1c2RVbE7BOl0PRcnagrDH30WPPbA_YytWqVSFVg4Eh27RAzE8bifvpEURHOQlrwLaIVLXjl6?purpose=inline)
+
+冬季
+
+低温、枯草或积雪景观
+
+实际季相还取决于具体位置、降水、气温及当年气候，不应把季节特征视为绝对固定。
+
+#### 环境约束应该如何写？
+
+建议使用这个结构：
+
+地区 + 季节 + 时间 + 天气 + 对环境的影响。
+
+例如：
+
+> 内蒙古夏季草原，下午三点左右，局部多云。草地呈自然绿色，远处山丘清晰可见，太阳穿过部分云层，在草地上形成不规则明暗区域。空气能见度较好，地面保持干燥。
+
+这样的描述，不只是让 AI 生成“多云天气”，还明确了多云天气会如何影响地面和光影。
+
+### 14.10 第八部分：环境物件与真实世界逻辑（Environmental Props & World Logic）
+
+我们在构建场景时，经常需要添加环境物件来提高真实性。
+
+例如，草原中可能出现蒙古包、牧道、围栏或牛羊；城市中可能出现路灯、斑马线、公交站和道路标识。
+
+但需要记住：
+
+环境物件越多，不代表场景越真实。每一个物件都应符合场景主题、地域特点、尺度和物理关系。
+
+#### 环境物件的三个层级
+
+| 类型     | 作用             | 草原示例             |
+| -------- | ---------------- | -------------------- |
+| 核心物件 | 直接服务故事主题 | 牧民帐篷、人物、马匹 |
+| 辅助物件 | 建立地域和生活感 | 牧道、围栏、远处牛羊 |
+| 氛围物件 | 增加自然细节     | 草叶、石块、云层     |
+
+#### 场景真实性的五个检查维度
+
+01
+
+地域合理性
+
+环境物件是否符合指定地点？
+
+02
+
+季节合理性
+
+植物、地面和天气是否互相协调？
+
+03
+
+空间合理性
+
+人物、建筑、道路与物件的尺度是否准确？
+
+04
+
+物理合理性
+
+阴影、反射、水流、风向与接触关系是否可信？
+
+05
+
+叙事合理性
+
+画面中的物件是否有明确作用，而不是随机堆积？
+
+如果任务是艺术创作，我们当然可以有意打破真实世界规律。但必须在提示词里说明这是超现实、奇幻或概念艺术，而不是把不合理的环境误认为写实。
+
+### 14.11 环境复杂度：从基础场景逐渐增加细节
+
+写提示词时，不推荐一开始就给背景添加大量建筑、植物、交通、人物和装饰。
+
+更合理的方法是逐层建立环境。
+
+Level 1 · Base Scene
+
+基础环境
+
+一片夏季绿色草原。
+
+Level 2 · Geographic Structure
+
+地理结构
+
+绿色草原，缓坡起伏，远处有山丘和开阔天空。
+
+Level 3 · Environmental Detail
+
+环境细节
+
+前景细密草叶，中景自然牧道，远处少量牛羊。
+
+Level 4 · World Consistency
+
+世界逻辑
+
+夏季下午、多云、地面干燥、空气清澈；自然太阳光与所有物体阴影方向协调。
+
+这样我们就把一个抽象的“草原背景”，逐步转化成了可以检查的环境结构。
+
+### 14.12 通用场景提示词模板
+
+## GPT Image · Environment Design Prompt V1.0
+
+### 01. 场景目标（Scene Objective）
+
+图片用途：[商业摄影 / 人像 / 产品图 / 场景概念图]
+
+主要主体：[人物 / 产品 / 汽车]
+
+### 02. 地点（Location）
+
+场景类型：[草原 / 城市 / 森林 / 海边 / 摄影棚 / 展厅]
+
+具体地点：[可选，明确地区或地域特征]
+
+### 03. 地形与建筑（Terrain & Architecture）
+
+- 地形：[平坦 / 起伏 / 山地 / 沙滩]
+- 建筑：[类型、结构、材质]
+- 地面：[草地 / 石材 / 木地板 / 沥青 / 沙地]
+
+### 04. 植被与材质（Vegetation & Materials）
+
+- 植被类型：[草本 / 阔叶树 / 针叶树等]
+- 植被密度：[稀疏 / 中等 / 茂密]
+- 环境材质：[自然纹理与粗糙度]
+
+### 05. 季节与时间（Season & Time）
+
+季节：[春 / 夏 / 秋 / 冬]
+
+时间：[清晨 / 正午 / 下午 / 黄昏 / 夜晚]
+
+### 06. 天气与大气（Weather & Atmosphere）
+
+天气：[晴朗 / 多云 / 雨天 / 雾天 / 雪天]
+
+能见度：[清澈 / 轻雾 / 低能见度]
+
+环境效果：[干湿程度、云层、空气透视]
+
+### 07. 环境物件（Environmental Props）
+
+- 核心物件：[列表]
+- 辅助物件：[列表]
+- 禁止物件：[列表]
+
+### 08. 空间层次（Spatial Layers）
+
+前景：[对象]
+
+中景：[主要主体]
+
+背景：[环境]
+
+说明物体的相对距离、遮挡和接触关系。
+
+### 09. 光影控制（Lighting）
+
+- 光源：[太阳 / 天空 / 人工照明]
+- 方向：[顺光 / 侧光 / 逆光]
+- 质感：[硬光 / 柔光]
+- 颜色：[暖 / 中性 / 冷]
+
+### 10. 真实世界约束（World Consistency）
+
+P0：地形、地点、季节和环境必须自洽。
+
+P1：空间透视、物体尺度、遮挡和光影合理。
+
+P2：允许自然增加不影响真实性的少量环境细节。
+
+避免不符合地域的植被、错误建筑、悬浮道具和不合理天气现象。
+
+### 11. 输出与验收（Output & Validation）
+
+画幅：[比例]
+
+风格：[写实 / 电影 / 插画 / 动漫]
+
+验收：
+
+- 地域准确性
+- 季节与天气协调
+- 环境物件合理
+- 空间关系正确
+- 光影与材质真实
+
+### 14.13 交互练习：场景生成提示词构建器
+
+选择场景、季节、时间和天气，自动生成一段场景设计提示词。
+
+第一步：选择环境
+
+草原
+
+城市
+
+森林
+
+海边
+
+摄影棚
+
+汽车展厅
+
+第二步：选择季节
+
+春季夏季秋季冬季
+
+第三步：选择时间
+
+清晨
+
+正午
+
+下午
+
+黄昏
+
+夜晚
+
+第四步：选择天气
+
+局部多云
+
+第五步：主要主体
+
+视觉风格
+
+写实电影动漫
+
+自动生成的环境提示词
+
+生成一张3:4竖版真实摄影风格图片。 【主要主体】一位穿米白色长裙的成年女性。 【场景】草原。 【地形与建筑】起伏草地与低矮山丘。 【环境细节】自然草本植被、远处牧道。 【季节】夏季。 【时间】下午。 【天气】局部多云。 【空间层次】主体位于中景，前景具有适度环境细节，背景展现完整空间。 【真实约束】环境元素、季节、天气与光照需要协调。避免热带植物和不合理城市高楼。物体尺度合理，阴影与接触关系真实。 【要求】保持主体清晰，场景可信，不添加无关内容。
+
+ 复制提示词
+
+生成前应检查组合是否符合物理条件，例如室内摄影棚通常不直接受到室外雨雪影响；雨天场景应考虑地面潮湿与光照变化。
+
+### 14.14 第十四节博客教学配图规划
+
+建议继续沿用上一节的教学规范：白底、深蓝色标题、浅蓝色分区、必要的红蓝辅助标注。
+
+| 编号  | 教学配图                           | 推荐布局           |
+| ----- | ---------------------------------- | ------------------ |
+| 14-01 | 同一草原的春夏秋冬                 | 2×2 四宫格         |
+| 14-02 | 草原、城市、森林、海边             | 2×2 环境类型对比   |
+| 14-03 | 地形与植被密度变化                 | 三栏对比           |
+| 14-04 | 同一城市的清晨、正午、黄昏、夜晚   | 2×2 四宫格         |
+| 14-05 | 晴天、阴天、雨天、雾天             | 2×2 天气对比       |
+| 14-06 | 普通摄影棚 vs 商业汽车展厅         | 左右对比           |
+| 14-07 | 错误环境逻辑 vs 真实环境逻辑       | 左右对比、红色标注 |
+| 14-08 | 完整 Environment Prompt 的八维拆解 | 综合信息图         |
+
+这一节特别建议把 14-01、14-04 和 14-05 设计成单变量实验。
+
+例如制作 14-05 时，固定同一条城市街道、相机机位与建筑结构，只改变天气及天气必然带来的光线、地面状态等结果。
+
+这比用四个完全不同的城市图片说明天气变化，更具有教学价值。
+
+### 14.15 本节总结
+
+本节最重要的公式是：
+
+场景构建 = 地点 + 地形建筑 + 植被材质 + 季节时间 + 天气大气 + 环境物件 + 空间关系 + 世界逻辑。
+
+通过这一节，我们应该掌握三个重要原则。
+
+第一，环境不是一个简单的背景名称。 它包含地形、材质、建筑、天气、季节和物理关系等多个相互影响的系统。
+
+第二，场景越复杂，越需要先建立结构，再补充细节。 先确定地点和地形，再加入植被、道具、时间和天气，最后进行真实性检查。
+
+第三，真实性来自各个要素之间的协调，而不是单纯堆砌细节。 一张细节很多但地域错误、阴影冲突的图片，不一定比简洁的场景更真实。
+
+#### 下一节：第十五节——动态与运动表现（Motion & Dynamics）
+
+接下来我们将研究如何让静态图片呈现真实的运动感，包括人物奔跑、跳跃、转身，头发与衣服随风飘动，车辆高速运动，以及水花、雨滴、尘土与运动模糊。
+
+重点还会区分三种不同的表现方式：凝固瞬间（Freeze Motion）、运动模糊（Motion Blur）和动态构图（Dynamic Composition），理解如何只用一张静态图表达速度、方向和动作力量

@@ -1,0 +1,419 @@
+---
+title: "第四节：视觉风格（Style）——从写实摄影到动漫、电影与 3D 渲染"
+date: "2026-10-09"
+summary: >-
+  完整迁移第 4 节原文，建立从写实摄影、电影风格、动漫到 3D 渲染的视觉风格控制框架。
+status: published
+course: "gpt-image-2"
+tags:
+  - "AI生图"
+  - "视觉风格"
+  - "风格迁移"
+lang: zh
+chapter: "第 4 节：视觉风格"
+---
+##  第四节：视觉风格（Style）——从写实摄影到动漫、电影与 3D 渲染
+
+GPT Image 生图从 0 到 1 · 第 04 课 · 视觉风格控制
+
+在第三节，我们学习了构图（Composition），知道如何控制主体的位置、比例、视角和画面布局。
+
+这一节，我们开始研究 AI 生图中最具创造性的部分：视觉风格（Visual Style）。
+
+同一个少女角色，可以生成真实摄影照片、动漫角色、电影剧照、三维角色渲染，甚至水彩插画。
+
+而我们的目标不是简单地告诉 AI“生成动漫风格”，而是学会逐层控制：
+
+风格大类 → 风格子类 → 视觉特征 → 材质表现 → 风格约束。
+
+### 4.1 什么是视觉风格？
+
+视觉风格是指一张图片在表现形式上具有的共同特征，包括线条、颜色、材质、纹理、细节处理以及整体美术语言。
+
+例如：
+
+![與 Amy Irish 聊天 - AI 女友](https://images.openai.com/static-rsc-4/SE6vIqfPXGSEEcU2ET35cZpg_JhoS9GZCMeyY92iVKFzFMCHekI-MG5fpb8i_SeQFx3KNM-Z3XU9YLCpv5hdghyMqMZuof0SOs_awflD3uBFNVg45yOBLVBoeobc5yc2V-XfndCB3VBigtN4WV7Xy2Q5NJ6iM0GYis9mVRNyXj0?purpose=inline)
+
+写实摄影（Photorealism）
+
+真实皮肤、自然镜头质感、符合物理规律的材质与光线
+
+![A close up of a woman in a blue and white dress - SeaArt AI](https://images.openai.com/static-rsc-4/ATE6N5BmBxJzBo_jqwI0Azj02beI5Nwi1E2u4eMg5sf9lz7FOUFcsOCIv1lD4o1v3T3cHCEcr0P6cgUAcYMoF8f1UVmR1bh2PaVQx19UVRAotqtlaGBayrcIsAED8V5YjSfAZei4ZnIA016CrSZmKNKp7I4PutTIUuX23bNLnL0?purpose=inline)
+
+电影风格（Cinematic）
+
+电影布光、色彩分级、氛围、镜头叙事
+
+![偽春菜のTwitterイラスト検索結果。](https://images.openai.com/static-rsc-4/Q3c9gatn4XS1gILDSdnhVlz0fW1OOuW_ae3yyNg7O0pDk6o5H9V0xOS03BCmXAJI8obxwgtGa3f6rmRcb7Gx5qByFIKwiUdkqCTt7cVpGDhhQXJrW7ufIBl7339XDDWgqQH1yAREeCGQ7jnb2fmxuuA9W19dUdy3-4ZbiR8GYu8?purpose=inline)
+
+动漫风格（Anime）
+
+线稿、赛璐璐上色、角色化五官、二维视觉语言
+
+![Срок регистрации beauty-boxes.ru истек](https://images.openai.com/static-rsc-4/FjVSZMw0yUcfD-P6AlqLknGmiRaM_vuaIMM-bqX_0Y59pZ5MeItg4f6i0Zb6Ssth2TfU2Ge8PyVEHzkvdTiM_PJpzHRoOSvstXVFpt-4qvmE47-AoJhFERXi5weyoeVefowVa4Xo8I3Ed8VcHCAVfajB0PnUzbhdhTSB_2t7_rw?purpose=inline)
+
+3D 渲染（3D Rendering）
+
+立体建模质感、材质着色、空间深度、渲染细节
+
+以上为风格参考示意，人物细节可能不同。正式的控制实验建议始终使用同一张角色参考图。
+
+请注意：电影风格不一定是写实摄影，3D 渲染也不一定是卡通。这些风格标签可以相互组合。
+
+### 4.2 视觉风格的五层控制模型
+
+我们可以把视觉风格描述分成五层：
+
+L1 · 风格大类（Category）
+
+写实 / 动漫 / 电影 / 3D / 插画
+
+
+
+L2 · 风格子类（Substyle）
+
+如日系赛璐璐、日系厚涂、低多边形、电影胶片
+
+
+
+L3 · 视觉特征（Visual Language）
+
+线条粗细、阴影层次、饱和度、细节密度
+
+
+
+L4 · 材质与表现（Material & Rendering）
+
+肌肤、头发、布料、反射、高光、笔触
+
+
+
+L5 · 风格约束（Style Constraints）
+
+保持哪些特征？排除哪些不希望出现的风格？
+
+举个例子：
+
+普通提示词：
+
+> 一个动漫少女。
+
+升级后的风格描述：
+
+> 日系二维动漫风格，精细赛璐璐上色，轮廓线清晰，皮肤采用平滑色块，头发使用分层阴影和少量高光，整体配色柔和，禁止真实摄影皮肤纹理和明显三维塑料质感。
+
+这就是从“风格名称”升级到“视觉表现规则”。
+
+### 4.3 第一大类：写实摄影（Photorealistic Photography）
+
+写实摄影追求符合真实摄影规律的画面表现。
+
+它并不是一个单独风格，还可以继续细分。
+
+![Plage Inc.](https://images.openai.com/static-rsc-4/BlMQLDZJSLGdwzOrZ_KXjyYUjpRw5Y5eJ76YucQsxy3XWc0cyQWtv2mplKLjrLxZfuIcbHOayEdmMoHOR8fS574A1XcC4B0TC2a7Q6LV0VUgHi8VTIP7jAasSjgPISfaJB2velPRaRdZ8hHYqONhBNx1gXdhy3mJu3byIKep3-8?purpose=inline)
+
+A. 自然生活摄影（Lifestyle）
+
+自然环境光、真实肤质、随意姿态、轻度后期处理。
+
+关键词：natural light, candid, authentic skin texture
+
+![Portrait Of Beautiful Woman in Studio](https://images.openai.com/static-rsc-4/CV-s_hVOG6dfqmB7QmN-6C3CKV5j9mETGRbU2LPUqRnnO3nCVj_xWdkkD3-cz4Dfwfq7G27-9s5bPa8ncgaJyJ7QZPmbnzRD9tNiU8r0JfO846JRnLQw1H3M5o9qC4GO204v8Vy3nhelNmggoWdvf_tevBS8RxQXbvQ_SQRyZVQQyrNVVEgA_gpjNNpRyyDO?purpose=inline)
+
+B. 商业棚拍（Studio Photography）
+
+精确布光、干净背景、细节清晰、商业级人物表现。
+
+关键词：studio lighting, softbox, commercial photography
+
+![Marcas de moda coreanas que tienes que conocer | Vogue España](https://images.openai.com/static-rsc-4/qPU6i2Z6skKzVYzOTkTDQE6tM3XNQrOlMEr2ylOy2q_jiFj-SOWAllcvu-69Bn8lxv2ysc8afy4lclIWLKSxbW2k3ioMq1QpGudXEwIERVujBDMaJcaKLRlEZB1OEtpfhz4X9ZpWQEJRDHhabUWrhNM9C1sZB3W0HyNMKvac32w?purpose=inline)
+
+C. 时尚杂志摄影（Fashion Editorial）
+
+强调人物造型、创意布景、艺术性和时尚表现力。
+
+关键词：fashion editorial, magazine, art direction
+
+![35mm Film - Instapix - Your AI Studio for Photos & Videos](https://images.openai.com/static-rsc-4/wvEspki56-spvu-wpfiM4euvZxMnIQEEe3rGKVCK1d2gRfXeTwgg-P3_f13T6IpgKhCy4iAlF4iNyA5vNJ4UE6u1apmlIixVeloK7Eyo6fHRPNeaWHoL_ygjuZ1Ow_gqeVPrT1mxeip-4TeKpPuIIOYMUQWxTGivC8U0NQCkzEk?purpose=inline)
+
+D. 胶片摄影（Film Photography）
+
+胶片颗粒、柔和反差、细微色偏、复古氛围。
+
+关键词：35mm film, grain, analog color rendition
+
+#### 写实摄影提示词模板
+
+**主体：** 参考图中的蓝发少女，保持原有蓝色长发、蓝色眼睛、女仆头饰及深蓝白色服装。
+
+**风格大类：** 写实人物摄影（Photorealism）
+
+**风格子类：** 专业商业棚拍（Studio Portrait）
+
+**视觉特征：** 自然肤质、真实发丝、合理的人体比例，保留细微皮肤纹理。
+
+**材质表现：** 真实布料褶皱、刺绣纹理、蕾丝细节，皮肤具有自然散射效果。
+
+**风格约束：** 不采用动漫线稿，不采用明显的塑料皮肤效果，不改变原角色服装的核心设计。
+
+**固定构图：** 3:4 竖版，人物正面半身像，居中构图，浅灰色背景，柔和均匀光线。
+
+### 4.4 第二大类：电影风格（Cinematic Style）
+
+电影感的核心不只是“暗色调”，而是通过光线、色彩、景别和画面氛围表达情绪或叙事。
+
+| 子风格             | 典型视觉特征                 |
+| ------------------ | ---------------------------- |
+| 好莱坞商业电影     | 精致布光、丰富影调、较高细节 |
+| 黑色电影 Film Noir | 强烈明暗对比、黑白或低饱和   |
+| 复古电影胶片       | 颗粒、胶片色彩、柔和高光     |
+| 赛博朋克电影       | 霓虹灯、冷暖对比、未来城市   |
+| 文艺电影           | 自然光、克制构图、生活化色彩 |
+
+![Промпты для аватарки в нейросети: 12 готовых стилей с примерами - Elyras AI](https://images.openai.com/static-rsc-4/OvjkVlpac7LSNrvoQtdO9RE5fv0bt8ZlgQ9M65zVEpEzPSnclQCcRu8RWsfo769YNzyo7PdfL-vsYCAJw2oKntBOjEVIKdKiqUMX98XZ9n22KMeR08HNYFQBU0ydxr1ScOWLypXc7FnMveLHHsI296oJdlNZROV97ONox9SP9_M?purpose=inline)
+
+黑色电影 · Film Noir
+
+![Cyberpunk Neon Portrait — GPT Image 2 Prompt | Image2](https://images.openai.com/static-rsc-4/R3D3rHRtw7FP86lioUkV5-6XPkpLs71Gk2gt6RVJlN17Kzl3aYz57GkVwvs7PT4Uc8A4enWvU3JDMxX-Hi5Z5nJcCPa-HSn9sDH4ArGsv46WOEw8oTUCWUR6q5h4AELmHr8pR8EpRpXHxuC65_X3JvcQ65HUbmu65xbEVRx9EEM?purpose=inline)
+
+赛博朋克 · Cyberpunk
+
+提示词示例：
+
+> 电影剧照风格，采用克制的冷暖色彩分级，柔和主光配合低强度轮廓光，暗部保留细节，具有自然的镜头景深与细微胶片颗粒。人物保持居中半身构图，画面富有情绪但不过度戏剧化。
+
+需要注意：如果本次实验只是比较风格，就不要同时修改人物姿势、背景位置和构图。否则无法清楚分辨哪些变化来自电影风格。
+
+### 4.5 第三大类：动漫风格（Anime Style）
+
+动漫是一个非常庞大的视觉风格体系。
+
+![Rem (Re:Zero)  - Re:Zero Kara Hajimeru Isekai Seikatsu - Image by SHIFT UP #4381514 - Zerochan Anime Image Board](https://images.openai.com/static-rsc-4/sUahMB0qYT25cJuccan6pr_HeMZjhiTj9JYGQQUFzptASPeoCebF7GbN6dynSyuQ3GxCxlHCkGE1TfLitUeBxSQmwTj1YUqNEs4Gt30PqcBievt1Cx-JoEAq609PxTSwqS2L4det2lMNQE302xYzw8-OmHH1WB6P5tEkpLlORVs?purpose=inline)
+
+A. 赛璐璐上色（Cel Shading）
+
+轮廓线清晰，阴影采用分明色块，典型二维动画角色表现。
+
+![Blue Ombre Hair Anime Character with Flower Adornments | Deep Dream Generator](https://images.openai.com/static-rsc-4/Qw50eUGAsMLcKO_h19EQhrmvYeBjrZbm_Yl5h0Fq_0SiwI4-ls-ovL34KkzFvAlu_v6_pAjR4JYbXfcY1BO-v4v762RJXYjrhC10SGac2slOTfDiykKXRY-awyAf8mUKdXI_n7WcRfHgQ0wdZQCrv_RTz0d9TROMmO_Wv2CzFkw?purpose=inline)
+
+B. 动漫厚涂（Painterly Anime）
+
+保留动漫化角色结构，但融合丰富笔触、渐变阴影和绘画材质。
+
+![A cartoon girl with a blue hair and a white dress - SeaArt AI](https://images.openai.com/static-rsc-4/nro3DKvsdq3-0eLqfIVqVRkRPiR7zIhk0MG7QvBOczbmdTs9jLWDqZO5Gh7xOYH-X9c18TF7F48ImxLMj6_RNf7SuVWRCf795aAMqEgESe4DEK9j7q26gaf9Xbh7oovzsMCrpBbRllQgxJZ8bOE9mXY48easOdnwkojPQdwkFYM?purpose=inline)
+
+C. Q 版（Chibi）
+
+大头小身、夸张表情、可爱化比例，适合表情包和角色周边。
+
+![Creamy Mami, the Magic Angel : Yū Morisawa](https://images.openai.com/static-rsc-4/ZMVDTtYvS0T38QAEa58lKzSHv90uHKelNX0__1oOTbM8NOx1QWa2OT2Z6RRw5M63z4MMilKN-lxY1b1nq20nsyr9S0wsI0XIw_dR1Qa2n3x3MiAbnFqNS5iG0EYNMB7I6XsjOYi1R10JjSupLkfbXOiBHEAAZ4jJkjUiTX3GeRI?purpose=inline)
+
+D. 复古日式动画（Retro Anime）
+
+传统动画色彩、手绘线条、复古色调和经典动画质感。
+
+#### 动漫风格的关键控制维度
+
+| 维度     | 常见选项                       |
+| -------- | ------------------------------ |
+| 角色比例 | 写实动漫比例 / Q 版 / 夸张比例 |
+| 线稿     | 细线 / 粗线 / 弱化线稿         |
+| 上色     | 赛璐璐 / 厚涂 / 渐变           |
+| 阴影     | 双色块 / 多层次 / 柔和         |
+| 细节密度 | 简约 / 中等 / 高精度           |
+| 背景     | 纯色 / 插画背景 / 动画场景     |
+
+这一节最重要的知识：
+
+动漫风格不等于一个关键词。我们需要学会精确描述角色比例、线稿、色块和阴影方式。
+
+### 4.6 第四大类：3D 渲染（3D Rendering）
+
+3D 风格一般包含两个不同的概念：几何造型风格和渲染表现风格。
+
+![Vocaloid - Hatsune Miku (Classical Maid) - Luminasta Figur - 21 cm | Anime-Mura](https://images.openai.com/static-rsc-4/SDww1A2jlLcJ5lzTh5JDA5eb51qdTSAZGQi5C6jlGWqifg8mh4XBoiodnyDGvZzD5cyZRRYFhJs3xyMhB3BS0b-8ndMhUzBY8Ed9tU3qnql1ZkxREIm56aMHNXEPePTBER6onZDV6tbt2uk18QYtcAPKZsYCUWJdxxO7nm8zVhQ?purpose=inline)
+
+卡通 3D
+
+圆润造型、平滑材质、角色模型质感
+
+![Crafting a 3D Young Girl with Realistic Hair and Refined Clothing](https://images.openai.com/static-rsc-4/4n9HFviuaX0sZhjw3peygIaHLIgT_XHgA1oJNXsxgpMd-FplOePal7zcrOTIRx1Rz0sMj5jKnc35wy05093PW7RxcHLoTzSXnROTq86s5lcFWFJSYLFrmnFOeDVfoxa52lzDelvGR_aVp9Nt69RPPUrXPiAh_pFJ40l2nZu4GjQ?purpose=inline)
+
+超写实 3D
+
+真实材质、精细几何、逼真的渲染光照
+
+![Pixelia Questmaker - Character Life Simulation by Jabali AI](https://images.openai.com/static-rsc-4/PoBKfNh7838bkIwoEfY1nxLH0E8QseD_jm2qLcpNT19Y_OwIRxXdEyLpt5q8XJHEq7rkynJFT2CWrXVOugx0N4cdX70DXqLNCPZXpQAvRBbMcvpUu7mS2VsbEJfhYDcLDZ2J5ztV3dDD31VOzgv2o3Tno35k_3GbRfa3SCwmjZM?purpose=inline)
+
+Low Poly
+
+低面数几何结构、多边形表面、简化细节
+
+![Figure](https://images.openai.com/static-rsc-4/RfkNGfa5nWB2u15dZUG3298FVQzttWSVQGZpSqnCGRDZaty6Prri87qmrrxaf783bqhkwiUldBy9MwXMiljX9wzItm5hbVDSq33ttOJhp8XhfzIuOGSC_fPmlB6jrJP-B-gFYhZ_NHzYjcmEvxt0DMC0JC4CHNtRMvjx5wpPd3c?purpose=inline)
+
+手办模型风
+
+树脂或 PVC 质感、实体收藏模型表现
+
+例如，生成手办模型时，除了写“3D”，还应该描述：
+
+- 模型的造型比例
+- 塑料或树脂材质
+- 涂装与表面反射
+- 灯光及阴影
+- 是否包含展示底座
+
+### 4.7 第五大类：插画风格（Illustration）
+
+插画与动漫存在交集，但插画的范围更广。
+
+![Aoi Kotonoha from VOICEROID](https://images.openai.com/static-rsc-4/89iDueLB3x5lJ2ocKkCdzDWCLLUxXVVPaBaZ2dJrfEADQRHhPPZZoYPthfzYfdqybxgYtnMQE3GSR6fagZ0d4vdrr8sg7uq3TJqY-vdixs8U8rvApUoeyQ-yVA0dwusCNy2ZOygXCv4_QA1VC4cr0pLUXkzSDV61lcm36-xCekY?purpose=inline)
+
+水彩插画
+
+透明颜料、纸张纹理、自然晕染
+
+![Japanese anime girl in blue uniform and high socks](https://images.openai.com/static-rsc-4/_SI3imcjOuqU3S36cDuv4dCfAbRpfimF4XDAE54ka4QEGoFznN_QkEDdUfs2QXbyIO7QBKyoNDn9DG39OT4WtLvbuRv8pe5mCHTo7IYtFXZ9PxTPsif0vGaAVazNwEp9-DkgM-5nuUEvUZeflsuptfJ-0t7AUgz03RT_yPfAcR2-4Wf0bIHLuY74jjW93qMP?purpose=inline)
+
+扁平矢量插画
+
+几何图形、纯色块、简洁边界
+
+![LITTLE PAOLA - Original Colored Pencil Drawing, Doll Portrait by Maria William - Etsy Canada](https://images.openai.com/static-rsc-4/5zBx9O-tFtmvwNSWJmBnSuW1bPUaHhnLYHem6VlSSvQ0HgdpFQwDtuspw_Fr0W7pAn2yHF0axmd2SgM9agsTKzPIW2rj2nGBPt6Dk1jO_wwYil3nY8METrphLj6Tne5_a-Kyp9CR0d_GTKvJ0GTz7Wf2UjnO9Xj8piyV9vzTURk?purpose=inline)
+
+彩铅手绘
+
+铅笔笔触、叠色、纸纹与细线
+
+![Mabeobsonyeo "Magical Girl" (A3 Risograph Print)  – Koguchi Press](https://images.openai.com/static-rsc-4/zP1HBUiJhBErT8zU66dqrNTvhG23yVGfPEKlKj8REGNcw7wOnnQIcYgE0gqU8NhqCwotatzzArsYNeuTtg9_aSnOliPsebf2vNheUX38vMKkrfYJPp-i2qR8K5T9YyuDMhpyLPYkrFlhnCAcEyEckPfSxf6um2bOhjPu6Nx7jHk?purpose=inline)
+
+复古印刷插画
+
+有限色彩、网点、套印偏移感
+
+### 4.8 风格控制：把模糊词变成具体描述
+
+初学者经常使用一些过于宽泛的词，例如：
+
+“高级感”“动漫感”“电影质感”“超清晰”。
+
+这些词可以表达审美方向，但不能替代具体的视觉指令。
+
+| 模糊描述 | 更精确的描述                           |
+| -------- | -------------------------------------- |
+| 高级感   | 克制配色、充足留白、柔和反差、精细材质 |
+| 动漫感   | 二维线稿、赛璐璐阴影、动漫化五官比例   |
+| 电影感   | 低调布光、冷暖分级、镜头景深、胶片颗粒 |
+| 3D 感    | 明确体积、材质反射、空间光照、几何厚度 |
+| 手绘感   | 可见笔触、非均匀边缘、纸张肌理         |
+
+当然，风格的表现没有唯一正确答案。选择哪种描述，取决于你希望最终图片呈现什么视觉结果。
+
+### 4.9 可复用的风格提示词模板
+
+## GPT Image 视觉风格控制模板
+
+### 01. 主体信息
+
+使用参考图片作为主体依据。
+
+保持：
+
+- 人物主要外貌特征
+- 发型和发色
+- 服装核心结构
+- 主要配饰与角色特征
+
+### 02. 风格大类
+
+[写实摄影 / 电影 / 动漫 / 3D / 插画]
+
+### 03. 风格子类
+
+[例如：日系赛璐璐 / 商业棚拍 / 电影胶片 / 卡通3D]
+
+### 04. 视觉语言
+
+- 线条表现：[粗细、轮廓、是否保留线稿]
+- 色彩表现：[配色、饱和度、色彩层次]
+- 阴影表现：[硬边阴影、柔和渐变等]
+- 细节密度：[简约、精细、高密度]
+- 纹理表现：[皮肤、纸张、布料、画笔等]
+
+### 05. 材质与渲染
+
+[真实肌肤、树脂模型、平面色块、水彩笔触等]
+
+### 06. 风格约束
+
+- 保持：[角色特征、主体结构]
+- 禁止：[不希望出现的风格或材质]
+- 允许变化：[艺术化程度、纹理、颜色表现]
+
+### 固定实验条件
+
+图片比例：3:4
+构图：人物居中半身
+视角：正面平视
+背景：浅灰色纯净背景
+光线：柔和均匀
+主体：始终使用同一参考人物
+
+本轮只改变视觉风格，不主动改变构图、镜头、背景与主体身份。
+
+### 4.10 互动练习：构建自己的风格提示词
+
+第一步 · 选择风格大类
+
+写实摄影
+
+电影风格
+
+动漫风格
+
+3D 渲染
+
+插画风格
+
+第二步 · 选择风格子类
+
+赛璐璐
+
+动漫厚涂
+
+Q版
+
+复古日漫
+
+第三步 · 补充风格细节
+
+自动组合后的完整提示词
+
+使用参考图中的蓝发少女作为主体，保持人物主要外貌特征、发型、服装与配饰。采用动漫风格中的赛璐璐风格。视觉表现：清晰轮廓线，柔和配色，分层阴影，保留服装细节。使用3:4竖版、正面半身、居中构图、浅灰色背景与均匀柔光。本次只改变视觉风格，不主动改变构图和角色设计。
+
+### 4.11 博客配图规划
+
+延续我们之前的教学模式，这一节建议建立以下六张核心对比图：
+
+| 图片编号 | 主题                     | 教学目的                 |
+| -------- | ------------------------ | ------------------------ |
+| 04-01    | 五大视觉风格对比         | 认识风格大类             |
+| 04-02    | 四种写实摄影子风格       | 理解摄影细分             |
+| 04-03    | 四种电影风格             | 区分电影色彩与氛围       |
+| 04-04    | 四种动漫子风格           | 理解赛璐璐、厚涂、Q版等  |
+| 04-05    | 四种 3D 渲染风格         | 区分不同的模型和材质表现 |
+| 04-06    | 模糊提示词 vs 精确提示词 | 认识风格控制的作用       |
+
+建议全部使用之前的蓝发女仆少女作为统一主体，固定 3:4 比例、人物居中、半身构图，通过不同风格生成结果帮助读者直观看出差异。
+
+### 本节总结
+
+视觉风格控制的关键，不是堆砌大量风格名称，而是理解每种风格背后的视觉规律。
+
+本节需要掌握的公式是：
+
+视觉风格 = 风格大类 + 子类 + 视觉特征 + 材质与渲染方式 + 风格约束。
+
+到这里，我们已经拥有了基本的风格控制能力。
+
+下一节将进入 第五节：镜头与视角（Camera & Perspective），研究正视、侧视、俯视、仰视、特写、广角、长焦、景深等控制维度，以及如何通过镜头语言改变同一个人物的视觉表现。

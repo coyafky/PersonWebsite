@@ -1,0 +1,635 @@
+---
+title: "第十二节：人物姿态与动作控制（Pose & Gesture）"
+date: "2026-10-09"
+summary: >-
+  完整迁移第 12 节原文，拆解姿态、动作、重心、视线与人物交互的提示词控制方法。
+status: published
+course: "gpt-image-2"
+tags:
+  - "AI生图"
+  - "人物姿态"
+  - "动作控制"
+lang: zh
+chapter: "第 12 节：人物姿态与动作控制"
+---
+## 第十二节：人物姿态与动作控制（Pose & Gesture）
+
+GPT 生图从 0 到 1 · 第 12 课 · 人体姿态、手势、身体重心、视线与人物互动
+
+前十一节，我们学习了如何控制图片的比例、构图、风格、镜头、光影、材质与参考图，并建立了完整的商业生图工作流。
+
+这一节，我们要解决一个经常出现的问题：
+
+为什么 AI 能够生成漂亮的人物，却不一定能准确控制人物的手、脚、身体姿态和动作？
+
+例如：
+
+- 明明要求人物双手背在身后，却生成了一只手放在胸前。
+- 要求人物坐在椅子上，但身体重心和腿部姿态不自然。
+- 要求人物向左转头，结果整个身体都转向左侧。
+- 要求两个人牵手，却出现多余手指、手臂融合等问题。
+
+这些都与 Pose（身体姿态）和 Gesture（手势与表达性动作） 有关。
+
+本节继续使用之前的蓝发女仆少女作为统一角色参考，固定角色设计、服装与画风，重点改变身体姿态和动作。
+
+### 12.1 首先区分 Pose、Gesture、Action
+
+这三个概念很容易混淆，但它们控制的内容不同。
+
+![Rem Re Zero Full Body, HD Png Download , Transparent Png Image - PNGitem](https://images.openai.com/static-rsc-4/CdRWNCPNrbc16IK4F3WFhRx_asvHJQZTr7i0Arz0QLCtAAKRdoAs-bCE3yMsTpl3IyjMOoGzaSotau-WQqZtgLF_cu-76lRtjto5IMTVCNGKsPynxsqsoZpmdxQkVokx41deOzCA0f5W01dPFhD4j9lc3w9e9cH0sAqBXGOpNO0?purpose=inline)
+
+Pose
+
+身体姿态
+
+站立、坐下、蹲下、身体旋转
+
+![Source_anime, score_9, score_8_up, score_7_up, solo, gradient background - SeaArt AI](https://images.openai.com/static-rsc-4/8Zk1b7uA-b21bTHsLOD9tB_myP34ZUbF4eo17TuzHzPCEEYsRr2vONFnE2pe6Us2GxZepnnXo5_qifRuCMy3-buOJW4xVXa4j3BAFV0XEUeDgnXo1p7MvNMWPYyJB7Bk0u3xIEuWpB8sTlmiFSN78TcmFujQTeZdglDKLxeCzx8?purpose=inline)
+
+Gesture
+
+表达性手势
+
+挥手、比心、指向、托腮
+
+![ヒガナヨガナ (@higana_yogana) on X](https://images.openai.com/static-rsc-4/qhgenpYsuzA3bNSGOUfHQc2AoYIXzOQBg-2VrnxsdroFgUXL2sSazaEHF9gnCsOPNZzSG8qHNB7N-Y3CXmhAKZfxLnBadZy30tF5mM39qb9Ft-ShiN99q8sgtidglEgdR68dEn5FgAhT79HQTferopZuNbByRO9jWMDXAKdsa94?purpose=inline)
+
+Action
+
+连续动作
+
+奔跑、跳跃、转身、拿起物品
+
+以上为三种控制概念的示意。严格的动作实验应使用同一张角色参考图片。
+
+| 概念    | 重点控制                 | 示例                     |
+| ------- | ------------------------ | ------------------------ |
+| Pose    | 身体各部位的位置和方向   | 双腿站立，身体向右转 30° |
+| Gesture | 手、头部等部位表达的动作 | 右手挥手、左手托腮       |
+| Action  | 人物正在执行的运动行为   | 向前奔跑、从椅子起身     |
+
+例如：
+
+> 少女站立，身体略微侧向右方，右手举起挥手，正在向朋友打招呼。
+
+这句话同时包含 Pose、Gesture 和 Action 的信息。
+
+### 12.2 人物姿态的七大控制维度
+
+HUMAN POSE CONTROL SYSTEM
+
+01 · Body Pose
+
+整体姿态
+
+站、坐、蹲、跪、躺
+
+02 · Body Orientation
+
+身体朝向
+
+正面、侧面、背面、旋转
+
+03 · Limb Position
+
+肢体位置
+
+肩膀、手臂、双腿、关节
+
+04 · Weight Balance
+
+身体重心
+
+承重腿、倾斜、支撑点
+
+05 · Hand Gesture
+
+手势控制
+
+张手、握拳、比心、拿物
+
+06 · Head & Gaze
+
+头部与视线
+
+转头、低头、抬头、看向哪里
+
+07 · Interaction
+
+接触与互动
+
+人物与道具、人物与人物
+
+其中，人物姿态最重要的是空间关系与支撑关系。
+
+不能只告诉 AI“人物坐着”，还需要说明坐在哪里、双腿如何摆放、双手如何放置，以及身体重量由什么承载。
+
+### 12.3 第一部分：基础身体姿态（Body Pose）
+
+我们先研究最常见的四类姿态。
+
+<ImageTextList
+  title="四类基础姿态：先确认身体如何被支撑"
+  intro="姿态提示词不能只写动作名称，还要交代接触面、重心和四肢关系。下面的本地教学图可以作为观察和描述的起点。"
+>
+  <ImageTextItem
+    src="/images/course/gpt-image-2/lesson12/06.png"
+    alt="站立、坐姿、蹲姿和躺姿的四格姿态示意"
+    eyebrow="01 · Body Pose"
+    title="站、坐、蹲、躺"
+    description="先判断身体的主要支撑面，再描述髋部、膝盖、脚部和手臂的位置。不要只依赖“坐着”或“蹲下”这样的宽泛动词。"
+    keywords="standing, seated, squatting, lying, supported by surface"
+  />
+  <ImageTextItem
+    src="/images/course/gpt-image-2/lesson12/05.png"
+    alt="双腿均衡承重与单腿承重的姿态对比"
+    eyebrow="02 · Weight Balance"
+    title="重心与平衡"
+    description="双腿均衡承重和单腿承重会产生不同的骨盆倾斜与身体线条。描述承重腿，能减少人物像悬浮或失去平衡。"
+    keywords="balanced weight, contrapposto, supporting leg, center of gravity"
+  />
+  <ImageTextItem
+    src="/images/course/gpt-image-2/lesson12/07.png"
+    alt="人物与马克杯的正确接触关系示意"
+    eyebrow="03 · Human–Object Interaction"
+    title="人物与道具接触"
+    description="当人物拿杯子、抚摸物体或依靠桌面时，要补充手指、手腕、接触面和重力方向，避免穿模与漂浮。"
+    keywords="hand contact, grip, supporting surface, natural interaction"
+  />
+</ImageTextList>
+
+![蒼瀬 澪（あおせ みお）｜陽浜研究所エージェント設定資料 ｜学習書房格物堂](https://images.openai.com/static-rsc-4/D-sJ9CH3SyMcXo6076qGgG-nrcxwSbH4UjT71h6W-a2QNEWqoN1y8vt20Wfq-xDLEm_moXSAEqT-oF3AVgvoa0BuvcWedpM1yVnXgrYSvluRrpLN_vGAQzVewTWcCEpehDQEqUqkeMr4CiDi3NmXf-C0Y7XwlhCANu_FS3eERQs?purpose=inline)
+
+1. 站姿（Standing Pose）
+
+双脚与地面接触，身体重量由腿部支撑。可进一步细分为自然站立、双腿并拢、单腿承重、交叉站姿。
+
+关键词：standing upright, relaxed posture, natural weight distribution
+
+![青髪メイドの甘い午後茶 - kyoの作品 - Aipictors - AI画像投稿サイト・生成サイト](https://images.openai.com/static-rsc-4/vVETHxvSfF7mJhJPcffQYJEofpKKgtYVEx1H6YkdxDBIIi1i5bKhyizdiXbKlSws70zJ2L_Wv8Sq7r4JnQK9xNxS8V1_8e09n3rHNOeuEYVAPsLBX52M8BBrZDRjRlHb9vsGsdAtRColktdQdYdC0cKmDNMfoiBjS0AqQrPYSyA?purpose=inline)
+
+2. 坐姿（Sitting Pose）
+
+臀部由椅子或其他表面支撑，髋关节和膝关节处于弯曲状态。需要明确双脚是否落地，以及手放在腿上还是椅子上。
+
+关键词：seated, feet resting on floor, hands on lap
+
+![ᴮ on Twitter | Character art, Anime, Character](https://images.openai.com/static-rsc-4/ZTS6_YQPoazGhAFsQ2BNCAyy9eI2q98LUHhf7DU2etK7UjhmaEVEn2XF1AJkjouV1efz5nEvllkNbGaYzd_9uITarEXo074bwQHAkpvXxpsC7VpOqcU4H3YhZ94xI94CXAqNkNbkzVYDIcw7GJoj1hoxhxwjLBZQiacHWXrnbrk?purpose=inline)
+
+3. 蹲姿（Squatting Pose）
+
+髋部和膝部明显弯曲，身体重心降低。要明确脚跟、膝盖与手臂的位置，避免违反人体运动规律的姿势。
+
+关键词：squatting, balanced center of gravity
+
+![蓝发女仆装少女惬意瘫坐粉沙发看书 梗图网 | AI梗图搜索引擎与百科](https://images.openai.com/static-rsc-4/6T9LLytBSdoP_5HsiCXsDW0cDWB-sSdja4zFtd4Kzqgnyu-tTevBn3HdN4ubTEG0FXYNdyq0oPaNhd-rmDdM-TaB0eL22udz8YSgt9j92o8dYf6uzNRaF0dVLyvfz3t-D9XfwEt1BS_ZgF0Zmsd1pzQg59nm4s9pZsQ1FDLU2ho?purpose=inline)
+
+4. 躺姿（Lying Pose）
+
+身体大部分重量由床、沙发或地面承载。需要明确身体朝向、接触面以及头部和四肢摆放。
+
+关键词：lying on side, supported by sofa, relaxed limbs
+
+#### 从模糊姿态到精确姿态
+
+普通提示词：
+
+> 蓝发少女坐在椅子上。
+
+更精确的提示词：
+
+> 蓝发少女自然坐在木椅中央，臀部与椅面接触，躯干直立略微前倾，双膝自然弯曲，双脚平放在地面上，双手交叠放在大腿上，身体重心由椅面和双脚共同支撑。
+
+第二种描述明确了身体与椅子的关系，能够降低生成不合理姿势的可能性。
+
+### 12.4 第二部分：身体朝向（Body Orientation）
+
+这一节需要重新强调第五节学过的概念：
+
+身体朝向、头部朝向、相机位置，是三个不同的控制维度。
+
+例如：
+
+人物身体朝左，但头部回头看镜头。
+
+![Rem Wallpaper](https://images.openai.com/static-rsc-4/TPr08dQ5SSlDoBmhEzhb0wXZvsGO0CAXNBhyOn7qC65uKgDfljG9ILcE_CIybz5dojITq0b6kjVpmEW-gLXOW5HQpyf3WMn9SjN1kJ9uWvMa_g8AO6_uhy2f0p2kQIBmo_A3M6QcCCBH_wpRKo2OO5xKbYFnBxRWdUvAPKXjMe8?purpose=inline)
+
+身体正面朝向镜头
+
+躯干与脸部都面向相机
+
+![レム(リゼロ) 「お題箱にいただいたリゼロのレムを描きました!お題いただいた方、ありがとうございま」|case-K(けーすけ)のイラスト](https://images.openai.com/static-rsc-4/4jN2cuLX2prRxGinzw_83q7xIQ3OcksLepgXwsXOWy1sWuyIZyGlEWtjrWjYYO2M2RlOWeDSKA19A_SAzQwWr4iIKUVZJiHEGxSs1Wct4E7C7aW78d73682fe6h6g6pvyOg7AP0amdoCC5YD-BCGn7k-EaaWtu3olMypoc9_Hlg?purpose=inline)
+
+身体侧向，回头看镜头
+
+躯干方向和头部方向分离
+
+可以将控制拆成三个参数：
+
+| 参数             | 描述         |
+| ---------------- | ------------ |
+| `BODY_DIRECTION` | 身体面向左侧 |
+| `HEAD_DIRECTION` | 头部转向相机 |
+| `GAZE_TARGET`    | 双眼看向镜头 |
+
+#### 示例提示词
+
+参考图中的蓝发少女站立在画面中央。
+
+身体朝向画面左侧，肩膀与躯干呈自然侧身姿态。
+
+头部向右转动，回头看向相机。
+
+双眼准确看向镜头方向，保持自然表情。
+
+双脚稳定站立，身体重量主要落在靠后的腿上。
+
+使用三分之四人物视角，3:4 竖版全身构图。
+
+保持角色服装、发型和配饰一致，避免头部和颈部出现不合理扭转。
+
+### 12.5 第三部分：手势控制（Hand Gesture）
+
+手是 AI 生图中非常值得单独研究的复杂结构。
+
+因为手掌包含多个关节，手指长度、弯曲角度、相互遮挡和物体接触关系都需要协调。
+
+![Ami Tsuruga | Goddess Café Terrace - SeaArt AI Model](https://images.openai.com/static-rsc-4/1d0JcQwkSgy_EmgEtu-2h-Ppf2GXOk-0QPxr4rS74ymtMe_6kX7pAGZfO0qIwEMC9rSQcKjh_JV0m9yNmUPILsXlEb2wB-Vh61DjcuFwceuRbxv-Nwl2LGdNLQxGS4AxoXfQ4doogw8IxPOnsXbFj3iNsWUOHRQuzQdwEABJOEQ?purpose=inline)
+
+挥手（Waving）
+
+手掌张开，手指自然分开
+
+![ご主人様ラブビーム - ippeiの作品 - Aipictors - AI画像投稿サイト・生成サイト](https://images.openai.com/static-rsc-4/l6zh1OYOOv0W8KVEMXLf75a2Mk63xgC_qoumalrSrw-bhwAlShmCXUTb6w_dtmIW5-ie7vUm0bM4u7K5W3qfUxISsnnFLK-viEdlEIB5HbJnE4gNi20F334Lrxlx3OZEHk0I8-6aWkYs429xi-aiAdPpcY9N7yM4H3UBnSFNp2w?purpose=inline)
+
+比心（Heart Gesture）
+
+双手配合，手指位置明确
+
+![Wallpaper From scratch, REM, girl, long hair, re zero kara hajime chip isek or seikatsu, butterfly for mobile and desktop, section сёнэн, resolution 2992x2000 - download](https://images.openai.com/static-rsc-4/1D7GLYsRbO6jhLIgdDLKSC1aA68ayqkKDdOEsYK5bUdrj7vgJx2FTdeM2piZDiN6pnxydrXU_8PP2YmfJ4EfTn9XUn-wbvrWVVexiyUilXeGtyJaSgdhfaNIHNeGtdeuxrKk_juxJ-AXj0S4EKHsobGEgWmIZq5CYtmXbI5pLn0?purpose=inline)
+
+指向（Pointing）
+
+食指伸出，其余手指自然弯曲
+
+![ちょびこパパ | chichi-pui（ちちぷい）AI画像専用の投稿＆生成サイト](https://images.openai.com/static-rsc-4/d8Wk6QHUTxOfoz6JhPJtJa66tQyqcVtLIhdEHmgyfVrNiyWoSWQbo_1_xqm9mKwOu0XcQMNFnfXWHNpQnGbL_1nL69eTNFe3BSkTAqfVfWYFqOTLgQHlgafeABwuU2DRGwNehx3PVrbs3PdevIgd-Wo5_rOhMoJfx_ctmlBn86Y?purpose=inline)
+
+托腮（Hand on Cheek）
+
+手掌与脸颊形成自然接触
+
+#### 如何描述手指动作？
+
+不要只写：
+
+> 右手做一个好看的动作。
+
+建议描述：
+
+> 右手抬至肩膀附近，手掌面向相机，五根手指自然张开，手腕略微向外旋转，左手自然垂放在身体侧面。
+
+如果需要拿物品，还需要补充接触关系：
+
+> 右手握住白色马克杯杯柄，拇指位于杯柄外侧，其余手指自然弯曲并形成稳定握持。杯子垂直放置，不悬浮。
+
+但需要注意，指定五根手指也不能保证 AI 一定生成正确。最终仍要放大查看手指数量、关节和遮挡关系。
+
+### 12.6 第四部分：身体重心与平衡（Weight Distribution）
+
+为什么有些 AI 人像看上去像悬浮或即将跌倒？
+
+一个重要原因是身体的支撑关系不合理。
+
+站姿重心示意
+
+双腿均衡承重
+
+身体中轴大致处于双脚支撑范围内
+
+单腿主要承重
+
+骨盆与肩膀可产生自然倾斜
+
+简化的二维人体姿态示意。实际平衡取决于三维重心、脚底支撑区域和动作状态。
+
+#### 一个重要概念：Contrapposto
+
+Contrapposto（对立式平衡姿态）是艺术与人物造型中常用的站姿概念。
+
+它通常表现为：
+
+- 身体重量主要落在一条腿上。
+- 骨盆因承重而倾斜。
+- 肩部与骨盆产生相应的平衡关系。
+- 非承重腿相对放松。
+
+这种姿态常用于时尚写真、人物插画和角色设定图。
+
+提示词可以写：
+
+> 自然的 Contrapposto 站姿，身体重量主要落在右腿，左腿放松并略微弯曲，骨盆轻微倾斜，肩膀形成自然平衡，整体姿态优雅且符合人体结构。
+
+### 12.7 第五部分：视线与头部控制（Head & Gaze）
+
+视线对人物情绪的表达非常重要。
+
+例如，同样是一个半身肖像：
+
+![朗読劇 「JK★CHRONICLE ―消えたメロディ―」Ver.1.2│Candy Pop Music](https://images.openai.com/static-rsc-4/gso0gHMyaGnM3YN9UhuH_MHAPWuiVMBR6rCgTvy0nfrQ0F0svvqLnCF4_kfDiKG8bh3xqkPfvK2M16w2No5vTKGOTCoI0lcJSnE6gJ4NF4b0uqQ1MVBnyTy7WdUeq-73Czce3_sTpi6MNtKdMmdGlfCfXy1Rzki7I_FoK8o7TSo?purpose=inline)
+
+直视镜头
+
+亲近、直接、具有互动感
+
+![Hinomori Shizuku  - Project Sekai Colorful Stage! feat. Hatsune Miku - Image #3410095 - Zerochan Anime Image Board](https://images.openai.com/static-rsc-4/6wm_11j7bICeKL1fOldks0KnC5UQsTIKv3NBjR83bqmOD3vXqWYP_dl86mH1zWtHLZr8OamXrmVwRu3U_uyVMCe1oT7dHUGGgzVq1lNWbEE8tq-Kpi7wCKq2uQMIkLGoIAscp3CC8JQat3FyUZwRrU1eYhRkKRqxPoX9IZl6goI?purpose=inline)
+
+看向画面之外
+
+引导观众想象画面外的空间
+
+![Sunlit Radiance - A Bright Anime... | Tensor.Art | Tensor.Art](https://images.openai.com/static-rsc-4/lASG7C7VXdpZ_dA9yEIB151HDAC6Cqt_kFMscvOVw5clkPJlnZ3RDBXAMDXBPKPdcrgvWfefkREKi38Ou4dDrrbvOgeJSrgBB4wrK-4w89TIp46I9Fd2WpdCaVi8eZLHHxZPAic8bF9fB5QETuhoTgE_bAAa59ngWSfAqwpHD08?purpose=inline)
+
+低头垂眸
+
+安静、沉思、内敛
+
+![Rem/Re:0_maid, oni＆chibi / B.E.S.T 蕾姆 | Tensor.Art | Tensor.Art](https://images.openai.com/static-rsc-4/-aZ6AYEMFXbSeWGTpqO7vpAlr0ID9nO8FMqg7SvuhXz7ROo3dWpvYj-7_GEE9bDe1mks-LhAbx0e8GhXAqqGMfDIj1DQuPlQNNlkRF1jZMExtbi38pNWo-33okJJAjzM80THl5Q81WCwB1b2OOTVdyyr2M1UH7yB7stJJSJwzTU?purpose=inline)
+
+仰头向上看
+
+好奇、向往、希望
+
+控制视线时，建议分别描述：
+
+头部方向（Head Orientation） 与 眼睛注视目标（Gaze Target）。
+
+例如：
+
+> 头部略微向左转动约 15°，眼睛仍看向正前方的相机。
+
+这样能比“她看着镜头”更明确。
+
+### 12.8 第六部分：人物与道具的互动（Human–Object Interaction）
+
+当人物需要拿着、坐着、靠着或触摸某个物体时，模型不只要生成两个主体，还需要理解它们之间的接触关系。
+
+例如，我们让少女拿起一只白色马克杯。
+
+人物与道具交互的四项控制
+
+1. 接触位置： 手掌、手指接触杯柄的具体区域。
+2. 动作方向： 右手抬起，杯子保持直立。
+3. 物体尺度： 杯子大小符合成人手部握持比例。
+4. 支撑与遮挡： 手指正确环绕杯柄，杯子不悬浮或穿过手掌。
+
+![Anime girl in maid outfit sitting on counter with coffee - SeaArt AI](https://images.openai.com/static-rsc-4/52Qu-NgYwSsvHPA965_HmgISNHaPEaaTZjt67uMZjv3KjROBkAUqPnUKYccQt1GHqJg_Iv7NtAtAyzBpleFBXeRGsos4qQYq9ivhrkMH-qdV_TtJHyyRwsy7o8sjy9wb8dIo_VZV879XyXlBDHQ1G4MKrNuMkpHwzx33ilCGxis?purpose=inline)
+
+#### 示例提示词
+
+使用参考图中的蓝发女仆少女作为唯一主体。
+
+人物自然坐在木椅上，身体面向镜头，双脚平放地面。
+
+右手握住桌面上白色马克杯的杯柄，手指自然弯曲，形成真实的抓握姿态。
+
+左手轻轻放在桌面上。
+
+杯子保持直立，比例与人物手掌相协调。
+
+采用3:4竖版、中景、平视镜头，温暖室内自然光。
+
+必须保持角色的蓝发、蓝色眼睛、女仆服装及主要配饰。
+
+不得出现多余手指、悬浮物品、手掌穿透杯柄或不合理的手腕弯曲。
+
+### 12.9 第七部分：多人姿态与互动（Multi-person Interaction）
+
+当画面中出现两个人时，单独描述人物动作已经不够。
+
+还要明确：
+
+- 人物 A 与人物 B 的位置。
+- 谁是主要人物。
+- 两人面向哪里。
+- 人物之间是否接触。
+- 接触的是哪只手、哪个部位。
+
+#### 示例：双人牵手
+
+普通提示词：
+
+> 两个少女在草原上牵手。
+
+更精确的描述：
+
+> 两位成年女性站在草原上，人物 A 位于画面左侧，人物 B 位于右侧。人物 A 使用右手轻握人物 B 的左手，两人自然站立，手臂呈舒适的弯曲状态。两人的身体轮廓清晰分离，双手接触位置自然，不出现融合或重复的肢体。
+
+复杂多人场景中，最好给人物分配固定的标识，例如 Character A、Character B，避免模型混淆角色。
+
+### 12.10 第八部分：使用姿态参考图进行控制
+
+仅靠文字描述某些复杂动作时，容易出现误差。
+
+这时可以使用 Pose Reference（姿态参考图）。
+
+例如：
+
+姿态参考控制流程
+
+图片 A · 角色参考
+
+确定人物外貌与服装
+
+图片 B · 姿态参考
+
+确定身体姿势、手臂和腿部位置
+
+生成目标图片
+
+尽量保持 A 的角色身份 + B 的动作结构
+
+例如：
+
+> 图片 A 作为角色设计的唯一依据。图片 B 只作为人物姿态和肢体位置参考。最终图片保持图片 A 的蓝色长发、女仆服装及角色特征，但使用图片 B 中的坐姿、手臂位置和腿部摆放。不得复制图片 B 中人物的脸部、服装或背景。
+
+#### OpenPose 与 ControlNet 是什么？
+
+这两个名词值得了解，但它们并不属于 GPT Image 的通用内置控制参数。
+
+- OpenPose：一类人体关键点检测与姿态表示技术，可以表达头部、肩膀、手肘、手腕、髋部和膝盖等关键位置。
+- ControlNet：在部分扩散模型生态中，用姿态骨架、边缘图、深度图等条件辅助控制生成内容的方法。
+
+它们适合需要更明确几何约束的工作流。使用 GPT Image 时，可以通过上传姿态参考图进行自然语言引导，但不能据此认定其内部会使用 OpenPose 或 ControlNet，也不能保证逐关键点精确匹配。
+
+### 12.11 完整的姿态控制提示词模板
+
+## GPT Image · Pose & Gesture Prompt V1.0
+
+### 01. 主体（Subject）
+
+使用参考图中的人物作为唯一主体。
+
+保持人物主要外貌、发型、服装、配饰和视觉风格。
+
+### 02. 整体姿态（Body Pose）
+
+[站立 / 坐下 / 蹲下 / 跪姿 / 躺姿]
+
+### 03. 身体朝向（Body Orientation）
+
+身体面向：[正面 / 左侧 / 右侧 / 背面]
+
+躯干旋转：[具体描述]
+
+### 04. 四肢控制（Limb Position）
+
+- 左手：[位置、弯曲程度]
+- 右手：[位置、弯曲程度]
+- 左腿：[位置、承重情况]
+- 右腿：[位置、承重情况]
+
+### 05. 身体重心（Weight Balance）
+
+明确主要承重部位、支撑点与重心方向。
+
+### 06. 手势（Gesture）
+
+[挥手 / 指向 / 比心 / 握持 / 托腮]
+
+描述手掌方向与手指位置。
+
+### 07. 头部与视线（Head & Gaze）
+
+- 头部方向：[方向]
+- 头部倾斜：[角度或程度]
+- 视线目标：[相机 / 物体 / 远处]
+
+### 08. 互动关系（Interaction）
+
+如果涉及道具或其他人物，说明：
+
+- 人物与物体的相对位置
+- 接触位置
+- 支撑方式
+- 合理的遮挡关系
+
+### 09. 镜头与风格（Camera & Style）
+
+- 比例：3:4
+- 构图：人物居中
+- 景别：全身
+- 镜头：平视
+- 风格：保持参考图风格
+
+### 10. 约束条件（Constraints）
+
+P0：不改变人物核心身份和服装结构。
+
+P1：姿态与指定肢体关系尽量一致。
+
+P2：允许自然衣褶和发丝变化。
+
+禁止多余肢体、异常关节、悬浮物体及明显错误的人体支撑结构。
+
+### 11. 验收标准（Validation）
+
+- 整体动作正确
+- 头部和躯干方向正确
+- 双手与双脚位置正确
+- 人体比例与重心合理
+- 人物身份与服装保持一致
+- 人物与物体接触自然
+
+### 12.12 互动实验：构建人物姿态提示词
+
+选择身体姿态、手势和视线方向，自动组合提示词。
+
+整体姿态
+
+自然站立
+
+坐在木椅上
+
+自然蹲下
+
+身体侧向站立
+
+手部动作
+
+右手挥手，左手自然下垂
+
+双手在胸前比心
+
+左手托腮，右手自然放松
+
+双手自然垂放在身体两侧
+
+头部与视线
+
+正面看向镜头
+
+头部向左转并看向远方
+
+轻微低头，视线向下
+
+抬头看向上方
+
+身体重心
+
+双腿均衡承重
+
+主要由右腿承重
+
+主要由左腿承重
+
+身体由椅面与双脚支撑
+
+视觉风格
+
+动漫写实3D
+
+自动组合的姿态提示词
+
+使用参考图中的蓝发女仆少女作为唯一人物主体，保持蓝色长发、蓝色眼睛、白色女仆头饰、深蓝白色女仆服装与核心配饰。 【整体姿态】自然站立。 【双手动作】右手挥手，左手自然下垂。 【头部与视线】正面看向镜头。 【重心与支撑】双腿均衡承重。 【画面风格】日系动漫。 采用3:4竖版、平视、人物居中全身构图，确保手部、脚部完整可见。 【约束】保持角色主要设计一致，保证人体关节自然、动作具有合理支撑，避免多余肢体、不合理手指和异常扭曲。
+
+ 复制提示词
+
+有些组合需要进一步调整，例如坐姿不适合采用单腿站立承重。正式生成前应检查姿态、手势和重心之间是否存在冲突。
+
+### 12.13 第十二节博客配图规划
+
+建议为本节制作以下 8 张教学图片：
+
+| 编号  | 教学图片                   | 说明           |
+| ----- | -------------------------- | -------------- |
+| 12-01 | Pose、Gesture、Action 对比 | 理解三个概念   |
+| 12-02 | 站、坐、蹲、躺姿态         | 2×2 四宫格     |
+| 12-03 | 身体朝向与头部朝向         | 双栏对比       |
+| 12-04 | 挥手、比心、托腮、指向     | 2×2 四宫格     |
+| 12-05 | 双腿承重 vs 单腿承重       | 重心示意       |
+| 12-06 | 四种头部与视线方向         | 2×2 四宫格     |
+| 12-07 | 人物拿马克杯的正确接触关系 | 手部细节与标注 |
+| 12-08 | 角色图 + 姿态图 → 目标图   | 多图参考工作流 |
+
+我们可以继续使用同一个蓝发少女角色进行整套对比实验，尽量固定服装、脸部、画风、比例和背景。
+
+尤其推荐将 12-07 作为重要教学案例：人物握住马克杯时，重点检查手指与杯柄的关系、手腕角度、物体重力方向以及是否出现穿模。
+
+### 12.14 本节总结
+
+人物姿态控制的核心公式是：
+
+Pose & Gesture = 整体姿态 + 身体朝向 + 肢体位置 + 重心支撑 + 手势 + 头部视线 + 互动关系。
+
+通过这一节，我们不再只是写“一个少女站着”或“一个少女坐着”，而是能够详细描述身体各部位如何组织、如何支撑，以及与其他物体产生什么关系。
+
+需要记住三个关键原则：
+
+1. 描述身体结构，而不只是动作名称。
+2. 区分身体朝向、头部方向与相机位置。
+3. 复杂动作尽量使用姿态参考图，并对手部和接触关系进行单独验收。
+
+下一节将进入 第十三节：空间与透视控制（Spatial & Perspective），研究一点透视、两点透视、三点透视、消失点、前中后景、物体尺度、遮挡关系和空间深度。
+
+这将帮助我们进一步解决 AI 生图中的另一类核心问题：人物和物体本身看起来正确，但它们所处的空间却不真实。

@@ -1,0 +1,736 @@
+---
+title: "第十八节：视觉叙事与分镜控制（Visual Storytelling & Storyboard）"
+date: "2026-10-09"
+summary: >-
+  完整迁移第 18 节原文，用故事结构、角色、场景、镜头、动作、时间和情绪组织连续画面。
+status: published
+course: "gpt-image-2"
+tags:
+  - "AI生图"
+  - "视觉叙事"
+  - "分镜"
+lang: zh
+chapter: "第 18 节：视觉叙事与分镜控制"
+---
+## 第十八节：视觉叙事与分镜控制（Visual Storytelling & Storyboard）
+
+GPT 生图从 0 到 1 · 第 18 课 · 连续画面、角色一致性、镜头衔接、情绪递进与图文叙事
+
+在前十七节中，我们已经学习了如何精确控制一张图片：包括构图、风格、镜头、光影、人物动作、空间、环境以及产品展示。
+
+但实际创作中，我们经常需要的不只是一张图。
+
+例如：
+
+- 用 6 张图片讲述一位少女在内蒙古草原旅行的故事。
+- 用 4 张图片展示一辆汽车从驶入门店到完成轻改升级的过程。
+- 用 8 张小红书图文，向车主解释为什么需要贴隐形车衣。
+- 用一组连续分镜，展示一个产品从设计、制造到实际使用的过程。
+
+这时我们面临的新问题是：
+
+如何让多张独立生成的图片，看起来属于同一个故事、同一个世界、同一组人物？
+
+本节将从单张图片的 Prompt Engineering 进入连续画面的 Visual Storytelling（视觉叙事） 和 Storyboard（分镜设计）。
+
+### 18.1 首先区分：单张图片、系列图片与视觉叙事
+
+![Nature Portraits - ai prompts and filters of theme - Photify AI](https://images.openai.com/static-rsc-4/3uvoQZCiYBoGayTlFwQ7TqJIkCA_9Vitx5UzJnxypfIFrqqzELvlcqUDMCEN1-0tOnUKhD2Eb45LGiPIk2GmtD05HDHEbX5jMCxuWMqAtHZePKYv2qhqbrAbUdnZz5KdOlOyovkACNGLNsk28nF_xCyZ1PSs--Fs7QKQLtVsqkk?purpose=inline)
+
+单张图片
+
+一个视觉瞬间
+
+![path on hillside meadow in mountain](https://images.openai.com/static-rsc-4/fKJREUI7XgSHCCjDRogsfn-vaWVZ_yX5PGBG0jrWpcJxeNRDwnz0UswkSzlYkgTxR4eTaDug4RfgMOCS0_yrpX1qw1AYNJTWfmuIuJCWtYn5vUkWa2YTMow4k-7E9gMCT_FiLapc_ebFk9QZo6JcdfBLYnYMueGKT_y8zfFKF7Zm0Z9KSCmfAs8z8e3CIKM6?purpose=inline)
+
+系列图片
+
+同一主题的多张图片
+
+![Free AI Storyboard Generator | Plan Scenes with Vidu | Vidu AI](https://images.openai.com/static-rsc-4/q4H2ZPWJo7PlPdzLioAsdsT-eqOq3Bn7gje16uMIsQciBQl46lwPDUsbvAcRa-F66pw0XW9BeMH_YZkt2SoAUmyeDjEDznj0u2l5pj-TzEdSIH_HGJt2RpFWfRFQuxenZGBwQY9LcVK9cuv__LlxC9MYtv-6XBC2Z00UYDa2RHc?purpose=inline)
+
+视觉叙事
+
+存在事件发展和前后因果
+
+| 类型     | 主要特征                 | 示例                             |
+| -------- | ------------------------ | -------------------------------- |
+| 单图     | 独立表达一个画面主题     | 少女站在草原                     |
+| 系列图   | 多张图片共享主题或风格   | 草原四季写真                     |
+| 叙事分镜 | 多张画面按时间或逻辑发展 | 少女抵达草原、出发、探索、看日落 |
+
+重要区别：图片风格统一，并不代表它们具有叙事关系。
+
+只有当图片之间存在时间推进、动作变化、情绪递进、因果关系或信息论证时，才真正形成了视觉叙事。
+
+### 18.2 视觉叙事的八大控制维度
+
+<VisualStorytellingFramework />
+
+这八个维度会共同决定一组图片是否能够形成连贯的故事。
+
+### 18.3 第一部分：故事结构（Story Arc）
+
+我们先不要急着生成图片，而是确定故事到底要讲什么。
+
+对于入门课程，可以采用最简单的四阶段叙事：
+
+四阶段故事结构
+
+01
+
+开端
+
+Setup
+
+谁、在哪里
+
+02
+
+发展
+
+Development
+
+发生了什么
+
+03
+
+转折
+
+Turning Point
+
+出现变化
+
+04
+
+结果
+
+Resolution
+
+最终状态
+
+例如，我们要做一个《少女的草原之旅》系列：
+
+| 阶段 | 画面                     | 叙事作用       |
+| ---- | ------------------------ | -------------- |
+| 开端 | 少女刚来到草原           | 建立人物和环境 |
+| 发展 | 少女沿草原小路行走       | 展示探索过程   |
+| 转折 | 她登上山丘，看见辽阔风景 | 形成视觉高潮   |
+| 结果 | 黄昏时坐在草地上望向夕阳 | 形成情绪收束   |
+
+这个故事没有复杂的戏剧冲突，但依然具有明确的时间顺序与情绪变化。
+
+对于商业图文，四阶段结构也可以改成：
+
+用户问题 → 原因分析 → 解决方案 → 结果与证据。
+
+### 18.4 第二部分：角色一致性（Character Consistency）
+
+连续分镜最容易出现的问题就是人物漂移。
+
+例如，第一张是黑色长发，第三张变成棕发；第一张穿白色长裙，第四张衣服突然改变。
+
+我们需要建立一个 Character Bible（角色设定档案）。
+
+#### 角色设定卡
+
+![Nuruk Linen Dress  – SAERO COLLECTIVE │ 새로 콜렉티브](https://images.openai.com/static-rsc-4/6FiXawlmOE2kxG-E9alKfp-rV9aonJgqrvRMmcW4b0KsAMNLKb-2FID_lPqjbs_8pDPAoPT3JMEc4Z9HCHpQZS9chvHiwHxVjptAJop59psdy6UOyk-Qbaj-xhV_XcXoZmTlDG0JxjHgBNQNsqObs8aSSJAy17kLe14AC7TBfyo?purpose=inline)
+
+角色 A · 草原旅行者
+
+Character ID: GIRL-001
+
+成年东方女性，黑色长发，米白色长裙，自然妆容，写实人像摄影风格。
+
+统一角色参考
+
+| 核心身份 | 同一成年女性，主要面部特征稳定   |
+| -------- | -------------------------------- |
+| 发型     | 黑色长发，长度与发际线尽量一致   |
+| 服装     | 米白色长裙，款式和细节一致       |
+| 允许变化 | 动作、姿势、表情、镜头景别       |
+| 禁止变化 | 人物身份、主要发型、服装核心设计 |
+
+正式生图时，角色参考应该尽量来自同一张基准图或经过确认的角色参考集，而不能只是每次重复一段类似的人物描述。
+
+#### 角色保持提示词
+
+使用图片 A 作为本系列唯一人物身份参考。
+
+所有分镜必须保持同一位成年女性的主要面部特征、黑色长发、米白色长裙与核心配饰。
+
+允许人物动作、表情、镜头位置和景别根据分镜内容发生变化。
+
+不允许人物身份漂移、发色变化、服装款式突变或凭空增加配饰。
+
+每张画面延续同一角色设定，但不要求人物在所有分镜中保持相同姿势。
+
+### 18.5 第三部分：场景连续性（Scene Continuity）
+
+角色不变，还不足以保证故事连贯。
+
+因为同一个人在每张图中出现，但背景里的山丘、建筑、道具不断变化，依然会让读者感觉故事发生在不同地点。
+
+#### 场景连续性的四个锚点
+
+| 锚点     | 作用             | 草原案例                 |
+| -------- | ---------------- | ------------------------ |
+| 地理锚点 | 固定地点特征     | 同一片起伏草原           |
+| 地标锚点 | 帮助识别位置     | 远处一座独特的缓坡       |
+| 道具锚点 | 维持故事关联     | 同一只旅行背包           |
+| 环境锚点 | 维持真实世界状态 | 夏季草地、天气与时间变化 |
+
+![Top Hohhot Attractions, Things to Do in Hohhot, Hohhot Sightseeing](https://images.openai.com/static-rsc-4/FA34m-gKES1Xed2Jdi-WB_1AEicQqfVhrsazeXamI00zOiK-Ih6wMZZeRHIcRaS6fD1lj2IjC4ie1FWPXJdh8lb2PkdVbYZCuZTEpCT0TevPq_l-vuJoinjd3CqbgeJP_jAOHcAMAVshQNMCHIANksC2RBtmRjQqHzZCtabVMfU?purpose=inline)
+
+场景基准图
+
+确定草地、牧道与远处山丘位置
+
+![Country Farm Road,fields in the sunset sky](https://images.openai.com/static-rsc-4/YByVf1jRddoETPiejMhBodGnFLDmYpysqJ7Oswg0inMxbWS5OkRAb9LwD7dSbKtwVT58l_py3LxAQAl505xRBziZt7ykZXQvvKmuhD2dLlI2oXI6r9qqqG05rI4gadexiotIaamTOm2fl-zrbqipWbraT5eWlm20LKCUwic6J4oPHPWnHWf3nk3C78TYWRA1?purpose=inline)
+
+光线变化图
+
+允许日光变化，但核心地理元素应保持
+
+以上是场景示意，而不是严格的同一地点变化实验。
+
+#### 场景提示词
+
+> 本系列发生在同一片内蒙古夏季草原。维持草地起伏、牧道位置以及远处缓坡的主要空间关系。允许根据故事时间改变天空亮度、阴影长度和色温，但不任意新增大型山脉、湖泊或建筑。
+
+这里与第十四节的重要区别是：
+
+第十四节研究如何创建一个场景。
+
+第十八节研究如何让同一个场景在多张图片中连续存在。
+
+### 18.6 第四部分：镜头衔接（Shot Progression）
+
+这是分镜设计中最核心的知识点之一。
+
+一组图片如果全部使用相同的中景构图，虽然可能很统一，却容易显得平淡。
+
+电影和漫画经常交替使用不同景别，控制观众对信息的感知。
+
+![【我和草原有个约定摄影图片】若尔盖大草原人像摄影_东边云唯美意境_太平洋电脑网摄影部落](https://images.openai.com/static-rsc-4/Rze84ogBtGB1xYANi8rY8QNiAPOXfmuUelzRzKYWifSNl4l-ZxLHV6yBP6Cqrhg5UFkMZVHHnqY_8jFTRYnr30GB9LDmauzGgcEOgucg1r62r7NzaefDVL23IV58elH4yMsxIhc4qa1Z_MD8-6aYGT3GOgTiA3V0mDM_XuzpX3E?purpose=inline)
+
+01 · 远景（Wide Shot）
+
+建立场景、展示环境规模
+
+![Woman in white dress walking in the mountain](https://images.openai.com/static-rsc-4/vE4mdeGdlw7fPxDktQjCsq9HCYIcq6_vE-eDpNUlEcuAJEo2Htc6K6agKzbgdnOTe8k6XnwzmFIFgK7cakxUqW5gHQSv52omstuCLmEtoNO_84xXzIQ7FBgoV6qqbOodTXGNfdkQsdBKf8ASbdixmFtXn34kJu4vXYW1sFgSOy2b9221Y3im2Y2WtGqM2J5U?purpose=inline)
+
+02 · 全景（Full Shot）
+
+展示人物姿态与环境关系
+
+![Create Cinematic Videos with Seedance 2.0 Free | Blog Picasso IA](https://images.openai.com/static-rsc-4/9SETNHxBoT8_qS45ZGPxJdz_YSAh12OoxT_PtHrzfKtfocJbg3tTdqQwkSKUEACBZTjV99ijppoE9DzZGmn5hvSbn8TzP9cm0ZGQk0j7bPzBMMiPjWlr7enQZEIJXh_7mDJrBGVXj-Ct6TTYdkQ4uaPITH85Oc0alQwuchdmNRc?purpose=inline)
+
+03 · 中景（Medium Shot）
+
+关注动作、互动和人物情绪
+
+![Done Ultimate Root Retouch Kit (5N Twlight - Darkest Brown) - Adore Beauty](https://images.openai.com/static-rsc-4/TDOjHBgGVEv2t4WflNNjkDhNbSF50Qr3dDZGpxzj3EtpJmSLmoEpF73boCO92CwAgyI0ljtA3PA50ijsQNoAbsukkDvf70Oqm4qyDcvClbtylCzADLw6V4IB_Qc_yLkJ9xHTd78JYxoKbpnAquBAtk1Xu6Mj6mhTlkMGbKTYh20?purpose=inline)
+
+04 · 特写（Close-up）
+
+强调面部反应和细节
+
+#### 推荐的镜头衔接逻辑
+
+可以从远景建立环境，然后进入中景交代动作，再进入特写表达情绪，最后拉远完成故事收束。
+
+例如：
+
+远景
+
+中景
+
+特写
+
+远景
+
+交代环境 → 展示事件 → 表达情绪 → 完成收束
+
+这不是唯一的正确顺序。镜头应该服务于当前故事需要传达的信息，而不是机械执行固定的景别排列。
+
+### 18.7 第五部分：动作连续性（Action Continuity）
+
+连续动作的控制比单张姿态更复杂。
+
+例如：
+
+一位少女先拿起马克杯，再将杯子靠近嘴边，最后放回桌面。
+
+我们需要明确每张图对应的动作阶段。
+
+01
+
+拿起
+
+右手握住杯柄
+
+02
+
+靠近
+
+右手抬至嘴边
+
+03
+
+放下
+
+杯子回到桌面
+
+连续动作需要控制：
+
+- 同一只手执行同一个动作。
+- 道具不突然改变形状或位置。
+- 动作阶段具有合理的先后顺序。
+- 人物的身体朝向与场景位置不无故跳变。
+- 相邻画面之间的动作关系能够被读者理解。
+
+#### 动作连续性提示词
+
+使用同一位人物、同一张桌子和同一只白色马克杯生成三张连续分镜。
+
+分镜一：人物右手刚刚握住桌面上的杯柄。
+
+分镜二：人物右手将杯子抬至嘴边，杯身保持自然直立。
+
+分镜三：人物将杯子重新放在桌面原来的位置。
+
+三张图保持人物身份、服装、桌面布局、杯子尺寸与背景一致。
+
+人物始终使用右手操作杯子。
+
+每张图只展示一个明确的动作阶段，不在同一张图中叠加多个时间状态。
+
+手部和杯柄的接触自然，不出现多余手指、物体穿透或杯子形状变化。
+
+### 18.8 第六部分：时间变化与情绪递进
+
+故事往往伴随着时间变化。
+
+例如一组草原故事可以从清晨开始，在黄昏结束。
+
+![Beautiful grassland sunrise](https://images.openai.com/static-rsc-4/gCtPXIKRflDs8J2odvcL3PFDvEQGrzSAMaRPgxgdxoMrQ2HJ0chBM-XGMxFPo12TuSVBZf7jZjmO_H_NTgwna6YTNz44kcDB4VUe6XPtiRIZ9xrWK-joPjlEeEFowVjmvER257ZV9LVC3kXnlndrc6gSHBYMVaIAnYs8TYRnMkGteUfqk1Y3CT68dkwteWil?purpose=inline)
+
+清晨
+
+期待、安静、开始
+
+![Sun shining green meadow](https://images.openai.com/static-rsc-4/Uz3TRGAXKKyFC5419x1jubfMNFsx2K1IThqMviBEUpe3yaoOkV12W9W22KCX_BiDkkH86MMa95Z4x3sTHA1Wqby6BJbxtDIerYXbAgSNyY_NKzWpqO4Qs9SjIwuDUPU1NQZzfG4jZTtkhhhfPGAh-3s6u8DXhZHmKBGuTi_eLxG4IFNW9UonCWBVBksBazeu?purpose=inline)
+
+午后
+
+探索、活力、发展
+
+![Chilechuan Grassland—Step into the scenery from elementary school textbooks | Trip.com Hohhot](https://images.openai.com/static-rsc-4/8y3mddQxpA42J-B-AoxMUZhI2cfbCsWvzkyXrhWskcFW8etkQo9FKTX7AocqJEZMqwATmwNHgYtoJeldzfli7Mxb3slJmmty0h-Q3Ha5yeNUof743TowJwTTzAc502U82nqHaIkDyFTHk_dL1BsbT8sT-lZXWJk4pqCPJOci7sA?purpose=inline)
+
+黄昏
+
+释然、回忆、结束
+
+时间变化应该影响真实环境：
+
+| 时间变化   | 可能伴随的视觉变化                 |
+| ---------- | ---------------------------------- |
+| 清晨至正午 | 太阳高度变化、阴影长度变化         |
+| 正午至黄昏 | 阳光角度降低、暖色光照更常见       |
+| 黄昏至夜晚 | 环境亮度下降、人工照明可能变得重要 |
+| 天气变化   | 云层、地面干湿与能见度发生相应变化 |
+
+不能只改变天空颜色，却让太阳方向、地面阴影与所有物体高光完全不变。
+
+#### 情绪递进与色彩
+
+例如：
+
+期待 → 好奇 → 惊喜 → 宁静
+
+可以通过表情、身体姿态、镜头景别、环境规模和光线共同表达，而不是单独依靠不同颜色。
+
+### 18.9 第七部分：分镜中的方向一致性（Screen Direction）
+
+这是专业视觉叙事中一个容易被忽略的问题。
+
+例如，人物在上一张图中向右行走，下一张图突然向左行走，观众可能以为她已经转身返回。
+
+如果故事实际上仍在朝同一个方向前进，我们就需要维持方向一致性。
+
+运动方向连续性示意
+
+向右 → 向右
+
+ 方向连续
+
+向右 → 向左
+
+ 可能造成方向混淆
+
+这里涉及电影中的 180 度轴线原则（180-degree Rule）。
+
+它的基本思想是：在描述人物互动或运动时，可以在空间中建立一条动作轴线，并尽量让相机停留在轴线同一侧，以保持左右方位关系稳定。
+
+但 180 度轴线原则并非不能打破。只要通过过渡镜头、人物运动或明确的空间交代，越轴也可以成为合理的叙事选择。
+
+对于多张 AI 生图，建议在分镜表里记录每张图片的运动方向和相机方位。
+
+### 18.10 完整案例一：六张草原旅行分镜
+
+这是一个适合直接放进博客的完整教学案例。
+
+![Photos - Beautiful Chinese Inner Mongolia province, vast land over 3 times of Japan | PKDefense](https://images.openai.com/static-rsc-4/U89S8J8-aQ05kbEyGgUO-2LcO3qS5yhf8fCuWGnBbW9F1ynYKm6mjp52YKmHqPxUr1JvEsXbll1JtFkcJLNmaX7MhhrL8yOz4ASH4rSLwUwGrNKdGrfHaSVnh2pxLA0fgCzkUScpdXaQkfJ8VEyQjX_ynev7hDFTmnD55jmOcSw?purpose=inline)
+
+镜头 01 · 初到草原
+
+远景 · 清晨 · 建立地点
+
+![Hồ Sơn Thọ - Thảo nguyên xanh ngát giữa lòng cố đô](https://images.openai.com/static-rsc-4/DcHgDfnshlNb_E6if2bGEn13Q9FnNYrl5UiIp5oMJ6PnMfhKrMIxJqdEKk6EGwmgosD55HcFvPo0-E6mp3rDgP7ybnkFNC1Ncsep0DzIz5RSgV2vPnmk1m28_Ty-iWBVbsig_bFq03_LhWi2hTV2ciay0HZ37W1edCuzIao6bMA?purpose=inline)
+
+镜头 02 · 开始探索
+
+全景 · 行走 · 动作开始
+
+![Female hand in tall blooming grass in summer meadow](https://images.openai.com/static-rsc-4/8NuY1HITL2EAkYZP-PXTmwOpkby8FmMvmdu3DqK23jAtf5w7ikzbYx3JprhB7Eej9pXaQn7ZoTO3fT8XbeeoS2Y1QUzhUa8QVpkE_zOm2n4idec-uw1FN84d9XVQ7ScpqgHQyv2JfM-7WfQQBAp8Bd7GeaS4vBFQNOLHy9F6O6eVk9OHq_eY4OK8PlQtSM7p?purpose=inline)
+
+镜头 03 · 触碰草叶
+
+局部特写 · 增加感官细节
+
+![Hulunbuir Family 6-Day Trip Guide | Pure Dry Goods, No Pitfalls | Trip.com Hulunbuir](https://images.openai.com/static-rsc-4/n1-V_r8E7lLQlKldUXnLy2iasRb_OYuYL_CxvbuDMwkAm9skxag2sfvbxxW38xKa9rSratfNTqfczhfKAIA8N6hTD6-rDP2-bCEOo6ExhjQub4NaYKPcgrzGaYZijdrLnpf--VBRXU1IoalfUjFkr9kVS9ir5zifHxW__KrEFnc?purpose=inline)
+
+镜头 04 · 发现远方
+
+中景 · 视线引导 · 情绪上升
+
+![Nancy Nguyen — Bio Sites](https://images.openai.com/static-rsc-4/nKy2_-5cfhHnNfA4tBF4cUyaPCT1olhm0a8opzj7U9vTJypNCKeGOdN77x70wZOJckCe30K-LUXm9wQB1L0AahJMj36xLT0ZSnFrF0RByFGL6YcwInhmsDSVscluN8sjza2YAmWyFM0jok3BxzbMiFCUbDVjSCc_m7BPVUDIB6A?purpose=inline)
+
+镜头 05 · 自然微笑
+
+面部特写 · 情绪高潮
+
+![Woman Sitting in a Field with Sunset in the Background](https://images.openai.com/static-rsc-4/eqhyTy-_ghyeLwYiQq-jIx1CBmnbfiiMXqaoSENKPVxs1AP3-__fJ7dYMhMDG1j5fm4pot3fsz8s0g4pMq42wX9KzTYMJB_cIof1JxyegJRe6vtlHepu4oxx_W31W9NSEISyxCOyq3gXVHsRa9sNC894Ld3v8QYKJmy8gWffCHDxGBsCo3UZ3cycAVA98ocj?purpose=inline)
+
+镜头 06 · 日落收束
+
+远景 · 黄昏 · 完成故事
+
+六张画面为叙事结构示意，不保证人物与地理细节完全一致。正式制作应使用统一的人物基准图和场景参考图逐张生成。
+
+#### 六镜头分镜表（Storyboard Sheet）
+
+| 镜头 | 景别 | 动作       | 时间 | 主要作用 |
+| ---- | ---- | ---------- | ---- | -------- |
+| 01   | 远景 | 抵达草原   | 清晨 | 交代环境 |
+| 02   | 全景 | 沿小路行走 | 上午 | 开始行动 |
+| 03   | 特写 | 触摸草叶   | 上午 | 感官细节 |
+| 04   | 中景 | 眺望远方   | 下午 | 情绪变化 |
+| 05   | 特写 | 微笑       | 傍晚 | 情绪高潮 |
+| 06   | 远景 | 坐下看日落 | 黄昏 | 故事收束 |
+
+这个分镜表不仅适合博客，也可以成为后续视频生成的基础，但本节仍聚焦静态图片。
+
+### 18.11 完整案例二：汽车轻改的视觉叙事
+
+这次我们从人物旅行转向商业故事。
+
+假设要制作一组新能源汽车电动踏板升级图文。
+
+可以采用：
+
+用户痛点 → 产品方案 → 施工过程 → 安装结果 → 使用体验 → 行动引导。
+
+汽车产品六镜头叙事结构
+
+1. 用户场景（Problem）
+
+   车主准备上下较高车身的 SUV，展示使用场景，不夸张制造安全风险。
+
+2. 展示产品（Product）
+
+   电动踏板实物特写，重点呈现面板与防滑结构。
+
+3. 适配确认（Fitment）
+
+   展示车型与产品适配信息，使用经过确认的数据。
+
+4. 安装施工（Installation）
+
+   展示真实施工流程；若素材为生成图，应明确标注示意。
+
+5. 使用效果（Result）
+
+   踏板伸出，车主上下车，展示实际使用价值。
+
+6. 品牌收束（CTA）
+
+   车型、产品与品牌信息，以精确排版形式承接咨询。
+
+这一套图文与普通电商主图的差别在于：
+
+单张商品图展示“产品是什么”。
+
+而连续叙事要说明“用户为什么需要它、它如何解决问题，以及用户如何判断它是否适合自己”。
+
+对于真实施工和产品性能，优先使用可核验的现场照片与资料；AI 生成图更适合承担场景示意、视觉表达和概念展示。
+
+### 18.12 第八部分：博客和小红书图文如何转换为分镜？
+
+这一部分是视觉叙事非常实用的应用。
+
+例如，你之前研究过“窗膜的前世今生”主题，可以把一篇长文章拆分为视觉叙事。
+
+| 页码 | 内容任务   | 建议画面                   |
+| ---- | ---------- | -------------------------- |
+| 01   | 提出问题   | 汽车暴晒、车内热感的场景   |
+| 02   | 历史背景   | 早期汽车玻璃与遮阳方式     |
+| 03   | 技术演进   | 不同窗膜技术的历史阶段     |
+| 04   | 工作原理   | 太阳辐射与玻璃膜层示意     |
+| 05   | 用户价值   | 隔热、可见光透过和使用体验 |
+| 06   | 选择方法   | 关键参数比较信息图         |
+| 07   | 施工流程   | 清洁、贴膜、赶水、收边     |
+| 08   | 总结与行动 | 常见误区、适配咨询入口     |
+
+这类知识型图文的叙事不一定依赖人物连续动作，而是通过信息层次与论证顺序推进。
+
+可以使用：
+
+问题 → 背景 → 原理 → 比较 → 实例 → 结论。
+
+这也是为什么视觉叙事不能简单理解为电影分镜。
+
+### 18.13 分镜一致性的三层控制模型
+
+为了避免连续生成时出现人物和场景漂移，我们建议把整个项目的控制要求分成三层。
+
+Global Constants · 全局常量
+
+角色身份、服装、主要场景、画风、画幅、项目视觉规范
+
+Scene Variables · 镜头变量
+
+景别、相机方位、人物动作、道具状态、时间、情绪
+
+Continuity Constraints · 连续性约束
+
+前后镜头之间的动作、位置、方向、道具与时间必须衔接
+
+例如，六张草原分镜可以共享：
+
+```
+CHARACTER_ID = GIRL-001
+OUTFIT = Ivory long dress
+LOCATION = Inner Mongolia grassland
+STYLE = Photorealistic cinematic photography
+ASPECT_RATIO = 16:9
+```
+
+然后每张图具有自己的参数：
+
+```
+SHOT_01:
+  ShotSize = Wide
+  Action = Arriving
+  Time = Morning
+  Mood = Anticipation
+
+SHOT_02:
+  ShotSize = Full
+  Action = Walking
+  Time = Morning
+  Mood = Curiosity
+```
+
+这样就把第八节的常量、变量管理引入到连续叙事中。
+
+### 18.14 通用分镜提示词模板
+
+## GPT Image · Visual Storytelling & Storyboard Prompt V1.0
+
+### 01. 项目目标（Story Objective）
+
+故事主题：[主题]
+
+目标受众：[受众]
+
+图片数量：[数量]
+
+最终形式：[博客配图 / 小红书图文 / 漫画 / 品牌故事]
+
+### 02. 故事结构（Story Arc）
+
+开端：[内容]
+
+发展：[内容]
+
+转折：[内容]
+
+结果：[内容]
+
+### 03. 全局主体（Character / Product）
+
+参考图 A：[主要人物或产品]
+
+固定身份与结构：[描述]
+
+禁止改变：[内容]
+
+### 04. 场景设定（Environment Bible）
+
+参考图 B：[环境]
+
+固定地点：[地点]
+
+重要地标：[地标]
+
+可随时间变化：[天气、光线、环境状态]
+
+### 05. 视觉规范（Visual Style）
+
+画幅：[比例]
+
+风格：[写实 / 动漫 / 电影 / 其他]
+
+统一色彩：[配色]
+
+统一材质与光照规律：[说明]
+
+### 06. 分镜信息（Shot Specification）
+
+镜头编号：[SHOT_ID]
+
+当前画面任务：[叙事目的]
+
+景别：[远景 / 全景 / 中景 / 近景 / 特写]
+
+相机角度：[角度]
+
+人物动作：[动作]
+
+视线方向：[方向]
+
+道具状态：[状态]
+
+时间：[时间]
+
+情绪：[情绪]
+
+### 07. 连续性控制（Continuity）
+
+前一个镜头：[SHOT_ID]
+
+需要保持的内容：[角色、位置、道具等]
+
+允许变化的内容：[动作、视角、时间等]
+
+屏幕运动方向：[左 / 右 / 前 / 后]
+
+### 08. 约束条件（Constraints）
+
+P0：人物身份、产品结构和关键故事事实正确。
+
+P1：镜头、动作、场景、时间与上下文连贯。
+
+P2：允许自然调整环境氛围与非关键细节。
+
+不添加与故事无关的角色和物件。
+
+### 09. 验收（Validation）
+
+检查：
+
+- 角色身份一致
+- 场景与地标连续
+- 动作和运动方向合理
+- 时间变化自洽
+- 道具状态正确
+- 镜头完成叙事任务
+- 全部图片风格协调
+
+### 18.15 交互练习：分镜脚本生成器
+
+我们可以先选择故事类型，再查看不同镜头的任务描述和完整提示词。
+
+故事类型
+
+草原旅行
+
+汽车产品故事
+
+选择分镜
+
+01初到草原
+
+02开始探索
+
+03触摸草叶
+
+04发现风景
+
+05自然微笑
+
+06日落收束
+
+SHOT 01 · 初到草原
+
+远景
+
+| 时间      | 清晨                   |
+| --------- | ---------------------- |
+| 内容      | 站在草原入口，望向远方 |
+| 情绪/任务 | 期待                   |
+
+输出比例
+
+16:93:41:1
+
+当前镜头完整提示词
+
+【项目全局设定】 主体：同一位黑色长发、穿米白色长裙的成年女性。 场景：同一片内蒙古夏季草原。 风格：统一写实商业摄影，真实材质，自然空间关系。 比例：16:9。 【当前分镜 01】 镜头主题：初到草原。 景别：远景。 时间或阶段：清晨。 动作或内容：站在草原入口，望向远方。 情绪或目的：期待。 【连续性要求】 保持同一人物或产品的核心特征，维持整体视觉风格、场景关系及可识别的参考元素。只根据当前镜头修改景别、动作、时间和情绪。与上一镜头存在合理衔接，不随意改变服装、产品结构、地标或道具状态。 【验收】 检查主体一致性、空间与动作逻辑、镜头景别、叙事目的和时间状态。
+
+ 复制提示词
+
+生成连续分镜时，最好同时上传统一的角色基准图、环境参考图，以及必要的前一镜头结果。文字模板只是控制的一部分，不能单独保证跨图精确一致。
+
+### 18.16 第十八节博客教学配图规划
+
+本节建议继续沿用之前的视觉规范：白色背景、深蓝色标题、科技蓝模块、红色辅助线与结构化标注。
+
+| 编号  | 教学配图                         | 推荐布局           |
+| ----- | -------------------------------- | ------------------ |
+| 18-01 | 单图、系列图、叙事分镜对比       | 三栏对比           |
+| 18-02 | 四阶段故事结构                   | 横向四格           |
+| 18-03 | 角色与场景一致性控制             | 原图＋多镜头对比   |
+| 18-04 | 远景、全景、中景、特写           | 2×2 四宫格         |
+| 18-05 | 人物拿起、举起、放下马克杯       | 横向三格           |
+| 18-06 | 清晨、午后、黄昏的时间与情绪递进 | 横向三格           |
+| 18-07 | 正确与错误的运动方向连续性       | 左右对比＋方向箭头 |
+| 18-08 | 六镜头草原旅行故事板             | 3×2 六宫格         |
+
+其中建议重点制作 18-03、18-05、18-07、18-08。
+
+18-03 用于说明人物和场景参考如何保持一致；18-05 用于展示同一物体在连续动作中的位置变化；18-07 讲解屏幕运动方向；18-08 则把本节所有知识组合成完整视觉故事板。
+
+正式生成 18-08 时，建议先确定人物和草原的基准参考，再分别生成六个镜头，而不是只用一个六宫格提示词让 AI 自由发挥。这样更容易逐格验收人物、服装、景别和时间变化。
+
+### 18.17 本节总结
+
+视觉叙事的核心公式：
+
+连续视觉叙事 = 故事结构 + 角色一致性 + 场景连续性 + 镜头衔接 + 动作逻辑 + 情绪递进 + 时间变化 + 视觉规范。
+
+通过第十八节，我们应该掌握三个重要原则。
+
+第一，分镜先于生图。 在生成之前，先确定每张图片要传达什么信息，以及它与上一张图有什么关系。
+
+第二，一致性不代表所有镜头都必须相同。 人物和关键场景要稳定，但镜头、动作、情绪和时间应该根据故事发展产生变化。
+
+第三，连续图像要作为整体进行验收。 单张图片看起来很优秀，也可能因为与前后镜头冲突而不适合整组故事。
+
+下一节将进入 第十九节：局部重绘与高级编辑（Inpainting & Advanced Editing）。
+
+我们会研究如何通过遮罩、选区、扩图、对象移除、背景替换与多轮修复，控制图片中的指定区域。重点是解决一个非常实际的问题：
+
+当一张图片 90% 已经满意时，如何只修改剩下的 10%，而不是每次推倒重来

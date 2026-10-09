@@ -1,0 +1,491 @@
+---
+title: "第七节：材质与细节控制（Material & Texture）——让 AI 图片摆脱塑料感，呈现真实的物理质感"
+date: "2026-10-09"
+summary: >-
+  完整迁移第 7 节原文，学习皮肤、头发、服装与纺织品等材质的真实纹理表达。
+status: published
+course: "gpt-image-2"
+tags:
+  - "AI生图"
+  - "材质"
+  - "纹理"
+lang: zh
+chapter: "第 7 节：材质与细节控制"
+---
+## 第七节：材质与细节控制（Material & Texture）——让 AI 图片摆脱塑料感，呈现真实的物理质感
+
+GPT 生图从 0 到 1 · 第 07 课 · 材质、纹理、反射与细节控制
+
+前六节，我们已经学习了如何通过图片比例、构图、视觉风格、镜头和光影控制画面的整体效果。
+
+这一节，我们开始研究更细微、也更容易暴露 AI 生成痕迹的问题：
+
+为什么有些 AI 图片乍看很真实，但仔细观察皮肤、头发、衣服、金属或玻璃时，却会感觉像塑料、蜡像或游戏模型？
+
+原因之一，是图片中的材质特征没有得到合理表达。
+
+例如：
+
+- 真实皮肤并不是完全光滑的，它具有毛孔、细微纹理、自然肤色变化和次表面散射。
+- 真实头发不是一块完整的光滑曲面，而是由大量发丝与发束形成的层次结构。
+- 棉布和丝绸不会以完全相同的方式反射光线。
+- 金属、玻璃和木材的反射、透光、粗糙度及表面纹理差异显著。
+
+这一节的核心目标，是学会通过提示词描述材质的物理属性与视觉表现，让生成结果更符合现实世界。
+
+### 7.1 什么是材质与纹理？
+
+我们先区分三个容易混淆的概念。
+
+| 概念     | 英文               | 核心含义                                     |
+| -------- | ------------------ | -------------------------------------------- |
+| 材质     | Material           | 物体由什么材料构成，以及它如何响应光线       |
+| 纹理     | Texture            | 物体表面的颜色、图案、细微起伏等细节         |
+| 表面表现 | Surface Appearance | 材质、纹理、光照及观察角度共同形成的视觉效果 |
+
+例如，一只不锈钢水杯：
+
+材质是不锈钢，纹理可能是拉丝纹，最终的表面表现则受到粗糙度、反射环境和光线方向共同影响。
+
+MATERIAL CONTROL · 六大控制参数
+
+01 · Material Type
+
+材质类型
+
+皮肤、金属、玻璃、布料
+
+02 · Roughness
+
+表面粗糙度
+
+光滑、粗糙、磨砂
+
+03 · Reflectivity
+
+反射特性
+
+镜面反射、漫反射
+
+04 · Transmission
+
+透光特性
+
+透明、半透明、不透明
+
+05 · Microtexture
+
+微观纹理
+
+毛孔、发丝、木纹、纤维
+
+06 · Imperfections
+
+瑕疵与真实感
+
+自然磨损、细微不规则性
+
+这里需要注意：在 GPT 生图中，这些是帮助模型理解视觉效果的语义控制维度，不是可以像三维软件一样精确调整的物理材质参数。
+
+### 7.2 第一部分：皮肤材质（Skin Texture）
+
+人像生图最容易出现的材质问题之一，就是过度光滑。
+
+![A hyper-realistic close-up portrait of an East Asian 45... | Legnext](https://images.openai.com/static-rsc-4/q05SJ8zxF-Yae4MEp22Mn7gbGEGu2L25c72qGYpnthqWVIKrMO25oLth92YGdpa6q6MGm1gF8_otkHNttt3QkprvQQV3owP9JUNgvzp3w-foEjqGgTQElpmP7rx1ori7w1QhGhjIJ4Mo39TlqDdqumA2PcExVQAVdLYO_Dx7k6E?purpose=inline)
+
+过度磨皮 / 塑料感
+
+纹理不足，皮肤表面均匀得不自然，像蜡像或塑料模型
+
+![Арьсны нүхжилт байх ёстой, гэхдээ нүдэнд ил харагдахуйцаар биш... | Beauty Secrets](https://images.openai.com/static-rsc-4/QRe6hzuNsapi8--uzN_MV81t2VXbhlhQtl7s9-Xhqg5VeiEGXTyA2hNaVI62lJQ9b5jclcFKOxcvXqVu15Ny6ZbCoStli8Dl92WKabjp_fFg6_s6D3js789OiNp0M2nMKZ2aUTxic728yxlpW_g3Hf8-YgU86nqya5ZG1A255NU?purpose=inline)
+
+真实皮肤质感
+
+保留细微毛孔、柔和肤色变化、自然高光与真实皮肤层次
+
+#### 真实皮肤的四个重要特征
+
+① 微观纹理（Microtexture）
+
+正常皮肤具有毛孔、细纹等细微纹理，但也不是所有部位都应该有相同的细节密度。
+
+② 次表面散射（Subsurface Scattering，SSS）
+
+部分光线进入皮肤浅层后发生散射，再从表面离开，使皮肤呈现柔和而非生硬的透光感。
+
+③ 高光变化（Specular Variation）
+
+额头、鼻尖、脸颊等区域的皮脂与表面微结构不同，高光表现也可能不同。
+
+④ 肤色变化（Color Variation）
+
+真实脸部通常具有细微的冷暖与明度差异，而不是单一均匀肤色。
+
+#### 提示词对比
+
+基础提示词
+
+生成一张皮肤白皙、非常漂亮、完美无瑕的少女写真。
+
+材质精细控制
+
+真实人像摄影，保留自然毛孔和细微皮肤纹理。面部肤色有自然过渡，鼻尖和脸颊具有符合光照的柔和高光。避免过度磨皮、塑料皮肤、蜡像质感和不合理的锐化。
+
+重要原则：真实皮肤不等于强行添加大量毛孔、雀斑或瑕疵。 材质细节需要与镜头距离、分辨率、光线方向保持一致。
+
+### 7.3 第二部分：头发材质（Hair & Fibers）
+
+头发也是 AI 生图的重要细节难点。
+
+![Can Black People Have Straight Hair? Genetics Explained](https://images.openai.com/static-rsc-4/aLupF0DhVKj4mNCTQuHBWdd0jrZ8IIEzVR4v_-mC-QXSuX2NyDk70_Pk_FBcQJ01QsWBGqO0FibDvRWkChmX9MUtqQl748v7L-vSvdFebxEb9HaT0I3oPEgCeU5CX8pVvqiz3D38OTXKzW_i-Mpel1TVQWs9yXPimBdRtuXfiQ4?purpose=inline)
+
+真实发丝（Individual Hair Strands）
+
+发束之间存在自然分离，局部可以看到细小发丝和碎发，而不是完全黏合的形状。
+
+![Mastering Hairstyles with Midjourney: Unleashing Creative Hair Control part 4 | by Libée Lune | Medium](https://images.openai.com/static-rsc-4/XrVSHjZF0GJK07oX_t_GlSsmnjOpa-U16OBJmskK4ynFewTrlnwikiMoCxENTF8UNaEZ9XK-0sj8nsndnfHZ6rTUmlc-VeBtHp7Yt2p0BT2aYeUlLSh4KZDuSZzD8sOl3vu5G8e2oJYAdSVhBGECM0U0SuHpRtixO89dDAKLECw?purpose=inline)
+
+头发层次（Hair Layering）
+
+不同发束具有前后遮挡、卷曲程度和光照差异，形成自然体积。
+
+![Serene Golden Hour Beach Portrait of a Woman - ChatbotsPlace](https://images.openai.com/static-rsc-4/PRSsHcg6_w9KfJeEkgc_LhRGvtNHHsfv9k9_ZfR4fnBak2HOynV14bbSuusANds1QngOuZfsIzXlnQ10QChzziIh_CCc9vLBmXGpATI97OkgabldtkA-zBIVl_n1kkFgBaA_i-1WOZlstJd2iv4UiWYsMzKZcMQ3MzyehANJZTM?purpose=inline)
+
+发丝高光（Anisotropic Highlights）
+
+头发纤维具有方向性反射。高光通常顺着发束形成带状变化，而不只是随机的白点。
+
+#### 常见错误
+
+不推荐只写：
+
+> 超级细腻的头发，头发有非常多细节。
+
+更推荐：
+
+> 自然长发具有清晰的发束层次，发丝沿真实生长方向排列，局部存在少量自然碎发。高光顺着发丝方向分布，明暗过渡柔和，不出现塑料块状头发或不规则融合的发束。
+
+### 7.4 第三部分：服装与纺织材质（Fabric & Textiles）
+
+同一件服装，选择不同材质，会直接改变它的褶皱形态、反光效果和视觉重量。
+
+![コットンリネンビエラ（白無地・綿麻） - 生地と型紙の通販サイト：nunocoto fabric](https://images.openai.com/static-rsc-4/H0z1CUaXC4z69lu77SOE7mJRNz1n_i8S66fyuKnM9HaWGG6vcjMwvV_oNQ1NNyZAauK6d8IGRNLRuu7qaKrEKqZf3B3Nq42uwXIUtsvEc-niuPSHJTakZtjtWXd2OHH8bNG7LgYjni_GlH1qVSSji3ZpolDpkHnng1pjvX8lBeI?purpose=inline)
+
+棉与亚麻
+
+哑光、纤维可见、褶皱较自然
+
+![100% SILK DUTCHESS SATIN IVORY 41 momme 54" wide [15339] – Puresilks.us](https://images.openai.com/static-rsc-4/qFtBlh0UnFlCk4JKx8WzjeI9LIrGcwk-27LrPeHaabfJ608EynvGr6GnDmIXziCWrDBQIjKMWUp-XENTG-f6QBWFfM3JPEDd7Jn53Wavut4kwD5abrNRIx6AKLf9k1-s3E6Po8_U4M6ryBTjnIMshP6vnpqYWCjfgGat-uellOs?purpose=inline)
+
+丝绸与缎面
+
+柔软垂坠、具有方向性光泽
+
+![Old vintage genuine soft black leather texture background, top layer with pores and scratches, macro, close-up](https://images.openai.com/static-rsc-4/oLdV3BVGkLV-NGZG0nXzzAYsNwGyla10lZRKPZCMzNNb56Om02mQOvfnvHtLZQ_k3XN8DrhvFZjUfGSJ-ZOZ439aUHpRNWoo81PnUJSAatvNLiH5Vcs44zatHE32t-ffQmvd9K42z9cBAdO4HVPr0mA2uZFkSB8eKiQ3_FrR56NOZeHMN0MCsjJ5wSXjaWw1?purpose=inline)
+
+皮革
+
+表面纹理、柔和反光、折痕与厚度
+
+![Vải Ren Là Gì? Đặc Tính & Phân Loại Các Chất Liệu Ren](https://images.openai.com/static-rsc-4/vTiGKyr_x3128Sxpom1tNLAW3JgQR1w1omHxrgHJJPnTKmGLCp_d_tyyrB4UP0h7LMrJHyMOAJ6ghxb8oih0VojR401DZkXPhIjyP-Jamg-YEQDg7GufA-uf0zS-kE9IPIcrYeqUuZ6ND7Q0zkbj5hWE4oN7TDZzGf-8YEHrMVM?purpose=inline)
+
+蕾丝与刺绣
+
+细小编织结构、镂空与层次
+
+#### 如何在人物提示词中精确表达服装材质？
+
+假设我们让之前的蓝发女仆角色转化为写实摄影。
+
+不推荐：
+
+> 一件漂亮的蓝白女仆装，细节丰富，材质高级。
+
+推荐：
+
+> 深蓝色主体布料采用偏哑光的中等厚度棉混纺质感，具有自然的布料褶皱；白色围裙使用细密棉布纹理，边缘的蕾丝花边具有真实镂空结构；胸前蝴蝶结采用轻微光泽的缎面材质。各材质反光程度有所区别，避免整套服装呈现统一塑料质感。
+
+我们通过材质差异，让 AI 理解同一套服装中不同部分的视觉表现。
+
+### 7.5 第四部分：金属材质（Metal）
+
+金属材质非常适合用于工业产品、汽车配件和商业商品图。
+
+![Acabamento superficial | Ruixing](https://images.openai.com/static-rsc-4/aKPReToYMJRw9uxuofQHF_r1EuDeaeWhVaW8ffKWfJcTS_7HOFiSs5yVmg7Lnf6jvtfBb1k5ggqh_emoI4wgVN9y_UXkH7s0eM7CtQCIJgdOcn35UW1eefkD11fuJvzALNMk5LXteJBXDEOgJw5U3nnNEVli3b1KRCJRDUeB1p8?purpose=inline)
+
+拉丝金属（Brushed Metal）
+
+细密方向纹理、拉长的反射高光
+
+!["Precision Instruments" | Mind Dynamics | 1080p](https://images.openai.com/static-rsc-4/l7QIwaEpN8Ki0KaSLsU7I83zwc2HNlXDenuNvnuCKaGe7R5pCR3E6CZsnNMfipjJntRXIN6eAWX5gkNEtod50sJXF1qhpacXWn2pYcYGN4EB-7R-T9LBpiUwyc8WKUVNz8YQK05JQtk7puODFJpOI7dEueM5E4HuyLtoxj1llkA?purpose=inline)
+
+镜面金属（Polished Chrome）
+
+反射清晰，对周围环境敏感
+
+![AluBlack | Alumet](https://images.openai.com/static-rsc-4/hHfgXLx9c0Q60gVxQrsjLduk_RRIhBBu3BKmoTPMxc-THA73X3Gm9BwkonjmJihOo3xBLZILn8il0MzWY9GbcdTYmUiH_39qgc4UdoYsZylbi1LJdg_TZSnT6mTXhhdZTssXPWobkBQzEFM9fUnrykc2fS2BVCcIMSMoXrwvX7s?purpose=inline)
+
+哑光阳极氧化铝
+
+反射分散，表面颜色稳定，具有微细纹理
+
+![次世代表面処理「A.S.T.」でレイズ最強の鍛造アルミホイール・ボルクレーシング「TE37 SAGA S-plus」に新カラー誕生(11/25) - Car Watch[Sponsored]](https://images.openai.com/static-rsc-4/ofALI68gw-MLded7gXA2qmAPRDcRL2acXY32LVHTyfwk825VvGS93iL04xjH0Sejdsmc98-5JT_CXSNe0bTEWHaQgowH7Zys5z_pNOImazzA7sD3rYS1Prf1W7bwkEyFgtpfyKEc3nnkA-ef5xp-6dtwwQOex5IKsGktxXXcntc?purpose=inline)
+
+机械加工金属（Machined Metal）
+
+车削纹、加工痕迹、金属高光
+
+金属材质最重要的一个概念是：
+
+金属的真实感很大程度上取决于它如何反射周围环境。
+
+例如，镜面轮毂如果没有合理的环境反射，即使造型正确，也可能看起来像灰色塑料。
+
+#### 实战：锻造轮毂材质提示词
+
+参考上传的轮毂产品图，保持轮毂结构与尺寸比例。
+
+**主体材质：** 锻造铝合金。
+
+**表面工艺：** 辐条正面采用精细金属拉丝与机械加工效果，部分侧面使用深灰色哑光表面。
+
+**反射表现：** 金属高光遵循辐条曲面变化，反射来源与摄影棚灯光位置一致。抛光区域反射较清晰，哑光区域反射柔和。
+
+**微观细节：** 适度保留真实金属加工纹路，不增加随机划痕。
+
+**约束条件：** 不改变辐条数量、形状、中心盖和孔位结构，不添加不存在的雕刻、图案或金属装饰。
+
+注意：如果是实际商品宣传图，真实产品的表面工艺和结构必须以实物为准，不能为了增强质感而随意生成不存在的加工纹理。
+
+### 7.6 第五部分：玻璃与透明材质（Glass & Transparency）
+
+玻璃和金属不同，它的关键特性之一是光的透射与折射。
+
+![simple water-glass with light surface](https://images.openai.com/static-rsc-4/sKmIQ-K3Emf0U23Dym2J7chJ6P-D165zgRRdSka15FZNNENaIO5bh8AI4tzhJjpTirt5_Wdcws9-6RMz3drA6XpdSs7KptYf1wuGQvZzGXeCF6pk4XBnnfMwzo9myoKQn2NT6AS6qJnmjfe6ZHDvc_YGb1wdqSPPcNnEKUl62OX5XN_CjMy_NdBmyLtj6_Sb?purpose=inline)
+
+透明玻璃
+
+背景透过玻璃可见，边缘有折射与反射
+
+![Стакан Glass Frost Base, Serax купить в Laboratory Dome](https://images.openai.com/static-rsc-4/zmXxDhKi7Aoqr3H2axOA_9tmNCh6l9NPjAjJSpplVx4vcElQvF3fhSTE9pDraTuMqvbFb1PIqHii7z-tMyNrPKKWpoLxpbsUU0S0vFVky0ohosBQf2WH0fvGmmJ1o2If5hBx6aVvYkTVY3J5iZ1CD7eJ9Yqy7yd3-VtvECGC934?purpose=inline)
+
+磨砂玻璃
+
+透光但模糊背景细节，表面反射更柔和
+
+#### 玻璃材质的四个控制词
+
+| 参数              | 作用                   |
+| ----------------- | ---------------------- |
+| Transparency      | 描述透明程度           |
+| Refraction        | 描述透过玻璃的光线偏折 |
+| Reflection        | 描述玻璃表面的环境反射 |
+| Surface Roughness | 描述光滑或磨砂表面     |
+
+实际生图时，单纯要求“高透明度”并不一定能获得真实玻璃。
+
+更有效的描述是：
+
+> 无色透明玻璃杯，杯壁厚度合理，轮廓边缘呈现自然折射与高光，背景透过杯壁时发生符合玻璃曲率的轻微变形。杯底具有真实的玻璃厚度与阴影，避免塑料质感和不合理的双重边缘。
+
+### 7.7 第六部分：木材与自然纹理（Wood）
+
+木材的真实性主要来自自然纹理的连续性、不规则性和材质差异。
+
+![フリーカット無垢材 カスタム ホワイトオーク | PS-TT009-04-G165 | テーブル天板 | テーブル・デスク | toolbox](https://images.openai.com/static-rsc-4/66yF3rm8owhFQ5M4FL_Yc81ri6M83K8Dmh2Adaizs5GwR020f-6haMkRRHP3ZBo__uNgArOQYlSmgkA98YCKLnQLRv8XH2xB028l3yrdOBrBsJd0R2QKRihpuOfFA2OXbq0E6nJh2X2Ne4iM4xcenzpFTNKhgMJRvVukqLz8cKo?purpose=inline)
+
+天然木纹
+
+纹理沿木材生长方向延伸，具有自然变化
+
+![What Wood Looks Expensive? | Artisan Furniture UK](https://images.openai.com/static-rsc-4/GOKfYrdFOpo13XS-CD7I_ks31uJjvA2yy19qKXDPRwXIfr9XMCiTtB8qKraCLg3dicfVoT8LpwpKpUhs8lhe60Udsod3Nm6yW2SrDNBmw8khLmD5ZuOiyUKLb7BjJOLBSmL7icyU2Mh5Q51uYA_DtZKJoUZB077RbEKb-8Ivegg?purpose=inline)
+
+抛光木材
+
+清漆影响表面反射，但底层木纹仍清晰可见
+
+木纹最容易出现的问题是重复、错位或不合理的走向。
+
+提示词可以增加：
+
+> 自然连续的木材纹理，纹路沿木板长度方向变化，不出现机械重复图案。局部具有真实细小导管纹理，色彩随天然木纹轻微变化。
+
+### 7.8 为什么 AI 图片容易出现“塑料感”？
+
+“塑料感”不是一种严格的技术故障名称，而是一组视觉问题的综合表现。
+
+| 常见问题     | 视觉现象                 | 改进方式                     |
+| ------------ | ------------------------ | ---------------------------- |
+| 纹理过度平滑 | 皮肤像蜡、布料像橡胶     | 增加适当微观纹理             |
+| 材质反射雷同 | 皮肤、布料和金属都在发亮 | 明确不同材质的粗糙度         |
+| 光影不协调   | 阴影方向不一致           | 固定主光方向与光照环境       |
+| 细节过度锐化 | 发丝与皮肤像被人工描边   | 避免过量细节增强             |
+| 结构不自然   | 玻璃厚度、织物褶皱失真   | 描述合理的几何与物理结构     |
+| 纹理重复     | 木纹、布纹过度规律       | 要求自然、不规则、连续的纹理 |
+
+在提示词中反复写“超真实、8K、极致细节”未必能解决这些问题。
+
+很多时候，真正有效的是把材质拆开描述，告诉模型哪些区域应该光滑，哪些区域应该粗糙，以及它们分别如何反射光线。
+
+### 7.9 材质控制的五层描述法
+
+建议将每一种材质拆成五层。
+
+L1
+
+Material Type
+
+指定材料：棉布、玻璃、不锈钢、皮肤
+
+L2
+
+Surface Properties
+
+描述粗糙度、光泽和透明程度
+
+L3
+
+Microtexture
+
+描述细小纹理：毛孔、织物纤维、加工纹
+
+L4
+
+Light Interaction
+
+描述材质在当前光照下的反射、散射和透射
+
+L5
+
+Constraints
+
+排除塑料感、不合理的纹理、错误反射与结构变形
+
+### 7.10 完整材质提示词模板
+
+## GPT Image · Material & Texture Prompt V1.0
+
+### 01. 主体（Subject）
+
+[人物 / 产品 / 物体]
+
+保持参考主体的结构、形状与核心特征。
+
+### 02. 材质区域划分（Material Regions）
+
+区域 A：[材质名称]
+区域 B：[材质名称]
+区域 C：[材质名称]
+
+### 03. 表面属性（Surface Properties）
+
+- 粗糙度：[光滑 / 中等 / 粗糙]
+- 光泽：[哑光 / 半光泽 / 高光泽]
+- 透明度：[不透明 / 半透明 / 透明]
+- 反射：[柔和 / 清晰 / 镜面]
+
+### 04. 微观纹理（Microtexture）
+
+描述材质独有的细微纹理：
+
+[皮肤毛孔 / 发丝 / 纺织纤维 / 金属拉丝 / 木纹 / 玻璃边缘]
+
+### 05. 光照交互（Light Interaction）
+
+描述材质与光线的关系：
+
+[高光方向 / 反射强弱 / 阴影过渡 / 透光效果]
+
+### 06. 真实感控制（Realism）
+
+保留符合真实物理材质的自然变化。
+
+避免过度磨皮、统一高光、重复纹理、虚假反射、塑料质感。
+
+### 07. 构图与镜头（Camera）
+
+[图片比例、构图、视角、焦距和景深]
+
+### 08. 约束（Constraints）
+
+- 不能改变：[主体结构与关键细节]
+- 必须表现：[目标材质特征]
+- 禁止出现：[错误纹理与不自然材质]
+- 本轮实验仅调整指定材质，不主动修改其他视觉因素。
+
+### 7.11 交互实验：材质提示词生成器
+
+选择一种材质，并指定表面属性，组合出可以直接用于生图的提示词。
+
+选择材质
+
+皮肤
+
+头发
+
+棉布
+
+金属
+
+玻璃
+
+木材
+
+表面光泽
+
+哑光
+
+半光泽
+
+高光泽
+
+镜面
+
+细节密度
+
+简约自然精细
+
+生成的材质提示词
+
+生成一张真实商业摄影风格的铝合金产品表面特写图片。主体材质为金属。表面表现为半光泽，细节程度为自然细节。重点表现符合加工工艺的细密纹理与环境反射。使用柔和的侧面摄影棚光线，确保反射、阴影与材质物理特征协调。背景简洁，画面清晰，保留真实微观纹理，避免塑料感、过度锐化和不合理反射。
+
+ 复制提示词
+
+选择时需要遵守材质合理性，例如天然皮肤不适合整体镜面效果，普通透明玻璃也不应被描述为完全不透光的哑光金属。
+
+### 7.12 本节博客教学配图规划
+
+与前面的课程保持统一，我们建议第七节制作以下 8 张教学图片。
+
+| 编号  | 教学主题                   | 对比方式   |
+| ----- | -------------------------- | ---------- |
+| 07-01 | 塑料皮肤 vs 真实皮肤       | 1×2        |
+| 07-02 | 块状头发 vs 自然发丝       | 1×2        |
+| 07-03 | 棉、丝绸、皮革、蕾丝       | 2×2        |
+| 07-04 | 镜面、拉丝、哑光、加工金属 | 2×2        |
+| 07-05 | 透明玻璃 vs 磨砂玻璃       | 1×2        |
+| 07-06 | 原木 vs 清漆木材           | 1×2        |
+| 07-07 | 材质控制前 vs 材质控制后   | 1×2        |
+| 07-08 | 六大材质与控制参数总览     | 综合信息图 |
+
+其中，我建议重点制作 07-01、07-03、07-04 和 07-07。
+
+因为这四张图能够直接解释为什么 AI 生成结果不够真实，以及我们如何通过材质相关的提示词改善画面。
+
+对于实际教学对比，建议先生成一张固定主体的基准图，再针对需要测试的材质区域进行局部修改。这样才能尽量避免将光线、构图、身份变化误认为材质控制带来的差异。
+
+### 7.13 本节总结
+
+这一节最重要的公式是：
+
+材质真实感 = 材质类型 + 表面属性 + 微观纹理 + 光照交互 + 合理的不规则性。
+
+我们要学会的不只是“增加细节”，而是让细节符合具体材质的物理特征。
+
+判断一张 AI 图片是否具有真实材质感，可以重点检查三个问题：
+
+1. 不同材质是否具有合理且不同的反射、粗糙度和纹理？
+2. 材质细节是否与镜头距离、画面清晰度和光照条件相匹配？
+3. 是否出现过度平滑、错误反射、重复纹理或不自然的结构？
+
+下一节建议进入第八节：参考图与一致性控制（Reference Image & Consistency）。 我们将研究如何利用一张或多张参考图控制人物身份、服装、产品结构、场景布局和品牌标识，并进一步学习局部修改、多图参考、主体锁定与多轮生图的一致性管理。
