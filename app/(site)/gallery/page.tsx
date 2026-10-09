@@ -1,5 +1,6 @@
 import { CollectionList } from "@/components/collection-list";
 import { GalleryCard } from "@/components/gallery-card";
+import { GalleryCarouselCard } from "@/components/gallery-carousel-card";
 import { getGalleryPosts } from "@/lib/content";
 
 export const metadata = {
@@ -19,7 +20,11 @@ export default async function GalleryPage() {
       >
         <div className="entry-card-gallery-grid">
           {posts.map((post) => (
-            <GalleryCard key={post.slug} post={post} />
+            post.carouselImages?.length ? (
+              <GalleryCarouselCard key={post.slug} post={post} />
+            ) : (
+              <GalleryCard key={post.slug} post={post} />
+            )
           ))}
         </div>
       </CollectionList>

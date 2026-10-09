@@ -2160,17 +2160,22 @@ main {
 
 .entry-card-gallery-cover {
   position: relative;   /* 叠加层的定位基准 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: clamp(360px, 58vh, 680px);
   margin: 0;
   overflow: hidden;
+  background: var(--surface-soft);
 }
 
 .entry-card-gallery-cover img {
   display: block;
   width: 100%;
-  height: auto;
-  /* 刻意不写 aspect-ratio / object-fit：各篇有自己的 params.ratio（有 1:1 也有 3:4），
-     强行裁成方形会把竖构图的上半身/七分身切掉。保持原生比例还有个副作用是好的 ——
-     卡片高度不再一致，破掉「形状相同的模块一路码下去」的清单感。 */
+  height: 100%;
+  object-fit: contain;
+  /* 预览框统一高度，但图片始终按原始比例完整显示；不同的 3:4、9:16
+     素材只会留下少量留白，不再被卡片高度撑大或被 cover 裁切。 */
   transition: transform var(--transition-smooth);
 }
 
@@ -2280,6 +2285,7 @@ main {
   position: relative;
   display: block;
   width: 100%;
+  height: 100%;
   padding: 0;
   border: 0;
   background: transparent;
@@ -2296,7 +2302,8 @@ main {
 .entry-card-gallery-carousel-stage > img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
   transition: transform var(--transition-smooth);
 }
 
@@ -2312,18 +2319,17 @@ main {
 }
 
 .entry-card-gallery-carousel-controls {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
   padding: 12px 12px 0;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(17, 19, 15, 0.22) transparent;
 }
 
 .entry-card-gallery-carousel-choice {
-  display: inline-flex;
-  flex: 0 0 auto;
+  display: flex;
+  min-width: 0;
   align-items: center;
+  justify-content: center;
   gap: 7px;
   min-height: 34px;
   padding: 7px 10px;
@@ -2335,6 +2341,8 @@ main {
   font-size: 11px;
   line-height: 1;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
   transition:
     background var(--transition-fast),
@@ -2393,6 +2401,10 @@ main {
   .entry-card-gallery-carousel-controls {
     padding-right: 10px;
     padding-left: 10px;
+  }
+
+  .entry-card-gallery-carousel-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .entry-card-gallery-carousel-status {
@@ -3038,7 +3050,8 @@ main {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: var(--surface-soft);
   transition: transform var(--transition-fast);
 }
 
