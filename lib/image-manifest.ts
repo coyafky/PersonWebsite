@@ -329,6 +329,16 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "height": 1254,
     "blurDataURL": "data:image/webp;base64,UklGRjQBAABXRUJQVlA4ICgBAADwBQCdASoYABgAPt1mq1EopSOiqAgBEBuJYwCsAywTkwX8eMW18g8XvnBflpYc2Nn+jqnzWQKfIAD+4leaBBe/KH4UQmsXuGikcl3npsPd/ADPc+yl/k81mZCCGZ/BBAXFlp2M/NvipFWQZKN1ZNDW6QSSeIPQqs+hkOoBXdih7CB5mC7m0oObL+t7lNx1qDG6c9McuEG0jmgHrDMR5YoOZNfFobXyU8to6eli4kMByb68jCU/vQQauymUEhwwaImaihDzthUJNNZ/nvkjyo6H/Q/kvc19TUw1XShAD+7CswM0Qj1R7W2Jv5wdNO8cKiPyTU/of1jEkFLIK3irM7U3/DXEcm5d2HTOdPnNtKazh+y00iChPj6CD7ICRim8eqHG6rmsIwAAAA=="
   },
+  "/gallery/2026-10-10-douyin-window-film-singing-cover-source.webp": {
+    "width": 891,
+    "height": 1296,
+    "blurDataURL": "data:image/webp;base64,UklGRjgBAABXRUJQVlA4ICwBAADwBgCdASoYACMAPt1krFAopSQipWsxEBuJQBftckAuaU1HvFbsnP+bE0E9ud8g2qwkT93bgvtcGG4nBPaPi/mwAP7gCfEK7I5Y1YBS04mEMfWO3DrEepjr6/8x26fuEXGnW9FOGhti390z5LNjj0Z1RM9N5PsyJgrgTWMBdmynwaJCUPFmu4mtpcFHLIozodo35ffHnjmqg60GZ4CA39PEs56CFe7nFPakOxaUx8BxHgWnYtcvjVH0UcDtY9DrFaq+xet1cK7UwKCA6QOFWFAA7FjmAc7Ra/9ZDaOd+DWuDDdCMSB/sUrKY8PdwI6nwevNcBKRrgMbF1zZHe0tXNqkAB0492dBtx3yslRR0sEoszMb8acdxrJ1WdGEakvqtH7HMUsUIQZuQnA14AA="
+  },
+  "/gallery/2026-10-10-douyin-window-film-singing-cover.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRrYBAABXRUJQVlA4IKoBAABQCACdASoYACAAPt1cpUyopSOiMAgBEBuJbAC1CNmwAby1PgcYJoCVBDPPG/RM9QAOshPElyPkngVYm2Dem1r6vOMMxeb3zfXAdeAA/q2dacGD4RU/bPtW6oDqAeRLNTCtupdn2dIfWszgRjcwOK06CRAvLobocUbAAtvmzItsX2j7XdbsD7pN2aVpMOCdU6sAwjj58s3aCqPlQn4PFzG0s1Sw3ngFbgTtNeBQnALmqnPr2XKQDfIHZYu0/we/btUhCXibxw+J/Ee81XniL7udRx95jvPfbtPFl/DOEIyL5PAWpL3njE+dUkXWGc0RtuvA2ibXjirta+LkIesKyacNKLL1hX6KeKF07jVEhkfVc1Xf/Fv79OaZ1X6H3P3i/ACadYetPku5JbPARNa+kFL7sVsgiNiYpeTozWPM6dRaxgHgRwkSMh90/ey5PSrmL3HKu+cFmAJXXtxiIwMsKJYiWqeptqt6ZyA5yTcVlIvDiUD8K7S2mdQe+gXP7yoN8XXjTfkl33xsLekzfK/ScIVPusyxr7w3n00JgPiBWarszXan3juQ/30AAAA="
+  },
   "/gallery/2026-10-10-lanhui-v1-au01-inner-brow-raised.webp": {
     "width": 1086,
     "height": 1448,
@@ -403,6 +413,16 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "width": 1122,
     "height": 1402,
     "blurDataURL": "data:image/webp;base64,UklGRtYAAABXRUJQVlA4IMoAAABwBQCdASoYAB4APtVao0yoJSMiMAwBABqJYwDKAYxE32aZ1eFRoswmeiwJZGmGl4vbzK+AAP7qgex9dCVnwUbmkhAmnsV0n8lzkWrTx/oBgusgT8CJa2+eO3wZfRDnGXrOq+Z+p45wScGsgBBmGpqsT+F4lasoFxLh0wN8ZX7SfViAOLIEXXNK4rJIZPABA/t/cSaE8O9LsHdfoAna6voRPAiOXZWrWghbK9exW0yn9nrVPzWmiX7B8QqFm853MawC0UiExzmaAAAA"
+  },
+  "/gallery/2026-10-10-wheel-white-background-hero.webp": {
+    "width": 1086,
+    "height": 1448,
+    "blurDataURL": "data:image/webp;base64,UklGRsoAAABXRUJQVlA4IL4AAABwBQCdASoYACAAPt1cpkyopSOiMAgBEBuJaQAIFo5uW+1+0wWYJcVgNZ+xtVBRgUdTbhAAAP70y5Ha9mJ4qLEOEWD7Z6yBA96wvmhev/tHnhIeB55ZVfvNdJisDg7+DDv0Z10kMB4OZzw6CxpMx7Qk19MeK2fs0OQh0TsRU/0EkOYoTIRD1VsR7IP27E/spDv+CjFFQLlTuIjpAIxkACCbQUvgxdyb/NX61T7yi5VLJFhVNA8CvPruMxo6OsAA"
+  },
+  "/gallery/2026-10-10-wheel-white-background-original.webp": {
+    "width": 1080,
+    "height": 1920,
+    "blurDataURL": "data:image/webp;base64,UklGRs4AAABXRUJQVlA4IMIAAABwBQCdASoYACsAPt1qq1GopaOipWmZEBuJaQDRCYv2ZIdh32LBir0woPtX0LahEa/Zaq4AAP6LYfr0mw+cp3VBHJcP7tNAgzXYxdILFhfCQ6GrwJQFy8fZOlCsWR19Dhqtrcxvj97QBvzyViE39HJMpvI/RVcAYKzu2GdipZtqM3V9fVaqV+iB8ONsYHHCYoyy/+XKgboA4d7wMRGPocejFhERtEuKYHlRdc+Hpu1i/jJpu+v4WBAzA7n+qX7Q+AAAAA=="
   },
   "/images/blog/2026-03-21-openclaw-youtube-reading-comprehension/cover.webp": {
     "width": 1600,

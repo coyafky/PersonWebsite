@@ -3,7 +3,7 @@ import { EntryCardProject } from "@/components/entry-card-project";
 import type { ProjectPost } from "@/lib/content";
 
 /**
- * 首页「精选作品」区。
+ * 首页「最近的工作」区。
  *
  * 刻意复用 `EntryCardProject`（只把 `featured` 钉成 false）而不是另写一套卡片 ——
  * `featured: true` 在项目列表页会触发 `entry-card-project-featured`
@@ -16,11 +16,11 @@ export function FeaturedProjects({ projects }: { projects: ProjectPost[] }) {
   }
 
   return (
-    <section className="content-section featured-projects" aria-label="精选作品">
+    <section className="content-section featured-projects" aria-label="最近的工作">
       <div className="section-heading">
         <div>
-          <span className="section-kicker">SELECTED WORK</span>
-          <h2>精选作品</h2>
+          <span className="section-kicker">RECENT PROOF</span>
+          <h2>最近的工作</h2>
         </div>
         <Link href="/projects">全部作品 →</Link>
       </div>

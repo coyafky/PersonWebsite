@@ -1,56 +1,21 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
 import { ContentCard } from "@/components/content-card";
 import { FeaturedProjects } from "@/components/featured-projects";
 import { HeroSection, HeroItem } from "@/components/hero-section";
+import { HomeProofCard } from "@/components/home-proof-card";
 import { getFeaturedProjects } from "@/lib/content";
+import { homePageModel } from "@/lib/home-page";
 import {
-  Icons0Blog,
   Icons0Image,
   Icons0Notebook,
   Icons0Portfolio,
-  Icons0Profile,
 } from "@/components/icons0";
 
-type PortalEntry = {
-  href: string;
-  icon: ReactNode;
-  title: string;
-  description: string;
-};
-
-const portalEntries: ReadonlyArray<PortalEntry> = [
-  {
-    href: "/blog",
-    icon: <Icons0Blog />,
-    title: "Blog",
-    description: "技术、想法和工程实践的长文。",
-  },
-  {
-    href: "/notes",
-    icon: <Icons0Notebook />,
-    title: "Notes",
-    description: "学习笔记、读书笔记与课程笔记，按集合归档。",
-  },
-  {
-    href: "/projects",
-    icon: <Icons0Portfolio />,
-    title: "Projects",
-    description: "做过的项目与可验证的能力证据。",
-  },
-  {
-    href: "/gallery",
-    icon: <Icons0Image />,
-    title: "Gallery",
-    description: "AI 生图实验、提示词与视觉变量的对照档案。",
-  },
-  {
-    href: "/about",
-    icon: <Icons0Profile />,
-    title: "About",
-    description: "关于我、教育背景、技术栈与求职材料。",
-  },
-];
+const portalIcons = {
+  "/notes": <Icons0Notebook />,
+  "/projects": <Icons0Portfolio />,
+  "/gallery": <Icons0Image />,
+} as const;
 
 export default async function HomePage() {
   const featuredProjects = await getFeaturedProjects(3);
@@ -58,71 +23,73 @@ export default async function HomePage() {
   return (
     <div className="page-shell home-shell">
       <HeroSection
+        signature={homePageModel.signature}
         copy={
           <>
             <HeroItem>
               <h1 id="home-hero-title">
-                把模糊的想法，
-                <span>做成可验证的工作。</span>
+                从一条笔记开始，
+                <span>把它做到能用。</span>
               </h1>
             </HeroItem>
             <HeroItem>
               <p>
-                我是 Coya，计算机科学背景的 AI 提效实践者。这里记录我如何把 Agent、内容系统和
-                AI 视觉实验接进真实流程，也保留每次学习、试错和交付留下的证据。
+                我是 Coya，计算机科学背景的 AI 提效实践者。我把 AI、内容系统和自动化工具接进真实工作，
+                并保留从问题、处理到交付的完整证据。
               </p>
             </HeroItem>
             <HeroItem>
               <div className="hero-actions">
                 <Link className="button primary" href="/projects">
                   <Icons0Portfolio />
-                  View Projects
+                  看项目证据
                 </Link>
-                <Link className="button secondary" href="/about">
-                  <Icons0Profile />
-                  About Coya
+                <Link className="button secondary" href="/notes">
+                  <Icons0Notebook />
+                  了解工作方法
                 </Link>
               </div>
             </HeroItem>
           </>
         }
-        panel={
-          <>
-            <div className="panel-row strong">
-              <Icons0Notebook />
-              <span>Knowledge Field</span>
-              <span>source → proof</span>
-            </div>
-            <div className="panel-row">
-              <Icons0Blog />
-              <span>Blog / Notes</span>
-              <span>thinking</span>
-            </div>
-            <div className="panel-row">
-              <Icons0Portfolio />
-              <span>Projects</span>
-              <span>evidence</span>
-            </div>
-          </>
-        }
+        panel={<HomeProofCard proof={homePageModel.heroProof} />}
       />
+
+      <section className="content-section home-process" aria-labelledby="home-process-title">
+        <div className="section-heading home-process-heading">
+          <div>
+            <span className="section-kicker">HOW THE FIELD MOVES</span>
+            <h2 id="home-process-title">从记录，到交付</h2>
+          </div>
+          <p>每一项工作都留下输入、处理和结果，而不只是一个漂亮的结论。</p>
+        </div>
+        <div className="home-process-grid">
+          {homePageModel.process.map((step) => (
+            <article className="home-process-step" key={step.key}>
+              <span className="home-process-label">{step.label}</span>
+              <h3>{step.title}</h3>
+              <p>{step.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <FeaturedProjects projects={featuredProjects} />
 
-      <section className="content-section portal-section" aria-label="Sections">
+      <section className="content-section portal-section" aria-labelledby="home-entry-title">
         <div className="section-heading">
           <div>
-            <span className="section-kicker">EXPLORE THE FIELD</span>
-            <h2>从哪里开始</h2>
+            <span className="section-kicker">START WITH A PROOF</span>
+            <h2 id="home-entry-title">从一个证据开始</h2>
           </div>
-          <Link href="/about">About this site</Link>
+          <Link href="/about">About the field</Link>
         </div>
         <div className="card-grid">
-          {portalEntries.map((entry) => (
+          {homePageModel.entryPoints.map((entry) => (
             <ContentCard
               key={entry.href}
               href={entry.href}
-              icon={entry.icon}
+              icon={portalIcons[entry.href]}
               title={entry.title}
               summary={entry.description}
             />

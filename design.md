@@ -64,31 +64,11 @@ PersonalWebsite 是一个**内容优先**的个人站，不是产品营销页。
 **Read** 模式（日记 68 篇、博客 57 篇、学习笔记、周记）——结构为理解服务，排版的职责是让人愿意多待一会儿。
 唯一的 **Experience** 模式页面是 `/gallery`（AI 生图作品集）：作品主导，界面后退。
 
-视觉方向是 Stripe Press 气质的编辑式排版：克制的暖灰底、单一交互色、以「阴影当边框」代替 CSS border、
-大量留白、衬线/窄体混排的层级感。
+视觉方向是 Knowledge Field：克制的暖灰纸张底、深色文字、单一蓝色交互色、窄体标签和等宽状态信息。
+首页的唯一叙事是「把记录转化为可验证的工作」，首屏用一个可替换的真实项目证据卡承载记忆点，内容通过 Notes → AI / Tools → Projects → Proof 展开。
 
-> ### ⚠️ 陷阱：`app/globals.css` 里有两个 `:root`，只有第二个生效
->
-> **第一个 `:root` 不是"死代码"，而是被部分覆盖。** 实测：它声明 33 个 token，
-> 其中 **15 个被第二个 `:root` 覆盖**，另外 **18 个仍然生效** —— 包括全部
-> `--space-1`…`--space-10`、`--transition-fast`、`--transition-smooth`、
-> `--radius-pill`、`--container`、`--shadow-border-strong`、`--shadow-menu`、
-> `--shadow-modal`、`--noise-opacity`。
-> 所以「往第一个里加 token」有时生效有时不生效 —— **新 token 一律加第二个 `:root`**。
->
-> 被覆盖的 15 个：`--background` `--surface` `--surface-soft` `--surface-hover`
-> `--text` `--text-secondary` `--muted` `--accent` `--accent-hover`
-> `--shadow-border` `--shadow-card` `--radius` `--radius-card` `--header-height`
-> `--focus-ring`。
->
-> 历史坑（**已修**，2026-09-20）：`--focus-ring` 原先只在第一个 `:root` 里定义，
-> 用的是旧主题蓝 `#0072F5`，而第二个 `:root` 覆盖颜色时漏了它 —— 全站 18 处焦点环
-> 的蓝和 `--accent` 不是同一个蓝。现已补进第二个 `:root`，白环也改用 `--surface`。
->
-> **正文字体同样被后面一条 `html` 规则覆盖**，实际是
-> `"Avenir Next", Avenir, "Helvetica Neue", "PingFang SC"` ——
-> 文件前部那条 `font-family: Inter` 的 `html` 规则**不在渲染**。
-> 因此 impeccable 在旧行号 75 报的 `overused-font (Inter)` 是对**失效声明**的误报。
+`app/globals.css` 的 token 现在只有一个 `:root` 来源。新增 token 必须放在该块中，组件只消费变量，
+不要在页面局部重新定义颜色、圆角或阴影。
 
 **无暗色模式**：`color-scheme: light`，全站只有 `@media (prefers-reduced-motion: reduce)` 一个媒体偏好分支。
 新增样式不需要写暗色变体，但**必须**为动效提供 reduced-motion 降级。
