@@ -1,12 +1,18 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 import type { ReactNode } from "react";
+import { homeMotion } from "@/lib/home-motion";
 
 const staggerContainer = {
   hidden: {},
-  show: { transition: { delayChildren: 0.1, staggerChildren: 0.1 } },
+  show: {
+    transition: {
+      delayChildren: 0.1,
+      staggerChildren: homeMotion.entrance.stagger,
+    },
+  },
 };
 
 const fadeUpItem = {
@@ -14,7 +20,10 @@ const fadeUpItem = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.58, ease: [0.22, 0.61, 0.36, 1] },
+    transition: {
+      duration: homeMotion.entrance.duration,
+      ease: [0.22, 0.61, 0.36, 1],
+    },
   },
 } as const;
 
@@ -24,9 +33,9 @@ const panelSlide = {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0.62,
+      duration: homeMotion.panel.duration,
       ease: [0.22, 0.61, 0.36, 1],
-      delay: 0.28,
+      delay: homeMotion.panel.delay,
     },
   },
 } as const;
@@ -36,10 +45,12 @@ export function HeroSection({
   copy,
   panel,
 }: {
-  signature: "proof-card";
+  signature: "workflow-panel";
   copy: ReactNode;
   panel: ReactNode;
 }) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section
       className={`hero-section hero-section--${signature}`}
@@ -49,7 +60,7 @@ export function HeroSection({
       <motion.div
         className="hero-copy"
         variants={staggerContainer}
-        initial="hidden"
+        initial={reduceMotion ? false : "hidden"}
         animate="show"
       >
         <span className="hero-kicker">COYA / KNOWLEDGE FIELD</span>
@@ -60,7 +71,7 @@ export function HeroSection({
         className="hero-panel"
         aria-label="Content system overview"
         variants={panelSlide}
-        initial="hidden"
+        initial={reduceMotion ? false : "hidden"}
         animate="show"
       >
         <div className="hero-panel-label">

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Icons0ArrowUpRight } from "@/components/icons0";
+import { homeMotion } from "@/lib/home-motion";
 
 type ContentCardProps = {
   href: string;
@@ -26,9 +27,12 @@ export function ContentCard({
     <motion.a
       className="content-card"
       href={href}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: homeMotion.cardHover.lift }}
       whileTap={{ y: 0 }}
-      transition={{ duration: 0.4, ease: [0.22, 0.61, 0.36, 1] }}
+      transition={{
+        duration: homeMotion.cardHover.duration,
+        ease: [0.22, 0.61, 0.36, 1],
+      }}
     >
       {icon ? <span className="icon-shell">{icon}</span> : null}
       {meta ? <span className="card-meta">{meta}</span> : null}

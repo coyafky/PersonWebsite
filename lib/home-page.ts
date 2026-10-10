@@ -26,7 +26,7 @@ export type HomeProof = {
 };
 
 export const homePageModel = {
-  signature: "proof-card" as const,
+  signature: "workflow-panel" as const,
   heroProof: {
     href: "/projects/ark-seedream-car-preview",
     eyebrow: "FEATURED CASE / PROVEN",

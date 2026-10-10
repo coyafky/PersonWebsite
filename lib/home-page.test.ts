@@ -17,8 +17,8 @@ test("homepage explains the real notes-to-proof workflow in order", () => {
   );
 });
 
-test("homepage makes the proof card the signature element", () => {
-  assert.equal(homePageModel.signature, "proof-card");
+test("homepage makes the workflow panel the signature element", () => {
+  assert.equal(homePageModel.signature, "workflow-panel");
   assert.match(homePageModel.heroProof.href, /^\/projects\//);
   assert.ok(homePageModel.heroProof.title.length > 0);
   assert.deepEqual(
