@@ -98,19 +98,21 @@ export function ArticleToc({ headings }: ArticleTocProps) {
     };
   }, []);
 
-  const handleClick = useCallback(
-    (id: string) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      // Update URL hash after smooth scroll starts so it doesn't snap to the anchor
-      window.setTimeout(() => {
-        window.history.replaceState(null, "", `#${id}`);
-      }, 50);
-      setActiveId(id);
-    },
-    [],
-  );
+  const handleClick = useCallback((id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+      block: "start",
+    });
+    // Update URL hash after smooth scroll starts so it doesn't snap to the anchor
+    window.setTimeout(() => {
+      window.history.replaceState(null, "", `#${id}`);
+    }, 50);
+    setActiveId(id);
+  }, []);
 
   const progressPct = Math.round(progress * 100);
 
@@ -167,8 +169,8 @@ export function ArticleToc({ headings }: ArticleTocProps) {
         />
       </div>
 
-      {headings.length > 0 && (
-        isDesktop ? (
+      {headings.length > 0 &&
+        (isDesktop ? (
           <nav className="article-toc" aria-label="Table of contents">
             {navContent}
           </nav>
@@ -193,8 +195,7 @@ export function ArticleToc({ headings }: ArticleTocProps) {
               </nav>
             </div>
           </>
-        )
-      )}
+        ))}
     </>
   );
 }

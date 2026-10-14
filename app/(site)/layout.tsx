@@ -7,11 +7,13 @@ import { MusicNowPlaying } from "@/components/MusicNowPlaying";
 
 import { SearchDialog } from "@/components/search-dialog";
 
-export default function SiteLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default function SiteLayout({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   return (
     <>
       <SiteNav />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <PageTransitionWrapper>{children}</PageTransitionWrapper>
       </main>
       <SectionFooter />

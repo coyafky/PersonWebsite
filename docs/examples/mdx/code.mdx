@@ -1,0 +1,72 @@
+---
+title: "把工作流写成可维护的文件：代码组件示例"
+date: "2026-10-14"
+summary: "检查代码高亮、文件名、行号、方案切换、目录树和终端展示。"
+tags: ["MDX", "AI 工作流"]
+status: draft
+lang: zh
+---
+
+<Callout type="info" title="代码与输出均为展示示例">
+
+本文的文件结构和终端输出用于检查组件，不表示这些命令已经在真实项目中执行。
+
+</Callout>
+
+## 给文件一个清晰的位置
+
+<FileTree title="示例工作流目录" items={[
+  { name: "marketing-workflow", children: [
+    { name: "SKILL.md", comment: "工作流入口" },
+    { name: "references", children: [
+      { name: "brand-voice.md", comment: "表达约定" }
+    ] },
+    { name: "drafts", children: [
+      { name: "article.mdx", comment: "等待审核的草稿" }
+    ] }
+  ] }
+]} />
+
+文件职责分开后，可以分别更新表达约定和文章内容。
+
+## 展示需要解释的代码
+
+代码块支持文件名、行号和重点行。窄屏可横向滚动，复制按钮只复制代码正文。
+
+```typescript title="workflow.ts" showLineNumbers {2-3}
+const draft = {
+  status: "draft",
+  needsReview: true,
+  source: "user-outline",
+};
+```
+
+## 对比同一配置的写法
+
+<CodeTabs label="配置格式" items={[
+  { label: "JSON", language: "json", filename: "workflow.json", code: '{\n  "status": "draft",\n  "needsReview": true\n}' },
+  { label: "YAML", language: "yaml", filename: "workflow.yaml", code: 'status: draft\nneedsReview: true' }
+]} />
+
+两份代码表达相同的约束。可以用左右方向键切换选项，也可以按 Home 和 End 跳到首尾。
+
+## 区分命令与输出
+
+<Terminal title="校验流程 · 示例输出" lines={[
+  { command: "npm run typecheck", output: "类型检查通过（示例）" },
+  { command: "npm run mdx:check -- docs/examples/mdx/code.mdx", output: "MDX 校验通过（示例）" }
+]} />
+
+复制按钮只提取命令，不包含提示符和输出。组件只展示文本，不运行命令。
+
+## 检查图片放大
+
+![本站标记，用于演示图片放大](/site-mark.svg)
+
+这是本站已有的标记。点击图片可放大，按 Escape 关闭，并回到原来的触发位置。
+
+<Accordion title="没有 JavaScript 时会怎样？">
+
+代码与终端内容仍可阅读，代码标签页会展开全部方案，图片链接可以打开原图。
+
+</Accordion>

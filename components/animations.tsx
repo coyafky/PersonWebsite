@@ -103,7 +103,7 @@ export function PageTransitionWrapper({ children }: { children: ReactNode }) {
       <AnimatePresence mode="wait">
         <motion.div
           key={pathname}
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1, transition: { duration: 0.2, ease: easeOut } }}
           exit={{ opacity: 0, transition: { duration: 0.2, ease: easeOut } }}
         >
@@ -166,10 +166,7 @@ export function RevealOnScroll({
   // `Tag` string, so memoizing by `Tag` keeps the component stable across
   // renders (no remount, no state reset). Cast to ElementType so the union
   // of motion.* components accepts an HTMLElement-typed ref.
-  const Comp = useMemo(
-    () => resolveMotionTag(Tag) as ElementType,
-    [Tag],
-  );
+  const Comp = useMemo(() => resolveMotionTag(Tag) as ElementType, [Tag]);
 
   return (
     <Comp

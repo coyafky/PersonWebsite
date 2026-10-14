@@ -26,13 +26,15 @@ const LABELS: Record<CalloutType, string> = {
 export function Callout({
   type = "info",
   children,
+  title,
 }: {
   type?: CalloutType;
+  title?: string;
   children: ReactNode;
 }) {
   return (
     <aside className={`callout callout-${type}`}>
-      <span className="callout-label">{LABELS[type]}</span>
+      <span className="callout-label">{title ?? LABELS[type]}</span>
       <div className="callout-body">{children}</div>
     </aside>
   );

@@ -1,191 +1,74 @@
 ---
-name: Coya's Site — PersonalWebsite
-description: 内容优先的个人站：日记、博客、学习笔记、项目与方法论，Stripe Press 气质的编辑式排版。
-# ── 机器可读 token。这些是**规范层**（normative），下面正文只提供应用语境。 ──
-# 全部取自 app/globals.css 里**实际生效**的那套 :root（见 Overview 的陷阱说明）。
+name: Coya — AI for Business
+description: 面向企业 AI 应用与营销岗位的个人作品集，兼顾长期写作与知识记录。
+reference: https://design.ricoui.com/brands/airtable
 colors:
-  background: "#f3f5f2"
+  background: "#fafbf9"
   surface: "#ffffff"
-  surface-soft: "#e9ece8"
-  surface-hover: "#e1e5df"
-  text: "#11130f"
-  text-secondary: "#50554d"
-  muted: "#7b8278"
+  surface-soft: "#f0f2f0"
+  surface-hover: "#e6eae6"
+  text: "#18231f"
+  text-secondary: "#52605a"
+  muted: "#66736c"
   accent: "#3157ff"
-  accent-hover: "#1538d8"
+  accent-hover: "#2342c7"
+  accent-soft: "#edf1ff"
 typography:
-  body:
-    fontFamily: "\"Avenir Next\", Avenir, \"Helvetica Neue\", \"PingFang SC\", sans-serif"
-    fontSize: "16px"
-    fontWeight: 400
-    lineHeight: 1.55
-  brand-label:
-    fontFamily: "\"Arial Narrow\", \"Avenir Next Condensed\", sans-serif"
-    fontSize: "13px"
-    fontWeight: 800
-    letterSpacing: "0.12em"
-  code:
-    fontFamily: "\"SF Mono\", \"Fira Code\", \"Fira Mono\", \"Roboto Mono\", Menlo, Monaco, Consolas, monospace"
-  readout:
-    fontFamily: "\"Avenir Next\", Avenir, \"Helvetica Neue\", \"PingFang SC\", sans-serif"
-    fontSize: "clamp(56px, 12vw, 96px)"
-    fontWeight: 600
-    letterSpacing: "-0.04em"
+  display: '"Avenir Next", "Helvetica Neue", "PingFang SC", sans-serif'
+  body: '"Avenir Next", Avenir, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif'
+  label: '"Arial Narrow", "Avenir Next Condensed", sans-serif'
+  utility: '"SF Mono", Menlo, Consolas, monospace'
 rounded:
-  control: "10px"
-  card: "18px"
-  pill: "9999px"
-spacing:
-  unit: "4px"
-  space-1: "4px"
-  space-2: "8px"
-  space-3: "12px"
-  space-4: "16px"
-  space-5: "24px"
-  space-6: "32px"
-  space-7: "40px"
-  space-8: "48px"
-  space-9: "64px"
-  space-10: "96px"
-elevation:
-  border: "0 0 0 1px rgba(17, 19, 15, 0.09)"
-  card: "0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.04)"
-motion:
-  fast: "150ms ease"
-  smooth: "200ms cubic-bezier(.175, .885, .32, 1.1)"
+  control: 10px
+  card: 18px
+  pill: 9999px
 layout:
-  container: "1200px"
-  headerHeight: "68px"
+  container: 1200px
+  reading: 760px
+  headerHeight: 76px
 ---
 
-## Overview
+# Coya — AI for Business
 
-PersonalWebsite 是一个**内容优先**的个人站，不是产品营销页。绝大多数页面属于 DESIGN.md 意义上的
-**Read** 模式（日记 68 篇、博客 57 篇、学习笔记、周记）——结构为理解服务，排版的职责是让人愿意多待一会儿。
-唯一的 **Experience** 模式页面是 `/gallery`（AI 生图作品集）：作品主导，界面后退。
+## 定位与参考选择
 
-视觉方向是 Knowledge Field：克制的暖灰纸张底、深色文字、单一蓝色交互色、窄体标签和等宽状态信息。
-首页的唯一叙事是「把记录转化为可验证的工作」，首屏用顺序出现的 Notes → AI / Tools → Projects 工作流面板承载记忆点，内容通过 Notes → AI / Tools → Projects → Proof 展开。
+面向招聘企业 AI 应用、AI 产品运营和营销效率岗位的人。首页首先回答：我是谁、能解决什么业务问题、有哪些实际交付，以及如何联系。
 
-`app/globals.css` 的 token 现在只有一个 `:root` 来源。新增 token 必须放在该块中，组件只消费变量，
-不要在页面局部重新定义颜色、圆角或阴影。
+主参考：[RICOUI / Airtable](https://design.ricoui.com/brands/airtable)（2026-10-14 查看）。借鉴它以业务工作流组织内容、留白、适中字重、深色主按钮和清晰的案例卡片。保留本站的蓝色交互色、中文阅读体验及个人身份，不复制商标、宣传文案或商业字体。
 
-**无暗色模式**：`color-scheme: light`，全站只有 `@media (prefers-reduced-motion: reduce)` 一个媒体偏好分支。
-新增样式不需要写暗色变体，但**必须**为动效提供 reduced-motion 降级。
+比较过 [Notion](https://design.ricoui.com/brands/notion)：其知识组织思路适合笔记页面，但多色插画与企业产品营销首屏不作为本站主视觉。旧版 Knowledge Field 的知识积累仍是辅助内容，求职入口提升到第一层。
 
-首页动效采用 Workbench Motion：首屏按信息顺序入场，Workflow 面板在 400ms 内完成步骤反馈，内容区进入视口后只 reveal 一次，卡片 hover 只做 3px 上移和阴影增强。
+## 视觉设定
 
-## Colors
+明亮偏中性的底色、墨绿倾向的深色文字、单一蓝色交互色。页面不铺网格、粒子或大面积渐变。签名元素是首页「业务工作流卡」：从客户跟进、营销内容、知识检索切换到实际项目的处理流程，点击进入案例。这是项目流程说明，不模拟线上实时数据。
 
-九个颜色，全部走 CSS 变量，组件里不写死色值。
+首页方案：
 
-| Token | 值 | 用途 |
-|---|---|---|
-| `--background` | `#f3f5f2` | 页面底色（暖灰，不是纯白） |
-| `--surface` | `#ffffff` | 卡片 / 面板 |
-| `--surface-soft` | `#e9ece8` | 次级块、chip、进度槽、输入框 |
-| `--surface-hover` | `#e1e5df` | hover 态背景 |
-| `--text` | `#11130f` | 正文与标题 |
-| `--text-secondary` | `#50554d` | 次级正文、摘要 |
-| `--muted` | `#7b8278` | 元信息、标签、时间 |
-| `--accent` | `#3157ff` | **唯一的交互色** |
-| `--accent-hover` | `#1538d8` | accent 的 hover |
+```text
+标识                    项目 / 关于 / 写作 / 笔记 / 视觉 / 工具    联系
+个人定位 + 主要行动                  可切换的业务流程
+企业应用 / 营销内容 / 知识整理        三个业务领域
+精选案例                            真实阶段 + 个人职责 + 结果
+工作方法                            从需求到可复盘的交付
+近期写作                            持续学习与复盘
+联系入口
+```
 
-**铁律：`--accent` 是全站唯一的交互色。** 不要引入第二个彩色。需要强调非交互内容时，
-用 `--text` 的加粗或 `--surface-soft` 的底，不要用彩色。
+自检修订：移除用工具名称和大数字撑起首屏的方案。把业务问题和实际项目放在中心；不编造效率提升、客户评价、任职信息或上线成果。已跑通但尚未验证业务价值的管线，要把限制一并展示。
 
-正文色是 `#11130f`（带绿倾向的近黑），**不是纯黑** —— 这是暖灰底上唯一可读的组合。
+## 全站规则
 
-## Typography
+- 色值只在 `app/globals.css` 唯一的 `:root` 定义。`app/portfolio.css` 是当前页面展示层，消费这些 token，不另建主题根节点。
+- 字体采用系统字体栈，不依赖联网获取字体。正文 16px、行高 1.7；长文行高 1.85。中文大标题行高至少 1.2，不用过密负字距。
+- 标题 500–600 字重；大标题 40–64px；段落标题 24–32px；元信息至少 12px。窄体标签只承担栏目说明，等宽字体用于日期与状态。
+- 4px 基础间距；使用 `--space-1` 至 `--space-10`。内容容器 1200px，长文约 760px；区块留白 64–96px。
+- 控件圆角 10px、卡片 18px、胶囊 9999px。轻阴影表达卡片边界，避免层层套卡、大面积玻璃效果和悬浮胶囊导航。
+- 导航始终可见，项目和关于优先。窄屏导航可横向滚动，不能被直接隐藏。触控入口至少 44px，键盘焦点清晰，提供跳转正文入口。
+- 首页和关于页是作品集；项目是业务案例；博客和笔记是阅读；画廊由作品主导；工具页优先保证可操作性。
+- 项目卡展示业务主题、摘要、阶段及技术标签；详情保留职责、结果、边界和实现记录。案例不全部跨整行堆叠。
+- 中文导航和正文保持一致，英文只用于辅助栏目标签。联系邮箱来自现有公开资料。
+- 动效仅用于操作反馈；尊重 `prefers-reduced-motion`。关键信息无需等待入场动画，打印关于页时保留经历与联系方式。
 
-三种角色，各司其职：
+## 验收
 
-- **正文**：`"Avenir Next", Avenir, "Helvetica Neue", "PingFang SC"`（由文件后部的
-  `html` 规则设定，**不是**文件前部那条 `Inter`），16px / 1.55。用于所有正文、标题、摘要。
-- **窄体标签**：`"Arial Narrow", "Avenir Next Condensed"`，13px / 800 / `letter-spacing: 0.12em` /
-  大写。用于 `.brand`、section label（`about-section-label` 这类）、工具卡 meta。
-  **这是刻意的排版语汇，不是随手选的**：窄体大写给"标签/编号"提供和正文完全不同的质感，
-  在一屏里形成"印刷品"的层级。
-- **等宽**：`"SF Mono"` 系列，用于代码与键盘提示（`kbd`）。
-
-**数字对齐**：任何会随时间跳动的数字（计时器读数、统计值）必须加
-`font-variant-numeric: tabular-nums`，否则等宽不足会让整串数字横向抖动。
-
-标题字重 600、负字距（`-0.02em` 到 `-0.0475em`），只对大字号使用；正文不加负字距。
-
-## Layout
-
-- 容器：`--container: 1200px`；页面外壳用 `.page-shell`，窄版加 `.narrow`。
-- 间距：4px 基数，`--space-1` … `--space-10`（4 → 96px）。**只用这些 token，不写裸 px。**
-- 区块：`.page-header`（页头）+ `.about-subsection` / `.content-section`（内容段）+
-  `.collection-list`（集合页骨架）。
-- 页头吸顶：`.site-header` 是 `position: sticky; top: 12px` 的胶囊条，高度 `--header-height`。
-- 栅格：优先 `grid-template-columns: repeat(auto-fit, minmax(<最小可读宽>, 1fr))`，
-  尽量避免写死列数。
-
-**反模式**：连续纵向堆叠形状相同的模块会读成"清单/简历"。需要打破时用横向画廊
-（见 `/about` 的 `ProjectRail`）或错落的网格，而不是换配色。
-
-## Elevation & Depth
-
-**核心手法：阴影当边框。** 站点不用 `border` 表达边界，一律用 `box-shadow` 的 1px 展开：
-
-- `--shadow-border`: `0 0 0 1px rgba(17, 19, 15, 0.09)` —— 最轻的边界（次级按钮、chip、输入框）
-- `--shadow-card`: `0 0 0 1px rgba(17, 19, 15, 0.1), 0 16px 44px rgba(17, 19, 15, 0.06)`
-  —— 卡片（**已被第二个 `:root` 覆盖为暖色**，不再是冷黑）
-- `--shadow-menu` / `--shadow-modal` —— 浮层（仍是旧主题值，改动前注意）
-
-hover 抬升用 `transform: translateY(-2px ~ -3px)` 配 accent 描边 + 一层柔和投影，
-不要用放大（`scale`）—— 会让相邻元素显得错位。
-
-焦点态统一 `box-shadow: var(--focus-ring)` + `outline: none`（双环 pattern）。
-`--focus-ring` = `0 0 0 2px var(--surface), 0 0 0 4px var(--accent)`（2026-09-20 修正：
-原先它只在被覆盖的那个 `:root` 里定义，用的是旧蓝 `#0072F5`）。
-
-## Shapes
-
-| Token | 值 | 用于 |
-|---|---|---|
-| `--radius` | `10px` | 控件：按钮、输入框、`kbd` |
-| `--radius-card` | `18px` | 卡片、面板、折叠区 |
-| `--radius-pill` | `9999px` | 胶囊：chip、导航条、进度槽、圆点 |
-
-三层足够。不要引入第四种圆角；`0` 圆角属于已废弃的旧主题，不要用。
-
-## Components
-
-- **`.button`**：`min-height: 40px`、`padding: 0 var(--space-4)`、`border: none`、`gap: 9px`。
-  `.button.primary` = `background: var(--text)` + 白字（**深色实心，不是 accent**）；
-  `.button.secondary` = 透明底 + `--shadow-border`。二者都可直接用在 `<button>` 与 `<Link>` 上。
-- **卡片**：`--radius-card` + `--shadow-card` + `--space-5` 内距；hover 抬升见上。
-- **chip / 标签**：`--radius-pill` + `--surface-soft` + 12–13px + `--text-secondary`。
-- **section label**：窄体大写 13px/800，颜色 `--muted`；当前区块是"活跃"态时才用 `--accent`。
-- **Callout**：`--surface-soft` 底 + `--shadow-border`，两列栅格（`auto 1fr`）——
-  左边是**文字标签**（说明 / 注意 / 警告 / 提示 / 结论），右边是内容。
-  用标签而不是 emoji 或彩色边来区分类型；危险级别才把标签压成 `--text`。
-  这既是本站既有的层级语言，也避免了把 accent 用在非交互元素上。
-- **横向画廊（`/about` `ProjectRail`）**：`overflow-x: auto` + `scroll-snap-type: x mandatory`，
-  不劫持纵向滚动；窄屏（<=720px）退回纵向堆叠。
-
-## Do's and Don'ts
-
-**Do**
-- 只用上面列出的 token；新增颜色前先问"能不能用 `--text` 加粗或 `--surface-soft` 解决"。
-- 动效全部提供 `prefers-reduced-motion: reduce` 降级（`transition: none` / 去掉 `transform`）。
-- 会跳动的数字加 `tabular-nums`。
-- 打破"纵向同形堆叠"时优先改**排布方向**（横向/错落），而不是加装饰。
-- 加新页面时确认它属于哪种 surface 模式（本站绝大多数是 Read，`/gallery` 是 Experience）。
-
-**Don't**
-- ❌ 不要用 `border`，用 `--shadow-border` 系列。
-- ❌ 不要引入第二个彩色（`--accent` 是唯一交互色）。
-- ❌ 不要写死色值、不要硬编码 px 间距、不要新增圆角档位。
-- ❌ 不要用 `transition: width / height / padding / margin`（会触发 layout 抖动）——
-  改用 `transform: scaleX()` 或 `grid-template-rows`。
-- ❌ 不要给卡片加单侧粗色边（`border-left: 3px solid` 这类）—— 已被判定为
-  AI 生成 UI 最典型的破绽。`/callout` 曾经就是这么写的，2026-09-20 已改为
-  「第二中性层 + 文字标签」（见 Components）。
-- ❌ 不要为了"更现代"把 `"Arial Narrow"` 换成别的高对比 sans：窄体大写标签是本站的
-  刻意语汇，不是疏忽。
-- ❌ 不要在 `app/globals.css` 的第一个 `:root`（第 8–63 行）里加 token —— 它是死代码，
-  写进去不会生效。**新 token 一律加在第二个 `:root`（约第 3152 行起）。**
+运行 typecheck、lint、test、content:audit、build（含 images:check 和 gallery:check）。浏览器检查首页、项目列表和详情、关于、博客、笔记、画廊和工具页；覆盖桌面与 390px / 320px 窄屏，验证导航、搜索、流程切换、联系和打印入口。已有内容告警需单独记录。

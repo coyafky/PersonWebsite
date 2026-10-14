@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MdxContent } from "@/components/mdx-content";
@@ -25,7 +26,9 @@ export async function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
 }
 
-export async function generateMetadata({ params }: SlugPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: SlugPageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = await getContentBySlug("projects", slug);
 
@@ -47,7 +50,14 @@ export default async function ProjectDetailPage({ params }: SlugPageProps) {
     notFound();
   }
 
-  const headings = extractHeadings(project.body);
+  // Older case studies repeat the frontmatter title as a leading H1.
+  const trimmedBody = project.body.trimStart();
+  const titleLine = `# ${project.title}`;
+  const body =
+    trimmedBody.split(/\r?\n/, 1)[0] === titleLine
+      ? trimmedBody.slice(titleLine.length).trimStart()
+      : project.body;
+  const headings = extractHeadings(body);
   const url = buildUrl(`/projects/${project.slug}`);
   const detailPosts = await getProjectDetailPosts(project);
 
@@ -58,13 +68,24 @@ export default async function ProjectDetailPage({ params }: SlugPageProps) {
       .filter((p) => p.series === project.series)
       .sort((a, b) => (a.seriesOrder ?? 0) - (b.seriesOrder ?? 0));
     const idx = seriesProjects.findIndex((p) => p.slug === project.slug);
-    if (idx > 0) seriesPrev = { title: seriesProjects[idx - 1].title, slug: `/projects/${seriesProjects[idx - 1].slug}`, date: seriesProjects[idx - 1].date };
-    if (idx < seriesProjects.length - 1) seriesNext = { title: seriesProjects[idx + 1].title, slug: `/projects/${seriesProjects[idx + 1].slug}`, date: seriesProjects[idx + 1].date };
+    if (idx > 0)
+      seriesPrev = {
+        title: seriesProjects[idx - 1].title,
+        slug: `/projects/${seriesProjects[idx - 1].slug}`,
+        date: seriesProjects[idx - 1].date,
+      };
+    if (idx < seriesProjects.length - 1)
+      seriesNext = {
+        title: seriesProjects[idx + 1].title,
+        slug: `/projects/${seriesProjects[idx + 1].slug}`,
+        date: seriesProjects[idx + 1].date,
+      };
   }
 
   const postIdx = allProjects.findIndex((p) => p.slug === slug);
   const prevPost = postIdx > 0 ? allProjects[postIdx - 1] : undefined;
-  const nextPost = postIdx < allProjects.length - 1 ? allProjects[postIdx + 1] : undefined;
+  const nextPost =
+    postIdx < allProjects.length - 1 ? allProjects[postIdx + 1] : undefined;
 
   return (
     <ArticleLayout headings={headings}>
@@ -75,18 +96,26 @@ export default async function ProjectDetailPage({ params }: SlugPageProps) {
       />
       <article className="article-shell">
         <header className="article-header">
-          <span>{project.stack.join(" / ")} · <span className="reading-time">{readingTimeLabel(project.body)}</span>{project.stage ? ` · ${project.stage}` : null}</span>
+          <Link className="article-back" href="/projects">
+            ← 全部项目案例
+          </Link>
+          <span>
+            {project.stack.join(" / ")} ·{" "}
+            <span className="reading-time">
+              {readingTimeLabel(project.body)}
+            </span>
+            {project.stage ? ` · ${project.stage}` : null}
+          </span>
           <h1>{project.title}</h1>
           <p>{project.summary}</p>
-          {project.englishSummary ? <p className="english-summary">{project.englishSummary}</p> : null}
         </header>
         <section className="evidence-grid">
           <div>
-            <h2>Role</h2>
+            <h2>我的职责</h2>
             <p>{project.role}</p>
           </div>
           <div>
-            <h2>Impact</h2>
+            <h2>交付与结果</h2>
             <ul>
               {project.impact.map((item) => (
                 <li key={item}>{item}</li>
@@ -94,11 +123,16 @@ export default async function ProjectDetailPage({ params }: SlugPageProps) {
             </ul>
           </div>
         </section>
-        <MdxContent source={project.body} />
+        <MdxContent source={body} />
         <ProjectDetails posts={detailPosts} />
-        <SeriesNav series={project.series ?? ""} prev={seriesPrev} next={seriesNext} />
+        <SeriesNav
+          series={project.series ?? ""}
+          prev={seriesPrev}
+          next={seriesNext}
+        />
         <section className="resume-block">
-          <h2>Resume Bullets</h2>
+          <h2>项目摘要 · English</h2>
+          {project.englishSummary ? <p>{project.englishSummary}</p> : null}
           <ul>
             {project.resumeBullets.map((bullet) => (
               <li key={bullet}>{bullet}</li>

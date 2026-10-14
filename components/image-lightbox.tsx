@@ -1,54 +1,77 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  Children,
+  isValidElement,
+  useId,
+  useRef,
+  useSyncExternalStore,
+} from "react";
+import { createPortal } from "react-dom";
+import type { ReactNode } from "react";
 
-type LightboxProps = {
-  src: string;
-  alt: string;
-  children: React.ReactNode;
-};
+const subscribe = () => () => {};
+
+type LightboxProps = { src: string; alt: string; children: ReactNode };
 
 export function ImageLightbox({ src, alt, children }: LightboxProps) {
-  const [open, setOpen] = useState(false);
-
-  const close = useCallback(() => setOpen(false), []);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, close]);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const labelId = useId();
+  const hydrated = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
+  const hasLink = Children.toArray(children).some(
+    (child) => isValidElement(child) && child.type === "a",
+  );
+  const open = () => dialog.current?.showModal();
 
   return (
     <>
-      <span className="lightbox-trigger" onClick={() => setOpen(true)}>
+      <span
+        className="lightbox-trigger"
+        role={hasLink ? undefined : "button"}
+        tabIndex={hasLink ? undefined : 0}
+        aria-label={hasLink ? undefined : `放大图片：${alt}`}
+        onClick={(event) => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
+            return;
+          event.preventDefault();
+          open();
+        }}
+        onKeyDown={(event) => {
+          if (!hasLink && (event.key === "Enter" || event.key === " ")) {
+            event.preventDefault();
+            open();
+          }
+        }}
+      >
         {children}
       </span>
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            className="lightbox-overlay"
-            onClick={close}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+      {hydrated &&
+        createPortal(
+          <dialog
+            className="mdx-lightbox"
+            ref={dialog}
+            aria-labelledby={labelId}
+            onClick={(event) => {
+              if (event.target === event.currentTarget) dialog.current?.close();
+            }}
           >
-            <motion.img
-              src={src}
-              alt={alt}
-              className="lightbox-image"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-            />
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+            <button
+              className="mdx-lightbox-close"
+              type="button"
+              onClick={() => dialog.current?.close()}
+            >
+              关闭图片
+            </button>
+            {/* eslint-disable-next-line @next/next/no-img-element -- original image for full-size inspection. */}
+            <img src={src} alt={alt} className="lightbox-image" />
+            <p id={labelId}>{alt}</p>
+          </dialog>,
+          document.body,
+        )}
     </>
   );
 }

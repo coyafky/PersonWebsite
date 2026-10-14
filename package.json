@@ -24,7 +24,8 @@
     "knowledge:deploy-production": "node scripts/knowledge-field.mjs deploy-production",
     "knowledge:report": "node scripts/knowledge-field.mjs report",
     "knowledge:cron": "bash scripts/knowledge-field-cron.sh",
-    "content:audit": "node scripts/audit-content.mjs"
+    "content:audit": "node scripts/audit-content.mjs",
+    "mdx:check": "node --experimental-strip-types scripts/check-mdx.ts"
   },
   "dependencies": {
     "@next/mdx": "16.2.7",
@@ -48,6 +49,7 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@mdx-js/mdx": "^3.1.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",

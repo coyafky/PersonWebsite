@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coya 博客共创"
+  short_description: "先读完整大纲并发散提问，确认方向后编写适配本站的 MDX 博客草稿"
+  default_prompt: "使用 $coya-blog-writer 阅读我提供的完整大纲，先梳理模块并提问，等我确认文章方向后再写 MDX 草稿。"

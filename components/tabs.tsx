@@ -1,62 +1,104 @@
 "use client";
 
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  Children,
+  isValidElement,
+  useId,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import type { ReactNode } from "react";
 
-interface Tab {
-  label: string;
-  children: ReactNode;
+type TabItem = { label: string; children: ReactNode };
+const subscribe = () => () => {};
+
+export function Tab({ children }: TabItem) {
+  return <>{children}</>;
 }
 
-export function Tabs({ tabs }: { tabs: Tab[] }) {
+export function Tabs({
+  tabs,
+  children,
+  label = "内容选项",
+}: {
+  tabs?: TabItem[];
+  children?: ReactNode;
+  label?: string;
+}) {
+  const id = useId();
   const [active, setActive] = useState(0);
-
-  if (!Array.isArray(tabs) || tabs.length === 0) {
-    return (
-      <div className="tabs tabs-empty">
-        <p>
-          Tabs 缺少 <code>tabs</code> 数据。请在 MDX 中通过 <code>import</code> 引入数据文件，或在
-          frontmatter 中提供 <code>tabs</code> 数组。
-        </p>
-      </div>
+  const triggers = useRef<(HTMLButtonElement | null)[]>([]);
+  const hydrated = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
+  const items =
+    tabs ??
+    Children.toArray(children).flatMap((child) =>
+      isValidElement<TabItem>(child) && typeof child.props.label === "string"
+        ? [{ label: child.props.label, children: child.props.children }]
+        : [],
     );
-  }
+  if (!items.length) return null;
+  const selected = Math.min(active, items.length - 1);
 
   return (
     <div className="tabs">
-      <div className="tabs-nav" role="tablist" aria-label="Content tabs">
-        {tabs.map((tab, i) => (
+      <div
+        className="tabs-nav"
+        role="tablist"
+        aria-label={label}
+        hidden={!hydrated}
+      >
+        {items.map((item, index) => (
           <button
-            key={i}
-            onClick={() => setActive(i)}
+            key={index}
+            ref={(node) => {
+              triggers.current[index] = node;
+            }}
             type="button"
             role="tab"
-            aria-selected={i === active}
-            aria-controls={`tabs-panel-${i}`}
-            id={`tabs-trigger-${i}`}
-            className={`tabs-trigger ${i === active ? "active" : ""}`}
+            id={`${id}-tab-${index}`}
+            aria-selected={index === selected}
+            aria-controls={`${id}-panel-${index}`}
+            tabIndex={index === selected ? 0 : -1}
+            className={`tabs-trigger ${index === selected ? "active" : ""}`}
+            onClick={() => setActive(index)}
+            onKeyDown={(event) => {
+              let next = index;
+              if (event.key === "ArrowRight") next = (index + 1) % items.length;
+              else if (event.key === "ArrowLeft")
+                next = (index - 1 + items.length) % items.length;
+              else if (event.key === "Home") next = 0;
+              else if (event.key === "End") next = items.length - 1;
+              else return;
+              event.preventDefault();
+              setActive(next);
+              triggers.current[next]?.focus();
+            }}
           >
-            {tab.label}
+            {item.label}
           </button>
         ))}
       </div>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active}
+      {items.map((item, index) => (
+        <div
+          key={index}
           className="tabs-panel"
-          role="tabpanel"
-          id={`tabs-panel-${active}`}
-          aria-labelledby={`tabs-trigger-${active}`}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
+          id={`${id}-panel-${index}`}
+          role={hydrated ? "tabpanel" : undefined}
+          aria-labelledby={hydrated ? `${id}-tab-${index}` : undefined}
+          tabIndex={hydrated ? 0 : undefined}
+          hidden={hydrated && index !== selected}
         >
-          {tabs[active]?.children}
-        </motion.div>
-      </AnimatePresence>
+          {!hydrated && (
+            <strong className="tabs-fallback-label">{item.label}</strong>
+          )}
+          {item.children}
+        </div>
+      ))}
     </div>
   );
 }

@@ -764,6 +764,71 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "height": 900,
     "blurDataURL": "data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAACQAwCdASoYAA4APt1apkyopSOiMAgBEBuJaQDE2CG7wrTYozHAAP7qddnvUoUKRKw9v0SLrCRxeJTTvPYN0fj8p79OsWp7em/0EXJA/rJaquf3biQcHoX2AAA="
   },
+  "/images/blog/2026-10-12-korean-semi-realistic-anime-prompt/knit-uniform.png": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRvQAAABXRUJQVlA4IOgAAABwBgCdASoYACsAPtlYpEyoJSOiMBqtUQAbCUAZx2WCcpD4iMm7ORfTwl4DtioHKUKRda3yRzq3mzxE2YAA/vTTe+xv/6ldkT8GIMrjE7+LhELFxL3RSHqHUnhxGeEmpVaxVx+76/cD7yLDB7yR/IC1u9I868k7vgOuZcNNGTD43LwOwGlTwFCXyoxgdGHMFB3hc+DQ7RTkKOplJ7nWWaTymENnuQmAmjR1Q/Y8/7JhYIGSGFTNOzMEC2Hx2/JfsZtLNskykGq9yAbIh/OCoTWvM/HrCtuEx2IJmtlllw8YyHINMJXskwAA"
+  },
+  "/images/blog/2026-10-12-korean-semi-realistic-anime-prompt/ming-hanfu.png": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRigBAABXRUJQVlA4IBwBAAAwBwCdASoYACsAPtFSpEyoJKOiNVgMAQAaCWIAw3QIHYEGBKgnx3YdQughx0XWpeIpB4cPqGfwJir+m6nd4GzCECAA/voVqOzqNSBlOaZzS8Rtl3vUst4WruuCTrs953HW27qScOvLRJVbHvAKYeiBO6JsS6eR2n6pEo9NVimMTw8Ch33OvKUEGnmxQ7/bNCVwe662EStjVaPo+b88RCqUAni9U2WfzqLqI0gGLCuF/tAOe+j7uq8yoLakre5KpMu6q859o1eRGYlOw25WQqrTugSxE+owkBPVLDxNOmbj+RxmkSCXczLs9/aW5VXcbNum2D6gbF4HyFMC+Tym8VOlWHTaZ0PTWkToK1UhypnMnRcQB/nSlh559YAAAA=="
+  },
+  "/images/blog/2026-10-12-korean-semi-realistic-anime-prompt/modern-qipao.png": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRgABAABXRUJQVlA4IPQAAAAwBgCdASoYACsAPt1YqEyopSQiMBVdURAbiWUAzJgIDlaJwge5vZ21uHOBUJTdFx4M1LswDaPyga4AAP74uTlxBLaBZe/Kj91tvlSTean+vZ5SMLtc9VZD3JQLzxHzy/+8ImixkLWZrJDbjKj7B74QAwiFVR/bawdfyivBkh/EAh1K3l/V0MXQZMtCvXEo4iNCFVXGl0Pp77dc/gV6l1pEGR0AvVC8ZdeKAgWxjbtH93BFbM4hGg+vKqdi/6MxHsdUQOhMytJShYrsNdO9Ca+0R9vFS0ZGt1GO8UIUDT745eUvpbklq5q+DqWuMec62y8iOgAA"
+  },
+  "/images/blog/2026-10-12-korean-semi-realistic-anime-prompt/office-suit.png": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRsIAAABXRUJQVlA4ILYAAABwBQCdASoYACsAPt1apkyopSOiMBVdURAbiWcA0umMbEqOlKjSCUQdBjOZbC7aG0IleDAAAP7008+pJ6MEvxa6VzVNm7jSMTDuCu+ozpcnczOexmaVTbMYHh5UBALW8KcWXpQ//MSZX5lLH+JP+AT44m5P965q8YWqltQatqiQwe7wTScyso39exOSWucN3p27cyd+VTt054hUXB0M+fkjpekNmzEs8IMZ7NN7FVJNVLCwbX/gAA=="
+  },
+  "/images/blog/2026-10-12-korean-semi-realistic-anime-prompt/raiden-shogun.png": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRnQBAABXRUJQVlA4IGgBAABQCACdASoYACsAPt1kq1CopSOipWsxEBuJZQDLMbA6wG0wNBQJ5l3kTWtOcp7QTmbIj6JVnCN9WXjsdiDYNZgvCCWW+FUSyBpVrgAA/vluWGj5rpRmO13PXy3YSMomdH0arBuCvxpoLOAfTN4NYvXozamQmxYEqHvarpxQzF8Hf2Ywq4+k1kfoKQ6ujUlr6u6s/AFyk8a8KTVYd3h6SMJKKrOpGkqZkYcE6MelM44h6H+uGYt0Fev+akvzgXZMpBrx9qU/FaHY1YYT1gsDora6C+IZAJx1IEkWiIIc5kOrVb8PpwHSDib1lUctSMAprT/ZoZdJqqAYpTy9Hd4UG3wF6QzB1o9RSqcFgFMJarXuBXR0cJ4NxJ1w/xCbIZJ5aVilUVfsU9NfynyQgmThe5isf0aoyfarmnAfPozufw+6kDRvvOJQMq3iVezPsgEGR9/PbrmtbeVOeyPQbI38Y3NlIXnx0wPIAAA="
+  },
+  "/images/blog/2026-10-12-korean-semi-realistic-anime-prompt/republican-qipao.png": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRsgAAABXRUJQVlA4ILwAAADwBQCdASoYACsAPt1cpU0opSOiNVQIARAbiWUABRKs39O28aujQowZKBcjGf/vuOxx2/ym2ZFAAAD+9+mWRcWALyiuDN+9NEdEtgLojCzsXyTrfViZjgaDbha2PlkBoEkI6sSV/kl92H+GVLjRnNJc1lTeq3NNrPXvOS0maXJspy7P8QXTVA6qCAI7yv4k+h9YgsbQdyATQj6FWn4NS8rUHzMTtyxqIgdnXz5fbSSkAsZ9LP2pJ4tM3awAAA=="
+  },
+  "/images/blog/2026-10-12-korean-semi-realistic-anime-prompt/song-hanfu.png": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRtIAAABXRUJQVlA4IMYAAACwBQCdASoYACsAPt1gpk2opaMiMBqoARAbiWcA0jQ6iB7XoWdpfHV6N1ad/DZeIhOlUHxQF0AA/vcIhnjlMDLWkAJrrwmDmxKiG+vlYk4hkNprtXQhOrA9y/ykUPnjR7k0MGi+lT+Gh0F/VvXR5WUsnqgNP2XeuQveFmFAh4ZsrRkIFon7XdsI8kZmlY6u1rBlXu4hyxG930ruqLgiKT2oUxjpdWZ1xobxPdroPvvuAD3owWQfzBFsH4uKxM13tBAiQeCAAAA="
+  },
+  "/images/blog/2026-10-12-korean-semi-realistic-anime-prompt/tang-hanfu.png": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRlwBAABXRUJQVlA4IFABAADwBwCdASoYACsAPs1SoUynpKMiOrZoAPAZiWoAtQkhugEoCrTsANIEz8ciBELkVbHz6xjVqKPXoNMbvvK+kFv1pUgI4n2MwAAA/voZfWC3uHEH+E4f98LQk97WU/wienrZAW1aZeE/RDgHcio1+pzq3cPC24TxIW2y12UdkagTPYMvnL6d+3gXNUMnXV/J4ich3RKFbqUaeEhIOebIB1kUQGLCp7qNXjqSee7rAodNOr38hN8+cTzboVvxtzrP4uGr4ZBJFHpAcyAbmdOHf/K5JFdNkGFGW6NN5Y/m9RB0R5PLYM/E431be89gsT/d+hFf2qAXFeJJlGZ57zW6e4xdpjQo0zHIxfyG30xEqGtuexKlJLd/tJV0uRNNoiyNhQRMP+KDTIQEA3u6B6xxbDgkqWZMPwCiCpKanonWnQiRY2QTbjz+rbZ5W+QPBXgAAAA="
+  },
+  "/images/blog/2026-10-12-korean-semi-realistic-anime-prompt/warring-states.png": {
+    "width": 941,
+    "height": 1672,
+    "blurDataURL": "data:image/webp;base64,UklGRgQBAABXRUJQVlA4IPgAAACQBgCdASoYACsAPt1eqVAopKOiqrgKARAbiWMAzUssE6EU1yNbpxov9gNfiEjGLGscq75Jo3dxUK/wOUAAAP76FZ/vnUD90tgcD7MzZg8iCw/Vi8jWXHZppOlign11g+SCHriuRqhPm1IE8HLF+3C2DpyDPaIuGso+N6XYcHZRggScRUYGAKo0XKVqJkI0xl66D+i6TJ7+LRrKBoMLzkyjkjdFfxkUuj5RTlTP3/5ye2pOiIUt8zSSfZXfiQ8FuUlgVa8a9bQ6B/q7Wje7JmDsyZjPVfb3Zbur7WuuDBIo0hnGO+umiI5vf/LrGDNHAR20TlswfEAAAA=="
+  },
+  "/images/blog/2026-10-14-chatgpt-notion-knowledge-workflow/notion-note.png": {
+    "width": 3024,
+    "height": 1652,
+    "blurDataURL": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADwAwCdASoYAA4APt1cp0yopSOiMAgBEBuJaQAAXlvQK/HHvJ+U++4AAP7x04MnX/P84AlMD/M1MYbpD3LkuD/G1r+9tGDQAAA="
+  },
+  "/images/blog/2026-10-14-chatgpt-notion-knowledge-workflow/notion-write-result.png": {
+    "width": 1788,
+    "height": 1314,
+    "blurDataURL": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAACQBACdASoYABIAPt1irE8opaSiKAqpEBuJaQAAL4bgPmlTzyXDMc0yFrg7ZAAA/vIpWxOKP6Bt+kf5Lquh04EmQ6CDWkTnkU2VDimdnTxERTgSQW3niXiGFIgDKsXqP4vqZtb5YY30pnCWEhAAAA=="
+  },
+  "/images/blog/2026-10-14-chatgpt-notion-knowledge-workflow/prompt.png": {
+    "width": 1986,
+    "height": 1292,
+    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAACwAwCdASoYABAAPt1cqUyopSQiMAgBEBuJZQABHuu1sbLe48PrwAD+/nszRXPm8OeJ0IpEDU1yV6D/6T+WVpyhbVWdr62KhT9PBRH7f+lRVwAA"
+  },
+  "/images/blog/2026-10-14-chatgpt-notion-knowledge-workflow/youtube-transcript.png": {
+    "width": 2988,
+    "height": 1508,
+    "blurDataURL": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAwAwCdASoYAA0ALqVut1ujKKioiICkS0gABc6gKb/U9IMAAP14/uFpgdiBg4JJeX3fLsYkcIJWbhZ4NkH28mj4GgrPziFMQbi/Wtqkr53EVzdiHq+i8ViOkapZs31IAAA="
+  },
   "/images/blog/图片提示词/01-比例.png": {
     "width": 1448,
     "height": 1086,

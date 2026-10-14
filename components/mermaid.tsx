@@ -73,8 +73,25 @@ export function Mermaid({ chart }: MermaidProps) {
   }
 
   if (svg) {
-    return <div className="mermaid" dangerouslySetInnerHTML={{ __html: svg }} />;
+    return (
+      <div
+        className="mermaid"
+        tabIndex={0}
+        role="region"
+        aria-label="流程图，可横向滚动"
+        dangerouslySetInnerHTML={{ __html: svg }}
+      />
+    );
   }
 
-  return <div className="mermaid mermaid-loading" aria-busy="true" aria-label="Loading Mermaid diagram" />;
+  return (
+    <div className="mermaid mermaid-loading">
+      <p className="mdx-diagram-fallback">
+        图表加载后显示；未启用 JavaScript 时可阅读下方流程源码。
+      </p>
+      <pre>
+        <code>{definition}</code>
+      </pre>
+    </div>
+  );
 }
