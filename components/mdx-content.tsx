@@ -33,6 +33,8 @@ import { Accordion } from "@/components/mdx/accordion";
 import { CodeTabs } from "@/components/mdx/code-tabs";
 import { FileTree } from "@/components/mdx/file-tree";
 import { Terminal } from "@/components/mdx/terminal";
+import { GitHubCard } from "@/components/mdx/github-card";
+import { LinkPreview } from "@/components/mdx/link-preview";
 
 const prettyCodeOptions = {
   theme: "github-light",
@@ -149,6 +151,8 @@ const components = {
   CodeTabs: withStaticProps(CodeTabs),
   FileTree: withStaticProps(FileTree),
   Terminal: withStaticProps(Terminal),
+  GitHubCard: withStaticProps(GitHubCard),
+  LinkPreview: withStaticProps(LinkPreview),
   Mermaid: withStaticProps(Mermaid),
   Tweet,
   YouTube,

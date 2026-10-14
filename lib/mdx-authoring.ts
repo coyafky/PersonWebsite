@@ -56,6 +56,30 @@ const propSchemas: Record<string, z.ZodType> = {
     })
     .strict(),
   Mermaid: z.object({ chart: text }).strict(),
+  GitHubCard: z
+    .object({
+      repository: z.string().regex(/^[^/\s]+\/[^/\s]+$/),
+      name: text.max(120),
+      description: text.max(500),
+      url: z.string().url().regex(/^https:\/\/github\.com\/[^/\s]+\/[^/\s]+\/?$/),
+      language: text.max(40).optional(),
+      stars: z.number().int().nonnegative().optional(),
+      forks: z.number().int().nonnegative().optional(),
+      license: text.max(80).optional(),
+    })
+    .strict(),
+  LinkPreview: z
+    .object({
+      url: z.string().url().regex(/^https:\/\//),
+      title: text.max(160),
+      description: text.max(500),
+      image: z
+        .string()
+        .regex(/^\/(?!\/)(?!.*(?:[?#%\\])).+$/)
+        .optional(),
+      siteName: text.max(80).optional(),
+    })
+    .strict(),
 };
 const allowed = new Set([
   ...Object.keys(propSchemas),
@@ -69,6 +93,8 @@ const allowed = new Set([
   "VisualDnaBuilder",
   "VisualStorytellingFramework",
   "LightingDirectionCarousel",
+  "GitHubCard",
+  "LinkPreview",
   "br",
   "kbd",
   "sup",
@@ -138,6 +164,8 @@ export async function checkMdxAuthoring(source: string) {
                 throw new Error(`${name} 需要 alt。`);
               assets.push(props.src);
             }
+            if (name === "LinkPreview" && typeof props.image === "string")
+              assets.push(props.image);
           }
           if (Array.isArray(item.children)) item.children.forEach(walk);
         }

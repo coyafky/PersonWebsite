@@ -67,6 +67,8 @@ const dataComponents = new Set([
   "Accordion",
   "Callout",
   "Mermaid",
+  "GitHubCard",
+  "LinkPreview",
 ]);
 const prefix = "__MDX_STATIC_JSON__:";
 
