@@ -4,6 +4,7 @@ import {
   getNoteCollections,
   getNoteCollectionNotes,
   getProjectPosts,
+  getSkillPosts,
 } from "@/lib/content";
 import { buildUrl } from "@/lib/metadata";
 import { TOOLS } from "@/lib/tools/registry";
@@ -12,9 +13,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /career 已合并到 /about（app/(site)/career/page.tsx 仅 307 跳转）。
   // 不暴露 /career 条目，避免搜索引擎索引跳转链。
   // /diary 与 /weekly 已下架（内容已归档，路由只剩 308 跳转桩），同样不产出条目。
-  const [blog, projects] = await Promise.all([
+  const [blog, projects, skills] = await Promise.all([
     getBlogPosts(),
     getProjectPosts(),
+    getSkillPosts(),
   ]);
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -23,6 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: buildUrl("/timeline"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
     { url: buildUrl("/projects"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: buildUrl("/gallery"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: buildUrl("/skills"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: buildUrl("/notes"), lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
     { url: buildUrl("/tools"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
   ];
@@ -43,6 +46,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const projectUrls: MetadataRoute.Sitemap = projects.map((post) => ({
     url: buildUrl(`/projects/${post.slug}`),
+    lastModified: new Date(post.date),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  const skillUrls: MetadataRoute.Sitemap = skills.map((post) => ({
+    url: buildUrl(`/skills/${post.slug}`),
     lastModified: new Date(post.date),
     changeFrequency: "monthly" as const,
     priority: 0.6,
@@ -78,6 +88,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...blogUrls,
     ...projectUrls,
+    ...skillUrls,
     ...noteIndexUrls,
     ...noteDetailUrls,
     ...toolUrls,

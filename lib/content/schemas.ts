@@ -137,6 +137,29 @@ export const courseNoteSchema = baseContentSchema.extend({
   chapter: z.string().optional(),
 });
 
+export const skillSchema = baseContentSchema.extend({
+  kind: z.literal("skills"),
+  contribution: z.enum(["original", "adaptation", "analysis"]),
+  origin: z.string(),
+  sourceUrl: z.string().url().optional(),
+  license: z.string().optional(),
+  scenario: z.string(),
+  input: z.string(),
+  process: z.string(),
+  output: z.string(),
+  contributionSummary: z.string(),
+  changes: stringArraySchema,
+  evidence: stringArraySchema,
+  cover: z.string().optional(),
+  coverAlt: z.string().optional(),
+  previewImages: z.array(z.string()).default([]),
+  tags: tagArraySchema,
+  lang: z.string().default("zh"),
+  updated: z.string().optional(),
+  relatedProjects: z.array(z.string()).default([]),
+  relatedBlogPosts: z.array(z.string()).default([]),
+});
+
 export const gallerySchema = baseContentSchema.extend({
   kind: z.literal("gallery"),
   image: z.string(),
@@ -178,6 +201,7 @@ export const schemaByKind = {
   "book-note": bookNoteSchema,
   "course-index": courseIndexSchema,
   "course-note": courseNoteSchema,
+  skills: skillSchema,
   gallery: gallerySchema,
 } as const;
 
@@ -193,6 +217,7 @@ export type BookIndexPost = z.infer<typeof bookIndexSchema>;
 export type BookNotePost = z.infer<typeof bookNoteSchema>;
 export type CourseIndexPost = z.infer<typeof courseIndexSchema>;
 export type CourseNotePost = z.infer<typeof courseNoteSchema>;
+export type SkillPost = z.infer<typeof skillSchema>;
 export type GalleryPost = z.infer<typeof gallerySchema>;
 export type SiteContent =
   | BlogPost
@@ -205,4 +230,5 @@ export type SiteContent =
   | BookNotePost
   | CourseIndexPost
   | CourseNotePost
+  | SkillPost
   | GalleryPost;

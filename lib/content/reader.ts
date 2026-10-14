@@ -15,6 +15,7 @@ import {
   type LearningPost,
   type ProjectPost,
   type SiteContent,
+  type SkillPost,
   type WeeklyPost,
   bookIndexSchema,
   bookNoteSchema,
@@ -52,6 +53,7 @@ type CollectionMap = {
   "course-index": CourseIndexPost;
   "course-note": CourseNotePost;
   gallery: GalleryPost;
+  skills: SkillPost;
 };
 
 async function fileExists(filePath: string) {
@@ -633,6 +635,15 @@ async function readAllNotePosts() {
   };
 }
 
+export async function getSkillPosts(includeDrafts = false): Promise<SkillPost[]> {
+  const items = await getCollection("skills", includeDrafts);
+  return items.filter((item): item is SkillPost => item.kind === "skills");
+}
+
+export async function getSkillPostBySlug(slug: string): Promise<SkillPost | null> {
+  return getContentBySlug("skills", slug);
+}
+
 export async function getGalleryPosts(includeDrafts = false): Promise<GalleryPost[]> {
   const items = await getCollection("gallery", includeDrafts);
   return items.filter((item): item is GalleryPost => item.kind === "gallery");
@@ -775,6 +786,7 @@ function emptyKindCounts(): Record<ContentKind, number> {
     "book-note": 0,
     "course-index": 0,
     "course-note": 0,
+    skills: 0,
     gallery: 0,
   };
 }

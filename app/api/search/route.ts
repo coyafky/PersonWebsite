@@ -5,6 +5,7 @@ import {
   getNoteCollectionNotes,
   getProjectPosts,
   getGalleryPosts,
+  getSkillPosts,
 } from "@/lib/content";
 
 type SearchHit = {
@@ -34,10 +35,11 @@ export async function GET(request: Request) {
   }
 
   // Diary 与 Weekly 已下架（内容归档），搜索不再收录。
-  const [blog, projects, gallery] = await Promise.all([
+  const [blog, projects, gallery, skills] = await Promise.all([
     getBlogPosts(),
     getProjectPosts(),
     getGalleryPosts(),
+    getSkillPosts(),
   ]);
 
   const hits: SearchHit[] = [];
@@ -55,6 +57,11 @@ export async function GET(request: Request) {
   for (const post of gallery) {
     const score = matchScore(post, q);
     if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/gallery#${encodeURIComponent(post.slug)}`, date: post.date });
+  }
+
+  for (const post of skills) {
+    const score = matchScore({ ...post, body: `${post.body} ${post.scenario} ${post.origin} ${post.contributionSummary}` }, q);
+    if (score > 0) hits.push({ title: post.title, summary: post.summary, url: `/skills/${post.slug}`, date: post.date });
   }
 
   // Notes：学习主题 / 书 / 课程三合一，URL 扁平 `/notes/<collection>/<slug>`
