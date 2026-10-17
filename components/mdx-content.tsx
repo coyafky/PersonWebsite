@@ -144,7 +144,7 @@ function withStaticProps<P extends object>(Component: ComponentType<P>) {
 
 const components = {
   Callout: withStaticProps(Callout),
-  Timeline,
+  Timeline: withStaticProps(Timeline),
   Tabs: withStaticProps(Tabs),
   Tab,
   Accordion: withStaticProps(Accordion),

@@ -66,6 +66,7 @@ const dataComponents = new Set([
   "Tab",
   "Accordion",
   "Callout",
+  "Timeline",
   "Mermaid",
   "GitHubCard",
   "LinkPreview",
