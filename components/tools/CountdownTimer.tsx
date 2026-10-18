@@ -165,7 +165,12 @@ export function CountdownTimer() {
   return (
     <div className="tool-panel">
       <div className={`tool-face tool-face--${countdown.isComplete ? "done" : "countdown"}`}>
-        <p className="tool-phase">倒计时</p>
+        <p className="tool-phase">
+          倒计时
+          {countdown.isComplete ? (
+            <span className="tool-complete-mark" aria-hidden="true">✓</span>
+          ) : null}
+        </p>
         <p className="tool-readout" role="timer" aria-label="剩余时间">
           {formatClock(countdown.remainingMs)}
         </p>

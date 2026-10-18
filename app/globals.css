@@ -5323,10 +5323,36 @@ main {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
+  transition: color 180ms ease;
 }
 
-.tool-face--focus .tool-phase {
+.tool-face--focus .tool-phase,
+.tool-face--done .tool-phase {
   color: var(--accent);
+}
+
+.tool-complete-mark {
+  display: inline-block;
+  margin-left: var(--space-2);
+  color: var(--accent);
+}
+
+@keyframes tool-complete-in {
+  from {
+    opacity: 0.55;
+    transform: scale(0.75);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tool-complete-mark {
+    animation: tool-complete-in 180ms ease-out both;
+  }
 }
 
 /* 大号读数。tabular-nums 让每位数字等宽 —— 否则每秒跳动时
@@ -5430,6 +5456,7 @@ main {
   height: 6px;
   border-radius: var(--radius-pill);
   background: var(--surface-soft);
+  transition: background-color 180ms ease;
 }
 
 .tool-dot.is-done {
@@ -5590,6 +5617,8 @@ main {
 
 @media (prefers-reduced-motion: reduce) {
   .tool-index-card,
+  .tool-phase,
+  .tool-dot,
   .tool-progress-fill,
   .tool-chip {
     transition: none;
