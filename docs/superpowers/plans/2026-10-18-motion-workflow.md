@@ -36,10 +36,12 @@
 
 **Outcome:** Back/forward and repeated navigation work without a stale page waiting on its exit animation. Reduced-motion navigation has no transition delay.
 
-- [ ] Measure current navigation behavior in a browser, including back/forward and repeated clicks.
-- [ ] If there is a problem, make the smallest change to the shared wrapper and recheck the same paths.
-- [ ] Run `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build`.
-- [ ] Record the finding; commit a code change as task 2 if one is needed.
+- [x] Measure current navigation behavior in a browser, including back/forward and repeated clicks.
+- [x] If there is a problem, make the smallest change to the shared wrapper and recheck the same paths.
+- [x] Run `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build`.
+- [x] Record the finding; commit a code change as task 2 if one is needed.
+
+**Audit result:** No wrapper change needed. In the production build, the new page heading appeared 12ms after the `/about` history update. Back/forward restored the expected headings, and quick successive navigation ended on the last selected route. With and without reduced motion, the route wrapper had no active animation when the new heading entered the DOM. The initial dev-server navigation was slower while compiling `/about`, so the production build was used for the decision. The local Vercel analytics endpoint returned a 404; this does not affect navigation.
 
 ### Deferred scope
 
