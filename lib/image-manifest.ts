@@ -829,6 +829,56 @@ export const IMAGE_MANIFEST: Record<string, ImageMeta> = {
     "height": 1508,
     "blurDataURL": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAwAwCdASoYAA0ALqVut1ujKKioiICkS0gABc6gKb/U9IMAAP14/uFpgdiBg4JJeX3fLsYkcIJWbhZ4NkH28mj4GgrPziFMQbi/Wtqkr53EVzdiHq+i8ViOkapZs31IAAA="
   },
+  "/images/blog/2026-10-18-ai-answer-harvest/cover.webp": {
+    "width": 1600,
+    "height": 900,
+    "blurDataURL": "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADwAwCdASoYAA4APt1cpkyopSOiMAgBEBuJZwDCgCK51q6cty3B/IAAAP7s2TdP3tNHshRHA1KANkE4ZIJsLuKCtG5V/gAA"
+  },
+  "/images/blog/2026-10-18-ai-answer-harvest/ev-artifacts.webp": {
+    "width": 1600,
+    "height": 345,
+    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAgCdASoYAAYAPt1apkyopSOiMAgBEBuJaQAAetEDAAD+8CZeoBqznBOY21KCgAA="
+  },
+  "/images/blog/2026-10-18-ai-answer-harvest/ev-citations.webp": {
+    "width": 1600,
+    "height": 478,
+    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAAAQAwCdASoYAAgAPt1cpkyopSOiMAgBEBuJaQAAetDEoAAA/vAIrlQRfWNTekvAAAA="
+  },
+  "/images/blog/2026-10-18-ai-answer-harvest/ev-runone.webp": {
+    "width": 1600,
+    "height": 280,
+    "blurDataURL": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADwAgCdASoYAAUAPt1apkyrpSOiMAgBcBuJaQAAetCkmAD+7+iJ/AbhpJjCsAAA"
+  },
+  "/images/blog/2026-10-18-ai-answer-harvest/pipeline-diagram.webp": {
+    "width": 2936,
+    "height": 1571,
+    "blurDataURL": "data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADQAwCdASoYAA0APt1cqUyopSQiMAgBEBuJZwAAXfTyXolLOyxVMSAA/vHUZQUJsLGgNBbeZUBJQKS6LgHBqBrvR08bJDiX1oXtyTMzxNc0oQAA"
+  },
+  "/images/blog/2026-10-18-ai-answer-harvest/pipeline.webp": {
+    "width": 1600,
+    "height": 435,
+    "blurDataURL": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAACwAwCdASoYAAcAPt1cqE0opSQiMAgBEBuJZwDKAB6GLPrNPuYgAAD+8eFJ0QeNwUBaHvqgbJeEUtU8+V9jCWVlM29XZCfdcguEhAAA"
+  },
+  "/images/blog/2026-10-18-ai-answer-harvest/risk.webp": {
+    "width": 1600,
+    "height": 743,
+    "blurDataURL": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAACwAwCdASoYAAwAPt1cp0yopSOiMAgBEBuJZwDImCHcOK4R0ZLSAAD+8gWvYd9G1stx0bm+wVILw1VOm030xZytvOAAAA=="
+  },
+  "/images/blog/2026-10-18-ai-answer-harvest/shot-q053.webp": {
+    "width": 1600,
+    "height": 936,
+    "blurDataURL": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAwCdASoYAA8APt1apkyopSOiMAgBEBuJaQAAW+wwltmWdD+f+AAA/vJIWayjvGZf3IlsFgFqjbIx/MeEzdpzHRvfruiES55xgAAA"
+  },
+  "/images/blog/2026-10-18-ai-answer-harvest/shot-q077.webp": {
+    "width": 1600,
+    "height": 936,
+    "blurDataURL": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAABwAwCdASoYAA8APt1apkyopSOiMAgBEBuJaQAAW/AxO5UZGfAA/vJDZxzNtCkuYFgbdsC6/4JzskbPCAAAAA=="
+  },
+  "/images/blog/2026-10-18-ai-answer-harvest/shot-q090.webp": {
+    "width": 1600,
+    "height": 936,
+    "blurDataURL": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAABwAwCdASoYAA8APt1apkyopSOiMAgBEBuJaQAAW+/QRSNeEQAA/vJDZyEwLgW0M3yOD/dAP0xm30d/wEGwpK1dp7GAAA=="
+  },
   "/images/blog/图片提示词/01-比例.png": {
     "width": 1448,
     "height": 1086,
