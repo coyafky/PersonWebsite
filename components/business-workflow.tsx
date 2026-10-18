@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { portfolioCases } from "@/lib/portfolio";
+
+const SWITCH_EASE = [0.22, 0.61, 0.36, 1] as const;
 
 export function BusinessWorkflow({
   availableSlugs,
@@ -13,7 +16,10 @@ export function BusinessWorkflow({
     availableSlugs.includes(item.slug),
   );
   const [selected, setSelected] = useState(0);
+  const [hasSwitched, setHasSwitched] = useState(false);
+  const reduceMotion = useReducedMotion();
   const current = cases[selected] ?? cases[0];
+
   if (!current) return null;
 
   return (
@@ -29,17 +35,37 @@ export function BusinessWorkflow({
             type="button"
             aria-pressed={selected === index}
             aria-controls="business-workflow-detail"
-            onClick={() => setSelected(index)}
+            onClick={() => {
+              if (index === selected) return;
+              setSelected(index);
+              setHasSwitched(true);
+            }}
           >
-            {item.tab}
+            {selected === index ? (
+              <motion.span
+                className="workflow-active-indicator"
+                layoutId="workflow-active-indicator"
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : { duration: 0.18, ease: SWITCH_EASE }
+                }
+                aria-hidden="true"
+              />
+            ) : null}
+            <span className="workflow-switcher-label">{item.tab}</span>
           </button>
         ))}
       </div>
-      <div
+      <motion.div
+        key={current.slug}
         id="business-workflow-detail"
         className="workflow-detail"
         aria-live="polite"
         aria-atomic="true"
+        initial={!hasSwitched || reduceMotion ? false : { opacity: 0.72 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: reduceMotion ? 0 : 0.18, ease: SWITCH_EASE }}
       >
         <div className="workflow-endpoint">
           <span>业务输入</span>
@@ -75,7 +101,7 @@ export function BusinessWorkflow({
             查看案例 <span aria-hidden="true">↗</span>
           </Link>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
