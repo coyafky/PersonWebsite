@@ -28,11 +28,28 @@ export function BusinessWorkflow({
         <span className="section-kicker">FROM BUSINESS TO WORKFLOW</span>
         <span className="workflow-caption">项目流程</span>
       </div>
-      <div className="workflow-switcher" role="group" aria-label="选择业务场景">
+      <div
+        className="workflow-switcher"
+        role="group"
+        aria-label="选择业务场景"
+        style={{ gridTemplateColumns: `repeat(${cases.length}, minmax(0, 1fr))` }}
+      >
+        <motion.span
+          className="workflow-active-indicator"
+          style={{ gridColumn: selected + 1, gridRow: 1 }}
+          layout="position"
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : { duration: 0.18, ease: SWITCH_EASE }
+          }
+          aria-hidden="true"
+        />
         {cases.map((item, index) => (
           <button
             key={item.slug}
             type="button"
+            style={{ gridColumn: index + 1, gridRow: 1 }}
             aria-pressed={selected === index}
             aria-controls="business-workflow-detail"
             onClick={() => {
@@ -41,18 +58,6 @@ export function BusinessWorkflow({
               setHasSwitched(true);
             }}
           >
-            {selected === index ? (
-              <motion.span
-                className="workflow-active-indicator"
-                layoutId="workflow-active-indicator"
-                transition={
-                  reduceMotion
-                    ? { duration: 0 }
-                    : { duration: 0.18, ease: SWITCH_EASE }
-                }
-                aria-hidden="true"
-              />
-            ) : null}
             <span className="workflow-switcher-label">{item.tab}</span>
           </button>
         ))}
