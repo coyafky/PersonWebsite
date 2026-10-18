@@ -11,6 +11,7 @@ export function CopyButton({ text }: { text: string }) {
     <button
       type="button"
       className="code-copy-btn"
+      data-copied={status === "已复制" ? "" : undefined}
       aria-live="polite"
       onClick={async () => {
         clearTimeout(timer.current);

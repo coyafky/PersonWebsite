@@ -934,6 +934,17 @@ main {
   color: var(--text);
 }
 
+.code-copy-btn[data-copied] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code-copy-btn {
+    transition: none;
+  }
+}
+
 .code-block-pre {
   margin: 0;
   padding: var(--space-4);
