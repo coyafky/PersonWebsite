@@ -175,6 +175,8 @@
 
 图表不是装饰。**能一句话说清的关系不要出图，说不清的关系必须出图。**
 
+`[项目]` **图不能是信息的唯一载体。** A 档 mermaid 的源码会进服务端 HTML（页面里的 `mdx-diagram-fallback` 降级块），爬虫与 AI 能读到；B 档和 C 档导出的是位图，图里的文字对机器完全不可见。所以**图里的每一个数字、名称、关系，正文都必须另有文字表述**。本站是讲 GEO 的站，主张就是内容要能被 AI 摘取——不能出现「核心论据只存在于一张 AI 读不到的图里」这种自相矛盾。
+
 ### 7.2 判断逻辑
 
 写完正文后执行以下四步。
@@ -208,20 +210,26 @@
 | 档 | 工具 | 用在 | 不适用 |
 |---|---|---|---|
 | **A · mermaid** | ` ```mermaid ` 围栏代码块，站内原生渲染 | 流程图、时序图、状态机、ER 图、类图、甘特图、简单层级、分支决策 | 需要精确排版或品牌视觉。节点超过 15 个会糊成一团 |
-| **B · HTML/SVG 转 PNG** | 手写 HTML 或 SVG，用 Playwright 截图 | 编辑级排版、精确坐标的架构图、嵌套与包含结构、矩阵与象限、时间线 | 内容会频繁改动。PNG 是死图，改一次就要重截一次 |
+| **B · 结构化绘制转 PNG** | 手写 HTML/SVG 用 Playwright 截图；或 **Excalidraw**（`.excalidraw` JSON → PNG） | 编辑级排版、精确坐标的架构图、嵌套与包含结构、矩阵与象限、并排多阶段对比 | 内容会频繁改动。PNG 是死图，改一次就要重新出图 |
 | **C · AI 生图** | `micu-image` MCP（gpt-image-2） | 封面、氛围图、概念隐喻、抽象意象 | **任何含具体数据、名称、代码或精确关系的图** |
 
 选档顺序：**先问 A 能不能表达。** 大部分结构化关系 mermaid 都能画，而且它可版本控制、零成本、能被搜索引擎读到。A 表达不了（要精确排版、要编辑级质感）才升到 B。**C 只用于不承载事实的图像**，一旦发现自己在 prompt 里塞具体数字或专有名称，说明选错档了。
+
+B 档内部再选一次：需要 byte 级控制或用现成组件库的，走手写 HTML/SVG；**做并排对比、矩阵象限，或预计要反复微调的，走 Excalidraw**——它的源码是文本 JSON，能进 git，也能直接拖进 excalidraw.com 手改。
 
 ### 7.4 各档落地
 
 **A · mermaid**
 
-直接写围栏代码块即可，站内已接好（`components/mermaid.tsx`，mermaid ^11.15.0，`securityLevel: "strict"`，`theme: "default"`）。仓库现有 63 个内容文件已在用。
+直接写围栏代码块即可，站内已接好（`components/mermaid.tsx`，mermaid ^11.15.0，`securityLevel: "strict"`，`theme: "default"`）。仓库现有 53 个内容文件在用（共 109 个围栏，2026-10-17 实测）。
 
 注意：`securityLevel: "strict"` 下，节点文字里的 HTML 会被当作纯文本，写标签时不要指望加粗或换行标签生效。
 
-**B · HTML/SVG 转 PNG**
+**B · 结构化绘制转 PNG**
+
+两条实现路径，按 7.3 的补充判据选。
+
+*路径一 · 手写 HTML/SVG 截图*
 
 - 截图工具：`~/.config/alma/tools/pw-shot`（Playwright 1.63.0，`deviceScaleFactor: 2`）。不要用 `npx playwright screenshot`，它没有 `deviceScaleFactor`（出图糊）、不能注入 CSS 隐藏工具栏、不能锁定 `colorScheme`。
 - 需要编辑级图表时用 `diagram-design` 技能。它的校验器仓库已永久化在 `~/.config/alma/tools/diagram-design-repo`，含三十多个校验器。
@@ -229,6 +237,22 @@
   - `verify-geometry.py` **只校验节点与 label mask 的重叠，不校验裸 `<text>`**。说明文字放错位置会被方块盖住，而它照样报零发现。它报通过**不等于**图看着对，出图后必须自己看一眼。
   - 模板常用 `min-height: 100vh` 加 flex 居中，整页截图会留大片空白。**要做元素级裁剪**，只截内容容器。
 - 产物落 `public/images/blog/<slug>/`，用 `npm run images:add` 导入，不要手写路径。
+
+*路径二 · Excalidraw*
+
+- 画图走 `excalidraw-skill` + `mcp-excalidraw-server`（CLI），**不要手写生成脚本**。形状里的文字必须用「独立 text 元素 + `containerId` 绑定 + `boundElements` 反指」这套结构，手写极易只生成空方块；工具会自动规范化。
+- ⚠️ canvas server 默认占 **3000 端口**，与 `npm run dev` 冲突。用 `PORT=3312` 之类错开。
+- 落库一条命令搞定（render → cwebp 无损 WebP → 写入 `public/images/blog/<slug>/` → 更新 manifest）：
+
+  ```bash
+  npm run excalidraw:add -- \
+    --diagram docs/diagrams/<name>.excalidraw \
+    --post <blog-slug> \
+    --name <image-name> \
+    --alt "描述这张图传达的信息"
+  ```
+
+- **验收必须是看渲染图，不能只查 JSON 结构**。完整流程、三条反模式与验收清单见 [`excalidraw-diagram-workflow.md`](excalidraw-diagram-workflow.md)。
 
 **C · AI 生图**
 
@@ -279,4 +303,6 @@
 - [ ] 每张图紧跟它服务的段落，图下有解读
 - [ ] 没有孤立悬挂、正文无指向的图
 - [ ] 图里的数据都能在正文或来源里核到
+- [ ] 图里的关键信息，正文另有文字表述（A 档以外的图机器读不到）
 - [ ] 全篇图风格统一，图总数不超过 5
+- [ ] B 档图已看过实际渲染结果，不是只检查了 JSON 结构

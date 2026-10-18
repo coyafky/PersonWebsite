@@ -116,3 +116,21 @@ scripts/webp-batch.sh tmp.png -q 86
 - 当前机制负责博客正文内图片，不承担 Gallery 作品管理；Gallery 继续使用自己的 `content/gallery` 与 `public/gallery`。
 - 封面（frontmatter `cover` / `coverAlt`）已纳入本机制，规则见上文「封面图（cover）」一节；无封面时列表页与详情页降级为纯文字布局，不渲染空节点。
 - 不建议引用外部图片 URL，避免来源失效、跨域配置和隐私问题。
+
+## 图表类配图：Excalidraw
+
+用 Excalidraw 画的技术图，不要手工 render + cwebp + images:add 走三遍，用一条命令：
+
+```bash
+npm run excalidraw:add -- \
+  --diagram docs/diagrams/<name>.excalidraw \
+  --post <blog-slug> \
+  --name <image-name> \
+  --alt "描述这张图传达的信息"
+```
+
+它自动完成「渲染 PNG → cwebp 无损转 WebP → 写入 `public/images/blog/<slug>/` → 更新 manifest」，产物符合上文全部目录与格式约定。
+
+图表是线条图，默认走**无损 WebP**（比有损更小且像素级无损）。详细流程、三条反模式与验收清单见 [`excalidraw-diagram-workflow.md`](excalidraw-diagram-workflow.md)。
+
+⚠️ 图表选档（什么时候该用 Excalidraw、什么时候该用 mermaid）以 [`content-style-guide.md`](content-style-guide.md) 第 7 节为准。特别记住：**B 档产物是位图，图里的文字 AI 读不到，关键信息正文必须另有文字表述。**

@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "test": "node --test --experimental-strip-types $(find lib -name '*.test.ts' -type f)",
     "images:add": "node scripts/content-images.mjs add",
+    "excalidraw:add": "node scripts/excalidraw-image.mjs",
     "images:manifest": "node scripts/image-manifest.mjs",
     "images:check": "node scripts/content-images.mjs check",
     "gallery:add": "node scripts/gallery-image.mjs add",
