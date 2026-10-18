@@ -45,7 +45,7 @@ export function GalleryCarousel({
           className="entry-card-gallery-carousel-stage"
           onClick={onToggleDetails}
           aria-expanded={expanded}
-          aria-label={`${title}：查看提示词和案例详情`}
+          aria-label={`${title}：${expanded ? "收起" : "查看"}提示词和案例详情`}
         >
           <Image
             src={activeImage.src}
@@ -55,6 +55,7 @@ export function GalleryCarousel({
             sizes="(max-width: 768px) 100vw, 320px"
             priority={activeIndex === 0}
           />
+          <span className="entry-card-gallery-toggle-icon" aria-hidden="true">+</span>
           <header className="entry-card-gallery-header">
             <h2 className="entry-card-gallery-title">{title}</h2>
             <div className="entry-card-gallery-badges">

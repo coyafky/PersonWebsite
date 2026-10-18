@@ -31,6 +31,7 @@ export function GalleryCard({ post }: GalleryCardProps) {
         onClick={() => setExpanded((value) => !value)}
         aria-expanded={expanded}
         aria-controls={`gallery-details-${post.slug}`}
+        aria-label={`${post.title}：${expanded ? "收起" : "查看"}提示词和案例详情`}
       >
         <div className="entry-card-gallery-cover">
           <Image
@@ -40,6 +41,7 @@ export function GalleryCard({ post }: GalleryCardProps) {
             height={imageHeight}
             sizes="(max-width: 768px) 100vw, 320px"
           />
+          <span className="entry-card-gallery-toggle-icon" aria-hidden="true">+</span>
           <header className="entry-card-gallery-header">
             <h2 className="entry-card-gallery-title">{post.title}</h2>
             <div className="entry-card-gallery-badges">

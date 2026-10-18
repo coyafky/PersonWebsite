@@ -2336,6 +2336,29 @@ main {
   transition: transform var(--transition-smooth);
 }
 
+.entry-card-gallery-toggle-icon {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius);
+  background: rgba(17, 19, 15, 0.76);
+  color: #fff;
+  font-size: 23px;
+  font-weight: 300;
+  line-height: 1;
+  transition: transform var(--transition-smooth);
+}
+
+.entry-card-gallery-trigger[aria-expanded="true"] .entry-card-gallery-toggle-icon,
+.entry-card-gallery-carousel-stage[aria-expanded="true"] .entry-card-gallery-toggle-icon {
+  transform: rotate(45deg);
+}
+
 /* 悬停时给作品一点推近 —— 唯一加的一点"交互感"，不加装饰 */
 .entry-card-gallery-trigger:hover .entry-card-gallery-cover img,
 .entry-card-gallery-trigger:focus-visible .entry-card-gallery-cover img {
@@ -2577,6 +2600,10 @@ main {
   .entry-card-gallery-reference img,
   .entry-card-gallery-carousel-stage > img,
   .entry-card-gallery-carousel-choice {
+    transition: none;
+  }
+
+  .entry-card-gallery-toggle-icon {
     transition: none;
   }
 
