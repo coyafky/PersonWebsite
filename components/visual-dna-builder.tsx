@@ -200,9 +200,15 @@ export function VisualDnaBuilder({
           <pre className="visual-dna-prompt" aria-live="polite">
             {prompt}
           </pre>
-          <button className="visual-dna-copy" onClick={copyPrompt} type="button">
+          <button
+            className="visual-dna-copy"
+            data-copied={copied ? "" : undefined}
+            aria-live="polite"
+            onClick={copyPrompt}
+            type="button"
+          >
             {copied ? "已复制 Prompt" : "复制提示词"}
-            <span aria-hidden="true">↗</span>
+            <span aria-hidden="true">{copied ? "✓" : "↗"}</span>
           </button>
           <p className="visual-dna-note">
             这是一个本地练习组件。它不会调用模型，也不会上传你输入的内容；你可以把结果复制到任意生图工具中继续实验。

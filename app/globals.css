@@ -3464,6 +3464,17 @@ main {
   color: var(--text);
 }
 
+.entry-card-gallery-copy[data-copied] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-card-gallery-copy {
+    transition: none;
+  }
+}
+
 .entry-card-gallery-params {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -7079,6 +7090,15 @@ body:has(.music-np) .site-footer {
   transform: translateY(-1px);
 }
 
+.visual-dna-copy span {
+  display: inline-block;
+  transition: transform 150ms ease;
+}
+
+.visual-dna-copy[data-copied] span {
+  transform: scale(1.2);
+}
+
 .visual-dna-copy:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--visual-dna-blue);
@@ -7118,7 +7138,13 @@ body:has(.music-np) .site-footer {
   .visual-dna-control input,
   .visual-dna-control select,
   .visual-dna-control textarea,
-  .visual-dna-copy {
+  .visual-dna-copy,
+  .visual-dna-copy span {
     transition: none;
+  }
+
+  .visual-dna-copy:hover,
+  .visual-dna-style-option:hover {
+    transform: none;
   }
 }
