@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ImageLightbox } from "@/components/image-lightbox";
 
 type LightingDirection = {
@@ -44,11 +44,15 @@ const LIGHTING_DIRECTIONS: LightingDirection[] = [
 
 export function LightingDirectionCarousel() {
   const [activeIndex, setActiveIndex] = useState(3);
+  const [hasChanged, setHasChanged] = useState(false);
   const active = LIGHTING_DIRECTIONS[activeIndex];
 
-  function selectDirection(index: number) {
-    setActiveIndex((index + LIGHTING_DIRECTIONS.length) % LIGHTING_DIRECTIONS.length);
-  }
+  const selectDirection = useCallback((index: number) => {
+    const next = (index + LIGHTING_DIRECTIONS.length) % LIGHTING_DIRECTIONS.length;
+    if (next === activeIndex) return;
+    setHasChanged(true);
+    setActiveIndex(next);
+  }, [activeIndex]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -58,7 +62,7 @@ export function LightingDirectionCarousel() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeIndex]);
+  }, [activeIndex, selectDirection]);
 
   return (
     <section className="lighting-direction-carousel" aria-labelledby="lighting-direction-title">
@@ -84,7 +88,12 @@ export function LightingDirectionCarousel() {
         </button>
         <ImageLightbox src={active.src} alt={`${active.label}光线方向示意图`}>
           {/* eslint-disable-next-line @next/next/no-img-element -- local SVG lesson diagrams are intentionally switchable. */}
-          <img className="lighting-direction-carousel-image" src={active.src} alt={`${active.label}光线方向示意图`} />
+          <img
+            key={active.id}
+            className={`lighting-direction-carousel-image${hasChanged ? " is-switching" : ""}`}
+            src={active.src}
+            alt={`${active.label}光线方向示意图`}
+          />
         </ImageLightbox>
         <button
           className="lighting-direction-carousel-arrow is-next"

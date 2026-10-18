@@ -934,6 +934,17 @@ main {
   color: var(--text);
 }
 
+.code-copy-btn[data-copied] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code-copy-btn {
+    transition: none;
+  }
+}
+
 .code-block-pre {
   margin: 0;
   padding: var(--space-4);
@@ -2336,6 +2347,29 @@ main {
   transition: transform var(--transition-smooth);
 }
 
+.entry-card-gallery-toggle-icon {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius);
+  background: rgba(17, 19, 15, 0.76);
+  color: #fff;
+  font-size: 23px;
+  font-weight: 300;
+  line-height: 1;
+  transition: transform var(--transition-smooth);
+}
+
+.entry-card-gallery-trigger[aria-expanded="true"] .entry-card-gallery-toggle-icon,
+.entry-card-gallery-carousel-stage[aria-expanded="true"] .entry-card-gallery-toggle-icon {
+  transform: rotate(45deg);
+}
+
 /* 悬停时给作品一点推近 —— 唯一加的一点"交互感"，不加装饰 */
 .entry-card-gallery-trigger:hover .entry-card-gallery-cover img,
 .entry-card-gallery-trigger:focus-visible .entry-card-gallery-cover img {
@@ -2580,6 +2614,10 @@ main {
     transition: none;
   }
 
+  .entry-card-gallery-toggle-icon {
+    transition: none;
+  }
+
   .entry-card-gallery-trigger:hover .entry-card-gallery-cover img,
   .entry-card-gallery-trigger:focus-visible .entry-card-gallery-cover img {
     transform: none;
@@ -2666,6 +2704,24 @@ main {
   width: 100%;
   max-height: min(55vw, 430px);
   object-fit: contain;
+}
+
+@keyframes lighting-direction-in {
+  from {
+    opacity: 0.7;
+    transform: scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lighting-direction-carousel-image.is-switching {
+    animation: lighting-direction-in 180ms ease-out both;
+  }
 }
 
 .lighting-direction-carousel-arrow {
@@ -2761,6 +2817,17 @@ main {
 .lighting-direction-carousel-tabs button.is-active {
   background: #f1f3f5;
   color: var(--lighting-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lighting-direction-carousel-arrow,
+  .lighting-direction-carousel-tabs button {
+    transition: none;
+  }
+
+  .lighting-direction-carousel-arrow:hover {
+    transform: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -3395,6 +3462,17 @@ main {
 .entry-card-gallery-copy:hover {
   background: var(--surface-hover);
   color: var(--text);
+}
+
+.entry-card-gallery-copy[data-copied] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-card-gallery-copy {
+    transition: none;
+  }
 }
 
 .entry-card-gallery-params {
@@ -5296,10 +5374,36 @@ main {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
+  transition: color 180ms ease;
 }
 
-.tool-face--focus .tool-phase {
+.tool-face--focus .tool-phase,
+.tool-face--done .tool-phase {
   color: var(--accent);
+}
+
+.tool-complete-mark {
+  display: inline-block;
+  margin-left: var(--space-2);
+  color: var(--accent);
+}
+
+@keyframes tool-complete-in {
+  from {
+    opacity: 0.55;
+    transform: scale(0.75);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tool-complete-mark {
+    animation: tool-complete-in 180ms ease-out both;
+  }
 }
 
 /* 大号读数。tabular-nums 让每位数字等宽 —— 否则每秒跳动时
@@ -5403,6 +5507,7 @@ main {
   height: 6px;
   border-radius: var(--radius-pill);
   background: var(--surface-soft);
+  transition: background-color 180ms ease;
 }
 
 .tool-dot.is-done {
@@ -5563,6 +5668,8 @@ main {
 
 @media (prefers-reduced-motion: reduce) {
   .tool-index-card,
+  .tool-phase,
+  .tool-dot,
   .tool-progress-fill,
   .tool-chip {
     transition: none;
@@ -6983,6 +7090,15 @@ body:has(.music-np) .site-footer {
   transform: translateY(-1px);
 }
 
+.visual-dna-copy span {
+  display: inline-block;
+  transition: transform 150ms ease;
+}
+
+.visual-dna-copy[data-copied] span {
+  transform: scale(1.2);
+}
+
 .visual-dna-copy:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--visual-dna-blue);
@@ -7022,7 +7138,13 @@ body:has(.music-np) .site-footer {
   .visual-dna-control input,
   .visual-dna-control select,
   .visual-dna-control textarea,
-  .visual-dna-copy {
+  .visual-dna-copy,
+  .visual-dna-copy span {
     transition: none;
+  }
+
+  .visual-dna-copy:hover,
+  .visual-dna-style-option:hover {
+    transform: none;
   }
 }

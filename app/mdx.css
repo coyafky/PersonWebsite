@@ -49,6 +49,25 @@
   padding: 20px;
   min-width: 0;
 }
+
+@keyframes tabs-panel-in {
+  from {
+    opacity: 0.72;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .markdown-body .tabs-panel.is-switching:not([hidden]) {
+    animation: tabs-panel-in 180ms ease-out both;
+  }
+}
+
 .markdown-body .tabs-panel > :first-child {
   margin-top: 0;
 }
@@ -243,6 +262,38 @@
 }
 .mdx-lightbox::backdrop {
   background: #111b17d9;
+}
+
+@keyframes mdx-lightbox-in {
+  from {
+    opacity: 0.72;
+    transform: scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes mdx-lightbox-backdrop-in {
+  from {
+    opacity: 0.4;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mdx-lightbox[open] {
+    animation: mdx-lightbox-in 180ms ease-out both;
+  }
+
+  .mdx-lightbox[open]::backdrop {
+    animation: mdx-lightbox-backdrop-in 180ms ease-out both;
+  }
 }
 .mdx-lightbox .lightbox-image {
   display: block;

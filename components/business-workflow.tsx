@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { portfolioCases } from "@/lib/portfolio";
+
+const SWITCH_EASE = [0.22, 0.61, 0.36, 1] as const;
 
 export function BusinessWorkflow({
   availableSlugs,
@@ -13,7 +16,10 @@ export function BusinessWorkflow({
     availableSlugs.includes(item.slug),
   );
   const [selected, setSelected] = useState(0);
+  const [hasSwitched, setHasSwitched] = useState(false);
+  const reduceMotion = useReducedMotion();
   const current = cases[selected] ?? cases[0];
+
   if (!current) return null;
 
   return (
@@ -22,24 +28,49 @@ export function BusinessWorkflow({
         <span className="section-kicker">FROM BUSINESS TO WORKFLOW</span>
         <span className="workflow-caption">项目流程</span>
       </div>
-      <div className="workflow-switcher" role="group" aria-label="选择业务场景">
+      <div
+        className="workflow-switcher"
+        role="group"
+        aria-label="选择业务场景"
+        style={{ gridTemplateColumns: `repeat(${cases.length}, minmax(0, 1fr))` }}
+      >
+        <motion.span
+          className="workflow-active-indicator"
+          style={{ gridColumn: selected + 1, gridRow: 1 }}
+          layout="position"
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : { duration: 0.18, ease: SWITCH_EASE }
+          }
+          aria-hidden="true"
+        />
         {cases.map((item, index) => (
           <button
             key={item.slug}
             type="button"
+            style={{ gridColumn: index + 1, gridRow: 1 }}
             aria-pressed={selected === index}
             aria-controls="business-workflow-detail"
-            onClick={() => setSelected(index)}
+            onClick={() => {
+              if (index === selected) return;
+              setSelected(index);
+              setHasSwitched(true);
+            }}
           >
-            {item.tab}
+            <span className="workflow-switcher-label">{item.tab}</span>
           </button>
         ))}
       </div>
-      <div
+      <motion.div
+        key={current.slug}
         id="business-workflow-detail"
         className="workflow-detail"
         aria-live="polite"
         aria-atomic="true"
+        initial={!hasSwitched || reduceMotion ? false : { opacity: 0.72 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: reduceMotion ? 0 : 0.18, ease: SWITCH_EASE }}
       >
         <div className="workflow-endpoint">
           <span>业务输入</span>
@@ -75,7 +106,7 @@ export function BusinessWorkflow({
             查看案例 <span aria-hidden="true">↗</span>
           </Link>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

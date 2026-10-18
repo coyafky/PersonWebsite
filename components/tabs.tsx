@@ -28,6 +28,7 @@ export function Tabs({
 }) {
   const id = useId();
   const [active, setActive] = useState(0);
+  const [hasSwitched, setHasSwitched] = useState(false);
   const triggers = useRef<(HTMLButtonElement | null)[]>([]);
   const hydrated = useSyncExternalStore(
     subscribe,
@@ -65,7 +66,12 @@ export function Tabs({
             aria-controls={`${id}-panel-${index}`}
             tabIndex={index === selected ? 0 : -1}
             className={`tabs-trigger ${index === selected ? "active" : ""}`}
-            onClick={() => setActive(index)}
+            onClick={() => {
+              if (index !== selected) {
+                setActive(index);
+                setHasSwitched(true);
+              }
+            }}
             onKeyDown={(event) => {
               let next = index;
               if (event.key === "ArrowRight") next = (index + 1) % items.length;
@@ -75,7 +81,10 @@ export function Tabs({
               else if (event.key === "End") next = items.length - 1;
               else return;
               event.preventDefault();
-              setActive(next);
+              if (next !== selected) {
+                setActive(next);
+                setHasSwitched(true);
+              }
               triggers.current[next]?.focus();
             }}
           >
@@ -86,7 +95,7 @@ export function Tabs({
       {items.map((item, index) => (
         <div
           key={index}
-          className="tabs-panel"
+          className={`tabs-panel${hasSwitched ? " is-switching" : ""}`}
           id={`${id}-panel-${index}`}
           role={hydrated ? "tabpanel" : undefined}
           aria-labelledby={hydrated ? `${id}-tab-${index}` : undefined}

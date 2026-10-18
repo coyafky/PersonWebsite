@@ -60,6 +60,8 @@ export function GalleryDetails({ post, id }: GalleryDetailsProps) {
             <button
               type="button"
               className="entry-card-gallery-copy"
+              data-copied={copied ? "" : undefined}
+              aria-live="polite"
               onClick={handleCopy}
             >
               {copied ? "✓ Copied" : "Copy"}
