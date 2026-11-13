@@ -135,6 +135,14 @@ export const courseNoteSchema = baseContentSchema.extend({
   tags: tagArraySchema,
   lang: z.string().default("zh"),
   chapter: z.string().optional(),
+  /**
+   * 课程内的阅读顺序（从小到大）。
+   *
+   * 课程笔记的 `date` 通常是同一批次的导入日期，全部相同 —— 用它排序等于没排序。
+   * 所以这里单列一个字段：**有值就按它升序，没值退回按 date 倒序**。
+   * 这样存量笔记（gpt-image-2 等）不用改，新课按讲次排好即可。
+   */
+  readingOrder: z.number().optional(),
 });
 
 export const skillSchema = baseContentSchema.extend({

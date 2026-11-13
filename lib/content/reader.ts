@@ -69,6 +69,28 @@ function byNewestDate<T extends { date: string }>(items: T[]) {
   return items.toSorted((a, b) => b.date.localeCompare(a.date));
 }
 
+/**
+ * 课程笔记排序：**有 `readingOrder` 的按它升序排在最前，其余退回按日期倒序**。
+ *
+ * 为什么需要它：课程笔记的 `date` 往往是整批导入的同一天，用它排等于随机。
+ * 而课程是有讲授顺序的 —— 第 1 讲必须排在第 2 讲前面。
+ *
+ * 混排规则（存量课程不受影响）：
+ * - 两组都按各自规则排好后拼起来，有 readingOrder 的在前；
+ * - 存量笔记（如 gpt-image-2）全都没有该字段 → 整体走原来的日期倒序，行为不变。
+ */
+function byCourseReadingOrder<T extends { date: string; readingOrder?: number }>(
+  items: T[],
+) {
+  const ordered = items
+    .filter((item) => typeof item.readingOrder === "number")
+    .toSorted((a, b) => (a.readingOrder as number) - (b.readingOrder as number));
+  const rest = byNewestDate(
+    items.filter((item) => typeof item.readingOrder !== "number"),
+  );
+  return [...ordered, ...rest];
+}
+
 /** 解码 URL 段。slug 与 tag 共用 —— 两者都会以未解码形态从动态段传进来。 */
 function decodeSlug(slug: string): string {
   try {
@@ -482,7 +504,8 @@ export async function getNoteCollectionNotes(
     (item): item is NotePost => item.kind === config.noteKind && isArticleSlug(item.slug),
   );
   const visible = includeDrafts ? notes : publishedOnly(notes);
-  return byNewestDate(visible);
+  // 课程按讲次（readingOrder）排，其余集合保持原来的日期倒序。
+  return kind === "course" ? byCourseReadingOrder(visible) : byNewestDate(visible);
 }
 
 export async function getNoteBySlug(

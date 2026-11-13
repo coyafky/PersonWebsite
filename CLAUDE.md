@@ -140,6 +140,7 @@ PersonalWebsite/
 - 索引页正文也会作为 MDX 渲染 → **正文里不能再出现 `#` 一级标题**（页面已渲染 `<h1>{title}</h1>`），也不要用 HTML 注释（MDX 只认 `{/* */}`）
 - 文章 frontmatter 默认 `status: draft`，owner 改 `published` 后才会公开
 - reader 函数：`getNoteCollections` / `findNoteCollection` / `getNoteCollectionIndex` / `getNoteCollectionNotes` / `getNoteBySlug`
+- **课程笔记的排序**：默认按 `date` 倒序，但课程笔记的 `date` 常常是整批导入的同一天 —— 所以 `course-note` 多一个可选字段 `readingOrder`（数字，从 1 开始）。**有值就按它升序排在有值的部分前，没值的退回日期倒序**；存量课程不带该字段，行为不变。写多讲课程时**务必填它**，否则讲次顺序会乱
 - 加新集合只需：建子目录 + 写 `_index.md` + 写笔记，无需改代码
 - 旧路由 `/learning`、`/book-list`、`/course-list` 已 308 永久重定向到 `/notes`
 

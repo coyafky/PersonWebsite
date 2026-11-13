@@ -1,6 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { getContentByTag, getContentBySlug } from "./reader.ts";
+import {
+  getContentByTag,
+  getContentBySlug,
+  getNoteCollectionNotes,
+} from "./reader.ts";
 
 test("getContentByTag: matches across all 8 collections (incl. book-list + course-list)", async () => {
   const result = await getContentByTag("hermes");
@@ -167,4 +171,55 @@ test("getContentByTag: 非法转义的 % 不应抛错（原样返回不命中即
   const r = await getContentByTag("100%");
   const sum = Object.values(r.totalByKind).reduce((a, b) => a + b, 0);
   assert.equal(sum, 0, "不存在的标签命中 0，而不是抛异常");
+});
+
+test("getNoteCollectionNotes: course 按 readingOrder 升序（不按导入日期倒序）", async () => {
+  // 这一批课程笔记的 date 全是同一天（整批导入），若仍走 byNewestDate，
+  // 顺序就退化成文件系统顺序 —— 第 1 讲可能排在最后一讲后面。
+  const notes = await getNoteCollectionNotes(
+    "course",
+    "ai-application-development",
+    true,
+  );
+
+  assert.ok(notes.length > 0, "expected the course to have notes");
+
+  // NotePost 是三种笔记的联合类型，只有 course-note 带 readingOrder
+  const orders = notes
+    .filter((note) => note.kind === "course-note")
+    .map((note) => note.readingOrder)
+    .filter((order): order is number => typeof order === "number");
+
+  assert.equal(
+    orders.length,
+    notes.length,
+    "this course should declare readingOrder on every note",
+  );
+  assert.deepEqual(
+    orders,
+    [...orders].sort((a, b) => a - b),
+    "readingOrder must be ascending",
+  );
+});
+
+test("getNoteCollectionNotes: 没有 readingOrder 的存量课程保持日期倒序", async () => {
+  // gpt-image-2 是本次改造前就在的课程，一个 readingOrder 都没有。
+  // 它必须继续走 byNewestDate —— 否则改造会静默改变既有页面的顺序。
+  const notes = await getNoteCollectionNotes("course", "gpt-image-2", true);
+
+  assert.ok(notes.length > 0, "expected the legacy course to have notes");
+  assert.ok(
+    notes.every(
+      (note) =>
+        note.kind !== "course-note" || note.readingOrder === undefined,
+    ),
+    "legacy course notes should not carry readingOrder",
+  );
+
+  const dates = notes.map((note) => note.date);
+  assert.deepEqual(
+    dates,
+    [...dates].sort((a, b) => b.localeCompare(a)),
+    "legacy course must stay sorted by date descending",
+  );
 });
